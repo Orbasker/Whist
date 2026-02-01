@@ -41,9 +41,6 @@ class GameService:
         )
         
         saved_game = self.game_repo.create(game)
-        self.db.commit()
-        self.db.refresh(saved_game)
-        
         return GameResponse.model_validate(saved_game)
     
     async def get_game(self, game_id: UUID) -> Optional[GameResponse]:

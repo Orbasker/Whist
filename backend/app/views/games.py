@@ -6,24 +6,19 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.dependencies import get_game_service
 from app.core.exceptions import GameNotFoundError
-from app.models.game import Game
 from app.schemas.game import GameCreate, GameResponse, GameUpdate
 from app.services.game_service import GameService
 
 router = APIRouter(prefix="/games", tags=["games"])
 
 
-@router.post("/", response_model=GameResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=GameResponse, status_code=status.HTTP_201_CREATED)
 async def create_game(
     game_data: GameCreate,
     game_service: GameService = Depends(get_game_service)
 ):
     """Create a new game"""
-    result = await game_service.create_game(game_data)
-    # Convert to response if needed
-    if isinstance(result, Game):
-        return GameResponse.model_validate(result)
-    return result
+    return await game_service.create_game(game_data)
 
 
 @router.get("/{game_id}", response_model=GameResponse)
