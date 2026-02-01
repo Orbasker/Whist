@@ -1,0 +1,8 @@
+// RTL-specific styles
+[dir="rtl"] {
+  text-align: right;
+  
+  .icon-mirror {
+    transform: scaleX(-1);
+  }
+}

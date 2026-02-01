@@ -1,0 +1,15 @@
+<div class="flex gap-2 flex-wrap">
+  <button
+    *ngFor="let option of trumpOptions"
+    (click)="selectTrump(option.value)"
+    [class.bg-amber-500]="selectedTrump === option.value"
+    [class.bg-slate-700]="selectedTrump !== option.value"
+    [class.text-white]="selectedTrump === option.value"
+    [class.text-slate-300]="selectedTrump !== option.value"
+    [class]="option.color"
+    class="px-4 py-2 rounded-lg font-medium transition-colors hover:bg-amber-600"
+  >
+    <span *ngIf="option.icon" class="mr-2">{{ option.icon }}</span>
+    {{ option.label }}
+  </button>
+</div>

@@ -1,0 +1,63 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" dir="rtl" *ngIf="gameState">
+  <!-- Header -->
+  <div class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-lg border-b border-slate-700/50">
+    <div class="flex items-center justify-between p-4">
+      <button
+        (click)="goBack()"
+        class="p-2 text-slate-400 hover:text-white transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <div class="text-center">
+        <h1 class="text-lg font-semibold text-white">סיבוב {{ gameState.current_round }}</h1>
+        <p class="text-xs text-slate-400">
+          {{ phase === 'bidding' ? 'הימורים' : 'לקיחות' }}
+        </p>
+      </div>
+      <button
+        (click)="showScoreTable = true"
+        class="p-2 text-amber-400 hover:text-amber-300 transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="p-4 pb-24">
+    <app-bidding-phase
+      *ngIf="phase === 'bidding'"
+      [players]="gameState.players"
+      (bidsSubmit)="onBidsSubmit($event.bids, $event.trumpSuit)"
+    ></app-bidding-phase>
+
+    <app-tricks-phase
+      *ngIf="phase === 'tricks'"
+      [players]="gameState.players"
+      (tricksSubmit)="onTricksSubmit($event)"
+    ></app-tricks-phase>
+  </div>
+
+  <!-- Score Table Modal -->
+  <app-score-table
+    *ngIf="showScoreTable"
+    [gameState]="gameState"
+    (close)="showScoreTable = false"
+    (reset)="resetGame()"
+  ></app-score-table>
+
+  <!-- Round Summary Modal -->
+  <app-round-summary
+    *ngIf="showRoundSummary && roundResults"
+    [results]="roundResults"
+    (close)="onRoundSummaryClose()"
+  ></app-round-summary>
+</div>
+
+<div *ngIf="!gameState" class="min-h-screen bg-slate-900 flex items-center justify-center">
+  <div class="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full"></div>
+</div>

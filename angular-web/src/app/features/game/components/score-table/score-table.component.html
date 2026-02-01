@@ -1,0 +1,47 @@
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click)="onClose()">
+  <div class="bg-slate-800 rounded-lg max-w-2xl w-full p-6" (click)="$event.stopPropagation()">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-white">טבלת ניקוד</h2>
+      <button (click)="onClose()" class="text-slate-400 hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div *ngIf="gameState" class="space-y-4">
+      <!-- Current Scores -->
+      <div class="bg-slate-700 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-white mb-3">ניקוד נוכחי</h3>
+        <div class="grid grid-cols-4 gap-4">
+          <div *ngFor="let player of gameState.players; let i = index" class="text-center">
+            <div class="text-slate-400 text-sm mb-1">{{ player }}</div>
+            <div class="text-2xl font-bold" [class.text-green-400]="gameState.scores[i] > 0" [class.text-red-400]="gameState.scores[i] < 0">
+              {{ gameState.scores[i] }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round Info -->
+      <div class="text-slate-400 text-sm text-center">
+        סיבוב {{ gameState.current_round }} מתוך 13
+      </div>
+    </div>
+
+    <div class="flex gap-4 mt-6">
+      <button
+        (click)="onReset()"
+        class="flex-1 bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+      >
+        אפס משחק
+      </button>
+      <button
+        (click)="onClose()"
+        class="flex-1 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+      >
+        סגור
+      </button>
+    </div>
+  </div>
+</div>

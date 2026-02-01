@@ -1,0 +1,50 @@
+"""FastAPI application entry point"""
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from app.config import settings
+from app.api.v1.router import api_router
+from app.core.middleware import (
+    game_not_found_handler,
+    invalid_bids_handler,
+    invalid_tricks_handler,
+    validation_exception_handler
+)
+from app.core.exceptions import GameNotFoundError, InvalidBidsError, InvalidTricksError
+from fastapi.exceptions import RequestValidationError
+
+# Create FastAPI app
+app = FastAPI(
+    title=settings.project_name,
+    version="1.0.0",
+    description="Whist card game scoring API"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include API router
+app.include_router(api_router, prefix=settings.api_v1_prefix)
+
+# Add exception handlers
+app.add_exception_handler(GameNotFoundError, game_not_found_handler)
+app.add_exception_handler(InvalidBidsError, invalid_bids_handler)
+app.add_exception_handler(InvalidTricksError, invalid_tricks_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+
+
+@app.get("/")
+async def root():
+    """Root endpoint"""
+    return {
+        "message": "Whist Game API",
+        "version": "1.0.0",
+        "docs": "/docs"
+    }

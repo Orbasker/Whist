@@ -1,0 +1,15 @@
+<div class="grid grid-cols-7 gap-2">
+  <ng-container *ngFor="let row of numbers">
+    <button
+      *ngFor="let num of row"
+      (click)="selectBid(num)"
+      [class.bg-amber-500]="selectedBid === num"
+      [class.bg-slate-700]="selectedBid !== num"
+      [class.text-white]="selectedBid === num"
+      [class.text-slate-300]="selectedBid !== num"
+      class="px-3 py-2 rounded-lg font-medium transition-colors hover:bg-amber-600"
+    >
+      {{ num }}
+    </button>
+  </ng-container>
+</div>
