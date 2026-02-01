@@ -9,6 +9,26 @@
       </div>
       <h1 class="text-4xl font-bold text-white mb-2">וויסט</h1>
       <p class="text-slate-400">ניקוד משחקים</p>
+      <div class="mt-4">
+        <!-- Show login link if not authenticated -->
+        <a *ngIf="!isAuthenticated" routerLink="/login" class="text-amber-400 hover:text-amber-300 text-sm underline">
+          התחבר / הירשם
+        </a>
+        <!-- Show user info and logout if authenticated -->
+        <div *ngIf="isAuthenticated" class="flex flex-col items-center gap-2">
+          <div class="text-slate-300 text-sm">
+            <span *ngIf="userName">{{ userName }}</span>
+            <span *ngIf="userName && userEmail" class="mx-1">•</span>
+            <span *ngIf="userEmail" class="text-slate-400">{{ userEmail }}</span>
+          </div>
+          <button 
+            (click)="logout()" 
+            class="text-amber-400 hover:text-amber-300 text-sm underline bg-transparent border-none cursor-pointer p-0"
+          >
+            התנתק
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Player Input Form -->

@@ -1,9 +1,16 @@
 from typing import List, Literal
 
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    model_config = ConfigDict(
+        # Try .env.prod first (for production), then .env (for dev)
+        env_file=[".env.prod", ".env"],
+        case_sensitive=False,
+        extra="ignore",  # Ignore extra fields in .env (e.g., old NEON_AUTH_JWT_SECRET)
+    )
     # Environment
     environment: Literal["development", "production", "staging"] = "development"
     
@@ -19,6 +26,11 @@ class Settings(BaseSettings):
     
     # CORS - JSON array format in .env file: ["http://localhost:4200","http://localhost:3000"]
     cors_origins: List[str] = ["http://localhost:4200", "http://localhost:3000"]
+    
+    # Neon Auth (see docs/plan/authentication-architecture.md)
+    # Neon Auth is integrated with Neon PostgreSQL; FastAPI verifies JWTs using Neon's JWKS.
+    neon_auth_jwks_url: str = ""  # JWKS URL from Neon Auth (get from Neon dashboard → Configuration)
+    auth_session_cookie_name: str = "neon-auth.session_token"  # Cookie name for session token
     
     # Supabase (Phase 2 - not used in Phase 1)
     supabase_url: str = ""
@@ -47,11 +59,6 @@ class Settings(BaseSettings):
     def is_development(self) -> bool:
         """True when running in development environment."""
         return self.environment == "development"
-
-    class Config:
-        # Try .env.prod first (for production), then .env (for dev)
-        env_file = [".env.prod", ".env"]
-        case_sensitive = False
 
 
 settings = Settings()

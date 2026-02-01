@@ -99,6 +99,20 @@ uv add --dev package-name
 uv sync --upgrade
 ```
 
+## Authentication (better-auth)
+
+Authentication is integrated with [better-auth](https://www.better-auth.com/) (Node service). FastAPI:
+
+- **Proxies** `/api/auth/*` to the Better Auth service when `BETTER_AUTH_URL` is set (e.g. `http://localhost:3000/api/auth`).
+- **Verifies JWTs** on protected routes using `AUTH_JWT_SECRET` (same value as `BETTER_AUTH_SECRET` in the auth service).
+
+**Environment variables** (see `env.example`):
+
+- `BETTER_AUTH_URL` – Base URL of the Better Auth API. When set, requests to `/api/auth/*` are proxied here.
+- `AUTH_JWT_SECRET` – Shared secret (min 32 chars) used to verify JWTs; must match the auth service.
+
+Use `get_current_user_id` from `app.core.auth` as a dependency on routes that require authentication. See `docs/plan/authentication-architecture.md` for the full design.
+
 ## Architecture
 
 - **Models**: SQLAlchemy ORM models (`app/models/`)

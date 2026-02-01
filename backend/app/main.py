@@ -1,18 +1,20 @@
 """FastAPI application entry point"""
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.config import settings
+
 from app.api.v1.router import api_router
+from app.config import settings
+from app.core.exceptions import GameNotFoundError, InvalidBidsError, InvalidTricksError
 from app.core.middleware import (
     game_not_found_handler,
     invalid_bids_handler,
     invalid_tricks_handler,
-    validation_exception_handler
+    validation_exception_handler,
 )
-from app.core.exceptions import GameNotFoundError, InvalidBidsError, InvalidTricksError
-from fastapi.exceptions import RequestValidationError
+from app.views.auth import router as auth_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -21,7 +23,7 @@ app = FastAPI(
     description="Whist card game scoring API"
 )
 
-# Configure CORS
+# Configure CORS (auth endpoints need credentials for cookies)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -29,6 +31,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Auth router: Note - With Neon Auth, frontend communicates directly with Neon.
+# This router is kept for backward compatibility but returns 501.
+app.include_router(auth_router, prefix="/api/auth")
 
 # Include API router
 app.include_router(api_router, prefix=settings.api_v1_prefix)
