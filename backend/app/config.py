@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Literal
 
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
@@ -11,6 +11,9 @@ class Settings(BaseSettings):
         case_sensitive=False,
         extra="ignore",  # Ignore extra fields in .env (e.g., old NEON_AUTH_JWT_SECRET)
     )
+    # Environment
+    environment: Literal["development", "production", "staging"] = "development"
+    
     # Database
     # Use DATABASE_URL for Neon PostgreSQL or local PostgreSQL.
     # Neon format: postgresql://user:password@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
