@@ -17,6 +17,14 @@ class Settings(BaseSettings):
     # CORS - JSON array format in .env file: ["http://localhost:4200","http://localhost:3000"]
     cors_origins: List[str] = ["http://localhost:4200", "http://localhost:3000"]
     
+    # better-auth (see docs/plan/authentication-architecture.md)
+    # Auth runs as a separate Node service; FastAPI verifies JWTs with the same secret.
+    better_auth_url: str = ""  # Base URL of the Better Auth service (e.g. http://localhost:3000)
+    auth_jwt_secret: str = ""  # Same as BETTER_AUTH_SECRET; used to verify JWTs (min 32 chars)
+    auth_session_cookie_name: str = "better-auth.session_token"  # Cookie name for session token
+    auth_session_expires_seconds: int = 60 * 60 * 24 * 7  # 7 days
+    auth_session_update_age_seconds: int = 60 * 60 * 24   # 1 day
+    
     # Supabase (Phase 2 - not used in Phase 1)
     supabase_url: str = ""
     supabase_anon_key: str = ""

@@ -39,6 +39,21 @@ wheels = [
 ]
 
 [[package]]
+name = "better-auth"
+version = "0.0.1b11"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "python-dateutil" },
+    { name = "typing-extensions" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cd/ab/6f527453f9cd3aee79b8f689aaefefabfdf3b3476a5b6aff52ed4a7101c7/better_auth-0.0.1b11.tar.gz", hash = "sha256:b9df24d9fc4e8ae0111f61b2a4967225b0e4241eb8090c9b391c10400c77b380", size = 84293, upload-time = "2025-12-02T12:42:24.181Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c9/67/3088f44c8dd4d9712b38781f0fce046e94cceb40733ee52ad269161a54be/better_auth-0.0.1b11-py3-none-any.whl", hash = "sha256:f5524dd87b18b00941f16bd439afe088b13fe9a69177f989900c73120cff5bff", size = 195431, upload-time = "2025-12-02T12:42:22.888Z" },
+]
+
+[[package]]
 name = "black"
 version = "23.11.0"
 source = { registry = "https://pypi.org/simple" }
@@ -684,6 +699,18 @@ wheels = [
 ]
 
 [[package]]
+name = "python-dateutil"
+version = "2.9.0.post0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432, upload-time = "2024-03-01T18:36:20.211Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892, upload-time = "2024-03-01T18:36:18.57Z" },
+]
+
+[[package]]
 name = "python-dotenv"
 version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -868,6 +895,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466", size = 109391, upload-time = "2025-08-25T13:49:26.313Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548", size = 44614, upload-time = "2025-08-25T13:49:24.86Z" },
+]
+
+[[package]]
+name = "urllib3"
+version = "2.6.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3/urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed", size = 435556, upload-time = "2026-01-07T16:24:43.925Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
 ]
 
 [[package]]
@@ -1084,7 +1120,9 @@ version = "1.0.0"
 source = { virtual = "." }
 dependencies = [
     { name = "alembic" },
+    { name = "better-auth" },
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "psycopg2-binary" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -1107,8 +1145,10 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = "==1.12.1" },
+    { name = "better-auth", specifier = ">=0.0.1b11" },
     { name = "black", marker = "extra == 'dev'", specifier = "==23.11.0" },
     { name = "fastapi", specifier = "==0.104.1" },
+    { name = "httpx", specifier = ">=0.25.0" },
     { name = "httpx", marker = "extra == 'dev'", specifier = "==0.25.2" },
     { name = "mypy", marker = "extra == 'dev'", specifier = "==1.7.1" },
     { name = "psycopg2-binary", specifier = "==2.9.9" },

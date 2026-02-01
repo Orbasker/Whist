@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.config import settings
 from app.api.v1.router import api_router
+from app.views.auth import router as auth_router
 from app.core.middleware import (
     game_not_found_handler,
     invalid_bids_handler,
@@ -21,7 +22,7 @@ app = FastAPI(
     description="Whist card game scoring API"
 )
 
-# Configure CORS
+# Configure CORS (auth endpoints need credentials for cookies)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -29,6 +30,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Auth router: proxies /api/auth/* to Better Auth service when BETTER_AUTH_URL is set
+app.include_router(auth_router, prefix="/api/auth")
 
 # Include API router
 app.include_router(api_router, prefix=settings.api_v1_prefix)

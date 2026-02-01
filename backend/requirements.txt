@@ -7,3 +7,5 @@ alembic==1.12.1
 psycopg2-binary==2.9.9
 python-dotenv==1.0.0
 python-jose[cryptography]==3.3.0
+better-auth>=0.0.1b11
+httpx>=0.25.0
