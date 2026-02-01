@@ -1,9 +1,16 @@
 from typing import List
 
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    model_config = ConfigDict(
+        # Try .env.prod first (for production), then .env (for dev)
+        env_file=[".env.prod", ".env"],
+        case_sensitive=False,
+        extra="ignore",  # Ignore extra fields in .env (e.g., old NEON_AUTH_JWT_SECRET)
+    )
     # Database
     # Use DATABASE_URL for Neon PostgreSQL or local PostgreSQL.
     # Neon format: postgresql://user:password@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
@@ -17,13 +24,10 @@ class Settings(BaseSettings):
     # CORS - JSON array format in .env file: ["http://localhost:4200","http://localhost:3000"]
     cors_origins: List[str] = ["http://localhost:4200", "http://localhost:3000"]
     
-    # better-auth (see docs/plan/authentication-architecture.md)
-    # Auth runs as a separate Node service; FastAPI verifies JWTs with the same secret.
-    better_auth_url: str = ""  # Base URL of the Better Auth service (e.g. http://localhost:3000)
-    auth_jwt_secret: str = ""  # Same as BETTER_AUTH_SECRET; used to verify JWTs (min 32 chars)
-    auth_session_cookie_name: str = "better-auth.session_token"  # Cookie name for session token
-    auth_session_expires_seconds: int = 60 * 60 * 24 * 7  # 7 days
-    auth_session_update_age_seconds: int = 60 * 60 * 24   # 1 day
+    # Neon Auth (see docs/plan/authentication-architecture.md)
+    # Neon Auth is integrated with Neon PostgreSQL; FastAPI verifies JWTs using Neon's JWKS.
+    neon_auth_jwks_url: str = ""  # JWKS URL from Neon Auth (get from Neon dashboard → Configuration)
+    auth_session_cookie_name: str = "neon-auth.session_token"  # Cookie name for session token
     
     # Supabase (Phase 2 - not used in Phase 1)
     supabase_url: str = ""
@@ -42,11 +46,6 @@ class Settings(BaseSettings):
         """True when the effective database is PostgreSQL (e.g. Neon)."""
         url = self.effective_database_url
         return "postgresql" in url or "postgres+" in url
-
-    class Config:
-        # Try .env.prod first (for production), then .env (for dev)
-        env_file = [".env.prod", ".env"]
-        case_sensitive = False
 
 
 settings = Settings()

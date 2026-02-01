@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Run backend (FastAPI) and client (Angular) together for local development.
+# Note: With Neon Auth, no separate auth service is needed.
 # Backend: http://localhost:8000
 # Client:  http://localhost:4200
 

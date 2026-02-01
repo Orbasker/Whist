@@ -1,0 +1,26 @@
+{
+  "name": "wist-auth-service",
+  "version": "1.0.0",
+  "description": "Better Auth service for Wist game",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "migrate": "better-auth migrate"
+  },
+  "dependencies": {
+    "better-auth": "^1.0.0",
+    "hono": "^4.0.0",
+    "@hono/node-server": "^1.0.0",
+    "pg": "^8.11.3",
+    "drizzle-orm": "^0.29.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/pg": "^8.10.9",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}

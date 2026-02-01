@@ -1,19 +1,20 @@
 """FastAPI application entry point"""
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.config import settings
+
 from app.api.v1.router import api_router
-from app.views.auth import router as auth_router
+from app.config import settings
+from app.core.exceptions import GameNotFoundError, InvalidBidsError, InvalidTricksError
 from app.core.middleware import (
     game_not_found_handler,
     invalid_bids_handler,
     invalid_tricks_handler,
-    validation_exception_handler
+    validation_exception_handler,
 )
-from app.core.exceptions import GameNotFoundError, InvalidBidsError, InvalidTricksError
-from fastapi.exceptions import RequestValidationError
+from app.views.auth import router as auth_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -31,7 +32,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Auth router: proxies /api/auth/* to Better Auth service when BETTER_AUTH_URL is set
+# Auth router: Note - With Neon Auth, frontend communicates directly with Neon.
+# This router is kept for backward compatibility but returns 501.
 app.include_router(auth_router, prefix="/api/auth")
 
 # Include API router

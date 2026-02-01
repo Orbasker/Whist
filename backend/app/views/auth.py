@@ -1,9 +1,9 @@
 """
-Proxy router for Better Auth: forwards /api/auth/* to the external Better Auth service.
+Auth router - Note: With Neon Auth, authentication is handled directly by Neon.
+This router is kept for backward compatibility but is not needed with Neon Auth.
 
-When BETTER_AUTH_URL is set, all requests to this router are proxied to that URL.
-The Better Auth server (Node) handles sign-up, sign-in, session, etc.; see
-docs/plan/authentication-architecture.md.
+Neon Auth handles authentication at the database level, and the frontend
+communicates directly with Neon Auth endpoints. FastAPI verifies JWTs issued by Neon.
 """
 
 import logging
@@ -39,26 +39,22 @@ FORWARD_RESPONSE_HEADERS = {
 }
 
 
-def _build_auth_base_url() -> str:
-    base = (settings.better_auth_url or "").rstrip("/")
-    return base
-
-
 @router.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 async def proxy_to_better_auth(path: str, request: Request) -> Response:
     """
-    Proxy request to the configured Better Auth service.
-    Returns 503 if BETTER_AUTH_URL is not set.
+    Note: With Neon Auth, this proxy is not needed.
+    Frontend communicates directly with Neon Auth endpoints.
+    This endpoint returns 501 to indicate Neon Auth should be used directly.
     """
-    base_url = _build_auth_base_url()
-    if not base_url:
-        return JSONResponse(
-            status_code=503,
-            content={
-                "error": "Auth service not configured",
-                "detail": "Set BETTER_AUTH_URL to the Better Auth API base (e.g. http://localhost:3000/api/auth)",
-            },
-        )
+    return JSONResponse(
+        status_code=501,
+        content={
+            "error": "Use Neon Auth directly",
+            "detail": "With Neon Auth, the frontend should communicate directly with Neon Auth endpoints. " +
+                      "FastAPI verifies JWTs issued by Neon Auth, but does not proxy auth requests.",
+            "neon_auth_docs": "https://neon.tech/docs/auth"
+        },
+    )
     target = f"{base_url}/{path}" if path else base_url
     # Forward query string
     if request.url.query:
