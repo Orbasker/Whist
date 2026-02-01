@@ -5,7 +5,7 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from app.models.game import Game, GameStatus
+from app.models.game import Game, GameMode, GameStatus
 from app.models.round import Round
 from app.repositories.game_repository import GameRepository
 from app.schemas.game import GameCreate, GameResponse, GameUpdate
