@@ -17,6 +17,8 @@ class PaginationResponse(BaseModel):
 
 
 class HealthResponse(BaseModel):
-    """Schema for health check response"""
+    """Schema for health check response."""
+
     status: str
     version: str = "1.0.0"
+    database: str | None = None  # "ok" | "error" when DB check is performed

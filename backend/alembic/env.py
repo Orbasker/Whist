@@ -2,9 +2,7 @@ import os
 import sys
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config, pool
-from sqlalchemy import text as sa_text
-
+from sqlalchemy import create_engine, pool
 from alembic import context
 
 # Add parent directory to path
@@ -16,10 +14,10 @@ from app.config import settings
 from app.models import Game, Round  # noqa: F401
 from app.models.base import Base
 
-# this is the Alembic Config object
+# Alembic Config object
 config = context.config
 
-# Override sqlalchemy.url with settings (use effective URL for Supabase support)
+# Use app settings URL (Neon PostgreSQL, Supabase, or SQLite) for all migration operations
 config.set_main_option("sqlalchemy.url", settings.effective_database_url)
 
 # Interpret the config file for Python logging.
@@ -45,13 +43,11 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode."""
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
+    """Run migrations in 'online' mode using the same URL as the app (e.g. Neon)."""
+    connectable = create_engine(
+        settings.effective_database_url,
         poolclass=pool.NullPool,
     )
-
     with connectable.connect() as connection:
         context.configure(
             connection=connection, target_metadata=target_metadata

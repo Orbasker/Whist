@@ -28,18 +28,24 @@ This will:
 
 2. Set up environment:
 ```bash
-cp .env.example .env
-# Edit .env with your PostgreSQL database URL:
-# DATABASE_URL=postgresql://username:password@localhost:5432/whist_db
+cp env.example .env
+# Edit .env with your DATABASE_URL (see options below).
 ```
 
-3. Create PostgreSQL database (if not exists):
+**Database options:**
+
+- **Neon PostgreSQL (recommended):** Create a project at [neon.tech](https://neon.tech), copy the connection string, and set `DATABASE_URL` in `.env`. Neon requires SSL; the app adds `sslmode=require` automatically for Neon hosts. Example format: `postgresql://user:password@ep-xxx.region.aws.neon.tech/neondb?sslmode=require`
+- **Local PostgreSQL:** `DATABASE_URL=postgresql://username:password@localhost:5432/whist_db`
+- **SQLite (dev):** `DATABASE_URL=sqlite:///./whist.db`
+
+3. Create PostgreSQL database (only for local PostgreSQL):
 ```bash
 # Using psql:
 createdb whist_db
 # Or using SQL:
 psql -U postgres -c "CREATE DATABASE whist_db;"
 ```
+For Neon, the database is created when you create the project.
 
 4. Run database migrations (creates all tables):
 ```bash
