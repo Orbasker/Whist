@@ -49,6 +49,16 @@ class Settings(BaseSettings):
         """True when the effective database is PostgreSQL (e.g. Neon)."""
         url = self.effective_database_url
         return "postgresql" in url or "postgres+" in url
+    
+    @property
+    def is_production(self) -> bool:
+        """True when running in production environment."""
+        return self.environment == "production"
+    
+    @property
+    def is_development(self) -> bool:
+        """True when running in development environment."""
+        return self.environment == "development"
 
 
 settings = Settings()
