@@ -42,11 +42,25 @@ export class GameService {
   }
 
   // Methods
-  async createGame(players: string[]): Promise<GameState> {
+  async listGames(): Promise<GameState[]> {
     this.loading$.next(true);
     this.error$.next(null);
     try {
-      const game = await firstValueFrom(this.apiService.createGame(players));
+      const games = await firstValueFrom(this.apiService.listGames());
+      return games || [];
+    } catch (error: any) {
+      this.error$.next(error.message || 'Failed to load games');
+      throw error;
+    } finally {
+      this.loading$.next(false);
+    }
+  }
+
+  async createGame(players: string[], name?: string): Promise<GameState> {
+    this.loading$.next(true);
+    this.error$.next(null);
+    try {
+      const game = await firstValueFrom(this.apiService.createGame(players, name));
       if (game) {
         this.gameState$.next(game);
         this.currentPhase$.next('bidding');

@@ -14,8 +14,16 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   // Game endpoints
-  createGame(players: string[]): Observable<GameState> {
-    return this.http.post<GameState>(`${this.baseUrl}/games`, { players })
+  listGames(): Observable<GameState[]> {
+    return this.http.get<GameState[]>(`${this.baseUrl}/games`)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      );
+  }
+
+  createGame(players: string[], name?: string): Observable<GameState> {
+    return this.http.post<GameState>(`${this.baseUrl}/games`, { players, name })
       .pipe(
         retry(2),
         catchError(this.handleError)

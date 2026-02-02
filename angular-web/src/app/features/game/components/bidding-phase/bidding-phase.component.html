@@ -25,7 +25,11 @@
         [style.width.%]="(totalBids / 13) * 100"
       ></div>
     </div>
-    <p class="text-sm text-slate-300">{{ getStatusMessage() }}</p>
+    <p 
+      class="text-sm"
+      [class.text-red-400]="totalBids === 13"
+      [class.text-slate-300]="totalBids !== 13"
+    >{{ getStatusMessage() }}</p>
   </div>
 
   <!-- Bid Input for Each Player -->
@@ -45,7 +49,13 @@
   <!-- Submit Button -->
   <button
     (click)="onSubmit()"
-    class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+    [disabled]="!canSubmit()"
+    [class.bg-amber-600]="canSubmit()"
+    [class.hover:bg-amber-500]="canSubmit()"
+    [class.bg-slate-600]="!canSubmit()"
+    [class.cursor-not-allowed]="!canSubmit()"
+    [class.opacity-50]="!canSubmit()"
+    class="w-full text-white font-semibold py-3 px-6 rounded-lg transition-colors"
   >
     המשך
   </button>

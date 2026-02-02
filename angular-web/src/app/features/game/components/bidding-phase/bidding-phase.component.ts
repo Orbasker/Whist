@@ -30,7 +30,7 @@ export class BiddingPhaseComponent {
   }
 
   onSubmit() {
-    if (this.bids.every(bid => bid >= 0 && bid <= 13)) {
+    if (this.bids.every(bid => bid >= 0 && bid <= 13) && this.totalBids !== 13) {
       this.bidsSubmit.emit({
         bids: this.bids,
         trumpSuit: this.selectedTrumpSuit || undefined
@@ -40,12 +40,16 @@ export class BiddingPhaseComponent {
 
   getStatusMessage(): string {
     const diff = Math.abs(13 - this.totalBids);
-    if (this.totalBids < 13) {
+    if (this.totalBids === 13) {
+      return '❌ לא ניתן להימר בדיוק 13 - חייב להיות יותר או פחות';
+    } else if (this.totalBids < 13) {
       return `מצב אנדר - חסרות ${diff} לקיחות`;
-    } else if (this.totalBids > 13) {
-      return `מצב אובר - עודפות ${diff} לקיחות`;
     } else {
-      return 'מצב מאוזן';
+      return `מצב אובר - עודפות ${diff} לקיחות`;
     }
+  }
+
+  canSubmit(): boolean {
+    return this.bids.every(bid => bid >= 0 && bid <= 13) && this.totalBids !== 13;
   }
 }

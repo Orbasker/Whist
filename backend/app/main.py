@@ -1,5 +1,7 @@
 """FastAPI application entry point"""
 
+import logging
+
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +17,12 @@ from app.core.middleware import (
     validation_exception_handler,
 )
 from app.views.auth import router as auth_router
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO if settings.is_production else logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 # Create FastAPI app
 app = FastAPI(

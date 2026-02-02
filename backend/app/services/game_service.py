@@ -22,12 +22,13 @@ class GameService:
         self.round_service = round_service
         self.scoring_service = ScoringService()
     
-    async def create_game(self, game_data: GameCreate) -> GameResponse:
+    async def create_game(self, game_data: GameCreate, owner_id: Optional[UUID] = None) -> GameResponse:
         """
         Create a new game.
         
         Args:
             game_data: Game creation data
+            owner_id: Optional user ID who owns the game
             
         Returns:
             Created game response
@@ -37,7 +38,9 @@ class GameService:
             scores=[0, 0, 0, 0],
             current_round=1,
             status=GameStatus.ACTIVE,
-            game_mode=GameMode.SCORING_ONLY
+            game_mode=GameMode.SCORING_ONLY,
+            owner_id=owner_id,
+            name=game_data.name
         )
         
         saved_game = self.game_repo.create(game)
@@ -106,6 +109,19 @@ class GameService:
         self.db.commit()
         return True
     
+    async def list_games(self, user_id: UUID) -> List[GameResponse]:
+        """
+        List all games for a user (games they own or are a player in).
+        
+        Args:
+            user_id: User UUID
+            
+        Returns:
+            List of game responses
+        """
+        games = self.game_repo.get_games_by_user(user_id)
+        return [GameResponse.model_validate(game) for game in games]
+    
     async def submit_bids(
         self,
         game_id: UUID,
@@ -130,6 +146,11 @@ class GameService:
         # Validation: bids must be 4 values, each 0-13
         if len(bids) != 4 or not all(0 <= bid <= 13 for bid in bids):
             raise ValueError("Invalid bids: must be 4 values, each between 0 and 13")
+        
+        # Validation: sum of bids cannot equal 13 (game rule)
+        total_bids = sum(bids)
+        if total_bids == 13:
+            raise ValueError("Invalid bids: total bids cannot equal 13. Must be more or less than 13.")
         
         # Game state is updated when tricks are submitted
         # This method just validates and returns current game state
@@ -156,8 +177,6 @@ class GameService:
         Returns:
             Tuple of (Round, Updated GameResponse) or None if not found
         """
-        from app.models.round import Round
-        
         game = self.game_repo.get_by_id(game_id)
         if not game:
             return None
@@ -171,6 +190,11 @@ class GameService:
         # Validation: bids must be 4 values, each 0-13
         if len(bids) != 4 or not all(0 <= bid <= 13 for bid in bids):
             raise ValueError("Invalid bids: must be 4 values, each between 0 and 13")
+        
+        # Validation: sum of bids cannot equal 13 (game rule)
+        total_bids = sum(bids)
+        if total_bids == 13:
+            raise ValueError("Invalid bids: total bids cannot equal 13. Must be more or less than 13.")
         
         # Create round with calculated scores
         round_obj = self.round_service.create_round(

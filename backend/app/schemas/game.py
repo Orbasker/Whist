@@ -1,13 +1,16 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
 from uuid import UUID
-from app.models.game import GameStatus, GameMode
+
+from pydantic import BaseModel, Field
+
+from app.models.game import GameMode, GameStatus
 
 
 class GameCreate(BaseModel):
     """Schema for creating a new game"""
     players: List[str] = Field(..., min_length=4, max_length=4, description="List of 4 player names")
+    name: Optional[str] = Field(None, description="Optional game name")
 
 
 class GameUpdate(BaseModel):
