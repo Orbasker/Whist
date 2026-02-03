@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.models.game import GameMode, GameStatus
 
@@ -36,6 +36,24 @@ class GameResponse(BaseModel):
     share_code: Optional[str] = None
     created_at: datetime
     updated_at: datetime
+    
+    @field_validator('player_user_ids', mode='before')
+    @classmethod
+    def convert_player_user_ids(cls, v):
+        """Convert string UUIDs from JSON to UUID objects"""
+        if v is None:
+            return None
+        result = []
+        for pid in v:
+            if pid is None:
+                result.append(None)
+            elif isinstance(pid, str):
+                result.append(UUID(pid))
+            elif isinstance(pid, UUID):
+                result.append(pid)
+            else:
+                result.append(UUID(str(pid)))
+        return result
     
     class Config:
         from_attributes = True  # For SQLAlchemy model conversion

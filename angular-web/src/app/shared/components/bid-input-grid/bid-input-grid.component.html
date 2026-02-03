@@ -3,11 +3,15 @@
     <button
       *ngFor="let num of row"
       (click)="selectBid(num)"
+      [disabled]="disabled"
       [class.bg-amber-500]="selectedBid === num"
       [class.bg-slate-700]="selectedBid !== num"
       [class.text-white]="selectedBid === num"
       [class.text-slate-300]="selectedBid !== num"
-      class="px-3 py-2 rounded-lg font-medium transition-colors hover:bg-amber-600"
+      [class.opacity-50]="disabled"
+      [class.cursor-not-allowed]="disabled"
+      class="px-3 py-2 rounded-lg font-medium transition-colors"
+      [class.hover:bg-amber-600]="!disabled"
     >
       {{ num }}
     </button>

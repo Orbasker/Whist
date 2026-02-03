@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class TricksInputGridComponent {
   @Input() selectedTrick: number = 0;
+  @Input() disabled: boolean = false;
   @Output() trickSelect = new EventEmitter<number>();
 
   numbers = [

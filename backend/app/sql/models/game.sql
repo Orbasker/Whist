@@ -23,7 +23,7 @@ CREATE INDEX IF NOT EXISTS idx_games_share_code ON games(share_code);
 CREATE INDEX IF NOT EXISTS idx_games_created_at ON games(created_at DESC);
 
 -- Phase 2: Foreign key (commented for Phase 1)
--- Note: owner_id references Supabase auth.users, not a local users table
+-- Note: owner_id references Neon Auth users, not a local users table
 -- ALTER TABLE games 
 -- ADD CONSTRAINT fk_games_owner 
--- FOREIGN KEY (owner_id) REFERENCES auth.users(id) ON DELETE SET NULL;
+-- FOREIGN KEY (owner_id) REFERENCES "user"(id) ON DELETE SET NULL;

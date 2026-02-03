@@ -1,10 +1,10 @@
 import enum
 import uuid
 
-from sqlalchemy import Boolean, Column, DateTime, Enum, Integer, JSON, String
+from sqlalchemy import JSON, Boolean, Column, DateTime, Enum, Integer, String
 from sqlalchemy.orm import relationship
 
-from app.models.base import Base, GUID, TimestampMixin
+from app.models.base import GUID, Base, TimestampMixin
 
 
 class GameStatus(enum.Enum):
@@ -30,7 +30,7 @@ class Game(Base, TimestampMixin):
     status = Column(Enum(GameStatus), default=GameStatus.ACTIVE, nullable=False)
     
     # Phase 2 (nullable for backward compatibility)
-    owner_id = Column(GUID(), nullable=True)  # References Supabase auth.users
+    owner_id = Column(GUID(), nullable=True)  # References Neon Auth users
     name = Column(String, nullable=True)  # Optional game name
     player_user_ids = Column(JSON, nullable=True)  # [user_id1, null, null, null]
     is_shared = Column(Boolean, default=False)

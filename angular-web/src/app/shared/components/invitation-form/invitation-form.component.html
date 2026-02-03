@@ -1,0 +1,48 @@
+<div class="bg-slate-800 rounded-lg p-6 shadow-xl">
+  <h3 class="text-lg font-semibold text-white mb-4">שלח הזמנות למשחק</h3>
+  <p class="text-slate-400 text-sm mb-4">הזן כתובות אימייל של השחקנים שברצונך להזמין</p>
+
+  <form [formGroup]="invitationForm" (ngSubmit)="onSend()">
+    <div class="space-y-3 mb-4">
+      <div *ngFor="let email of emails; let i = index" class="flex items-center gap-2">
+        <input
+          type="email"
+          [formControlName]="'email' + (i + 1)"
+          [placeholder]="'שחקן ' + (i + 1) + ' - כתובת אימייל'"
+          class="flex-1 bg-slate-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+        />
+        <div *ngIf="invitationForm.get('email' + (i + 1))?.invalid && invitationForm.get('email' + (i + 1))?.touched" 
+             class="text-red-400 text-xs">
+          אימייל לא תקין
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-200 text-sm">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="mb-4 p-3 bg-green-900/50 border border-green-500 rounded-lg text-green-200 text-sm">
+      {{ successMessage }}
+    </div>
+
+    <div class="flex gap-3">
+      <button
+        type="submit"
+        [disabled]="!hasValidEmails() || sending"
+        class="flex-1 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+      >
+        <span *ngIf="!sending">שלח הזמנות</span>
+        <span *ngIf="sending">שולח...</span>
+      </button>
+      <button
+        type="button"
+        (click)="onCancel()"
+        [disabled]="sending"
+        class="bg-slate-600 hover:bg-slate-500 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+      >
+        ביטול
+      </button>
+    </div>
+  </form>
+</div>

@@ -16,6 +16,7 @@ dependencies = [
     "better-auth>=0.0.1b11",
     "httpx>=0.25.0",
     "pyjwt>=2.11.0",
+    "email-validator>=2.3.0",
 ]
 
 [project.optional-dependencies]

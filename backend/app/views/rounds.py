@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.dependencies import get_game_service, get_round_service
 from app.core.exceptions import InvalidBidsError, InvalidTricksError
+from app.core.websocket_manager import connection_manager
 from app.schemas.game import GameUpdate
 from app.schemas.round import RoundCreate, RoundResponse, TricksSubmit
 from app.services.game_service import GameService
@@ -34,6 +35,10 @@ async def submit_bids(
         # Calculate round mode
         total_bids = sum(round_data.bids)
         round_mode = "over" if total_bids > 13 else "under"
+        
+        # Broadcast game update via WebSocket (use mode='json' to serialize UUIDs)
+        await connection_manager.broadcast_game_update(str(game_id), game.model_dump(mode='json'))
+        await connection_manager.broadcast_phase_update(str(game_id), "tricks")
         
         return {
             "game": game,
@@ -70,6 +75,10 @@ async def submit_tricks(
             raise HTTPException(status_code=404, detail="Game not found")
         
         round_obj, updated_game = result
+        
+        # Broadcast game update via WebSocket (use mode='json' to serialize UUIDs)
+        await connection_manager.broadcast_game_update(str(game_id), updated_game.model_dump(mode='json'))
+        await connection_manager.broadcast_phase_update(str(game_id), "bidding")
         
         return {
             "game": updated_game,

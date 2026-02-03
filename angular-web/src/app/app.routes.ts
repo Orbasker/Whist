@@ -17,6 +17,10 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'invite/:token',
+    loadComponent: () => import('./features/invite/invite.component').then(m => m.InviteComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

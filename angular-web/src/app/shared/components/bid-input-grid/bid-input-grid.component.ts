@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class BidInputGridComponent {
   @Input() selectedBid: number = 0;
+  @Input() disabled: boolean = false;
   @Output() bidSelect = new EventEmitter<number>();
 
   numbers = [

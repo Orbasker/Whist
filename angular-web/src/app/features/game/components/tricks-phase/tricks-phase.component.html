@@ -28,11 +28,16 @@
         <div>
           <span class="text-white font-medium">{{ player }}</span>
           <span class="text-slate-400 text-sm mr-2">הימור: {{ bids[i] }}</span>
+          <span class="text-xs text-green-400 ml-2" *ngIf="currentPlayerIndex === i">(אתה)</span>
         </div>
-        <span class="text-amber-400 font-bold">{{ tricks[i] }} לקיחות</span>
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 font-bold">{{ getTrickForPlayer(i) }} לקיחות</span>
+          <span *ngIf="i !== currentPlayerIndex && liveTricks[i] !== undefined" class="text-xs text-green-400">(בחירה)</span>
+        </div>
       </div>
       <app-tricks-input-grid
-        [selectedTrick]="tricks[i]"
+        [selectedTrick]="getTrickForPlayer(i)"
+        [disabled]="false"
         (trickSelect)="onTrickChange(i, $event)"
       ></app-tricks-input-grid>
     </div>

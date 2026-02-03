@@ -3,6 +3,7 @@ import sys
 from logging.config import fileConfig
 
 from sqlalchemy import create_engine, pool
+
 from alembic import context
 
 # Add parent directory to path
@@ -17,7 +18,7 @@ from app.models.base import Base
 # Alembic Config object
 config = context.config
 
-# Use app settings URL (Neon PostgreSQL, Supabase, or SQLite) for all migration operations
+# Use app settings URL (Neon PostgreSQL or SQLite) for all migration operations
 config.set_main_option("sqlalchemy.url", settings.effective_database_url)
 
 # Interpret the config file for Python logging.

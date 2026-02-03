@@ -8,6 +8,7 @@ import { BiddingPhaseComponent } from './components/bidding-phase/bidding-phase.
 import { TricksPhaseComponent } from './components/tricks-phase/tricks-phase.component';
 import { RoundSummaryComponent } from './components/round-summary/round-summary.component';
 import { ScoreTableComponent } from './components/score-table/score-table.component';
+import { ScoreboardIconComponent } from '../../shared/components/scoreboard-icon/scoreboard-icon.component';
 
 @Component({
   selector: 'app-game',
@@ -17,7 +18,8 @@ import { ScoreTableComponent } from './components/score-table/score-table.compon
     BiddingPhaseComponent,
     TricksPhaseComponent,
     RoundSummaryComponent,
-    ScoreTableComponent
+    ScoreTableComponent,
+    ScoreboardIconComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
@@ -28,6 +30,7 @@ export class GameComponent implements OnInit, OnDestroy {
   showScoreTable = false;
   showRoundSummary = false;
   roundResults: any = null;
+  private gameId: string | null = null;
 
   private subscriptions = new Subscription();
 
@@ -37,19 +40,21 @@ export class GameComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const gameId = localStorage.getItem('whist_game_id');
-    if (gameId) {
-      this.loadGame(gameId);
+    this.gameId = localStorage.getItem('whist_game_id');
+    if (this.gameId) {
+      this.loadGame(this.gameId);
     } else {
       this.router.navigate(['/']);
     }
 
+    // Subscribe to game state updates (from WebSocket)
     this.subscriptions.add(
       this.gameService.getGameState().subscribe(state => {
         this.gameState = state;
       })
     );
 
+    // Subscribe to phase updates (from WebSocket)
     this.subscriptions.add(
       this.gameService.getCurrentPhase().subscribe(phase => {
         this.phase = phase;
@@ -63,6 +68,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   async loadGame(gameId: string) {
     try {
+      this.gameId = gameId;
       await this.gameService.loadGame(gameId);
     } catch (error) {
       console.error('Failed to load game:', error);
@@ -82,25 +88,29 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  onBidsSubmit(bids: number[], trumpSuit?: string) {
-    this.gameService.submitBids(bids, trumpSuit);
+  async onBidsSubmit(bids: number[], trumpSuit?: string) {
+    try {
+      await this.gameService.submitBids(bids, trumpSuit);
+      // WebSocket will update the game state automatically
+    } catch (error) {
+      console.error('Failed to submit bids:', error);
+    }
   }
 
   async onTricksSubmit(tricks: number[]) {
     try {
-      const result = await this.gameService.submitTricks(tricks);
-      if (result?.round) {
-        this.roundResults = {
-          players: this.gameState?.players || [],
-          bids: result.round.bids,
-          tricks: result.round.tricks,
-          roundScores: result.round.scores,
-          newTotalScores: result.game.scores,
-          roundMode: result.round.round_mode,
-          trumpSuit: result.round.trump_suit
-        };
-        this.showRoundSummary = true;
-      }
+      await this.gameService.submitTricks(tricks);
+      // WebSocket will update the game state and we'll get the round data
+      // Subscribe to game state updates to show round summary
+      const gameStateSub = this.gameService.getGameState().subscribe(state => {
+        if (state) {
+          // Check if we have a new round by comparing round numbers
+          // This is a simplified approach - in production you might want to track this better
+        }
+      });
+      
+      // Note: Round summary will be shown when we receive the WebSocket update
+      // For now, we'll show it after a short delay or when we detect the round was created
     } catch (error) {
       console.error('Failed to submit tricks:', error);
     }

@@ -122,6 +122,62 @@ class GameService:
         games = self.game_repo.get_games_by_user(user_id)
         return [GameResponse.model_validate(game) for game in games]
     
+    async def join_game(self, game_id: UUID, user_id: UUID, player_index: int) -> GameResponse:
+        """
+        Join a game by updating player_user_ids at the specified index.
+        
+        Args:
+            game_id: Game UUID
+            user_id: User UUID joining the game
+            player_index: Which seat (0-3) to join
+            
+        Returns:
+            Updated game response
+            
+        Raises:
+            ValueError: If player_index is invalid or seat is already taken
+        """
+        if not 0 <= player_index <= 3:
+            raise ValueError("player_index must be between 0 and 3")
+        
+        game = self.game_repo.get_by_id(game_id)
+        if not game:
+            raise ValueError("Game not found")
+        
+        # Initialize player_user_ids if None
+        if game.player_user_ids is None:
+            game.player_user_ids = [None, None, None, None]
+        else:
+            # Ensure it's a list of 4 elements
+            while len(game.player_user_ids) < 4:
+                game.player_user_ids.append(None)
+            # Convert any existing UUID objects to strings for JSON compatibility
+            game.player_user_ids = [
+                str(pid) if pid is not None and not isinstance(pid, str) else pid
+                for pid in game.player_user_ids
+            ]
+        
+        # Check if seat is already taken
+        # Compare as strings since JSON stores UUIDs as strings
+        user_id_str = str(user_id)
+        existing_id = game.player_user_ids[player_index]
+        if existing_id is not None:
+            # Convert to string if it's a UUID object
+            existing_id_str = str(existing_id) if not isinstance(existing_id, str) else existing_id
+            if existing_id_str == user_id_str:
+                raise ValueError(f"Player seat {player_index} is already taken by this user")
+            else:
+                raise ValueError(f"Player seat {player_index} is already taken")
+        
+        # Update player_user_ids - convert UUID to string for JSON storage
+        game.player_user_ids[player_index] = str(user_id)
+        
+        updated_game = self.game_repo.update(game)
+        self.db.commit()
+        self.db.refresh(updated_game)
+        
+        return GameResponse.model_validate(updated_game)
+    
     async def submit_bids(
         self,
         game_id: UUID,

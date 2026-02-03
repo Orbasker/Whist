@@ -18,7 +18,6 @@ class Settings(BaseSettings):
     # Use DATABASE_URL for Neon PostgreSQL or local PostgreSQL.
     # Neon format: postgresql://user:password@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
     database_url: str = "sqlite:///./whist.db"
-    supabase_database_url: str = ""  # Override for Supabase in production
 
     # API
     api_v1_prefix: str = "/api/v1"
@@ -32,16 +31,15 @@ class Settings(BaseSettings):
     neon_auth_jwks_url: str = ""  # JWKS URL from Neon Auth (get from Neon dashboard → Configuration)
     auth_session_cookie_name: str = "neon-auth.session_token"  # Cookie name for session token
     
-    # Supabase (Phase 2 - not used in Phase 1)
-    supabase_url: str = ""
-    supabase_anon_key: str = ""
-    supabase_jwt_secret: str = ""
+    # Email Service (for invitations)
+    resend_email: str = ""  # Resend API token (RESEND_EMAIL in .env)
+    from_email: str = "onboarding@resend.dev"  # Sender email address (use Resend's default domain for dev, verify your domain for production)
+    frontend_url: str = "http://localhost:4200"  # Frontend URL for invitation links
+    invitation_secret: str = ""  # Secret for signing invitation JWT tokens (INVITATION_SECRET in .env, defaults to resend_email if not set)
     
     @property
     def effective_database_url(self) -> str:
-        """Get the effective database URL, preferring Supabase if configured."""
-        if self.supabase_database_url:
-            return self.supabase_database_url
+        """Get the effective database URL."""
         return self.database_url
 
     @property

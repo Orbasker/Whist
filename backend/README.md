@@ -62,7 +62,7 @@ uv run uvicorn app.main:app --reload
 Or use VS Code debugger:
 - Press `F5` or go to Run and Debug
 - Select "Backend: Dev (Local PostgreSQL)" for local development
-- Select "Backend: Production (Supabase)" for production/Supabase testing
+- Select "Backend: Production (Neon)" for production/Neon testing
 
 The API will be available at `http://localhost:8000`
 - Swagger UI: http://localhost:8000/docs

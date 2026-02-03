@@ -37,10 +37,12 @@
     <div *ngFor="let player of players; let i = index" class="bg-slate-800 rounded-lg p-4">
       <div class="flex items-center justify-between mb-3">
         <span class="text-white font-medium">{{ player }}</span>
-        <span class="text-amber-400 font-bold">{{ bids[i] }} לקיחות</span>
+        <span class="text-amber-400 font-bold">{{ getBidForPlayer(i) }} לקיחות</span>
+        <span *ngIf="i !== currentPlayerIndex && liveBids[i] !== undefined" class="text-xs text-green-400">(בחירה)</span>
       </div>
       <app-bid-input-grid
-        [selectedBid]="bids[i]"
+        [selectedBid]="getBidForPlayer(i)"
+        [disabled]="false"
         (bidSelect)="onBidChange(i, $event)"
       ></app-bid-input-grid>
     </div>
