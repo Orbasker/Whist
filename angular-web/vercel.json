@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build:prod",
+  "outputDirectory": "dist/whist-app/browser",
+  "framework": "angular",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

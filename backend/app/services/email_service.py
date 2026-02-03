@@ -18,7 +18,7 @@ class EmailService:
         # Use Resend's default domain for development (no verification needed)
         # For production, verify your domain at https://resend.com/domains
         self.from_email = settings.from_email if settings.from_email else "onboarding@resend.dev"
-        self.frontend_url = settings.frontend_url
+        self.frontend_url = settings.effective_frontend_url
         self.api_url = "https://api.resend.com/emails"
 
     async def send_invitation(
