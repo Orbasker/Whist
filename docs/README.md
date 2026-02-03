@@ -8,7 +8,6 @@ Complete deployment guide for Whist game backend (Render) and frontend (Vercel).
 - **Backend:** `whist.api.orbasker.com` (Render)
 
 ## Prerequisites
-
 - [ ] GitHub repository with code
 - [ ] Neon PostgreSQL database created
 - [ ] Neon Auth configured (get JWKS URL and Auth URL)
