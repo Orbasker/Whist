@@ -47,6 +47,8 @@ DATABASE_URL=postgresql://user:password@ep-xxx.region.aws.neon.tech/neondb?sslmo
 ```
 FRONTEND_URL=https://whist.orbasker.com
 ```
+⚠️ **CRITICAL:** This must be set to your frontend domain (NOT the API domain). 
+Invitation emails will use this URL. If misconfigured, invite links will be broken.
 
 ```
 BACKEND_URL=https://whist.api.orbasker.com
@@ -169,6 +171,23 @@ Check browser console (F12):
 - ✅ WebSocket connections work
 
 ## Troubleshooting
+
+### Invitation Links Not Working (404 Errors)
+**Symptoms:** Clicking invite links in emails shows "Not Found" error
+
+**Causes:**
+1. `FRONTEND_URL` is not set or set incorrectly in Render
+2. `FRONTEND_URL` points to API domain (`whist.api.orbasker.com`) instead of frontend (`whist.orbasker.com`)
+3. `ENVIRONMENT` is not set to `production` in Render
+
+**Fix:**
+1. Go to Render → Your Service → Environment
+2. Verify `ENVIRONMENT=production` is set
+3. Verify `FRONTEND_URL=https://whist.orbasker.com` (NOT `whist.api.orbasker.com`)
+4. Restart the service after updating
+5. Check backend logs for warnings about frontend URL configuration
+
+**Note:** The backend now includes a redirect endpoint at `/api/v1/invite/{token}/redirect` as a fallback, but the correct fix is to set `FRONTEND_URL` properly.
 
 ### Frontend 404 Errors
 1. Push latest changes (vercel.json, environment files, scripts)

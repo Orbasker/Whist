@@ -1,0 +1,54 @@
+# CodeRabbit Configuration for Whist Game Project
+# Documentation: https://docs.coderabbit.ai/configuration
+
+# Enable automatic reviews on pull requests
+reviews:
+  auto_review: true
+  review_status: ready_for_review
+
+# Paths to ignore (excluded from review)
+ignore:
+  - "**/node_modules/**"
+  - "**/venv/**"
+  - "**/__pycache__/**"
+  - "**/dist/**"
+  - "**/.git/**"
+  - "**/uv.lock"
+  - "**/package-lock.json"
+  - "**/*.db"
+  - "**/whist.db"
+  - "**/alembic/versions/**"  # Migration files are auto-generated
+  - "**/alembic/__pycache__/**"
+
+# Language-specific settings
+languages:
+  python:
+    # Focus areas for Python/FastAPI code
+    focus:
+      - type_safety
+      - error_handling
+      - database_operations
+      - api_design
+      - security
+      - async_patterns
+  
+  typescript:
+    # Focus areas for TypeScript/Angular code
+    focus:
+      - type_safety
+      - component_design
+      - state_management
+      - performance
+      - accessibility
+
+# Enable security checks
+security:
+  enabled: true
+
+# Enable performance suggestions
+performance:
+  enabled: true
+
+# Suggest tests for new code
+tests:
+  enabled: true

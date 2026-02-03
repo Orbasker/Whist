@@ -5,7 +5,9 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import RedirectResponse
 
+from app.config import settings
 from app.core.auth import get_current_user_id, get_current_user_id_optional
 from app.core.dependencies import get_game_service
 from app.core.invitations import generate_invitation_token, validate_invitation_token
@@ -109,6 +111,21 @@ async def create_invitations(
         "total": len(emails),
         "tokens": tokens,  # For testing/debugging
     }
+
+
+@router.get("/{token}/redirect")
+async def redirect_invitation(
+    token: str,
+):
+    """
+    Redirect invitation link to frontend (fallback for misconfigured email links).
+    
+    If someone clicks a link pointing to the API domain, redirect them to the frontend.
+    """
+    frontend_url = settings.effective_frontend_url
+    redirect_url = f"{frontend_url}/invite/{token}"
+    logger.info(f"Redirecting invitation from API domain to frontend: {redirect_url}")
+    return RedirectResponse(url=redirect_url, status_code=307)
 
 
 @router.get("/{token}", response_model=InvitationInfo)

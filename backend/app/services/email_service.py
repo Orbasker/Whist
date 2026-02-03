@@ -20,6 +20,38 @@ class EmailService:
         self.from_email = settings.from_email if settings.from_email else "onboarding@resend.dev"
         self.frontend_url = settings.effective_frontend_url
         self.api_url = "https://api.resend.com/emails"
+        
+        # Validate frontend URL configuration
+        self._validate_frontend_url()
+    
+    def _validate_frontend_url(self):
+        """Validate that frontend URL is correctly configured."""
+        url = self.frontend_url.lower()
+        
+        # Check for common misconfigurations
+        issues = []
+        
+        if settings.is_production:
+            # In production, should use HTTPS
+            if url.startswith("http://"):
+                issues.append("FRONTEND_URL uses HTTP instead of HTTPS in production")
+            
+            # Should not point to API domain
+            if ".api." in url or url.endswith(".api"):
+                issues.append(f"FRONTEND_URL appears to point to API domain ({self.frontend_url}), should point to frontend domain")
+            
+            # Should not be localhost
+            if "localhost" in url:
+                issues.append("FRONTEND_URL points to localhost in production")
+        
+        if issues:
+            logger.warning(
+                f"Frontend URL configuration issues detected: {'; '.join(issues)}. "
+                f"Current FRONTEND_URL: {self.frontend_url}. "
+                f"Expected: https://whist.orbasker.com (production) or set FRONTEND_URL environment variable."
+            )
+        else:
+            logger.info(f"Frontend URL configured: {self.frontend_url}")
 
     async def send_invitation(
         self,
@@ -45,6 +77,7 @@ class EmailService:
             return False
 
         invitation_link = f"{self.frontend_url}/invite/{invitation_token}"
+        logger.info(f"Generating invitation link: {invitation_link} (frontend_url={self.frontend_url})")
         game_display_name = game_name or "Whist Game"
 
         subject = f"You've been invited to play: {game_display_name}"
