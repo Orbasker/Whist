@@ -48,6 +48,12 @@ input {
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s;
+  background-color: white;
+  color: #1a202c; // Explicit dark text color for visibility
+
+  &::placeholder {
+    color: #a0aec0; // Light gray for placeholder text
+  }
 
   &:focus {
     outline: none;
@@ -141,7 +147,13 @@ input {
   font-weight: 500;
 }
 
-.google-button {
+.oauth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.oauth-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,7 +181,17 @@ input {
   }
 }
 
-.google-icon {
+.github-button {
+  color: #24292e;
+  
+  &:hover:not(:disabled) {
+    background-color: #f6f8fa;
+    border-color: #d1d5da;
+  }
+}
+
+.oauth-icon {
   width: 20px;
   height: 20px;
+  flex-shrink: 0;
 }

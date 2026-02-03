@@ -65,7 +65,10 @@ export class AuthComponent implements OnInit {
           this.router.navigate([returnUrl]);
         }
       } catch (error: any) {
-        this.errorMessage = error?.message || 'Login failed. Please check your credentials.';
+        let errorMsg = error?.message || 'Login failed. Please check your credentials.';
+        // Clean up error message - remove leading periods/dots and trim
+        errorMsg = errorMsg.replace(/^\.+\s*/, '').trim();
+        this.errorMessage = errorMsg;
         console.error('Login error:', error);
       } finally {
         this.isLoading = false;
@@ -90,7 +93,10 @@ export class AuthComponent implements OnInit {
           this.router.navigate([returnUrl]);
         }
       } catch (error: any) {
-        this.errorMessage = error?.message || 'Signup failed. Please try again.';
+        let errorMsg = error?.message || 'Signup failed. Please try again.';
+        // Clean up error message - remove leading periods/dots and trim
+        errorMsg = errorMsg.replace(/^\.+\s*/, '').trim();
+        this.errorMessage = errorMsg;
         console.error('Signup error:', error);
       } finally {
         this.isLoading = false;
@@ -112,8 +118,70 @@ export class AuthComponent implements OnInit {
         this.router.navigate([returnUrl]);
       }
     } catch (error: any) {
-      this.errorMessage = error?.message || 'Google sign-in failed. Please try again.';
       console.error('Google sign-in error:', error);
+      
+      // Extract more meaningful error message
+      let errorMsg = 'Google sign-in failed. Please try again.';
+      
+      if (error?.message) {
+        // Check for HTTP status codes
+        if (error.message.includes('403') || error.message.includes('HTTP 403')) {
+          errorMsg = 'Google sign-in is not configured. Please contact support or configure Google OAuth in Neon Auth dashboard.';
+        } else if (error.message.includes('401') || error.message.includes('HTTP 401')) {
+          errorMsg = 'Google sign-in authentication failed. Please try again.';
+        } else if (error.message.includes('400') || error.message.includes('HTTP 400')) {
+          errorMsg = 'Invalid request. Please check your configuration.';
+        } else {
+          errorMsg = error.message;
+        }
+      } else if (error?.status === 403 || error?.statusCode === 403) {
+        errorMsg = 'Google sign-in is not configured. Please contact support or configure Google OAuth in Neon Auth dashboard.';
+      } else if (error?.status === 401 || error?.statusCode === 401) {
+        errorMsg = 'Google sign-in authentication failed. Please try again.';
+      }
+      
+      this.errorMessage = errorMsg;
+      this.isLoading = false;
+    }
+  }
+
+  async onGitHubSignIn() {
+    if (this.isLoading) return;
+    
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    try {
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      const result = await this.authService.signInWithGitHub();
+      
+      if (result) {
+        this.router.navigate([returnUrl]);
+      }
+    } catch (error: any) {
+      console.error('GitHub sign-in error:', error);
+      
+      // Extract more meaningful error message
+      let errorMsg = 'GitHub sign-in failed. Please try again.';
+      
+      if (error?.message) {
+        // Check for HTTP status codes
+        if (error.message.includes('403') || error.message.includes('HTTP 403')) {
+          errorMsg = 'GitHub sign-in is not configured. Please contact support or configure GitHub OAuth in Neon Auth dashboard.';
+        } else if (error.message.includes('401') || error.message.includes('HTTP 401')) {
+          errorMsg = 'GitHub sign-in authentication failed. Please try again.';
+        } else if (error.message.includes('400') || error.message.includes('HTTP 400')) {
+          errorMsg = 'Invalid request. Please check your configuration.';
+        } else {
+          errorMsg = error.message;
+        }
+      } else if (error?.status === 403 || error?.statusCode === 403) {
+        errorMsg = 'GitHub sign-in is not configured. Please contact support or configure GitHub OAuth in Neon Auth dashboard.';
+      } else if (error?.status === 401 || error?.statusCode === 401) {
+        errorMsg = 'GitHub sign-in authentication failed. Please try again.';
+      }
+      
+      this.errorMessage = errorMsg;
       this.isLoading = false;
     }
   }

@@ -82,6 +82,16 @@ export class AuthService {
   }
 
   /**
+   * Sign in with GitHub OAuth
+   */
+  async signInWithGitHub() {
+    return await this.authClient.signIn.social({
+      provider: 'github',
+      callbackURL: window.location.origin + '/login'
+    });
+  }
+
+  /**
    * Get the raw Neon Auth client (for advanced usage)
    */
   getClient() {
