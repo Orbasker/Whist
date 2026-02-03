@@ -3,8 +3,9 @@
 
 # Enable automatic reviews on pull requests
 reviews:
-  auto_review: true
-  review_status: ready_for_review
+  auto_review:
+    enabled: true
+  review_status: true
 
 # Paths to ignore (excluded from review)
 ignore:
