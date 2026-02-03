@@ -1,45 +1,47 @@
 <div class="space-y-6">
+  <!-- Question -->
   <div>
-    <h2 class="text-2xl font-bold text-white mb-2">תוצאות</h2>
-    <p class="text-slate-400">כמה לקיחות כל שחקן לקח בפועל?</p>
+    <p class="text-slate-300 text-sm">כמה לקיחות כל שחקן לקח בפועל?</p>
   </div>
 
-  <!-- Summary -->
-  <div class="bg-green-800 rounded-lg p-4">
-    <div class="flex items-center gap-2 mb-2">
-      <span class="text-white font-medium">סה"כ לקיחות</span>
-      <span class="text-2xl font-bold text-white">{{ totalTricks }}</span>
+  <!-- Summary - Green Bar -->
+  <div class="bg-green-700 rounded-lg p-4">
+    <div class="text-center">
+      <span class="text-white font-semibold text-lg">סה"כ לקיחות {{ totalTricks }}</span>
     </div>
-    <div class="w-full bg-green-700 rounded-full h-1 mb-2">
-      <div
-        class="bg-green-400 h-1 rounded-full transition-all"
-        [style.width.%]="(totalTricks / 13) * 100"
-      ></div>
-    </div>
-    <p class="text-sm" [class.text-green-300]="totalTricks === 13" [class.text-red-300]="totalTricks !== 13">
-      {{ getValidationMessage() }}
-    </p>
   </div>
 
   <!-- Tricks Input for Each Player -->
   <div class="space-y-4">
     <div *ngFor="let player of players; let i = index" class="bg-slate-800 rounded-lg p-4">
       <div class="flex items-center justify-between mb-3">
-        <div>
-          <span class="text-white font-medium">{{ player }}</span>
-          <span class="text-slate-400 text-sm mr-2">הימור: {{ bids[i] }}</span>
-          <span class="text-xs text-green-400 ml-2" *ngIf="currentPlayerIndex === i">(אתה)</span>
+        <!-- Left: Actual takes -->
+        <div class="text-white text-sm">
+          <span class="font-medium">{{ getTrickForPlayer(i) }} לקיחות</span>
+          <span class="text-xs text-red-400 mr-2" *ngIf="isTrickLocked(i)">🔒 נעול</span>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-amber-400 font-bold">{{ getTrickForPlayer(i) }} לקיחות</span>
-          <span *ngIf="i !== currentPlayerIndex && liveTricks[i] !== undefined" class="text-xs text-green-400">(בחירה)</span>
+        <!-- Right: Player name and bet -->
+        <div class="text-right">
+          <div class="flex items-center gap-2">
+            <span class="text-white font-medium">{{ player }}</span>
+            <span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded font-semibold" *ngIf="isPlayerOwner(i)" title="מנהל המשחק">מנהל</span>
+            <span class="text-slate-400 text-sm">הימור: {{ bids[i] }}</span>
+            <span class="text-xs text-green-400" *ngIf="currentPlayerIndex === i">(אתה)</span>
+          </div>
         </div>
       </div>
       <app-tricks-input-grid
         [selectedTrick]="getTrickForPlayer(i)"
-        [disabled]="false"
+        [disabled]="!canEditTrick(i)"
         (trickSelect)="onTrickChange(i, $event)"
       ></app-tricks-input-grid>
+      <button
+        *ngIf="canLockTrick(i)"
+        (click)="onLockTrick(i)"
+        class="mt-2 w-full bg-green-600 hover:bg-green-500 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
+      >
+        {{ currentPlayerIndex === i ? 'נעל בחירה' : 'נעל בחירת שחקן' }}
+      </button>
     </div>
   </div>
 

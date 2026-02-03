@@ -7,8 +7,7 @@ import { InvitationService } from '../../../core/services/invitation.service';
   selector: 'app-invitation-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './invitation-form.component.html',
-  styleUrl: './invitation-form.component.scss'
+  templateUrl: './invitation-form.component.html'
 })
 export class InvitationFormComponent {
   @Input() gameId: string = '';
@@ -81,7 +80,6 @@ export class InvitationFormComponent {
         this.successMessage = `נשלחו ${result.sent} מתוך ${result.total} הזמנות בהצלחה`;
         this.invitationsSent.emit({ sent: result.sent, total: result.total });
         
-        // Clear form after successful send
         setTimeout(() => {
           this.invitationForm.reset();
           this.cancelled.emit();

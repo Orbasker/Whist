@@ -16,6 +16,8 @@ export class GameService {
   private liveBidSelections$ = new BehaviorSubject<{[playerIndex: number]: number}>({});
   private liveTrickSelections$ = new BehaviorSubject<{[playerIndex: number]: number}>({});
   private liveTrumpSelection$ = new BehaviorSubject<string | null>(null);
+  private lockedBids$ = new BehaviorSubject<Set<number>>(new Set());
+  private lockedTricks$ = new BehaviorSubject<Set<number>>(new Set());
   private loading$ = new BehaviorSubject<boolean>(false);
   private error$ = new BehaviorSubject<string | null>(null);
   private wsSubscription: Subscription | null = null;
@@ -29,7 +31,6 @@ export class GameService {
     private injector: Injector
   ) {}
 
-  // Observables
   getGameState(): Observable<GameState | null> {
     return this.gameState$.asObservable();
   }
@@ -58,6 +59,22 @@ export class GameService {
     return this.liveTrumpSelection$.asObservable();
   }
 
+  getLockedBids(): Observable<Set<number>> {
+    return this.lockedBids$.asObservable();
+  }
+
+  getLockedTricks(): Observable<Set<number>> {
+    return this.lockedTricks$.asObservable();
+  }
+
+  isBidLocked(playerIndex: number): boolean {
+    return this.lockedBids$.value.has(playerIndex);
+  }
+
+  isTrickLocked(playerIndex: number): boolean {
+    return this.lockedTricks$.value.has(playerIndex);
+  }
+
   getLoading(): Observable<boolean> {
     return this.loading$.asObservable();
   }
@@ -66,7 +83,6 @@ export class GameService {
     return this.error$.asObservable();
   }
 
-  // Methods
   async listGames(): Promise<GameState[]> {
     this.loading$.next(true);
     this.error$.next(null);
@@ -107,16 +123,8 @@ export class GameService {
       const game = await firstValueFrom(this.apiService.getGame(gameId));
       if (game) {
         this.gameState$.next(game);
-        
-        // Determine current player index from player_user_ids
         await this.setCurrentPlayerIndex(game);
-        
-        // Determine phase from game state
-        // This is a temporary phase until WebSocket sends the actual phase
-        // The WebSocket will send the correct phase when it connects
         this.currentPhase$.next('bidding');
-        
-        // Connect to WebSocket for real-time updates
         if (this.currentGameId !== gameId) {
           this.disconnectWebSocket();
           this.currentGameId = gameId;
@@ -134,130 +142,122 @@ export class GameService {
     }
   }
 
-  private async setCurrentPlayerIndex(game: GameState): Promise<void> {
-    console.log('[GameService] ===== SETTING CURRENT PLAYER INDEX =====');
-    console.log('[GameService] Game player_user_ids:', JSON.stringify(game.player_user_ids));
+  /**
+   * Normalize UUID string for comparison (remove dashes, lowercase)
+   */
+  private normalizeUuid(uuid: string | null | undefined): string | null {
+    if (!uuid) return null;
+    return String(uuid).trim().toLowerCase().replace(/-/g, '');
+  }
+
+  /**
+   * Extract user ID from token (most reliable method)
+   */
+  private extractUserIdFromToken(): string | null {
+    try {
+      let token = localStorage.getItem('neon-auth.session_token');
+      
+      if (!token) {
+        const cookieMatch = document.cookie.split(';').find(c => c.trim().startsWith('neon-auth.session_token='));
+        if (cookieMatch) {
+          token = cookieMatch.split('=')[1]?.trim();
+        }
+      }
+      
+      if (!token) {
+        return null;
+      }
+      
+      const parts = token.split('.');
+      if (parts.length >= 2) {
+        try {
+          const payload = JSON.parse(atob(parts[1]));
+          const userId = payload.sub || payload.user_id || payload.id;
+          return userId ? String(userId).trim() : null;
+        } catch (e) {
+          return null;
+        }
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  /**
+   * Extract user ID from AuthService user object
+   */
+  private extractUserIdFromUser(user: any): string | null {
+    if (!user) return null;
     
-    // Try to get user ID from auth service
+    const userId = (user as any).id || (user as any).user_id || (user as any).sub || (user as any).userId;
+    return userId ? String(userId).trim() : null;
+  }
+
+  private async setCurrentPlayerIndex(game: GameState): Promise<void> {
+    if (!game.player_user_ids || game.player_user_ids.length === 0) {
+      this.currentPlayerIndex = null;
+      this.currentPlayerIndex$.next(null);
+      return;
+    }
+
+    const tokenUserId = this.extractUserIdFromToken();
+    if (tokenUserId) {
+      const normalizedTokenId = this.normalizeUuid(tokenUserId);
+      if (normalizedTokenId) {
+        const index = game.player_user_ids.findIndex((id) => {
+          if (!id) return false;
+          const normalizedId = this.normalizeUuid(id);
+          return normalizedId === normalizedTokenId;
+        });
+        
+        if (index !== -1) {
+          this.currentPlayerIndex = index;
+          this.currentPlayerIndex$.next(index);
+          return;
+        }
+      }
+    }
+
     try {
       const authService = this.injector.get(AuthService);
       const user = await authService.getUser();
+      const userObjectId = this.extractUserIdFromUser(user);
       
-      console.log('[GameService] getUser() returned:', JSON.stringify(user, null, 2));
-      console.log('[GameService] User type:', typeof user);
-      console.log('[GameService] User keys:', user ? Object.keys(user) : 'null');
-      
-      if (user && game.player_user_ids) {
-        // Try different possible user ID properties
-        const userId = (user as any).id || (user as any).user_id || (user as any).sub;
-        
-        console.log('[GameService] Extracted userId:', userId, 'type:', typeof userId);
-        
-        if (userId) {
-          // Convert both to strings for comparison (handles UUID vs string)
-          const userIdStr = String(userId).trim();
-          console.log('[GameService] Looking for user ID (string):', userIdStr);
-          console.log('[GameService] Player IDs (as strings):', game.player_user_ids.map(id => id ? String(id).trim() : 'null'));
-          
-          const index = game.player_user_ids!.findIndex((id, idx) => {
-            if (!id) {
-              console.log(`[GameService] Index ${idx}: null`);
-              return false;
-            }
-            const idStr = String(id).trim();
-            const match = idStr === userIdStr;
-            console.log(`[GameService] Index ${idx}: comparing "${idStr}" === "${userIdStr}" = ${match}`);
-            return match;
+      if (userObjectId) {
+        const normalizedUserObjectId = this.normalizeUuid(userObjectId);
+        if (normalizedUserObjectId) {
+          const index = game.player_user_ids.findIndex((id) => {
+            if (!id) return false;
+            const normalizedId = this.normalizeUuid(id);
+            return normalizedId === normalizedUserObjectId;
           });
           
           if (index !== -1) {
             this.currentPlayerIndex = index;
             this.currentPlayerIndex$.next(index);
-            console.log('[GameService] ✓✓✓ SUCCESS: Set current player index:', index, 'for user:', userIdStr);
             return;
-          } else {
-            const playerIds = game.player_user_ids ? game.player_user_ids.map(id => id ? String(id).trim() : 'null') : [];
-            console.error('[GameService] ✗✗✗ FAILED: User not found in player_user_ids');
-            console.error('[GameService] User ID:', userIdStr);
-            console.error('[GameService] Player IDs:', playerIds);
-            console.error('[GameService] Exact comparison failed. Checking case-insensitive...');
-            
-            // Try case-insensitive comparison
-            const caseInsensitiveIndex = game.player_user_ids!.findIndex(id => {
-              if (!id) return false;
-              return String(id).trim().toLowerCase() === userIdStr.toLowerCase();
-            });
-            
-            if (caseInsensitiveIndex !== -1) {
-              console.warn('[GameService] Found case-insensitive match at index:', caseInsensitiveIndex);
-              this.currentPlayerIndex = caseInsensitiveIndex;
-              this.currentPlayerIndex$.next(caseInsensitiveIndex);
-              return;
-            }
           }
-        } else {
-          console.error('[GameService] User object does not have id, user_id, or sub property');
-          console.error('[GameService] User object:', JSON.stringify(user, null, 2));
         }
-      } else {
-        console.error('[GameService] User is null or player_user_ids is missing');
-        console.error('[GameService] User:', user);
-        console.error('[GameService] player_user_ids:', game.player_user_ids);
       }
     } catch (e) {
       console.error('[GameService] Error getting user from AuthService:', e);
-      console.error('[GameService] Error stack:', (e as Error).stack);
     }
-    
-    // Fallback: Try to get from token
-    try {
-      const token = localStorage.getItem('neon-auth.session_token') || 
-                   document.cookie.split(';').find(c => c.trim().startsWith('neon-auth.session_token='))?.split('=')[1];
-      console.log('[GameService] Token found:', token ? 'YES' : 'NO');
+
+    if (tokenUserId) {
+      const index = game.player_user_ids.findIndex((id) => {
+        if (!id) return false;
+        return String(id).trim().toLowerCase() === tokenUserId.toLowerCase();
+      });
       
-      if (token) {
-        const parts = token.split('.');
-        console.log('[GameService] Token parts:', parts.length);
-        if (parts.length >= 2) {
-          const payload = JSON.parse(atob(parts[1]));
-          console.log('[GameService] Token payload:', JSON.stringify(payload, null, 2));
-          const userId = payload.sub || payload.user_id;
-          console.log('[GameService] User ID from token:', userId);
-          
-          if (userId && game.player_user_ids) {
-            // Convert both to strings for comparison
-            const userIdStr = String(userId).trim();
-            console.log('[GameService] Looking for token user ID:', userIdStr);
-            
-            const index = game.player_user_ids.findIndex((id, idx) => {
-              if (!id) return false;
-              const idStr = String(id).trim();
-              const match = idStr === userIdStr;
-              console.log(`[GameService] Token check index ${idx}: "${idStr}" === "${userIdStr}" = ${match}`);
-              return match;
-            });
-            
-            if (index !== -1) {
-              this.currentPlayerIndex = index;
-              this.currentPlayerIndex$.next(index);
-              console.log('[GameService] ✓✓✓ SUCCESS from token: Set current player index:', index, 'for user:', userIdStr);
-              return;
-            } else {
-              console.error('[GameService] ✗✗✗ Token user ID not found in player_user_ids');
-              console.error('[GameService] Token User ID:', userIdStr);
-              console.error('[GameService] Player IDs:', game.player_user_ids.map(id => id ? String(id).trim() : 'null'));
-            }
-          }
-        }
+      if (index !== -1) {
+        this.currentPlayerIndex = index;
+        this.currentPlayerIndex$.next(index);
+        return;
       }
-    } catch (e) {
-      console.error('[GameService] Error getting user ID from token:', e);
-      console.error('[GameService] Token error stack:', (e as Error).stack);
     }
-    
-    // If we get here, user is not a player in this game
-    console.error('[GameService] ===== FAILED TO SET CURRENT PLAYER INDEX =====');
-    console.error('[GameService] Setting to null - user will not be able to edit');
+
+    console.error('[GameService] Failed to set current player index - user will not be able to edit');
     this.currentPlayerIndex = null;
     this.currentPlayerIndex$.next(null);
   }
@@ -270,83 +270,177 @@ export class GameService {
     return this.currentPlayerIndex$.asObservable();
   }
 
+  async isGameOwnerAsync(): Promise<boolean> {
+    const game = this.gameState$.value;
+    if (!game || !game.owner_id) {
+      return false;
+    }
+    
+    try {
+      const authService = this.injector.get(AuthService);
+      const user = await authService.getUser();
+      if (user) {
+        const userId = (user as any).id || (user as any).user_id || (user as any).sub;
+        if (userId) {
+          return String(userId).trim() === String(game.owner_id).trim();
+        }
+      }
+    } catch (e) {
+      console.error('[GameService] Error checking game owner:', e);
+    }
+    
+    try {
+      const token = localStorage.getItem('neon-auth.session_token') || 
+                   document.cookie.split(';').find(c => c.trim().startsWith('neon-auth.session_token='))?.split('=')[1];
+      if (token && game.owner_id) {
+        const parts = token.split('.');
+        if (parts.length >= 2) {
+          const payload = JSON.parse(atob(parts[1]));
+          const userId = payload.sub || payload.user_id;
+          if (userId) {
+            return String(userId).trim() === String(game.owner_id).trim();
+          }
+        }
+      }
+    } catch (e) {
+      console.error('[GameService] Error checking game owner from token:', e);
+    }
+    
+    return false;
+  }
+
+  isPlayerOwner(playerIndex: number): boolean {
+    const game = this.gameState$.value;
+    if (!game || !game.owner_id || !game.player_user_ids || playerIndex < 0 || playerIndex >= game.player_user_ids.length) {
+      return false;
+    }
+    
+    const playerUserId = game.player_user_ids[playerIndex];
+    if (!playerUserId) {
+      return false;
+    }
+    
+    const normalizedPlayerId = this.normalizeUuid(playerUserId);
+    const normalizedOwnerId = this.normalizeUuid(game.owner_id);
+    
+    return normalizedPlayerId !== null && normalizedOwnerId !== null && normalizedPlayerId === normalizedOwnerId;
+  }
+
   private connectWebSocket(gameId: string): void {
     this.wsSubscription = this.wsService.connect(gameId).subscribe(message => {
-      console.log('[GameService] WebSocket message received:', message.type, message);
-      
       if (message.type === 'game_update' && message.game) {
-        // Update game state from WebSocket
-        console.log('[GameService] Updating game state from WebSocket');
         this.gameState$.next(message.game);
-        // Always recalculate player index when game state updates
         this.setCurrentPlayerIndex(message.game).catch(e => {
           console.error('[GameService] Error setting player index:', e);
         });
       } else if (message.type === 'phase_update' && message.phase) {
-        // Update phase from WebSocket
         this.currentPhase$.next(message.phase);
       } else if (message.type === 'bid_selection' && message.data) {
-        // A player selected a bid (live update) - update for ALL players to see
         const { player_index, bid } = message.data;
-        console.log('[GameService] Received bid_selection:', player_index, bid, 'Current player:', this.currentPlayerIndex);
         
-        // Ensure player_index is a number
         const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (isNaN(playerIdx) || bid === undefined) {
-          console.warn('[GameService] Invalid bid_selection data:', message.data);
           return;
         }
         
-        // Update live selections for all players (everyone should see all selections)
         const currentSelections = this.liveBidSelections$.value;
         const updated = {
           ...currentSelections,
           [playerIdx]: bid
         };
-        console.log('[GameService] Updated live bid selections:', updated);
         this.liveBidSelections$.next(updated);
-      } else if (message.type === 'trick_selection' && message.data) {
-        // A player selected a trick (live update) - update for ALL players to see
+      } else if (message.type === 'bet_change' && message.data) {
+        const { player_index, bid } = message.data;
+        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        if (!isNaN(playerIdx) && bid !== undefined) {
+          const currentSelections = this.liveBidSelections$.value;
+          const updated = {
+            ...currentSelections,
+            [playerIdx]: bid
+          };
+          this.liveBidSelections$.next(updated);
+        }
+      } else if (message.type === 'bet_locked' && message.data) {
+        const { player_index } = message.data;
+        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        if (!isNaN(playerIdx)) {
+          const locked = new Set(this.lockedBids$.value);
+          locked.add(playerIdx);
+          this.lockedBids$.next(locked);
+        }
+      } else if (message.type === 'round_result_changed' && message.data) {
         const { player_index, trick } = message.data;
-        console.log('[GameService] Received trick_selection:', player_index, trick, 'Current player:', this.currentPlayerIndex);
+        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        if (!isNaN(playerIdx) && trick !== undefined) {
+          const currentSelections = this.liveTrickSelections$.value;
+          const updated = {
+            ...currentSelections,
+            [playerIdx]: trick
+          };
+          this.liveTrickSelections$.next(updated);
+        }
+      } else if (message.type === 'round_score_locked' && message.data) {
+        const { player_index } = message.data;
+        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        if (!isNaN(playerIdx)) {
+          const locked = new Set(this.lockedTricks$.value);
+          locked.add(playerIdx);
+          this.lockedTricks$.next(locked);
+        }
+      } else if (message.type === 'trick_selection' && message.data) {
+        const { player_index, trick } = message.data;
         
-        // Ensure player_index is a number
         const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (isNaN(playerIdx) || trick === undefined) {
-          console.warn('[GameService] Invalid trick_selection data:', message.data);
           return;
         }
         
-        // Update live selections for all players (everyone should see all selections)
         const currentSelections = this.liveTrickSelections$.value;
         const updated = {
           ...currentSelections,
           [playerIdx]: trick
         };
-        console.log('[GameService] Updated live trick selections:', updated);
         this.liveTrickSelections$.next(updated);
       } else if (message.type === 'trump_selection' && message.data) {
-        // A player selected a trump suit (live update)
         const trumpSuit = message.data.trump_suit ?? null;
-        console.log('[GameService] Received trump_selection:', trumpSuit);
         this.liveTrumpSelection$.next(trumpSuit);
       } else if (message.type === 'bids_submitted' && message.game) {
-        // Bids were submitted (by this client or another)
         this.gameState$.next(message.game);
         this.currentPhase$.next('tricks');
-        this.liveBidSelections$.next({}); // Clear live bid selections
-        this.liveTrickSelections$.next({}); // Clear live trick selections
+        const submittedBids = this.liveBidSelections$.value;
+        if (Object.keys(submittedBids).length === 4) {
+          const bidsArray = Array(4).fill(0);
+          Object.keys(submittedBids).forEach(playerIdx => {
+            const idx = parseInt(playerIdx);
+            if (idx >= 0 && idx < 4) {
+              bidsArray[idx] = submittedBids[idx];
+            }
+          });
+          this.currentBids$.next(bidsArray);
+        }
+        const messageData = message.data as any;
+        if (messageData && messageData.bids && Array.isArray(messageData.bids)) {
+          this.currentBids$.next(messageData.bids);
+        }
+        if (messageData && messageData.trump_suit) {
+          this.currentTrumpSuit$.next(messageData.trump_suit);
+        }
+        this.liveBidSelections$.next({});
+        this.liveTrickSelections$.next({});
         this.liveTrumpSelection$.next(null);
+        this.lockedBids$.next(new Set());
+        this.lockedTricks$.next(new Set());
         this.loading$.next(false);
       } else if (message.type === 'tricks_submitted' && message.game) {
-        // Tricks were submitted (by this client or another)
         this.gameState$.next(message.game);
         this.currentBids$.next(null);
         this.currentTrumpSuit$.next(null);
         this.currentPhase$.next('bidding');
-        this.liveBidSelections$.next({}); // Clear live selections
-        this.liveTrickSelections$.next({}); // Clear live trick selections
+        this.liveBidSelections$.next({});
+        this.liveTrickSelections$.next({});
         this.liveTrumpSelection$.next(null);
+        this.lockedBids$.next(new Set());
+        this.lockedTricks$.next(new Set());
         this.loading$.next(false);
       } else if (message.type === 'error') {
         this.error$.next(message.message || 'An error occurred');
@@ -375,13 +469,10 @@ export class GameService {
 
     this.loading$.next(true);
     this.error$.next(null);
-    
-    // Store bids locally for tricks phase
     this.currentBids$.next(bids);
     this.currentTrumpSuit$.next(trumpSuit || null);
     
     try {
-      // Send through WebSocket instead of HTTP
       this.wsService.send({
         type: 'submit_bids',
         data: {
@@ -389,10 +480,6 @@ export class GameService {
           trump_suit: trumpSuit
         }
       });
-      
-      // The WebSocket message handler will update the state
-      // Wait a bit for the response (or we could use a promise-based approach)
-      // For now, the state will be updated via WebSocket message
     } catch (error: any) {
       this.error$.next(error.message || 'Failed to submit bids');
       this.currentBids$.next(null);
@@ -405,11 +492,50 @@ export class GameService {
 
   async submitTricks(tricks: number[]): Promise<any> {
     const game = this.gameState$.value;
-    const bids = this.currentBids$.value;
+    let bids = this.currentBids$.value;
     const trumpSuit = this.currentTrumpSuit$.value;
 
-    if (!game || !bids) {
-      throw new Error('No game or bids loaded');
+    if (!game) {
+      throw new Error('No game loaded');
+    }
+
+    if (!bids && game.id) {
+      try {
+        const rounds = await this.getRounds(game.id);
+        if (rounds && rounds.length > 0) {
+          const currentRound = rounds.find(r => r.round_number === game.current_round);
+          if (currentRound && currentRound.bids) {
+            bids = currentRound.bids;
+            this.currentBids$.next(bids);
+          } else {
+            const latestRound = rounds[rounds.length - 1];
+            if (latestRound && latestRound.bids) {
+              bids = latestRound.bids;
+              this.currentBids$.next(bids);
+            }
+          }
+        }
+      } catch (error) {
+        // Silently continue if rounds can't be fetched
+      }
+    }
+
+    if (!bids) {
+      const liveBids = this.liveBidSelections$.value;
+      if (Object.keys(liveBids).length === 4) {
+        bids = Array(4).fill(0);
+        Object.keys(liveBids).forEach(playerIdx => {
+          const idx = parseInt(playerIdx);
+          if (idx >= 0 && idx < 4) {
+            bids![idx] = liveBids[idx];
+          }
+        });
+        this.currentBids$.next(bids);
+      }
+    }
+
+    if (!bids) {
+      throw new Error('No bids loaded. Please ensure bids were submitted for this round.');
     }
 
     if (!this.wsService.isConnected()) {
@@ -420,7 +546,6 @@ export class GameService {
     this.error$.next(null);
     
     try {
-      // Send through WebSocket instead of HTTP
       this.wsService.send({
         type: 'submit_tricks',
         data: {
@@ -430,12 +555,9 @@ export class GameService {
         }
       });
       
-      // The WebSocket message handler will update the state
-      // Return a promise that resolves when we get the response
-      // For now, return the current state (will be updated via WebSocket)
       return {
         game: this.gameState$.value,
-        round: null // Will be updated via WebSocket
+        round: null
       };
     } catch (error: any) {
       this.error$.next(error.message || 'Failed to submit tricks');
@@ -480,18 +602,57 @@ export class GameService {
     }
   }
 
-  sendBidSelection(playerIndex: number, bid: number): void {
-    if (!this.wsService.isConnected() || this.currentPlayerIndex === null) {
+  sendBidSelection(playerIndex: number, bid: number, isGameOwner: boolean = false): void {
+    if (!this.wsService.isConnected()) {
       return;
     }
     
-    // Only send if this is the current player's selection
-    if (playerIndex === this.currentPlayerIndex) {
+    if (this.currentPlayerIndex === null && !isGameOwner) {
+      return;
+    }
+    
+    if (this.isBidLocked(playerIndex)) {
+      return;
+    }
+    
+    const canSend = isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
+    
+    if (canSend) {
       this.wsService.send({
         type: 'bid_selection',
         data: {
           player_index: playerIndex,
           bid: bid
+        }
+      });
+      
+      this.wsService.send({
+        type: 'bet_change',
+        data: {
+          player_index: playerIndex,
+          bid: bid
+        }
+      });
+    }
+  }
+
+  async lockBid(playerIndex: number): Promise<void> {
+    if (!this.wsService.isConnected()) {
+      return;
+    }
+    
+    if (this.isBidLocked(playerIndex)) {
+      return;
+    }
+    
+    const isOwner = await this.isGameOwnerAsync();
+    const isOwnBid = playerIndex === this.currentPlayerIndex;
+    
+    if ((isOwnBid && this.currentPlayerIndex !== null) || isOwner) {
+      this.wsService.send({
+        type: 'bet_locked',
+        data: {
+          player_index: playerIndex
         }
       });
     }
@@ -510,18 +671,57 @@ export class GameService {
     });
   }
 
-  sendTrickSelection(playerIndex: number, trick: number): void {
-    if (!this.wsService.isConnected() || this.currentPlayerIndex === null) {
+  sendTrickSelection(playerIndex: number, trick: number, isGameOwner: boolean = false): void {
+    if (!this.wsService.isConnected()) {
       return;
     }
     
-    // Only send if this is the current player's selection
-    if (playerIndex === this.currentPlayerIndex) {
+    if (this.currentPlayerIndex === null && !isGameOwner) {
+      return;
+    }
+    
+    if (this.isTrickLocked(playerIndex)) {
+      return;
+    }
+    
+    const canSend = isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
+    
+    if (canSend) {
       this.wsService.send({
         type: 'trick_selection',
         data: {
           player_index: playerIndex,
           trick: trick
+        }
+      });
+      
+      this.wsService.send({
+        type: 'round_result_changed',
+        data: {
+          player_index: playerIndex,
+          trick: trick
+        }
+      });
+    }
+  }
+
+  async lockTrick(playerIndex: number): Promise<void> {
+    if (!this.wsService.isConnected()) {
+      return;
+    }
+    
+    if (this.isTrickLocked(playerIndex)) {
+      return;
+    }
+    
+    const isOwner = await this.isGameOwnerAsync();
+    const isOwnTrick = playerIndex === this.currentPlayerIndex;
+    
+    if ((isOwnTrick && this.currentPlayerIndex !== null) || isOwner) {
+      this.wsService.send({
+        type: 'round_score_locked',
+        data: {
+          player_index: playerIndex
         }
       });
     }
@@ -536,6 +736,8 @@ export class GameService {
     this.liveBidSelections$.next({});
     this.liveTrickSelections$.next({});
     this.liveTrumpSelection$.next(null);
+    this.lockedBids$.next(new Set());
+    this.lockedTricks$.next(new Set());
     this.currentPlayerIndex = null;
     this.currentPlayerIndex$.next(null);
     this.error$.next(null);

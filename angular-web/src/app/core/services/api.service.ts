@@ -13,7 +13,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  // Game endpoints
   listGames(): Observable<GameState[]> {
     return this.http.get<GameState[]>(`${this.baseUrl}/games`)
       .pipe(
@@ -54,7 +53,6 @@ export class ApiService {
       );
   }
 
-  // Round endpoints
   submitBids(gameId: string, bids: number[], trumpSuit?: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/games/${gameId}/rounds/bids`, {
       bids,

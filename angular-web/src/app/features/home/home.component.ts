@@ -45,10 +45,8 @@ export class HomeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // Clean up OAuth callback URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('neon_auth_session_verifier')) {
-      // Remove the OAuth callback parameter from URL
       urlParams.delete('neon_auth_session_verifier');
       const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
       window.history.replaceState({}, '', newUrl);
@@ -91,7 +89,6 @@ export class HomeComponent implements OnInit {
   }
 
   async startGame() {
-    // Check authentication before creating game
     const isAuth = await this.authService.isAuthenticated();
     if (!isAuth) {
       console.error('Cannot create game: User is not authenticated');
@@ -100,7 +97,6 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    // Verify we have a valid token
     const token = await this.authService.getToken();
     if (!token) {
       console.error('Cannot create game: No authentication token available');
@@ -120,9 +116,7 @@ export class HomeComponent implements OnInit {
       try {
         const gameName = this.newGameName.trim() || undefined;
         const game = await this.gameService.createGame(players, gameName);
-        // Store game ID in localStorage for persistence
         localStorage.setItem('whist_game_id', game.id);
-        // Reset form
         this.playerForm.reset();
         this.newGameName = '';
         this.showNewGameForm = false;
@@ -132,7 +126,6 @@ export class HomeComponent implements OnInit {
         console.error('Failed to create game:', error);
         const errorMessage = error?.message || 'Failed to create game. Please try again.';
         alert(errorMessage);
-        // If it's an auth error, redirect to login
         if (errorMessage.includes('401') || errorMessage.includes('Unauthorized') || errorMessage.includes('authenticated')) {
           this.router.navigate(['/login']);
         }
@@ -174,13 +167,11 @@ export class HomeComponent implements OnInit {
   }
 
   openInvitationForm(gameId: string, gameName: string) {
-    console.log('Opening invitation form for game:', gameId, gameName);
     this.selectedGameId = gameId;
     this.selectedGameName = gameName;
     this.showInvitationForm = true;
     this.invitationError = null;
     this.invitationSuccess = null;
-    console.log('showInvitationForm set to:', this.showInvitationForm);
   }
 
   closeInvitationForm() {
@@ -203,8 +194,6 @@ export class HomeComponent implements OnInit {
   }
 
   isGameOwner(game: any): boolean {
-    // Check if current user is the game owner
-    // This would need to compare with current user ID from auth service
-    return true; // For now, assume user can invite to their games
+    return true;
   }
 }

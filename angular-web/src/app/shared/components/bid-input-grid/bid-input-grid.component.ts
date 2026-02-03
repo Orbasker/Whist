@@ -5,8 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-bid-input-grid',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './bid-input-grid.component.html',
-  styleUrl: './bid-input-grid.component.scss'
+  templateUrl: './bid-input-grid.component.html'
 })
 export class BidInputGridComponent {
   @Input() selectedBid: number = 0;
@@ -19,6 +18,9 @@ export class BidInputGridComponent {
   ];
 
   selectBid(bid: number) {
+    if (this.disabled) {
+      return;
+    }
     this.selectedBid = bid;
     this.bidSelect.emit(bid);
   }

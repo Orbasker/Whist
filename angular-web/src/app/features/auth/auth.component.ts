@@ -37,7 +37,6 @@ export class AuthComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // Check if user is already authenticated (e.g., returning from OAuth)
     const isAuthenticated = await this.authService.isAuthenticated();
     if (isAuthenticated) {
       const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -62,7 +61,6 @@ export class AuthComponent implements OnInit {
         );
 
         if (result) {
-          // Navigate to returnUrl if provided, otherwise home
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
           this.router.navigate([returnUrl]);
         }
@@ -88,7 +86,6 @@ export class AuthComponent implements OnInit {
         );
 
         if (result) {
-          // After signup, automatically log in and navigate to returnUrl if provided
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
           this.router.navigate([returnUrl]);
         }
@@ -111,7 +108,6 @@ export class AuthComponent implements OnInit {
       const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
       const result = await this.authService.signInWithGoogle();
       
-      // OAuth typically redirects, but if it returns a result, handle it
       if (result) {
         this.router.navigate([returnUrl]);
       }

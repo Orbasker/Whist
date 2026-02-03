@@ -5,8 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-tricks-input-grid',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './tricks-input-grid.component.html',
-  styleUrl: './tricks-input-grid.component.scss'
+  templateUrl: './tricks-input-grid.component.html'
 })
 export class TricksInputGridComponent {
   @Input() selectedTrick: number = 0;
@@ -19,6 +18,9 @@ export class TricksInputGridComponent {
   ];
 
   selectTrick(trick: number) {
+    if (this.disabled) {
+      return;
+    }
     this.selectedTrick = trick;
     this.trickSelect.emit(trick);
   }

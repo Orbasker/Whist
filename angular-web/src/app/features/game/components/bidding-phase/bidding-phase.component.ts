@@ -9,8 +9,7 @@ import { GameService } from '../../../../core/services/game.service';
   selector: 'app-bidding-phase',
   standalone: true,
   imports: [CommonModule, TrumpSelectorComponent, BidInputGridComponent],
-  templateUrl: './bidding-phase.component.html',
-  styleUrl: './bidding-phase.component.scss'
+  templateUrl: './bidding-phase.component.html'
 })
 export class BiddingPhaseComponent implements OnInit, OnDestroy {
   @Input() players: string[] = [];
@@ -22,29 +21,36 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
   totalBids = 0;
   roundMode: 'over' | 'under' = 'under';
   currentPlayerIndex: number | null = null;
+  lockedBids: Set<number> = new Set();
+  isGameOwner: boolean = false;
+  gameState: any = null;
   private subscriptions = new Subscription();
 
   constructor(private gameService: GameService) {}
 
   ngOnInit() {
-    // Get initial player index
     this.currentPlayerIndex = this.gameService.getCurrentPlayerIndex();
-    console.log('[BiddingPhase] Initial current player index:', this.currentPlayerIndex);
     
-    // Subscribe to current player index changes
     this.subscriptions.add(
       this.gameService.getCurrentPlayerIndex$().subscribe(index => {
-        console.log('[BiddingPhase] Current player index updated:', index);
         this.currentPlayerIndex = index;
       })
     );
     
-    // Subscribe to live bid selections from other players
+    this.subscriptions.add(
+      this.gameService.getGameState().subscribe(game => {
+        this.gameState = game;
+        if (game) {
+          this.gameService.isGameOwnerAsync().then(isOwner => {
+            this.isGameOwner = isOwner;
+          });
+        }
+      })
+    );
+    
     this.subscriptions.add(
       this.gameService.getLiveBidSelections().subscribe(selections => {
-        console.log('[BiddingPhase] Live bid selections updated:', selections);
-        this.liveBids = { ...selections }; // Create a new object to trigger change detection
-        // Sync all live bids to local state
+        this.liveBids = { ...selections };
         Object.keys(this.liveBids).forEach(playerIdx => {
           const idx = parseInt(playerIdx);
           if (idx >= 0 && idx < this.bids.length) {
@@ -55,17 +61,20 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
       })
     );
 
-    // Subscribe to live trump selection
     this.subscriptions.add(
       this.gameService.getLiveTrumpSelection().subscribe(trumpSuit => {
         if (trumpSuit !== null) {
-          console.log('[BiddingPhase] Live trump selection updated:', trumpSuit);
           this.selectedTrumpSuit = trumpSuit;
         }
       })
     );
+
+    this.subscriptions.add(
+      this.gameService.getLockedBids().subscribe(locked => {
+        this.lockedBids = locked;
+      })
+    );
     
-    // Initial calculation
     this.updateTotalBids();
   }
 
@@ -75,32 +84,26 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
 
   onTrumpSelect(trumpSuit: string | null) {
     this.selectedTrumpSuit = trumpSuit;
-    // Send live update through WebSocket
     this.gameService.sendTrumpSelection(trumpSuit);
   }
 
   onBidChange(playerIndex: number, bid: number) {
-    console.log('[BiddingPhase] Bid changed:', playerIndex, bid, 'Current player:', this.currentPlayerIndex);
+    if (!this.isGameOwner && playerIndex !== this.currentPlayerIndex) {
+      return;
+    }
+    
     this.bids[playerIndex] = bid;
-    
-    // Send live update through WebSocket for any player (allows editing other players' selections)
-    console.log('[BiddingPhase] Sending bid selection through WebSocket for player:', playerIndex);
-    this.gameService.sendBidSelection(playerIndex, bid);
-    
+    this.gameService.sendBidSelection(playerIndex, bid, this.isGameOwner);
     this.updateTotalBids();
   }
 
   private updateTotalBids() {
-    // Calculate total from both local bids and live bids
-    // Use live bids when available (from WebSocket), otherwise use local bids
     const allBids = [...this.bids];
     
-    // Merge live bids (these are the source of truth from WebSocket)
     Object.keys(this.liveBids).forEach(playerIdx => {
       const idx = parseInt(playerIdx);
       if (idx >= 0 && idx < allBids.length) {
         allBids[idx] = this.liveBids[idx];
-        // Also sync local state for current player
         if (idx === this.currentPlayerIndex) {
           this.bids[idx] = this.liveBids[idx];
         }
@@ -109,14 +112,10 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
     
     this.totalBids = allBids.reduce((a, b) => a + b, 0);
     this.roundMode = this.totalBids > 13 ? 'over' : 'under';
-    console.log('[BiddingPhase] Total bids updated:', this.totalBids, 'All bids:', allBids, 'Local bids:', this.bids, 'Live bids:', this.liveBids, 'Current player:', this.currentPlayerIndex);
   }
 
   getBidForPlayer(playerIndex: number): number {
-    // Always prefer live bid if available (from WebSocket), otherwise use local bid
-    // This ensures we show what other players have selected
     if (this.liveBids[playerIndex] !== undefined) {
-      // Always sync local state when we have a live value (for all players, not just current)
       this.bids[playerIndex] = this.liveBids[playerIndex];
       return this.liveBids[playerIndex];
     }
@@ -124,7 +123,6 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
   }
 
   isPlayerSelection(playerIndex: number): boolean {
-    // Check if this player has made a selection (either local or live)
     return playerIndex === this.currentPlayerIndex 
       ? this.bids[playerIndex] > 0 || this.bids[playerIndex] === 0
       : this.liveBids[playerIndex] !== undefined;
@@ -152,5 +150,43 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
 
   canSubmit(): boolean {
     return this.bids.every(bid => bid >= 0 && bid <= 13) && this.totalBids !== 13;
+  }
+
+  canEditBid(playerIndex: number): boolean {
+    if (this.isGameOwner) {
+      return !this.lockedBids.has(playerIndex);
+    }
+    
+    if (this.currentPlayerIndex === null) {
+      return false;
+    }
+    return playerIndex === this.currentPlayerIndex && !this.lockedBids.has(playerIndex);
+  }
+
+  isBidLocked(playerIndex: number): boolean {
+    return this.lockedBids.has(playerIndex);
+  }
+
+  canLockBid(playerIndex: number): boolean {
+    if (this.lockedBids.has(playerIndex)) {
+      return false;
+    }
+    
+    if (this.isGameOwner) {
+      return true;
+    }
+    
+    const isOwnBid = playerIndex === this.currentPlayerIndex;
+    return isOwnBid && this.currentPlayerIndex !== null;
+  }
+
+  isPlayerOwner(playerIndex: number): boolean {
+    return this.gameService.isPlayerOwner(playerIndex);
+  }
+
+  async onLockBid(playerIndex: number): Promise<void> {
+    if (this.canLockBid(playerIndex)) {
+      await this.gameService.lockBid(playerIndex);
+    }
   }
 }

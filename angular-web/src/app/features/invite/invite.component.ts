@@ -9,8 +9,7 @@ import { GameService } from '../../core/services/game.service';
   selector: 'app-invite',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './invite.component.html',
-  styleUrl: './invite.component.scss'
+  templateUrl: './invite.component.html'
 })
 export class InviteComponent implements OnInit {
   token: string = '';
@@ -37,10 +36,8 @@ export class InviteComponent implements OnInit {
       return;
     }
 
-    // Check authentication
     this.isAuthenticated = await this.authService.isAuthenticated();
 
-    // Load invitation info
     try {
       this.invitationInfo = await this.invitationService.getInvitationInfo(this.token);
     } catch (error: any) {
@@ -53,7 +50,6 @@ export class InviteComponent implements OnInit {
 
   async acceptInvitation() {
     if (!this.isAuthenticated) {
-      // Redirect to login with return URL
       this.router.navigate(['/login'], { 
         queryParams: { returnUrl: `/invite/${this.token}` }
       });
@@ -66,11 +62,9 @@ export class InviteComponent implements OnInit {
     try {
       const result = await this.invitationService.acceptInvitation(this.token);
       
-      // Load the game and navigate to it
       await this.gameService.loadGame(result.game_id);
       localStorage.setItem('whist_game_id', result.game_id);
       
-      // Navigate to game
       this.router.navigate(['/game']);
     } catch (error: any) {
       console.error('Error accepting invitation:', error);

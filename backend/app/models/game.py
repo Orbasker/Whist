@@ -1,7 +1,7 @@
 import enum
 import uuid
 
-from sqlalchemy import JSON, Boolean, Column, DateTime, Enum, Integer, String
+from sqlalchemy import JSON, Boolean, Column, Enum, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.models.base import GUID, Base, TimestampMixin

@@ -21,8 +21,7 @@ import { ScoreboardIconComponent } from '../../shared/components/scoreboard-icon
     ScoreTableComponent,
     ScoreboardIconComponent
   ],
-  templateUrl: './game.component.html',
-  styleUrl: './game.component.scss'
+  templateUrl: './game.component.html'
 })
 export class GameComponent implements OnInit, OnDestroy {
   gameState: GameState | null = null;
@@ -47,14 +46,12 @@ export class GameComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     }
 
-    // Subscribe to game state updates (from WebSocket)
     this.subscriptions.add(
       this.gameService.getGameState().subscribe(state => {
         this.gameState = state;
       })
     );
 
-    // Subscribe to phase updates (from WebSocket)
     this.subscriptions.add(
       this.gameService.getCurrentPhase().subscribe(phase => {
         this.phase = phase;
@@ -78,7 +75,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   goBack() {
     if (this.phase === 'tricks') {
-      // Return to bidding phase
       this.gameService.resetGame();
       if (this.gameState) {
         this.gameService.loadGame(this.gameState.id);
@@ -91,7 +87,6 @@ export class GameComponent implements OnInit, OnDestroy {
   async onBidsSubmit(bids: number[], trumpSuit?: string) {
     try {
       await this.gameService.submitBids(bids, trumpSuit);
-      // WebSocket will update the game state automatically
     } catch (error) {
       console.error('Failed to submit bids:', error);
     }
@@ -100,17 +95,6 @@ export class GameComponent implements OnInit, OnDestroy {
   async onTricksSubmit(tricks: number[]) {
     try {
       await this.gameService.submitTricks(tricks);
-      // WebSocket will update the game state and we'll get the round data
-      // Subscribe to game state updates to show round summary
-      const gameStateSub = this.gameService.getGameState().subscribe(state => {
-        if (state) {
-          // Check if we have a new round by comparing round numbers
-          // This is a simplified approach - in production you might want to track this better
-        }
-      });
-      
-      // Note: Round summary will be shown when we receive the WebSocket update
-      // For now, we'll show it after a short delay or when we detect the round was created
     } catch (error) {
       console.error('Failed to submit tricks:', error);
     }

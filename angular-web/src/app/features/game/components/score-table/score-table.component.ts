@@ -6,8 +6,7 @@ import { GameState } from '../../../../core/models/game-state.model';
   selector: 'app-score-table',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './score-table.component.html',
-  styleUrl: './score-table.component.scss'
+  templateUrl: './score-table.component.html'
 })
 export class ScoreTableComponent {
   @Input() gameState: GameState | null = null;

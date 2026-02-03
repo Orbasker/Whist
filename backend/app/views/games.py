@@ -6,7 +6,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.auth import get_current_user_id
 from app.core.dependencies import get_game_service
-from app.core.exceptions import GameNotFoundError
 from app.schemas.game import GameCreate, GameResponse, GameUpdate
 from app.services.game_service import GameService
 

@@ -54,7 +54,6 @@ export class AuthService {
    */
   async getUser() {
     const session = await this.getSession();
-    // Neon Auth wraps response in Data type
     if (session && 'data' in session && session.data) {
       return session.data.user || null;
     }
@@ -66,7 +65,6 @@ export class AuthService {
    */
   async isAuthenticated(): Promise<boolean> {
     const session = await this.getSession();
-    // Neon Auth wraps response in Data type
     if (session && 'data' in session && session.data) {
       return !!session.data.session;
     }
@@ -96,80 +94,54 @@ export class AuthService {
    */
   async getToken(): Promise<string | null> {
     try {
-      // Get token from session (get-session is working, so token should be here)
       const session = await this.getSession();
-      console.debug('[AuthService] getToken - Session object:', session);
       
       if (!session) {
         console.warn('[AuthService] getToken - No session returned');
         return null;
       }
       
-      // Log the full session structure to debug (only in dev mode)
-      if (!environment.production) {
-        console.debug('[AuthService] getToken - Session structure:', JSON.stringify(session, null, 2));
-      }
-      
-      // Try multiple possible token locations in Neon Auth session structure
       const sessionAny = session as any;
       
-      // Option 1: { data: { session: { token: string } } }
       if (sessionAny?.data?.session?.token) {
-        const token = sessionAny.data.session.token;
-        console.debug('[AuthService] getToken - Token found in data.session.token');
-        return token;
+        return sessionAny.data.session.token;
       }
       
-      // Option 2: { data: { session: { accessToken: string } } }
       if (sessionAny?.data?.session?.accessToken) {
-        const token = sessionAny.data.session.accessToken;
-        console.debug('[AuthService] getToken - Token found in data.session.accessToken');
-        return token;
+        return sessionAny.data.session.accessToken;
       }
       
-      // Option 3: { data: { token: string } }
       if (sessionAny?.data?.token) {
         const token = sessionAny.data.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
-          console.debug('[AuthService] getToken - Token found in data.token');
           return token;
         }
       }
       
-      // Option 4: { session: { token: string } }
       if (sessionAny?.session?.token) {
         const token = sessionAny.session.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
-          console.debug('[AuthService] getToken - Token found in session.token');
           return token;
         }
       }
       
-      // Option 5: { token: string } (direct)
       if (sessionAny?.token) {
         const token = sessionAny.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
-          console.debug('[AuthService] getToken - Token found in token');
           return token;
         }
       }
 
-      // Option 6: Recursively search for token in the session object
-      // This will find the token no matter where it's nested
-      const findTokenInObject = (obj: any, path = ''): string | null => {
+      const findTokenInObject = (obj: any): string | null => {
         if (!obj || typeof obj !== 'object') return null;
         
         for (const [key, value] of Object.entries(obj)) {
-          const currentPath = path ? `${path}.${key}` : key;
-          
           if (typeof value === 'string' && value.startsWith('eyJ') && value.length > 100) {
-            // Looks like a JWT token
-            console.debug(`[AuthService] getToken - Token found at path: ${currentPath}`);
             return value;
           }
           
           if (typeof value === 'object' && value !== null) {
-            const found = findTokenInObject(value, currentPath);
+            const found = findTokenInObject(value);
             if (found) return found;
           }
         }
@@ -181,43 +153,29 @@ export class AuthService {
         return foundToken;
       }
       
-      // Option 7: Try reading from cookie as fallback (Neon Auth might store token in cookie)
       try {
         const cookies = document.cookie.split(';');
         for (const cookie of cookies) {
           const [name, value] = cookie.trim().split('=');
-          // Check for common Neon Auth cookie names
           if (name === 'neon-auth.session_token' || name.includes('auth-token') || name.includes('session_token')) {
             const decodedValue = decodeURIComponent(value);
-            // If it's a JWT (starts with eyJ), return it
             if (decodedValue.startsWith('eyJ')) {
-              console.debug('[AuthService] getToken - Token found in cookie:', name);
               return decodedValue;
             }
           }
         }
       } catch (e) {
-        console.debug('[AuthService] getToken - Cookie read failed:', e);
+        // Continue to next option
       }
 
-      // Option 8: Try to get token from client's internal storage/state
-      // Neon Auth client might store the token internally
       const clientAny = this.authClient as any;
       if (clientAny._token || clientAny.token || clientAny.accessToken) {
         const token = clientAny._token || clientAny.token || clientAny.accessToken;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
-          console.debug('[AuthService] getToken - Token found in client internal state');
           return token;
         }
       }
       
-      console.warn('[AuthService] getToken - Token not found in session. Available keys:', Object.keys(session));
-      if (sessionAny?.data) {
-        console.warn('[AuthService] getToken - data keys:', Object.keys(sessionAny.data));
-        if (sessionAny.data.session) {
-          console.warn('[AuthService] getToken - session keys:', Object.keys(sessionAny.data.session));
-        }
-      }
       return null;
     } catch (error) {
       console.error('[AuthService] Error getting token:', error);

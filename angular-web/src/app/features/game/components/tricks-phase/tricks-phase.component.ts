@@ -8,8 +8,7 @@ import { TricksInputGridComponent } from '../../../../shared/components/tricks-i
   selector: 'app-tricks-phase',
   standalone: true,
   imports: [CommonModule, TricksInputGridComponent],
-  templateUrl: './tricks-phase.component.html',
-  styleUrl: './tricks-phase.component.scss'
+  templateUrl: './tricks-phase.component.html'
 })
 export class TricksPhaseComponent implements OnInit, OnDestroy {
   @Input() players: string[] = [];
@@ -20,44 +19,64 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
   bids: number[] = [0, 0, 0, 0];
   totalTricks = 0;
   currentPlayerIndex: number | null = null;
+  lockedTricks: Set<number> = new Set();
+  isGameOwner: boolean = false;
+  gameState: any = null;
   private subscriptions = new Subscription();
 
   constructor(private gameService: GameService) {
-    // Get bids from service
     const currentBids = this.gameService.getCurrentBidsValue();
     if (currentBids) {
-      this.bids = currentBids;
+      this.bids = [...currentBids];
     }
     
-    // Also subscribe for updates
     this.subscriptions.add(
       this.gameService.getCurrentBids().subscribe(bids => {
-        if (bids) {
-          this.bids = bids;
+        if (bids && bids.length === 4) {
+          this.bids = [...bids];
+        }
+      })
+    );
+    
+    this.subscriptions.add(
+      this.gameService.getLiveBidSelections().subscribe(selections => {
+        if (Object.keys(selections).length === 4) {
+          const bidsArray = Array(4).fill(0);
+          Object.keys(selections).forEach(playerIdx => {
+            const idx = parseInt(playerIdx);
+            if (idx >= 0 && idx < 4) {
+              bidsArray[idx] = selections[idx];
+            }
+          });
+          this.bids = bidsArray;
         }
       })
     );
   }
 
   ngOnInit() {
-    // Get initial player index
     this.currentPlayerIndex = this.gameService.getCurrentPlayerIndex();
-    console.log('[TricksPhase] Initial current player index:', this.currentPlayerIndex);
     
-    // Subscribe to current player index changes
     this.subscriptions.add(
       this.gameService.getCurrentPlayerIndex$().subscribe(index => {
-        console.log('[TricksPhase] Current player index updated:', index);
         this.currentPlayerIndex = index;
       })
     );
     
-    // Subscribe to live trick selections from other players
+    this.subscriptions.add(
+      this.gameService.getGameState().subscribe(game => {
+        this.gameState = game;
+        if (game) {
+          this.gameService.isGameOwnerAsync().then(isOwner => {
+            this.isGameOwner = isOwner;
+          });
+        }
+      })
+    );
+    
     this.subscriptions.add(
       this.gameService.getLiveTrickSelections().subscribe(selections => {
-        console.log('[TricksPhase] Live trick selections updated:', selections);
-        this.liveTricks = { ...selections }; // Create a new object to trigger change detection
-        // Sync all live tricks to local state
+        this.liveTricks = { ...selections };
         Object.keys(this.liveTricks).forEach(playerIdx => {
           const idx = parseInt(playerIdx);
           if (idx >= 0 && idx < this.tricks.length) {
@@ -67,8 +86,13 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
         this.updateTotalTricks();
       })
     );
+
+    this.subscriptions.add(
+      this.gameService.getLockedTricks().subscribe(locked => {
+        this.lockedTricks = locked;
+      })
+    );
     
-    // Initial calculation
     this.updateTotalTricks();
   }
 
@@ -77,27 +101,22 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
   }
 
   onTrickChange(playerIndex: number, trick: number) {
-    console.log('[TricksPhase] Trick changed:', playerIndex, trick, 'Current player:', this.currentPlayerIndex);
+    if (!this.isGameOwner && playerIndex !== this.currentPlayerIndex) {
+      return;
+    }
+    
     this.tricks[playerIndex] = trick;
-    
-    // Send live update through WebSocket for any player (allows editing other players' selections)
-    console.log('[TricksPhase] Sending trick selection through WebSocket for player:', playerIndex);
-    this.gameService.sendTrickSelection(playerIndex, trick);
-    
+    this.gameService.sendTrickSelection(playerIndex, trick, this.isGameOwner);
     this.updateTotalTricks();
   }
 
   private updateTotalTricks() {
-    // Calculate total from both local tricks and live tricks
-    // Use live tricks when available (from WebSocket), otherwise use local tricks
     const allTricks = [...this.tricks];
     
-    // Merge live tricks (these are the source of truth from WebSocket)
     Object.keys(this.liveTricks).forEach(playerIdx => {
       const idx = parseInt(playerIdx);
       if (idx >= 0 && idx < allTricks.length) {
         allTricks[idx] = this.liveTricks[idx];
-        // Also sync local state for current player
         if (idx === this.currentPlayerIndex) {
           this.tricks[idx] = this.liveTricks[idx];
         }
@@ -105,14 +124,10 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
     });
     
     this.totalTricks = allTricks.reduce((a, b) => a + b, 0);
-    console.log('[TricksPhase] Total tricks updated:', this.totalTricks, 'All tricks:', allTricks, 'Local tricks:', this.tricks, 'Live tricks:', this.liveTricks, 'Current player:', this.currentPlayerIndex);
   }
 
   getTrickForPlayer(playerIndex: number): number {
-    // Always prefer live trick if available (from WebSocket), otherwise use local trick
-    // This ensures we show what other players have selected
     if (this.liveTricks[playerIndex] !== undefined) {
-      // Always sync local state when we have a live value (for all players, not just current)
       this.tricks[playerIndex] = this.liveTricks[playerIndex];
       return this.liveTricks[playerIndex];
     }
@@ -132,6 +147,44 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
       return `עודפות ${this.totalTricks - 13} לקיחות`;
     } else {
       return 'סה"כ לקיחות: 13';
+    }
+  }
+
+  canEditTrick(playerIndex: number): boolean {
+    if (this.isGameOwner) {
+      return !this.lockedTricks.has(playerIndex);
+    }
+    
+    if (this.currentPlayerIndex === null) {
+      return false;
+    }
+    return playerIndex === this.currentPlayerIndex && !this.lockedTricks.has(playerIndex);
+  }
+
+  isTrickLocked(playerIndex: number): boolean {
+    return this.lockedTricks.has(playerIndex);
+  }
+
+  canLockTrick(playerIndex: number): boolean {
+    if (this.lockedTricks.has(playerIndex)) {
+      return false;
+    }
+    
+    if (this.isGameOwner) {
+      return true;
+    }
+    
+    const isOwnTrick = playerIndex === this.currentPlayerIndex;
+    return isOwnTrick && this.currentPlayerIndex !== null;
+  }
+
+  isPlayerOwner(playerIndex: number): boolean {
+    return this.gameService.isPlayerOwner(playerIndex);
+  }
+
+  async onLockTrick(playerIndex: number): Promise<void> {
+    if (this.canLockTrick(playerIndex)) {
+      await this.gameService.lockTrick(playerIndex);
     }
   }
 }

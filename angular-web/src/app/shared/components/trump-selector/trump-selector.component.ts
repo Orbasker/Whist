@@ -5,8 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-trump-selector',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './trump-selector.component.html',
-  styleUrl: './trump-selector.component.scss'
+  templateUrl: './trump-selector.component.html'
 })
 export class TrumpSelectorComponent {
   @Input() selectedTrump: string | null = null;
