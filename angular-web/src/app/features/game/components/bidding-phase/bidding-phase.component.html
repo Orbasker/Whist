@@ -1,45 +1,48 @@
 <div class="space-y-4 sm:space-y-6">
-  <div>
-    <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
-      {{ 'game.biddingPhase.title' | translate }}
-    </h2>
-    <p class="text-slate-400 text-sm sm:text-base">
-      {{ 'game.biddingPhase.subtitle' | translate }}
-    </p>
-  </div>
-
-  <!-- Trump Selector -->
-  <div>
-    <h3 class="text-base sm:text-lg font-semibold text-white mb-3">
-      {{ 'game.biddingPhase.trump' | translate }}
-    </h3>
-    <app-trump-selector
-      [selectedTrump]="selectedTrumpSuit"
-      (trumpSelect)="onTrumpSelect($event)"
-    ></app-trump-selector>
-  </div>
-
-  <!-- Total Bids Display -->
-  <div class="bg-slate-800 rounded-lg p-3 sm:p-4">
-    <div class="flex items-center justify-between mb-2">
-      <span class="text-slate-400 text-sm sm:text-base">{{
-        'game.biddingPhase.totalBids' | translate
-      }}</span>
-      <span class="text-xl sm:text-2xl font-bold text-white">{{ totalBids }}</span>
+  <!-- Sticky bids summary: title, trump, total bids bar -->
+  <div class="bidding-phase-sticky">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
+        {{ 'game.biddingPhase.title' | translate }}
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base">
+        {{ 'game.biddingPhase.subtitle' | translate }}
+      </p>
     </div>
-    <div class="w-full bg-slate-700 rounded-full h-2 mb-2">
-      <div
-        class="bg-amber-500 h-2 rounded-full transition-all"
-        [style.width.%]="(totalBids / 13) * 100"
-      ></div>
+
+    <!-- Trump Selector -->
+    <div>
+      <h3 class="text-base sm:text-lg font-semibold text-white mb-3">
+        {{ 'game.biddingPhase.trump' | translate }}
+      </h3>
+      <app-trump-selector
+        [selectedTrump]="selectedTrumpSuit"
+        (trumpSelect)="onTrumpSelect($event)"
+      ></app-trump-selector>
     </div>
-    <p
-      class="text-sm"
-      [class.text-red-400]="totalBids === 13"
-      [class.text-slate-300]="totalBids !== 13"
-    >
-      {{ getStatusMessage() }}
-    </p>
+
+    <!-- Total Bids Display -->
+    <div class="bg-slate-800 rounded-lg p-3 sm:p-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-slate-400 text-sm sm:text-base">{{
+          'game.biddingPhase.totalBids' | translate
+        }}</span>
+        <span class="text-xl sm:text-2xl font-bold text-white">{{ totalBids }}</span>
+      </div>
+      <div class="w-full bg-slate-700 rounded-full h-2 mb-2">
+        <div
+          class="bg-amber-500 h-2 rounded-full transition-all"
+          [style.width.%]="(totalBids / 13) * 100"
+        ></div>
+      </div>
+      <p
+        class="text-sm"
+        [class.text-red-400]="totalBids === 13"
+        [class.text-slate-300]="totalBids !== 13"
+      >
+        {{ getStatusMessage() }}
+      </p>
+    </div>
   </div>
 
   <!-- Bid Input for Each Player -->
