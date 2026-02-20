@@ -1,11 +1,14 @@
-<app-modal title="סיכום סיבוב" size="sm" (close)="onContinue()">
+<app-modal [title]="'game.roundSummary.title' | translate" size="sm" (close)="onContinue()">
   <div class="space-y-3" *ngIf="results">
     <div *ngFor="let player of results.players; let i = index" class="bg-slate-700 rounded-lg p-3">
       <div class="flex items-center justify-between">
         <div>
           <div class="text-white font-medium">{{ player }}</div>
           <div class="text-slate-400 text-sm">
-            הימר {{ results.bids[i] }}, לקח {{ results.tricks[i] }}
+            {{
+              'game.roundSummary.bidTook'
+                | translate: { bid: results.bids[i], took: results.tricks[i] }
+            }}
           </div>
         </div>
         <div class="text-right">
@@ -16,7 +19,9 @@
           >
             {{ results.roundScores[i] > 0 ? '+' : '' }}{{ results.roundScores[i] }}
           </div>
-          <div class="text-slate-400 text-sm">סה"כ: {{ results.newTotalScores[i] }}</div>
+          <div class="text-slate-400 text-sm">
+            {{ 'game.roundSummary.total' | translate }}: {{ results.newTotalScores[i] }}
+          </div>
         </div>
       </div>
     </div>
@@ -26,6 +31,6 @@
     (click)="onContinue()"
     class="min-h-touch w-full mt-6 bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
   >
-    המשך לסיבוב הבא
+    {{ 'game.roundSummary.continueNext' | translate }}
   </button>
 </app-modal>

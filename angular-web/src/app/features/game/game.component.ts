@@ -10,6 +10,7 @@ import { RoundSummaryComponent } from './components/round-summary/round-summary.
 import { ScoreTableComponent } from './components/score-table/score-table.component';
 import { ScoreboardIconComponent } from '../../shared/components/scoreboard-icon/scoreboard-icon.component';
 import { RoundHistoryComponent } from './components/round-history/round-history.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-game',
@@ -22,6 +23,7 @@ import { RoundHistoryComponent } from './components/round-history/round-history.
     ScoreTableComponent,
     ScoreboardIconComponent,
     RoundHistoryComponent,
+    TranslateModule,
   ],
   templateUrl: './game.component.html',
 })
