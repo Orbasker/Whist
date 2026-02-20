@@ -1,16 +1,18 @@
-"""Round service for managing game rounds"""
+"""Round service for managing game rounds."""
 
 from typing import List, Optional
 from uuid import UUID
+
 from sqlalchemy.orm import Session
-from app.models.round import Round
+
 from app.models.game import Game
-from app.services.scoring_service import ScoringService
+from app.models.round import Round
 from app.repositories.round_repository import RoundRepository
+from app.services.scoring_service import ScoringService
 
 
 class RoundService:
-    """Business logic for round management"""
+    """Business logic for round management."""
 
     def __init__(self, db: Session, round_repo: RoundRepository):
         self.db = db
@@ -24,7 +26,7 @@ class RoundService:
         bids: List[int],
         tricks: List[int],
         trump_suit: Optional[str] = None,
-        created_by: Optional[str] = None,
+        created_by: Optional[UUID] = None,
     ) -> Round:
         """
         Create a round with calculated scores.

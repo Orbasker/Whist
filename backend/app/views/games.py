@@ -17,9 +17,7 @@ async def list_games(
     user_id: str = Depends(get_current_user_id),
     game_service: GameService = Depends(get_game_service),
 ):
-    """List all games for the authenticated user (games they own or are a player in)"""
-    from uuid import UUID
-
+    """List all games for the authenticated user (games they own or are a player in)."""
     return await game_service.list_games(UUID(user_id))
 
 
@@ -29,9 +27,7 @@ async def create_game(
     user_id: str = Depends(get_current_user_id),
     game_service: GameService = Depends(get_game_service),
 ):
-    """Create a new game (requires authentication)"""
-    from uuid import UUID
-
+    """Create a new game (requires authentication)."""
     return await game_service.create_game(game_data, owner_id=UUID(user_id))
 
 
@@ -158,8 +154,6 @@ async def delete_game(
     game_service: GameService = Depends(get_game_service),
 ):
     """Delete a game. Only the game owner can delete."""
-    from uuid import UUID
-
     game = await game_service.get_game(game_id)
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")

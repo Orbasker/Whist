@@ -1,4 +1,4 @@
-"""Round API endpoints"""
+"""Round API endpoints."""
 
 from uuid import UUID
 
@@ -10,6 +10,7 @@ from app.core.websocket_manager import connection_manager
 from app.schemas.round import RoundCreate, RoundResponse, TricksSubmit
 from app.services.game_service import GameService
 from app.services.round_service import RoundService
+from app.services.scoring_service import ScoringService
 
 router = APIRouter(prefix="/games/{game_id}/rounds", tags=["rounds"])
 
@@ -33,7 +34,7 @@ async def submit_bids(
             raise HTTPException(status_code=404, detail="Game not found")
 
         total_bids = sum(round_data.bids)
-        round_mode = "over" if total_bids > 13 else "under"
+        round_mode = ScoringService.calculate_round_mode(total_bids)
 
         await connection_manager.broadcast_game_update(str(game_id), game.model_dump(mode="json"))
         await connection_manager.broadcast_phase_update(str(game_id), "tricks")
