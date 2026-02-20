@@ -19,9 +19,7 @@ class ConnectionManager:
         self.game_states: Dict[str, dict] = {}
 
     async def connect(self, websocket: WebSocket, game_id: str):
-        """Connect a WebSocket to a game room"""
-        await websocket.accept()
-
+        """Add an already-accepted WebSocket to a game room. Caller must accept() first."""
         if game_id not in self.active_connections:
             self.active_connections[game_id] = set()
             self.game_states[game_id] = {
