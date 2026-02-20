@@ -62,8 +62,8 @@
     ></app-tricks-phase>
   </div>
 
-  <!-- Floating Round History Button -->
-  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 safe-area-inset-bottom">
+  <!-- Floating Score board button: above the fixed footer so both are always visible -->
+  <div class="floating-scoreboard-wrap">
     <button
       (click)="showRoundHistory = true"
       class="min-h-touch flex items-center gap-2 px-5 py-3 sm:py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold rounded-full shadow-lg shadow-amber-500/30 transition-colors text-sm sm:text-base"
