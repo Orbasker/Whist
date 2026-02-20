@@ -1,0 +1,13 @@
+---
+description: Ask for project when creating Vibe Kanban tasks
+alwaysApply: true
+---
+
+# Vibe Kanban – project when creating tasks
+
+When creating a task or issue in **Vibe Kanban** (or any project/board that has multiple projects):
+
+1. **If the user does not specify the project** – ask which project the task should go in (e.g. "Which project should this go in? e.g. Personal, Web-UI, Backend.")
+2. **If the user explicitly names the project** – use that project and do not ask again.
+
+Do not assume a project (e.g. Web-UI) based on the task type. Prefer the user’s stated project, or ask when unclear.
