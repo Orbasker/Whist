@@ -59,15 +59,7 @@ async def websocket_endpoint(
             current_round_number = game.current_round
             
             has_round_for_current = any(r.round_number == current_round_number for r in rounds)
-            
-            if has_round_for_current:
-                phase = "bidding"
-            else:
-                has_round_for_previous = any(r.round_number == current_round_number - 1 for r in rounds)
-                if has_round_for_previous:
-                    phase = "tricks"
-                else:
-                    phase = "bidding"
+            phase = "tricks" if has_round_for_current else "bidding"
             
             if game_id in connection_manager.game_states:
                 connection_manager.game_states[game_id]["phase"] = phase
