@@ -5,4 +5,8 @@ export const environment = {
   // Go to: Neon Dashboard → Users → Configuration → Auth URL
   // Format: https://ep-xxx.neonauth.region.aws.neon.tech/neondb/auth
   authUrl: 'https://ep-shiny-voice-agz9vcbc.neonauth.c-2.eu-central-1.aws.neon.tech/neondb/auth',
+  // Supabase Realtime (optional) - set at build time via SUPABASE_URL, SUPABASE_ANON_KEY, USE_SUPABASE_REALTIME (see scripts/replace-env.js). No keys committed.
+  useSupabaseRealtime: false,
+  supabaseUrl: '',
+  supabaseAnonKey: '',
 };

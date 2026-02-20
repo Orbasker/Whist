@@ -7,6 +7,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { environment } from '../environments/environment';
+import { REALTIME_SERVICE } from './core/services/realtime.types';
+import { WebSocketService } from './core/services/websocket.service';
+import { SupabaseRealtimeService } from './core/services/supabase-realtime.service';
 import { LanguageService } from './core/services/language.service';
 
 export const appConfig: ApplicationConfig = {
@@ -26,6 +30,14 @@ export const appConfig: ApplicationConfig = {
       useFactory: (lang: LanguageService) => () => lang.init(),
       deps: [LanguageService],
       multi: true,
+    },
+    {
+      provide: REALTIME_SERVICE,
+      useFactory: (ws: WebSocketService, supabase: SupabaseRealtimeService) =>
+        environment.useSupabaseRealtime && environment.supabaseUrl && environment.supabaseAnonKey
+          ? supabase
+          : ws,
+      deps: [WebSocketService, SupabaseRealtimeService],
     },
   ],
 };

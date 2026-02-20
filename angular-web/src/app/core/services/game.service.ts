@@ -1,9 +1,10 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Inject } from '@angular/core';
 import { BehaviorSubject, Observable, firstValueFrom, Subscription } from 'rxjs';
 import { ApiService } from './api.service';
-import { WebSocketService } from './websocket.service';
 import { AuthService } from './auth.service';
 import { GameState, Round } from '../models/game-state.model';
+import { REALTIME_SERVICE } from './realtime.types';
+import type { RealtimeService } from './realtime.types';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,7 @@ export class GameService {
 
   constructor(
     private apiService: ApiService,
-    private wsService: WebSocketService,
+    @Inject(REALTIME_SERVICE) private realtimeService: RealtimeService,
     private authService: AuthService,
     private injector: Injector
   ) {}
@@ -311,7 +312,7 @@ export class GameService {
 
   private async connectWebSocket(gameId: string): Promise<void> {
     const token = await this.authService.getToken();
-    this.wsSubscription = this.wsService.connect(gameId, token).subscribe((message) => {
+    this.wsSubscription = this.realtimeService.connect(gameId, token).subscribe((message) => {
       if (message.type === 'game_update' && message.game) {
         this.gameState$.next(message.game);
         this.setCurrentPlayerIndex(message.game).catch((e) => {
@@ -431,7 +432,7 @@ export class GameService {
       this.wsSubscription.unsubscribe();
       this.wsSubscription = null;
     }
-    this.wsService.disconnect();
+    this.realtimeService.disconnect();
     this.currentGameId = null;
   }
 
@@ -441,7 +442,7 @@ export class GameService {
       throw new Error('No game loaded');
     }
 
-    if (!this.wsService.isConnected()) {
+    if (!this.realtimeService.isConnected()) {
       throw new Error('WebSocket is not connected');
     }
 
@@ -451,7 +452,7 @@ export class GameService {
     this.currentTrumpSuit$.next(trumpSuit || null);
 
     try {
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'submit_bids',
         data: {
           bids,
@@ -516,7 +517,7 @@ export class GameService {
       throw new Error('No bids loaded. Please ensure bids were submitted for this round.');
     }
 
-    if (!this.wsService.isConnected()) {
+    if (!this.realtimeService.isConnected()) {
       throw new Error('WebSocket is not connected');
     }
 
@@ -524,7 +525,7 @@ export class GameService {
     this.error$.next(null);
 
     try {
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'submit_tricks',
         data: {
           tricks,
@@ -607,7 +608,7 @@ export class GameService {
   }
 
   sendBidSelection(playerIndex: number, bid: number, isGameOwner: boolean = false): void {
-    if (!this.wsService.isConnected()) {
+    if (!this.realtimeService.isConnected()) {
       return;
     }
 
@@ -623,7 +624,7 @@ export class GameService {
       isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
 
     if (canSend) {
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'bid_selection',
         data: {
           player_index: playerIndex,
@@ -631,7 +632,7 @@ export class GameService {
         },
       });
 
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'bet_change',
         data: {
           player_index: playerIndex,
@@ -642,7 +643,7 @@ export class GameService {
   }
 
   async lockBid(playerIndex: number): Promise<void> {
-    if (!this.wsService.isConnected()) {
+    if (!this.realtimeService.isConnected()) {
       return;
     }
 
@@ -654,7 +655,7 @@ export class GameService {
     const isOwnBid = playerIndex === this.currentPlayerIndex;
 
     if ((isOwnBid && this.currentPlayerIndex !== null) || isOwner) {
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'bet_locked',
         data: {
           player_index: playerIndex,
@@ -664,11 +665,11 @@ export class GameService {
   }
 
   sendTrumpSelection(trumpSuit: string | null): void {
-    if (!this.wsService.isConnected() || this.currentPlayerIndex === null) {
+    if (!this.realtimeService.isConnected() || this.currentPlayerIndex === null) {
       return;
     }
 
-    this.wsService.send({
+    this.realtimeService.send({
       type: 'trump_selection',
       data: {
         trump_suit: trumpSuit,
@@ -677,7 +678,7 @@ export class GameService {
   }
 
   sendTrickSelection(playerIndex: number, trick: number, isGameOwner: boolean = false): void {
-    if (!this.wsService.isConnected()) {
+    if (!this.realtimeService.isConnected()) {
       return;
     }
 
@@ -693,7 +694,7 @@ export class GameService {
       isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
 
     if (canSend) {
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'trick_selection',
         data: {
           player_index: playerIndex,
@@ -701,7 +702,7 @@ export class GameService {
         },
       });
 
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'round_result_changed',
         data: {
           player_index: playerIndex,
@@ -712,7 +713,7 @@ export class GameService {
   }
 
   async lockTrick(playerIndex: number): Promise<void> {
-    if (!this.wsService.isConnected()) {
+    if (!this.realtimeService.isConnected()) {
       return;
     }
 
@@ -724,7 +725,7 @@ export class GameService {
     const isOwnTrick = playerIndex === this.currentPlayerIndex;
 
     if ((isOwnTrick && this.currentPlayerIndex !== null) || isOwner) {
-      this.wsService.send({
+      this.realtimeService.send({
         type: 'round_score_locked',
         data: {
           player_index: playerIndex,

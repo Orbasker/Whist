@@ -22,6 +22,10 @@ let content = fs.readFileSync(filePath, 'utf8');
 // Get environment variables with fallbacks
 const apiUrl = process.env.API_URL || 'https://whist.api.orbasker.com/api/v1';
 const authUrl = process.env.AUTH_URL || 'https://ep-xxx-prod.neonauth.region.aws.neon.tech/neondb/auth';
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
+const useSupabaseRealtime =
+  process.env.USE_SUPABASE_REALTIME === 'true' || process.env.USE_SUPABASE_REALTIME === '1';
 
 // Replace apiUrl (handle both single and double quotes)
 content = content.replace(
@@ -35,8 +39,26 @@ content = content.replace(
   `authUrl: '${authUrl}'`
 );
 
+// Replace Supabase Realtime (frontend)
+content = content.replace(
+  /useSupabaseRealtime:\s*(true|false)/,
+  `useSupabaseRealtime: ${useSupabaseRealtime}`
+);
+content = content.replace(
+  /supabaseUrl:\s*['"](.*?)['"]/,
+  `supabaseUrl: '${supabaseUrl}'`
+);
+content = content.replace(
+  /supabaseAnonKey:\s*['"](.*?)['"]/,
+  `supabaseAnonKey: '${supabaseAnonKey}'`
+);
+
 fs.writeFileSync(filePath, content);
 
 console.log(`✅ Updated ${envFile}`);
 console.log(`   API URL: ${apiUrl}`);
 console.log(`   Auth URL: ${authUrl}`);
+if (supabaseUrl) {
+  console.log(`   Supabase URL: ${supabaseUrl}`);
+  console.log(`   Use Supabase Realtime: ${useSupabaseRealtime}`);
+}

@@ -42,6 +42,11 @@ This directory contains the complete planning documentation for migrating the Wh
    - Real-time architecture (WebSockets)
    - Migration paths between phases
 
+5. **`websocket-evaluation.md`**
+   - How WebSockets are used today (backend + frontend)
+   - Evaluation of alternatives (SSE, polling, managed services)
+   - Recommendations and migration path for real-time game updates
+
 ## Phase Overview
 
 ### Phase 1: Current Scope (Single Game, Backend)
@@ -150,6 +155,7 @@ Thin Clients → HTTP API calls → FastAPI Backend
 | `architecture.md` | System architecture overview | To understand overall design |
 | `backend-architecture.md` | Backend design details | When building backend |
 | `future-phases.md` | Future features planning | To understand roadmap |
+| `websocket-evaluation.md` | Real-time transport evaluation & WebSocket usage | When changing or scaling real-time updates |
 
 ## Success Criteria
 
