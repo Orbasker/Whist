@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GameService } from '../../core/services/game.service';
-import { GameState } from '../../core/models/game-state.model';
+import { GameState, Round } from '../../core/models/game-state.model';
 import { BiddingPhaseComponent } from './components/bidding-phase/bidding-phase.component';
 import { TricksPhaseComponent } from './components/tricks-phase/tricks-phase.component';
 import { RoundSummaryComponent } from './components/round-summary/round-summary.component';
@@ -29,6 +29,8 @@ export class GameComponent implements OnInit, OnDestroy {
   showScoreTable = false;
   showRoundSummary = false;
   roundResults: any = null;
+  rounds: Round[] = [];
+  showRoundHistory = false;
   private gameId: string | null = null;
 
   private subscriptions = new Subscription();
@@ -67,6 +69,7 @@ export class GameComponent implements OnInit, OnDestroy {
     try {
       this.gameId = gameId;
       await this.gameService.loadGame(gameId);
+      this.rounds = await this.gameService.getRounds(gameId);
     } catch (error) {
       console.error('Failed to load game:', error);
       this.router.navigate(['/']);
@@ -95,6 +98,9 @@ export class GameComponent implements OnInit, OnDestroy {
   async onTricksSubmit(tricks: number[]) {
     try {
       await this.gameService.submitTricks(tricks);
+      if (this.gameId) {
+        this.rounds = await this.gameService.getRounds(this.gameId);
+      }
     } catch (error) {
       console.error('Failed to submit tricks:', error);
     }
