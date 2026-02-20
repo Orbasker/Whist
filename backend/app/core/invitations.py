@@ -13,7 +13,12 @@ logger = logging.getLogger(__name__)
 
 # Use a secret key for signing invitation tokens
 # Falls back to resend_email if invitation_secret not set (for development)
-INVITATION_SECRET = settings.invitation_secret or settings.resend_email or "change-me-in-production"
+_def_secret = "change-me-in-production"
+INVITATION_SECRET = settings.invitation_secret or settings.resend_email or _def_secret
+if INVITATION_SECRET == _def_secret and settings.is_production:
+    logger.warning(
+        "INVITATION_SECRET is not set; using default. Set INVITATION_SECRET in production."
+    )
 INVITATION_ALGORITHM = "HS256"
 INVITATION_EXPIRY_DAYS = 7
 

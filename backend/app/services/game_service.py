@@ -70,6 +70,32 @@ class GameService:
             return None
         return GameResponse.model_validate(game)
 
+    def _user_is_participant(self, game: Game, user_id: UUID) -> bool:
+        """Return True if user_id is the owner or one of the players in the game."""
+        if game.owner_id is not None and game.owner_id == user_id:
+            return True
+        if not game.player_user_ids:
+            return False
+        user_str = str(user_id)
+        for pid in game.player_user_ids:
+            if pid is not None and str(pid) == user_str:
+                return True
+        return False
+
+    async def get_game_if_participant(self, game_id: UUID, user_id: UUID) -> Optional[GameResponse]:
+        """
+        Get game by ID only if the user is a participant (owner or player).
+
+        Returns:
+            Game response if found and user is participant, else None.
+        """
+        game = self.game_repo.get_by_id(game_id)
+        if not game:
+            return None
+        if not self._user_is_participant(game, user_id):
+            return None
+        return GameResponse.model_validate(game)
+
     async def update_game(self, game_id: UUID, game_update: GameUpdate) -> Optional[GameResponse]:
         """
         Update a game.
