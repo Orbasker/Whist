@@ -33,13 +33,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideNoopAnimations(),
-    ...provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
     provideMissingTranslationHandler(SafeMissingTranslationHandler),
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'he',
       })
     ),
+    // Must come after TranslateModule.forRoot() so we override the default NoOpLoader and translations load from JSON
+    ...provideTranslateHttpLoader({ prefix: '/assets/i18n/', suffix: '.json' }),
     {
       provide: APP_INITIALIZER,
       useFactory: (lang: LanguageService) => () => lang.init(),
