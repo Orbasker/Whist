@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { GameService } from '../../core/services/game.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -12,7 +18,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule, InvitationFormComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   playerForm: FormGroup;
@@ -40,7 +46,7 @@ export class HomeComponent implements OnInit {
       player1: ['', [Validators.required, Validators.minLength(1)]],
       player2: ['', [Validators.required, Validators.minLength(1)]],
       player3: ['', [Validators.required, Validators.minLength(1)]],
-      player4: ['', [Validators.required, Validators.minLength(1)]]
+      player4: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
 
@@ -48,7 +54,8 @@ export class HomeComponent implements OnInit {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('neon_auth_session_verifier')) {
       urlParams.delete('neon_auth_session_verifier');
-      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      const newUrl =
+        window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
       window.history.replaceState({}, '', newUrl);
     }
 
@@ -65,7 +72,7 @@ export class HomeComponent implements OnInit {
 
   async loadGames() {
     if (!this.isAuthenticated) return;
-    
+
     this.loading = true;
     try {
       this.games = await this.gameService.listGames();
@@ -110,7 +117,7 @@ export class HomeComponent implements OnInit {
         this.playerForm.value.player1,
         this.playerForm.value.player2,
         this.playerForm.value.player3,
-        this.playerForm.value.player4
+        this.playerForm.value.player4,
       ];
 
       try {
@@ -126,7 +133,11 @@ export class HomeComponent implements OnInit {
         console.error('Failed to create game:', error);
         const errorMessage = error?.message || 'Failed to create game. Please try again.';
         alert(errorMessage);
-        if (errorMessage.includes('401') || errorMessage.includes('Unauthorized') || errorMessage.includes('authenticated')) {
+        if (
+          errorMessage.includes('401') ||
+          errorMessage.includes('Unauthorized') ||
+          errorMessage.includes('authenticated')
+        ) {
           this.router.navigate(['/login']);
         }
       }
@@ -157,12 +168,12 @@ export class HomeComponent implements OnInit {
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('he-IL', { 
-      year: 'numeric', 
-      month: 'short', 
+    return date.toLocaleDateString('he-IL', {
+      year: 'numeric',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
@@ -193,7 +204,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  isGameOwner(game: any): boolean {
+  isGameOwner(_game: unknown): boolean {
     return true;
   }
 }

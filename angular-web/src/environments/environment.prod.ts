@@ -7,5 +7,5 @@ export const environment = {
   // Go to: Neon Dashboard → Users → Configuration → Auth URL
   // Format: https://ep-xxx.neonauth.region.aws.neon.tech/neondb/auth
   // This will be replaced at build time by deployment platform environment variables
-  authUrl: 'https://ep-xxx-prod.neonauth.region.aws.neon.tech/neondb/auth'
+  authUrl: 'https://ep-xxx-prod.neonauth.region.aws.neon.tech/neondb/auth',
 };

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface InvitationCreate {
@@ -30,7 +30,7 @@ export interface InvitationAcceptResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InvitationService {
   private apiUrl = environment.apiUrl;
@@ -40,12 +40,16 @@ export class InvitationService {
   /**
    * Send invitations for a game
    */
-  async sendInvitations(gameId: string, emails: string[], playerIndices?: number[]): Promise<InvitationResponse> {
+  async sendInvitations(
+    gameId: string,
+    emails: string[],
+    playerIndices?: number[]
+  ): Promise<InvitationResponse> {
     const payload: InvitationCreate = { emails };
     if (playerIndices) {
       payload.player_indices = playerIndices;
     }
-    
+
     return await firstValueFrom(
       this.http.post<InvitationResponse>(`${this.apiUrl}/invite/games/${gameId}/invite`, payload)
     );
@@ -55,9 +59,7 @@ export class InvitationService {
    * Get invitation information from token (public, no auth required)
    */
   async getInvitationInfo(token: string): Promise<InvitationInfo> {
-    return await firstValueFrom(
-      this.http.get<InvitationInfo>(`${this.apiUrl}/invite/${token}`)
-    );
+    return await firstValueFrom(this.http.get<InvitationInfo>(`${this.apiUrl}/invite/${token}`));
   }
 
   /**

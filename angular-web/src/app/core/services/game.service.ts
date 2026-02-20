@@ -6,15 +6,15 @@ import { AuthService } from './auth.service';
 import { GameState, Round } from '../models/game-state.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GameService {
   private gameState$ = new BehaviorSubject<GameState | null>(null);
   private currentPhase$ = new BehaviorSubject<'bidding' | 'tricks'>('bidding');
   private currentBids$ = new BehaviorSubject<number[] | null>(null);
   private currentTrumpSuit$ = new BehaviorSubject<string | null>(null);
-  private liveBidSelections$ = new BehaviorSubject<{[playerIndex: number]: number}>({});
-  private liveTrickSelections$ = new BehaviorSubject<{[playerIndex: number]: number}>({});
+  private liveBidSelections$ = new BehaviorSubject<{ [playerIndex: number]: number }>({});
+  private liveTrickSelections$ = new BehaviorSubject<{ [playerIndex: number]: number }>({});
   private liveTrumpSelection$ = new BehaviorSubject<string | null>(null);
   private lockedBids$ = new BehaviorSubject<Set<number>>(new Set());
   private lockedTricks$ = new BehaviorSubject<Set<number>>(new Set());
@@ -47,11 +47,11 @@ export class GameService {
     return this.currentTrumpSuit$.asObservable();
   }
 
-  getLiveBidSelections(): Observable<{[playerIndex: number]: number}> {
+  getLiveBidSelections(): Observable<{ [playerIndex: number]: number }> {
     return this.liveBidSelections$.asObservable();
   }
 
-  getLiveTrickSelections(): Observable<{[playerIndex: number]: number}> {
+  getLiveTrickSelections(): Observable<{ [playerIndex: number]: number }> {
     return this.liveTrickSelections$.asObservable();
   }
 
@@ -130,7 +130,7 @@ export class GameService {
           this.currentGameId = gameId;
           this.connectWebSocket(gameId);
         }
-        
+
         return game;
       }
       throw new Error('Game not found');
@@ -156,18 +156,20 @@ export class GameService {
   private extractUserIdFromToken(): string | null {
     try {
       let token = localStorage.getItem('neon-auth.session_token');
-      
+
       if (!token) {
-        const cookieMatch = document.cookie.split(';').find(c => c.trim().startsWith('neon-auth.session_token='));
+        const cookieMatch = document.cookie
+          .split(';')
+          .find((c) => c.trim().startsWith('neon-auth.session_token='));
         if (cookieMatch) {
           token = cookieMatch.split('=')[1]?.trim();
         }
       }
-      
+
       if (!token) {
         return null;
       }
-      
+
       const parts = token.split('.');
       if (parts.length >= 2) {
         try {
@@ -189,8 +191,9 @@ export class GameService {
    */
   private extractUserIdFromUser(user: any): string | null {
     if (!user) return null;
-    
-    const userId = (user as any).id || (user as any).user_id || (user as any).sub || (user as any).userId;
+
+    const userId =
+      (user as any).id || (user as any).user_id || (user as any).sub || (user as any).userId;
     return userId ? String(userId).trim() : null;
   }
 
@@ -210,7 +213,7 @@ export class GameService {
           const normalizedId = this.normalizeUuid(id);
           return normalizedId === normalizedTokenId;
         });
-        
+
         if (index !== -1) {
           this.currentPlayerIndex = index;
           this.currentPlayerIndex$.next(index);
@@ -223,7 +226,7 @@ export class GameService {
       const authService = this.injector.get(AuthService);
       const user = await authService.getUser();
       const userObjectId = this.extractUserIdFromUser(user);
-      
+
       if (userObjectId) {
         const normalizedUserObjectId = this.normalizeUuid(userObjectId);
         if (normalizedUserObjectId) {
@@ -232,7 +235,7 @@ export class GameService {
             const normalizedId = this.normalizeUuid(id);
             return normalizedId === normalizedUserObjectId;
           });
-          
+
           if (index !== -1) {
             this.currentPlayerIndex = index;
             this.currentPlayerIndex$.next(index);
@@ -249,7 +252,7 @@ export class GameService {
         if (!id) return false;
         return String(id).trim().toLowerCase() === tokenUserId.toLowerCase();
       });
-      
+
       if (index !== -1) {
         this.currentPlayerIndex = index;
         this.currentPlayerIndex$.next(index);
@@ -257,7 +260,9 @@ export class GameService {
       }
     }
 
-    console.error('[GameService] Failed to set current player index - user will not be able to edit');
+    console.error(
+      '[GameService] Failed to set current player index - user will not be able to edit'
+    );
     this.currentPlayerIndex = null;
     this.currentPlayerIndex$.next(null);
   }
@@ -275,7 +280,7 @@ export class GameService {
     if (!game || !game.owner_id) {
       return false;
     }
-    
+
     try {
       const authService = this.injector.get(AuthService);
       const user = await authService.getUser();
@@ -288,10 +293,14 @@ export class GameService {
     } catch (e) {
       console.error('[GameService] Error checking game owner:', e);
     }
-    
+
     try {
-      const token = localStorage.getItem('neon-auth.session_token') || 
-                   document.cookie.split(';').find(c => c.trim().startsWith('neon-auth.session_token='))?.split('=')[1];
+      const token =
+        localStorage.getItem('neon-auth.session_token') ||
+        document.cookie
+          .split(';')
+          .find((c) => c.trim().startsWith('neon-auth.session_token='))
+          ?.split('=')[1];
       if (token && game.owner_id) {
         const parts = token.split('.');
         if (parts.length >= 2) {
@@ -305,64 +314,77 @@ export class GameService {
     } catch (e) {
       console.error('[GameService] Error checking game owner from token:', e);
     }
-    
+
     return false;
   }
 
   isPlayerOwner(playerIndex: number): boolean {
     const game = this.gameState$.value;
-    if (!game || !game.owner_id || !game.player_user_ids || playerIndex < 0 || playerIndex >= game.player_user_ids.length) {
+    if (
+      !game ||
+      !game.owner_id ||
+      !game.player_user_ids ||
+      playerIndex < 0 ||
+      playerIndex >= game.player_user_ids.length
+    ) {
       return false;
     }
-    
+
     const playerUserId = game.player_user_ids[playerIndex];
     if (!playerUserId) {
       return false;
     }
-    
+
     const normalizedPlayerId = this.normalizeUuid(playerUserId);
     const normalizedOwnerId = this.normalizeUuid(game.owner_id);
-    
-    return normalizedPlayerId !== null && normalizedOwnerId !== null && normalizedPlayerId === normalizedOwnerId;
+
+    return (
+      normalizedPlayerId !== null &&
+      normalizedOwnerId !== null &&
+      normalizedPlayerId === normalizedOwnerId
+    );
   }
 
   private connectWebSocket(gameId: string): void {
-    this.wsSubscription = this.wsService.connect(gameId).subscribe(message => {
+    this.wsSubscription = this.wsService.connect(gameId).subscribe((message) => {
       if (message.type === 'game_update' && message.game) {
         this.gameState$.next(message.game);
-        this.setCurrentPlayerIndex(message.game).catch(e => {
+        this.setCurrentPlayerIndex(message.game).catch((e) => {
           console.error('[GameService] Error setting player index:', e);
         });
       } else if (message.type === 'phase_update' && message.phase) {
         this.currentPhase$.next(message.phase);
       } else if (message.type === 'bid_selection' && message.data) {
         const { player_index, bid } = message.data;
-        
-        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+
+        const playerIdx =
+          typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (isNaN(playerIdx) || bid === undefined) {
           return;
         }
-        
+
         const currentSelections = this.liveBidSelections$.value;
         const updated = {
           ...currentSelections,
-          [playerIdx]: bid
+          [playerIdx]: bid,
         };
         this.liveBidSelections$.next(updated);
       } else if (message.type === 'bet_change' && message.data) {
         const { player_index, bid } = message.data;
-        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        const playerIdx =
+          typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (!isNaN(playerIdx) && bid !== undefined) {
           const currentSelections = this.liveBidSelections$.value;
           const updated = {
             ...currentSelections,
-            [playerIdx]: bid
+            [playerIdx]: bid,
           };
           this.liveBidSelections$.next(updated);
         }
       } else if (message.type === 'bet_locked' && message.data) {
         const { player_index } = message.data;
-        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        const playerIdx =
+          typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (!isNaN(playerIdx)) {
           const locked = new Set(this.lockedBids$.value);
           locked.add(playerIdx);
@@ -370,18 +392,20 @@ export class GameService {
         }
       } else if (message.type === 'round_result_changed' && message.data) {
         const { player_index, trick } = message.data;
-        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        const playerIdx =
+          typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (!isNaN(playerIdx) && trick !== undefined) {
           const currentSelections = this.liveTrickSelections$.value;
           const updated = {
             ...currentSelections,
-            [playerIdx]: trick
+            [playerIdx]: trick,
           };
           this.liveTrickSelections$.next(updated);
         }
       } else if (message.type === 'round_score_locked' && message.data) {
         const { player_index } = message.data;
-        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+        const playerIdx =
+          typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (!isNaN(playerIdx)) {
           const locked = new Set(this.lockedTricks$.value);
           locked.add(playerIdx);
@@ -389,16 +413,17 @@ export class GameService {
         }
       } else if (message.type === 'trick_selection' && message.data) {
         const { player_index, trick } = message.data;
-        
-        const playerIdx = typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
+
+        const playerIdx =
+          typeof player_index === 'number' ? player_index : parseInt(String(player_index), 10);
         if (isNaN(playerIdx) || trick === undefined) {
           return;
         }
-        
+
         const currentSelections = this.liveTrickSelections$.value;
         const updated = {
           ...currentSelections,
-          [playerIdx]: trick
+          [playerIdx]: trick,
         };
         this.liveTrickSelections$.next(updated);
       } else if (message.type === 'trump_selection' && message.data) {
@@ -410,7 +435,7 @@ export class GameService {
         const submittedBids = this.liveBidSelections$.value;
         if (Object.keys(submittedBids).length === 4) {
           const bidsArray = Array(4).fill(0);
-          Object.keys(submittedBids).forEach(playerIdx => {
+          Object.keys(submittedBids).forEach((playerIdx) => {
             const idx = parseInt(playerIdx);
             if (idx >= 0 && idx < 4) {
               bidsArray[idx] = submittedBids[idx];
@@ -471,14 +496,14 @@ export class GameService {
     this.error$.next(null);
     this.currentBids$.next(bids);
     this.currentTrumpSuit$.next(trumpSuit || null);
-    
+
     try {
       this.wsService.send({
         type: 'submit_bids',
         data: {
           bids,
-          trump_suit: trumpSuit
-        }
+          trump_suit: trumpSuit,
+        },
       });
     } catch (error: any) {
       this.error$.next(error.message || 'Failed to submit bids');
@@ -503,7 +528,7 @@ export class GameService {
       try {
         const rounds = await this.getRounds(game.id);
         if (rounds && rounds.length > 0) {
-          const currentRound = rounds.find(r => r.round_number === game.current_round);
+          const currentRound = rounds.find((r) => r.round_number === game.current_round);
           if (currentRound && currentRound.bids) {
             bids = currentRound.bids;
             this.currentBids$.next(bids);
@@ -524,7 +549,7 @@ export class GameService {
       const liveBids = this.liveBidSelections$.value;
       if (Object.keys(liveBids).length === 4) {
         bids = Array(4).fill(0);
-        Object.keys(liveBids).forEach(playerIdx => {
+        Object.keys(liveBids).forEach((playerIdx) => {
           const idx = parseInt(playerIdx);
           if (idx >= 0 && idx < 4) {
             bids![idx] = liveBids[idx];
@@ -544,20 +569,20 @@ export class GameService {
 
     this.loading$.next(true);
     this.error$.next(null);
-    
+
     try {
       this.wsService.send({
         type: 'submit_tricks',
         data: {
           tricks,
           bids,
-          trump_suit: trumpSuit
-        }
+          trump_suit: trumpSuit,
+        },
       });
-      
+
       return {
         game: this.gameState$.value,
-        round: null
+        round: null,
       };
     } catch (error: any) {
       this.error$.next(error.message || 'Failed to submit tricks');
@@ -606,32 +631,33 @@ export class GameService {
     if (!this.wsService.isConnected()) {
       return;
     }
-    
+
     if (this.currentPlayerIndex === null && !isGameOwner) {
       return;
     }
-    
+
     if (this.isBidLocked(playerIndex)) {
       return;
     }
-    
-    const canSend = isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
-    
+
+    const canSend =
+      isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
+
     if (canSend) {
       this.wsService.send({
         type: 'bid_selection',
         data: {
           player_index: playerIndex,
-          bid: bid
-        }
+          bid: bid,
+        },
       });
-      
+
       this.wsService.send({
         type: 'bet_change',
         data: {
           player_index: playerIndex,
-          bid: bid
-        }
+          bid: bid,
+        },
       });
     }
   }
@@ -640,20 +666,20 @@ export class GameService {
     if (!this.wsService.isConnected()) {
       return;
     }
-    
+
     if (this.isBidLocked(playerIndex)) {
       return;
     }
-    
+
     const isOwner = await this.isGameOwnerAsync();
     const isOwnBid = playerIndex === this.currentPlayerIndex;
-    
+
     if ((isOwnBid && this.currentPlayerIndex !== null) || isOwner) {
       this.wsService.send({
         type: 'bet_locked',
         data: {
-          player_index: playerIndex
-        }
+          player_index: playerIndex,
+        },
       });
     }
   }
@@ -662,12 +688,12 @@ export class GameService {
     if (!this.wsService.isConnected() || this.currentPlayerIndex === null) {
       return;
     }
-    
+
     this.wsService.send({
       type: 'trump_selection',
       data: {
-        trump_suit: trumpSuit
-      }
+        trump_suit: trumpSuit,
+      },
     });
   }
 
@@ -675,32 +701,33 @@ export class GameService {
     if (!this.wsService.isConnected()) {
       return;
     }
-    
+
     if (this.currentPlayerIndex === null && !isGameOwner) {
       return;
     }
-    
+
     if (this.isTrickLocked(playerIndex)) {
       return;
     }
-    
-    const canSend = isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
-    
+
+    const canSend =
+      isGameOwner || (this.currentPlayerIndex !== null && playerIndex === this.currentPlayerIndex);
+
     if (canSend) {
       this.wsService.send({
         type: 'trick_selection',
         data: {
           player_index: playerIndex,
-          trick: trick
-        }
+          trick: trick,
+        },
       });
-      
+
       this.wsService.send({
         type: 'round_result_changed',
         data: {
           player_index: playerIndex,
-          trick: trick
-        }
+          trick: trick,
+        },
       });
     }
   }
@@ -709,20 +736,20 @@ export class GameService {
     if (!this.wsService.isConnected()) {
       return;
     }
-    
+
     if (this.isTrickLocked(playerIndex)) {
       return;
     }
-    
+
     const isOwner = await this.isGameOwnerAsync();
     const isOwnTrick = playerIndex === this.currentPlayerIndex;
-    
+
     if ((isOwnTrick && this.currentPlayerIndex !== null) || isOwner) {
       this.wsService.send({
         type: 'round_score_locked',
         data: {
-          player_index: playerIndex
-        }
+          player_index: playerIndex,
+        },
       });
     }
   }

@@ -6,7 +6,7 @@ import { Round } from '../../../../core/models/game-state.model';
   selector: 'app-round-history',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './round-history.component.html'
+  templateUrl: './round-history.component.html',
 })
 export class RoundHistoryComponent {
   @Input() rounds: Round[] = [];
@@ -21,7 +21,7 @@ export class RoundHistoryComponent {
     diamonds: '♦',
     hearts: '♥',
     'no-trump': '✕',
-    null: '✕'
+    null: '✕',
   };
 
   onClose() {
@@ -45,7 +45,10 @@ export class RoundHistoryComponent {
 
   /** Cumulative score for player at playerIndex at the end of the round at roundIndex. */
   getScoreAfter(roundIndex: number, playerIndex: number): number {
-    return this.getScoreBefore(roundIndex, playerIndex) + (this.rounds[roundIndex].scores?.[playerIndex] ?? 0);
+    return (
+      this.getScoreBefore(roundIndex, playerIndex) +
+      (this.rounds[roundIndex].scores?.[playerIndex] ?? 0)
+    );
   }
 
   /** Round score (gain/loss) for display with optional +/- prefix. */

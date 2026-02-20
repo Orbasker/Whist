@@ -3,7 +3,21 @@ import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface WebSocketMessage {
-  type: 'game_update' | 'phase_update' | 'bids_submitted' | 'tricks_submitted' | 'bid_selection' | 'trick_selection' | 'trump_selection' | 'bet_sent' | 'bet_change' | 'bet_locked' | 'round_result_changed' | 'round_result_sent' | 'round_score_locked' | 'error';
+  type:
+    | 'game_update'
+    | 'phase_update'
+    | 'bids_submitted'
+    | 'tricks_submitted'
+    | 'bid_selection'
+    | 'trick_selection'
+    | 'trump_selection'
+    | 'bet_sent'
+    | 'bet_change'
+    | 'bet_locked'
+    | 'round_result_changed'
+    | 'round_result_sent'
+    | 'round_score_locked'
+    | 'error';
   game?: any;
   phase?: 'bidding' | 'tricks';
   round?: any;
@@ -18,7 +32,7 @@ export interface WebSocketMessage {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebSocketService {
   private ws: WebSocket | null = null;
@@ -43,15 +57,15 @@ export class WebSocketService {
 
     this.currentGameId = gameId;
     const wsUrl = this.getWebSocketUrl(gameId);
-    
+
     try {
       this.ws = new WebSocket(wsUrl);
-      
+
       this.ws.onopen = () => {
         this.connectionStatus$.next(true);
         this.reconnectAttempts = 0;
       };
-      
+
       this.ws.onmessage = (event) => {
         try {
           const message: WebSocketMessage = JSON.parse(event.data);
@@ -60,12 +74,12 @@ export class WebSocketService {
           console.error('Failed to parse WebSocket message:', error);
         }
       };
-      
+
       this.ws.onerror = (error) => {
         console.error('WebSocket error:', error);
         this.connectionStatus$.next(false);
       };
-      
+
       this.ws.onclose = () => {
         this.connectionStatus$.next(false);
         this.attemptReconnect(gameId);
@@ -74,7 +88,7 @@ export class WebSocketService {
       console.error('Failed to create WebSocket connection:', error);
       this.connectionStatus$.next(false);
     }
-    
+
     return this.messageSubject.asObservable();
   }
 
@@ -83,12 +97,12 @@ export class WebSocketService {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
-    
+
     if (this.ws) {
       this.ws.close();
       this.ws = null;
     }
-    
+
     this.currentGameId = null;
     this.connectionStatus$.next(false);
   }
@@ -124,7 +138,7 @@ export class WebSocketService {
     }
 
     this.reconnectAttempts++;
-    
+
     this.reconnectTimer = setTimeout(() => {
       this.connect(gameId);
     }, this.reconnectDelay);

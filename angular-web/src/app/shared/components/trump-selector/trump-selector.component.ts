@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-trump-selector',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './trump-selector.component.html'
+  templateUrl: './trump-selector.component.html',
 })
 export class TrumpSelectorComponent {
   @Input() selectedTrump: string | null = null;
@@ -16,7 +16,7 @@ export class TrumpSelectorComponent {
     { value: 'spades', label: 'עלה', icon: '♠' },
     { value: 'clubs', label: 'תלתן', icon: '♣' },
     { value: 'diamonds', label: 'יהלום', icon: '♦', color: 'text-red-500' },
-    { value: 'hearts', label: 'לב', icon: '♥', color: 'text-red-500' }
+    { value: 'hearts', label: 'לב', icon: '♥', color: 'text-red-500' },
   ];
 
   selectTrump(value: string | null) {

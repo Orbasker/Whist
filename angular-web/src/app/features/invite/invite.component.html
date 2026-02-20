@@ -1,10 +1,18 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4" dir="rtl">
+<div
+  class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4"
+  dir="rtl"
+>
   <div class="w-full max-w-md">
     <!-- Header -->
     <div class="text-center mb-8">
       <div class="inline-flex items-center justify-center w-16 h-16 bg-amber-500 rounded-lg mb-4">
         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          ></path>
         </svg>
       </div>
       <h1 class="text-3xl font-bold text-white mb-2">הזמנה למשחק</h1>
@@ -12,7 +20,9 @@
 
     <!-- Loading State -->
     <div *ngIf="loading" class="bg-slate-800 rounded-lg p-6 shadow-xl text-center">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"
+      ></div>
       <p class="text-slate-300">טוען פרטי הזמנה...</p>
     </div>
 
@@ -34,7 +44,9 @@
     <!-- Invitation Info -->
     <div *ngIf="invitationInfo && !loading && !error" class="bg-slate-800 rounded-lg p-6 shadow-xl">
       <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white mb-2">{{ invitationInfo.game_name || 'משחק וויסט' }}</h2>
+        <h2 class="text-2xl font-bold text-white mb-2">
+          {{ invitationInfo.game_name || 'משחק וויסט' }}
+        </h2>
         <p class="text-slate-400">הזמנה להצטרף למשחק</p>
       </div>
 
@@ -83,7 +95,10 @@
       </div>
 
       <!-- Error Message -->
-      <div *ngIf="error" class="mt-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-200 text-sm">
+      <div
+        *ngIf="error"
+        class="mt-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-200 text-sm"
+      >
         {{ error }}
       </div>
     </div>

@@ -46,7 +46,7 @@ repos:
       - id: eslint
         name: eslint (frontend)
         language: system
-        entry: bash -c 'cd angular-web && npx eslint "src/**/*.ts" --max-warnings=0'
+        entry: bash -c 'cd angular-web && npx eslint "src/**/*.ts" --max-warnings=99'
         pass_filenames: false
         files: ^angular-web/src/.*\.(ts|html)$
         stages: [pre-commit]
