@@ -99,9 +99,7 @@
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
-                (click)="
-                  openInvitationForm(game.id, getGameDisplayName(game)); $event.stopPropagation()
-                "
+                (click)="openInvitationForm(game); $event.stopPropagation()"
                 class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1 rounded transition-colors"
                 title="שלח הזמנות"
               >
@@ -146,8 +144,13 @@
       <app-invitation-form
         [gameId]="selectedGameId || ''"
         [gameName]="selectedGameName"
+        [players]="selectedGame?.players || []"
+        [playerUserIds]="selectedGame?.player_user_ids || []"
+        [currentUserId]="userId"
+        [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
         (invitationsSent)="onInvitationsSent($event)"
         (cancelled)="closeInvitationForm()"
+        (playerNameUpdated)="onPlayerNameUpdated($event)"
       ></app-invitation-form>
     </div>
 

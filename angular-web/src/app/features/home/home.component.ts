@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
   showInvitationForm = false;
   selectedGameId: string | null = null;
   selectedGameName: string = '';
+  selectedGame: GameState | null = null;
   invitationError: string | null = null;
   invitationSuccess: string | null = null;
 
@@ -188,9 +189,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  openInvitationForm(gameId: string, gameName: string) {
-    this.selectedGameId = gameId;
-    this.selectedGameName = gameName;
+  openInvitationForm(game: GameState) {
+    this.selectedGameId = game.id;
+    this.selectedGameName = game.name || game.players.join(', ') || 'משחק ללא שם';
+    this.selectedGame = game;
     this.showInvitationForm = true;
     this.invitationError = null;
     this.invitationSuccess = null;
@@ -200,6 +202,7 @@ export class HomeComponent implements OnInit {
     this.showInvitationForm = false;
     this.selectedGameId = null;
     this.selectedGameName = '';
+    this.selectedGame = null;
     this.invitationError = null;
     this.invitationSuccess = null;
   }
@@ -212,6 +215,14 @@ export class HomeComponent implements OnInit {
       }, 2000);
     } else {
       this.invitationError = 'לא הצלחנו לשלוח את ההזמנות. אנא נסה שוב.';
+    }
+  }
+
+  onPlayerNameUpdated(updatedGame: GameState) {
+    this.selectedGame = updatedGame;
+    const idx = this.games.findIndex((g) => g.id === updatedGame.id);
+    if (idx !== -1) {
+      this.games = [...this.games.slice(0, idx), updatedGame, ...this.games.slice(idx + 1)];
     }
   }
 

@@ -104,6 +104,13 @@ export class AuthService {
    */
   async getToken(): Promise<string | null> {
     try {
+      // Neon Auth may store the token in localStorage (e.g. after OAuth redirect).
+      // Check here first so API requests include Authorization header and avoid 401.
+      const fromStorage = localStorage.getItem('neon-auth.session_token');
+      if (typeof fromStorage === 'string' && fromStorage.startsWith('eyJ')) {
+        return fromStorage;
+      }
+
       const session = await this.getSession();
 
       if (!session) {
@@ -171,7 +178,11 @@ export class AuthService {
       try {
         const cookies = document.cookie.split(';');
         for (const cookie of cookies) {
-          const [name, value] = cookie.trim().split('=');
+          const trimmed = cookie.trim();
+          const eqIndex = trimmed.indexOf('=');
+          if (eqIndex === -1) continue;
+          const name = trimmed.slice(0, eqIndex);
+          const value = trimmed.slice(eqIndex + 1);
           if (
             name === 'neon-auth.session_token' ||
             name.includes('auth-token') ||

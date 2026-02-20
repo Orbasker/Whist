@@ -2,6 +2,55 @@
   <h3 class="text-lg font-semibold text-white mb-4">שלח הזמנות למשחק</h3>
   <p class="text-slate-400 text-sm mb-4">הזן כתובות אימייל של השחקנים שברצונך להזמין</p>
 
+  <!-- Players already in the match (editable: owner for placeholders, user for own slot) -->
+  <div *ngIf="(players ?? []).length > 0" class="mb-4 p-3 bg-slate-700/50 rounded-lg">
+    <p class="text-slate-300 text-sm font-medium mb-2">שחקנים במשחק</p>
+    <ul class="space-y-1.5 text-sm">
+      <li *ngFor="let name of players; let i = index" class="flex items-center gap-2 flex-wrap">
+        <ng-container *ngIf="editingPlayerIndex !== i">
+          <span class="text-white">שחקן {{ i + 1 }}: {{ name || '—' }}</span>
+          <span
+            *ngIf="isRealUser(i)"
+            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-600/80 text-white"
+          >
+            משתמש רשום
+          </span>
+          <button
+            *ngIf="canEditPlayerName(i)"
+            type="button"
+            (click)="startEditName(i)"
+            class="text-amber-400 hover:text-amber-300 p-0.5"
+            title="ערוך שם במשחק"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="editingPlayerIndex === i">
+          <input
+            type="text"
+            [(ngModel)]="editingName"
+            (keydown.enter)="savePlayerName()"
+            (keydown.escape)="cancelEditName()"
+            (blur)="savePlayerName()"
+            class="flex-1 min-w-0 max-w-[12rem] px-2 py-1 bg-slate-600 text-white text-sm rounded border border-slate-500"
+            [placeholder]="'שם שחקן ' + (i + 1)"
+          />
+          <span *ngIf="nameLoading" class="text-slate-400 text-xs">שומר...</span>
+        </ng-container>
+      </li>
+    </ul>
+    <p class="text-slate-500 text-xs mt-1.5">
+      השם המוצג במשחק. בעלים יכול לערוך מקומות ריקים; משתמש רשום יכול לערוך את השם שלו.
+    </p>
+  </div>
+
   <form [formGroup]="invitationForm" (ngSubmit)="onSend()">
     <div class="space-y-3 mb-4">
       <div *ngFor="let email of emails; let i = index" class="flex items-center gap-2">

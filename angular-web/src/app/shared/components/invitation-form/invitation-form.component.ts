@@ -1,19 +1,85 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { InvitationService } from '../../../core/services/invitation.service';
+import { GameService } from '../../../core/services/game.service';
+import { GameState } from '../../../core/models/game-state.model';
 
 @Component({
   selector: 'app-invitation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './invitation-form.component.html',
 })
 export class InvitationFormComponent {
   @Input() gameId: string = '';
   @Input() gameName: string = '';
+  /** Display names of players already in the match (by slot index). */
+  @Input() players: string[] = [];
+  /** User IDs for each slot; non-null means that slot is a registered (real) user. */
+  @Input() playerUserIds: (string | null)[] = [];
+  /** Current user ID (for allowing edit of own display name). */
+  @Input() currentUserId: string | null = null;
+  /** Game owner can edit placeholder (non-user) slots. */
+  @Input() isGameOwner = false;
   @Output() invitationsSent = new EventEmitter<{ sent: number; total: number }>();
   @Output() cancelled = new EventEmitter<void>();
+  @Output() playerNameUpdated = new EventEmitter<GameState>();
+
+  editingPlayerIndex: number | null = null;
+  editingName = '';
+  nameLoading = false;
+
+  isRealUser(index: number): boolean {
+    const id = this.playerUserIds[index];
+    return typeof id === 'string' && id.trim().length > 0;
+  }
+
+  /** Owner can edit placeholder slots; a user can edit their own slot's display name. */
+  canEditPlayerName(index: number): boolean {
+    const ids = this.playerUserIds ?? [];
+    const slotUserId = ids[index];
+    if (slotUserId == null || (typeof slotUserId === 'string' && slotUserId.trim() === '')) {
+      return this.isGameOwner;
+    }
+    if (!this.currentUserId) return false;
+    return String(slotUserId).trim().toLowerCase() === this.currentUserId.trim().toLowerCase();
+  }
+
+  startEditName(index: number) {
+    if (!this.canEditPlayerName(index)) return;
+    this.editingPlayerIndex = index;
+    this.editingName = (this.players[index] ?? '').trim();
+  }
+
+  cancelEditName() {
+    this.editingPlayerIndex = null;
+    this.editingName = '';
+  }
+
+  async savePlayerName() {
+    if (this.editingPlayerIndex == null || !this.gameId || this.nameLoading) return;
+    const name = this.editingName.trim();
+    if (!name) {
+      this.cancelEditName();
+      return;
+    }
+    this.nameLoading = true;
+    try {
+      const game = await this.gameService.updatePlayerDisplayName(
+        this.gameId,
+        this.editingPlayerIndex,
+        name
+      );
+      this.cancelEditName();
+      if (game) this.playerNameUpdated.emit(game);
+    } catch (e) {
+      console.error('Failed to update player name', e);
+    } finally {
+      this.nameLoading = false;
+    }
+  }
 
   invitationForm: FormGroup;
   emails: string[] = ['', '', '', ''];
@@ -23,7 +89,8 @@ export class InvitationFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private invitationService: InvitationService
+    private invitationService: InvitationService,
+    private gameService: GameService
   ) {
     this.invitationForm = this.fb.group({
       email1: ['', [Validators.email]],
