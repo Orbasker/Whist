@@ -31,6 +31,23 @@ export class InvitationFormComponent {
   editingName = '';
   nameLoading = false;
 
+  /** Indices (0–3) of slots that have no linked user (available for invite). */
+  get availableSlotIndices(): number[] {
+    const ids = this.playerUserIds ?? [];
+    const indices: number[] = [];
+    for (let i = 0; i < 4; i++) {
+      const id = ids[i];
+      if (id == null || (typeof id === 'string' && id.trim() === '')) {
+        indices.push(i);
+      }
+    }
+    return indices;
+  }
+
+  get isGameFull(): boolean {
+    return this.availableSlotIndices.length === 0;
+  }
+
   isRealUser(index: number): boolean {
     const id = this.playerUserIds[index];
     return typeof id === 'string' && id.trim().length > 0;
@@ -105,18 +122,25 @@ export class InvitationFormComponent {
   }
 
   getValidEmails(): string[] {
+    return this.getValidEmailsAndIndices().emails;
+  }
+
+  /** Returns valid emails and their corresponding player slot indices (for API). */
+  getValidEmailsAndIndices(): { emails: string[]; indices: number[] } {
     const emails: string[] = [];
-    for (let i = 0; i < 4; i++) {
-      const email = this.getEmailValue(i);
-      if (email && this.invitationForm.get(`email${i + 1}`)?.valid) {
+    const indices: number[] = [];
+    for (const slotIndex of this.availableSlotIndices) {
+      const email = this.getEmailValue(slotIndex);
+      if (email && this.invitationForm.get(`email${slotIndex + 1}`)?.valid) {
         emails.push(email.trim());
+        indices.push(slotIndex);
       }
     }
-    return emails;
+    return { emails, indices };
   }
 
   hasValidEmails(): boolean {
-    return this.getValidEmails().length > 0;
+    return this.getValidEmailsAndIndices().emails.length > 0;
   }
 
   onCancel() {
@@ -124,7 +148,7 @@ export class InvitationFormComponent {
   }
 
   async onSend() {
-    const validEmails = this.getValidEmails();
+    const { emails: validEmails, indices: playerIndices } = this.getValidEmailsAndIndices();
 
     if (validEmails.length === 0) {
       this.errorMessage = 'אנא הזן לפחות כתובת אימייל אחת תקינה';
@@ -141,7 +165,11 @@ export class InvitationFormComponent {
     this.successMessage = null;
 
     try {
-      const result = await this.invitationService.sendInvitations(this.gameId, validEmails);
+      const result = await this.invitationService.sendInvitations(
+        this.gameId,
+        validEmails,
+        playerIndices
+      );
 
       if (result.sent > 0) {
         this.successMessage = `נשלחו ${result.sent} מתוך ${result.total} הזמנות בהצלחה`;

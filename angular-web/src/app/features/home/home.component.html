@@ -139,19 +139,46 @@
       </div>
     </div>
 
-    <!-- Invitation Form (shown when showInvitationForm is true) -->
-    <div *ngIf="showInvitationForm" class="bg-slate-800 rounded-lg p-6 shadow-xl mb-4">
-      <app-invitation-form
-        [gameId]="selectedGameId || ''"
-        [gameName]="selectedGameName"
-        [players]="selectedGame?.players || []"
-        [playerUserIds]="selectedGame?.player_user_ids || []"
-        [currentUserId]="userId"
-        [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
-        (invitationsSent)="onInvitationsSent($event)"
-        (cancelled)="closeInvitationForm()"
-        (playerNameUpdated)="onPlayerNameUpdated($event)"
-      ></app-invitation-form>
+    <!-- Invitation Modal (shown when showInvitationForm is true) -->
+    <div
+      *ngIf="showInvitationForm"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      (click)="closeInvitationForm()"
+    >
+      <div
+        class="bg-slate-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-6"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-white">שלח הזמנות</h2>
+          <button
+            type="button"
+            (click)="closeInvitationForm()"
+            class="text-slate-400 hover:text-white p-1"
+            title="סגור"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <app-invitation-form
+          [gameId]="selectedGameId || ''"
+          [gameName]="selectedGameName"
+          [players]="selectedGame?.players || []"
+          [playerUserIds]="selectedGame?.player_user_ids || []"
+          [currentUserId]="userId"
+          [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
+          (invitationsSent)="onInvitationsSent($event)"
+          (cancelled)="closeInvitationForm()"
+          (playerNameUpdated)="onPlayerNameUpdated($event)"
+        ></app-invitation-form>
+      </div>
     </div>
 
     <!-- New Game Form (shown when showNewGameForm is true) -->
