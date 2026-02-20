@@ -33,6 +33,7 @@ export class GameComponent implements OnInit, OnDestroy {
   roundResults: any = null;
   rounds: Round[] = [];
   showRoundHistory = false;
+  currentPlayerIndex: number | null = null;
   private gameId: string | null = null;
 
   private subscriptions = new Subscription();
@@ -59,6 +60,12 @@ export class GameComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.gameService.getCurrentPhase().subscribe(phase => {
         this.phase = phase;
+      })
+    );
+
+    this.subscriptions.add(
+      this.gameService.getCurrentPlayerIndex$().subscribe(index => {
+        this.currentPlayerIndex = index;
       })
     );
   }

@@ -74,6 +74,7 @@
     *ngIf="showRoundHistory"
     [rounds]="rounds"
     [players]="gameState.players"
+    [currentPlayerIndex]="currentPlayerIndex"
     (close)="showRoundHistory = false">
   </app-round-history>
 </div>
