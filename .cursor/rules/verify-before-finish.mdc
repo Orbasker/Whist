@@ -1,0 +1,20 @@
+---
+description: Run server and frontend before considering a task finished (e.g. Vibe Kanban "finish task")
+alwaysApply: true
+---
+
+# Verify app runs before finishing a task
+
+When **finishing a task**, marking work complete, or before closing an issue (e.g. Vibe Kanban "finished task"), **always** run the backend and frontend and confirm they start with no errors. This catches build/runtime issues that would otherwise slip through.
+
+## Required checks
+
+1. **Backend** – From repo root:
+   - `cd backend && uv run uvicorn app.main:app --reload` (or run and then stop after a few seconds if already running)
+   - Confirm no startup errors (migrations, imports, env).
+
+2. **Frontend** – From repo root:
+   - `cd angular-web && npm run build` (or `npm run start` and confirm bundle generation succeeds)
+   - Confirm build completes with no NG/TypeScript errors.
+
+Only treat the task as finished after both run successfully. If either fails, fix the issues before marking complete.

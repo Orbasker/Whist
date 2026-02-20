@@ -39,9 +39,11 @@
               <th
                 colspan="5"
                 class="py-2 px-1 font-semibold text-center border-r border-slate-700"
-                [class.bg-amber-500/15]="isCurrentPlayer(pi)"
-                [class.text-amber-200]="isCurrentPlayer(pi)"
-                [class.border-amber-500/40]="isCurrentPlayer(pi)"
+                [ngClass]="{
+                  'bg-amber-500/15': isCurrentPlayer(pi),
+                  'text-amber-200': isCurrentPlayer(pi),
+                  'border-amber-500/40': isCurrentPlayer(pi),
+                }"
               >
                 {{ player
                 }}<span *ngIf="isCurrentPlayer(pi)" class="mr-1 text-amber-400 font-bold"
@@ -56,31 +58,31 @@
             <ng-container *ngFor="let player of players; let pi = index">
               <th
                 class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [class.bg-slate-700/30]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
               >
                 הצעה
               </th>
               <th
                 class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [class.bg-slate-700/30]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
               >
                 לקח
               </th>
               <th
                 class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [class.bg-slate-700/30]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
               >
                 שינוי
               </th>
               <th
                 class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [class.bg-slate-700/30]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
               >
                 לפני
               </th>
               <th
                 class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [class.bg-slate-700/30]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
               >
                 אחרי
               </th>
@@ -99,34 +101,36 @@
             <ng-container *ngFor="let player of players; let pi = index">
               <td
                 class="py-2.5 px-1.5 text-center text-slate-300 border-r border-slate-700/80"
-                [class.bg-amber-500/10]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
               >
                 {{ round.bids[pi] }}
               </td>
               <td
                 class="py-2.5 px-1.5 text-center text-slate-300 border-r border-slate-700/80"
-                [class.bg-amber-500/10]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
               >
                 {{ round.tricks[pi] }}
               </td>
               <td
                 class="py-2.5 px-1.5 text-center font-semibold border-r border-slate-700/80 tabular-nums"
-                [class.bg-amber-500/10]="isCurrentPlayer(pi)"
-                [class.text-green-400]="(round.scores[pi] ?? 0) > 0"
-                [class.text-red-400]="(round.scores[pi] ?? 0) < 0"
-                [class.text-slate-400]="(round.scores[pi] ?? 0) === 0"
+                [ngClass]="{
+                  'bg-amber-500/10': isCurrentPlayer(pi),
+                  'text-green-400': (round.scores[pi] ?? 0) > 0,
+                  'text-red-400': (round.scores[pi] ?? 0) < 0,
+                  'text-slate-400': (round.scores[pi] ?? 0) === 0,
+                }"
               >
                 {{ formatGainLoss(round.scores[pi] ?? 0) }}
               </td>
               <td
                 class="py-2.5 px-1.5 text-center text-slate-400 border-r border-slate-700/80 tabular-nums"
-                [class.bg-amber-500/10]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
               >
                 {{ getScoreBefore(ri, pi) }}
               </td>
               <td
                 class="py-2.5 px-1.5 text-center font-medium text-slate-200 border-r border-slate-700/80 tabular-nums"
-                [class.bg-amber-500/10]="isCurrentPlayer(pi)"
+                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
               >
                 {{ getScoreAfter(ri, pi) }}
               </td>
