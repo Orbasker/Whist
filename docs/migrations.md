@@ -52,9 +52,15 @@ uv run alembic revision --autogenerate -m "describe_your_change"
 
 **Purpose:** Validate that all migration scripts apply in order without errors. If this step fails, the whole pipeline fails (e.g. merge to `main` is blocked until migrations are fixed).
 
-**Neon cloud:** On **push to `main`** only, CI also runs migrations against your Neon PostgreSQL database. Configure the repository secret `NEON_DATABASE_URL` in GitHub (Settings → Secrets and variables → Actions) with your Neon connection string (e.g. a CI/staging Neon DB or your production DB if you want main to migrate it). If `NEON_DATABASE_URL` is not set, the Neon step is skipped on PRs and the step does not run on pushes from branches other than `main`. Use a dedicated Neon branch or project for CI if you prefer not to migrate production from CI.
+**Neon cloud (optional):** To have CI run migrations against your Neon PostgreSQL database on **push to `main`**, you must enable it explicitly so that CI never fails due to a missing secret:
 
-**You don’t run migrations manually in CI** — they run automatically on every push/PR to `main` (local Postgres); Neon is migrated on every push to `main` when the secret is set.
+1. In GitHub: **Settings → Secrets and variables → Actions**.
+2. Add repository **secret** `NEON_DATABASE_URL` with your Neon connection string (e.g. a CI/staging Neon DB).
+3. Add repository **variable** `NEON_MIGRATION_ENABLED` and set its value to `true`.
+
+The Neon migration step runs only when all of: push to `main`, and `NEON_MIGRATION_ENABLED` is `true`, and `NEON_DATABASE_URL` is set. If you do not set these, the step is skipped and CI passes without touching Neon.
+
+**You don’t run migrations manually in CI** — they run automatically on every push/PR (local Postgres); Neon is migrated on push to `main` only when the variable and secret above are set.
 
 ---
 
@@ -108,7 +114,7 @@ uv run alembic upgrade head
 | Environment   | Database source              | How migrations run                                      | Pipeline fails if migrations fail? |
 |---------------|------------------------------|---------------------------------------------------------|-------------------------------------|
 | Local        | `backend/.env` → `DATABASE_URL` | You run: `cd backend && uv run alembic upgrade head`   | N/A                                 |
-| CI           | Service container (`whist_ci`); on push to main also Neon (if `NEON_DATABASE_URL` secret set) | Automatically in Backend job                        | Yes                                 |
+| CI           | Service container (`whist_ci`); on push to main also Neon if `NEON_MIGRATION_ENABLED` and `NEON_DATABASE_URL` are set | Automatically in Backend job                        | Yes                                 |
 | Staging      | Staging service `DATABASE_URL` | Before app start (if same start command as prod) or manually | Deploy fails if start command fails |
 | Production   | Production service `DATABASE_URL` | Before app start in Render start command             | Yes (deploy fails)                  |
 
@@ -126,4 +132,4 @@ uv run alembic upgrade head
   Migrations always use `DATABASE_URL` from the environment. Double-check that staging and production services each have their own `DATABASE_URL` and never point at the other’s database.
 
 - **CI Neon step not running**  
-  The Neon migration step runs only on **push to `main`** (not on pull requests). Ensure the `NEON_DATABASE_URL` repository secret is set in GitHub so the step can connect. If you use a separate Neon DB for CI, get its connection string from the Neon dashboard (include `?sslmode=require` for Neon).
+  The Neon migration step runs only on **push to `main`** and when the repository **variable** `NEON_MIGRATION_ENABLED` is `true` and the **secret** `NEON_DATABASE_URL` is set (Settings → Secrets and variables → Actions). If you use a separate Neon DB for CI, get its connection string from the Neon dashboard (include `?sslmode=require` for Neon).

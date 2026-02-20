@@ -49,8 +49,9 @@ jobs:
           DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/whist_ci"
         run: uv run alembic upgrade head
 
+      # Only runs when NEON_MIGRATION_ENABLED repo variable is 'true' (and NEON_DATABASE_URL secret is set)
       - name: Run Alembic migrations (Neon)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.NEON_MIGRATION_ENABLED == 'true'
         env:
           DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
         run: uv run alembic upgrade head
