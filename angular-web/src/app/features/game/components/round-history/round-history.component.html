@@ -115,12 +115,12 @@
                 class="py-2.5 px-1.5 text-center font-semibold border-r border-slate-700/80 tabular-nums"
                 [ngClass]="{
                   'bg-amber-500/10': isCurrentPlayer(pi),
-                  'text-green-400': (round.scores[pi] ?? 0) > 0,
-                  'text-red-400': (round.scores[pi] ?? 0) < 0,
-                  'text-slate-400': (round.scores[pi] ?? 0) === 0,
+                  'text-green-400': round.scores[pi] > 0,
+                  'text-red-400': round.scores[pi] < 0,
+                  'text-slate-400': round.scores[pi] === 0,
                 }"
               >
-                {{ formatGainLoss(round.scores[pi] ?? 0) }}
+                {{ formatGainLoss(round.scores[pi]) }}
               </td>
               <td
                 class="py-2.5 px-1.5 text-center text-slate-400 border-r border-slate-700/80 tabular-nums"
