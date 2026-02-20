@@ -26,7 +26,7 @@ dev = [
     "httpx==0.25.2",
     "black==23.11.0",
     "ruff==0.1.6",
-    "mypy==1.7.1",
+    "ty>=0.0.1",
 ]
 
 [tool.ruff]
@@ -37,8 +37,9 @@ target-version = "py311"
 line-length = 100
 target-version = ["py311"]
 
-[tool.mypy]
-python_version = "3.11"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
+[tool.ty.rules]
+# Suppress false positives caused by missing/incomplete stubs for SQLAlchemy
+# and pydantic-settings (ty 0.0.x doesn't have full support for these yet)
+invalid-key = "ignore"
+invalid-argument-type = "ignore"
+invalid-method-override = "ignore"

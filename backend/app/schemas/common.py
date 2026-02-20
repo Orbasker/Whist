@@ -1,15 +1,17 @@
 from pydantic import BaseModel
-from typing import Optional, Any
+from typing import Optional
 
 
 class ErrorResponse(BaseModel):
     """Schema for error responses"""
+
     detail: str
     error_code: Optional[str] = None
 
 
 class PaginationResponse(BaseModel):
     """Schema for paginated responses"""
+
     total: int
     page: int
     page_size: int

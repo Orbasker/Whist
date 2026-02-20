@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from uuid import UUID
@@ -9,23 +9,26 @@ from app.sql.queries.round_queries import RoundQueries
 
 class RoundRepository(BaseRepository[Round]):
     """Repository for Round model with ORM and SQL methods"""
-    
+
     def __init__(self, db: Session):
         super().__init__(db, Round)
         self.sql_queries = RoundQueries()
-    
+
     # ORM methods
     def get_by_game_id(self, game_id: UUID) -> List[Round]:
         """Get all rounds for a game using ORM"""
-        return self.db.query(Round).filter(Round.game_id == game_id).order_by(Round.round_number).all()
-    
-    def get_by_game_and_round(self, game_id: UUID, round_number: int) -> Round:
+        return (
+            self.db.query(Round).filter(Round.game_id == game_id).order_by(Round.round_number).all()
+        )
+
+    def get_by_game_and_round(self, game_id: UUID, round_number: int) -> Optional[Round]:
         """Get specific round using ORM"""
-        return self.db.query(Round).filter(
-            Round.game_id == game_id,
-            Round.round_number == round_number
-        ).first()
-    
+        return (
+            self.db.query(Round)
+            .filter(Round.game_id == game_id, Round.round_number == round_number)
+            .first()
+        )
+
     # Raw SQL methods
     def get_round_statistics(self) -> List[dict]:
         """Get round statistics using raw SQL"""

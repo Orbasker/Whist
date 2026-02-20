@@ -2,7 +2,6 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models.base import Base
-from app.database.connection import get_db
 from app.repositories.game_repository import GameRepository
 from app.repositories.round_repository import RoundRepository
 from app.services.round_service import RoundService

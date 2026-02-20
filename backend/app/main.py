@@ -5,7 +5,6 @@ import logging
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
 from app.api.v1.router import api_router
 from app.config import settings
@@ -21,14 +20,12 @@ from app.views.auth import router as auth_router
 # Configure logging
 logging.basicConfig(
     level=logging.INFO if settings.is_production else logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
 # Create FastAPI app
 app = FastAPI(
-    title=settings.project_name,
-    version="1.0.0",
-    description="Whist card game scoring API"
+    title=settings.project_name, version="1.0.0", description="Whist card game scoring API"
 )
 
 # Configure CORS (auth endpoints need credentials for cookies)
@@ -57,8 +54,4 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 @app.get("/")
 async def root():
     """Root endpoint"""
-    return {
-        "message": "Whist Game API",
-        "version": "1.0.0",
-        "docs": "/docs"
-    }
+    return {"message": "Whist Game API", "version": "1.0.0", "docs": "/docs"}

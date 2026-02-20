@@ -20,24 +20,21 @@ repos:
         files: ^backend/
         language_version: python3.11
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.7.1
+  - repo: local
     hooks:
-      - id: mypy
-        name: mypy type check (backend)
+      - id: ruff-ty
+        name: ruff ty type check (backend)
+        language: system
+        entry: bash -c 'cd backend && uv run ty check .'
+        pass_filenames: false
         files: ^backend/
-        args: [--config-file=backend/pyproject.toml]
-        additional_dependencies:
-          - pydantic==2.5.0
-          - sqlalchemy==2.0.23
-          - fastapi==0.104.1
 
   - repo: local
     hooks:
       - id: pytest
         name: pytest (backend unit tests)
         language: system
-        entry: bash -c 'cd backend && python -m pytest tests/ -x -q'
+        entry: bash -c 'cd backend && uv run python -m pytest tests/ -x -q'
         pass_filenames: false
         files: ^backend/
         stages: [pre-commit]
