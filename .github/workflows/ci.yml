@@ -49,6 +49,12 @@ jobs:
           DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/whist_ci"
         run: uv run alembic upgrade head
 
+      - name: Run Alembic migrations (Neon)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+        run: uv run alembic upgrade head
+
       - name: Ruff lint
         run: ruff check .
 
