@@ -185,9 +185,10 @@ class GameService:
         game.reset_vote_user_ids = vote_ids
 
         if set(vote_ids) >= eligible:
-            # Unanimous: perform reset
-            for r in game.rounds:
-                self.db.delete(r)
+            # Unanimous: perform reset (bulk delete rounds for performance)
+            from app.models.round import Round
+
+            self.db.query(Round).filter(Round.game_id == game_id).delete()
             game.scores = [0, 0, 0, 0]
             game.current_round = 1
             game.reset_requested_at = None
