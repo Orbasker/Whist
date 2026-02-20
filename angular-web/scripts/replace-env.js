@@ -24,8 +24,13 @@ const apiUrl = process.env.API_URL || 'https://whist.api.orbasker.com/api/v1';
 const authUrl = process.env.AUTH_URL || 'https://ep-xxx-prod.neonauth.region.aws.neon.tech/neondb/auth';
 const supabaseUrl = process.env.SUPABASE_URL || '';
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
+// Default to Supabase Realtime when URL/key are set; allow USE_SUPABASE_REALTIME=false to override
 const useSupabaseRealtime =
-  process.env.USE_SUPABASE_REALTIME === 'true' || process.env.USE_SUPABASE_REALTIME === '1';
+  process.env.USE_SUPABASE_REALTIME === 'false' || process.env.USE_SUPABASE_REALTIME === '0'
+    ? false
+    : process.env.USE_SUPABASE_REALTIME === 'true' ||
+      process.env.USE_SUPABASE_REALTIME === '1' ||
+      !!(supabaseUrl && supabaseAnonKey);
 
 // Replace apiUrl (handle both single and double quotes)
 content = content.replace(
