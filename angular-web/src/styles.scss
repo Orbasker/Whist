@@ -20,3 +20,20 @@ body {
   color: var(--text-primary);
   direction: rtl;
 }
+
+/* Focus visible for keyboard accessibility */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}

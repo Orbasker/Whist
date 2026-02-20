@@ -100,19 +100,47 @@
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openInvitationForm(game); $event.stopPropagation()"
-                class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1 rounded transition-colors"
-                title="שלח הזמנות"
+                class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded transition-colors flex items-center gap-1.5"
+                aria-label="שלח הזמנות"
               >
-                📧 הזמן
+                <svg
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                הזמן
               </button>
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="deleteGame(game.id, $event)"
-                class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1 rounded transition-colors"
-                title="מחק משחק"
+                class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded transition-colors flex items-center gap-1.5"
+                aria-label="מחק משחק"
               >
-                🗑 מחק
+                <svg
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                מחק
               </button>
               <span
                 [class]="game.status === 'active' ? 'bg-green-500' : 'bg-slate-500'"
@@ -140,46 +168,24 @@
     </div>
 
     <!-- Invitation Modal (shown when showInvitationForm is true) -->
-    <div
+    <app-modal
       *ngIf="showInvitationForm"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-      (click)="closeInvitationForm()"
+      title="שלח הזמנות"
+      size="md"
+      (close)="closeInvitationForm()"
     >
-      <div
-        class="bg-slate-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-6"
-        (click)="$event.stopPropagation()"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-white">שלח הזמנות</h2>
-          <button
-            type="button"
-            (click)="closeInvitationForm()"
-            class="text-slate-400 hover:text-white p-1"
-            title="סגור"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <app-invitation-form
-          [gameId]="selectedGameId || ''"
-          [gameName]="selectedGameName"
-          [players]="selectedGame?.players || []"
-          [playerUserIds]="selectedGame?.player_user_ids || []"
-          [currentUserId]="userId"
-          [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
-          (invitationsSent)="onInvitationsSent($event)"
-          (cancelled)="closeInvitationForm()"
-          (playerNameUpdated)="onPlayerNameUpdated($event)"
-        ></app-invitation-form>
-      </div>
-    </div>
+      <app-invitation-form
+        [gameId]="selectedGameId || ''"
+        [gameName]="selectedGameName"
+        [players]="selectedGame?.players || []"
+        [playerUserIds]="selectedGame?.player_user_ids || []"
+        [currentUserId]="userId"
+        [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
+        (invitationsSent)="onInvitationsSent($event)"
+        (cancelled)="closeInvitationForm()"
+        (playerNameUpdated)="onPlayerNameUpdated($event)"
+      ></app-invitation-form>
+    </app-modal>
 
     <!-- New Game Form (shown when showNewGameForm is true) -->
     <div *ngIf="showNewGameForm" class="bg-slate-800 rounded-lg p-6 shadow-xl">
