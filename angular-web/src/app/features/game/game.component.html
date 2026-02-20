@@ -29,9 +29,11 @@
       </button>
       <div class="text-center flex-1 min-w-0">
         <h1 class="text-base sm:text-lg font-semibold text-white">
-          {{ 'game.round' | translate }} {{ gameState.current_round }}
+          {{ 'game.scoreBoard' | translate }}
         </h1>
         <p class="text-xs text-slate-400">
+          {{ 'game.roundsPlayed' | translate: { count: gameState.current_round - 1 } }}
+          ·
           {{ phase === 'bidding' ? ('game.bidding' | translate) : ('game.tricks' | translate) }}
         </p>
       </div>
@@ -60,8 +62,8 @@
     ></app-tricks-phase>
   </div>
 
-  <!-- Floating Round History Button -->
-  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 safe-area-inset-bottom">
+  <!-- Floating Score board button: above the fixed footer so both are always visible -->
+  <div class="floating-scoreboard-wrap">
     <button
       (click)="showRoundHistory = true"
       class="min-h-touch flex items-center gap-2 px-5 py-3 sm:py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold rounded-full shadow-lg shadow-amber-500/30 transition-colors text-sm sm:text-base"

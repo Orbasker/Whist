@@ -1,0 +1,8 @@
+/* Position the floating Score board button above the fixed footer so both stay visible */
+.floating-scoreboard-wrap {
+  position: fixed;
+  bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+}

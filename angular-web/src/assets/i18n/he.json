@@ -103,13 +103,15 @@
   "game": {
     "back": "חזור",
     "round": "סיבוב",
+    "scoreBoard": "לוח ניקוד",
+    "roundsPlayed": "{{count}} סיבובים",
     "bidding": "הימורים",
     "tricks": "לקיחות",
     "scoreTable": "טבלת ניקוד",
-    "roundsHistory": "סיבובים ({{count}}/13)",
+    "roundsHistory": "לוח ניקוד ({{count}} סיבובים)",
     "roundsEmpty": "אין סיבובים עדיין",
     "roundSummary": "סיכום סיבוב",
-    "roundHistory": "היסטוריית סיבובים",
+    "roundHistory": "לוח ניקוד",
     "biddingPhase": {
       "title": "הימורים",
       "subtitle": "בחר קלף שולט והימור לכל שחקן",
@@ -138,9 +140,9 @@
       "finishRound": "סיים סיבוב"
     },
     "scoreTable": {
-      "title": "טבלת ניקוד",
+      "title": "לוח ניקוד",
       "currentScore": "ניקוד נוכחי",
-      "roundOf": "סיבוב {{current}} מתוך 13",
+      "roundsPlayed": "סיבובים שבוצעו: {{current}}",
       "resetGame": "איפוס משחק",
       "resetDescription": "איפוס מתבצע רק כאשר כל השחקנים מצביעים כן.",
       "voteOpen": "הצבעה לאיפוס פתוחה. {{count}} הצביעו.",

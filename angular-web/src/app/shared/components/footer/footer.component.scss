@@ -1,7 +1,13 @@
 .app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
   padding: 0.75rem 1rem;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
   text-align: center;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(15, 23, 42, 0.95);
   border-top: 1px solid rgba(71, 85, 105, 0.3);
   flex-shrink: 0;
 }

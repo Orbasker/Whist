@@ -26,6 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule,
   ],
   templateUrl: './game.component.html',
+  styleUrl: './game.component.scss',
 })
 export class GameComponent implements OnInit, OnDestroy {
   gameState: GameState | null = null;

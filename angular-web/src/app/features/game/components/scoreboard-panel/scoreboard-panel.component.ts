@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -6,18 +6,19 @@ import { GameState } from '../../../../core/models/game-state.model';
 import { GameService } from '../../../../core/services/game.service';
 
 @Component({
-  selector: 'app-score-table',
+  selector: 'app-scoreboard-panel',
   standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule],
-  templateUrl: './score-table.component.html',
-  styleUrl: './score-table.component.scss',
+  templateUrl: './scoreboard-panel.component.html',
+  styleUrl: './scoreboard-panel.component.scss',
 })
-export class ScoreTableComponent {
+export class ScoreboardPanelComponent {
   @Input() gameState: GameState | null = null;
   @Input() isGameOwner = false;
   @Input() currentPlayerIndex: number | null = null;
-  /** Current user's id (for reset vote check). From gameState.player_user_ids[currentPlayerIndex] or auth. */
   @Input() currentUserId: string | null = null;
+  /** When false, hide the Close button (e.g. when used in sidebar). */
+  @Input() showClose = true;
   @Output() dismiss = new EventEmitter<void>();
   @Output() deleteRequested = new EventEmitter<void>();
 
@@ -30,11 +31,6 @@ export class ScoreTableComponent {
     private gameService: GameService,
     private translate: TranslateService
   ) {}
-
-  @HostListener('document:keydown.escape')
-  onEscape() {
-    this.dismiss.emit();
-  }
 
   onClose() {
     this.dismiss.emit();
@@ -112,7 +108,7 @@ export class ScoreTableComponent {
     try {
       await this.gameService.voteReset(this.gameState.id);
     } catch (e) {
-      console.error('Vote reset failed', e);
+      console.error('Request reset failed', e);
     } finally {
       this.resetLoading = false;
     }
@@ -124,7 +120,7 @@ export class ScoreTableComponent {
     try {
       await this.gameService.cancelResetRequest(this.gameState.id);
     } catch (e) {
-      console.error('Cancel reset failed', e);
+      console.error('Request reset failed', e);
     } finally {
       this.resetLoading = false;
     }

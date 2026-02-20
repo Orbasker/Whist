@@ -1,0 +1,70 @@
+/* Backdrop: full width but leave bottom so footer (language switcher) stays visible */
+.score-table-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 72px;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 50;
+}
+
+/* Panel in top-left corner so it never covers the language bar */
+.score-table-panel {
+  position: fixed;
+  left: 0.75rem;
+  top: max(0.75rem, env(safe-area-inset-top, 0.75rem));
+  z-index: 51;
+  width: min(320px, calc(100vw - 1.5rem));
+  max-height: calc(100vh - 6rem);
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-tertiary);
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.score-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid var(--bg-tertiary);
+  flex-shrink: 0;
+}
+
+.score-table-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.score-table-close {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.25rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-table-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.score-table-body {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+}

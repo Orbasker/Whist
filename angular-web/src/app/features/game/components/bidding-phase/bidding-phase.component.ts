@@ -13,6 +13,7 @@ import { GameState } from '../../../../core/models/game-state.model';
   standalone: true,
   imports: [CommonModule, TrumpSelectorComponent, BidInputGridComponent, TranslateModule],
   templateUrl: './bidding-phase.component.html',
+  styleUrl: './bidding-phase.component.scss',
 })
 export class BiddingPhaseComponent implements OnInit, OnDestroy {
   @Input() players: string[] = [];

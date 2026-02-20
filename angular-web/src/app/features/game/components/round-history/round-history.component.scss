@@ -1,0 +1,25 @@
+.round-history-scroll {
+  display: flex;
+  flex-direction: column;
+}
+
+.round-history-table-wrap {
+  // Scroll container for sticky thead/tfoot
+}
+
+.round-history-thead th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgb(30 41 59); /* slate-800 - solid so sticky header doesn’t show content through */
+  box-shadow: 0 1px 0 0 rgba(71, 85, 105, 0.5);
+}
+
+.round-history-tfoot td,
+.round-history-tfoot th {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  background: rgb(30 41 59);
+  box-shadow: 0 -1px 0 0 rgba(71, 85, 105, 0.5);
+}
