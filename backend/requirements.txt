@@ -10,4 +10,3 @@ python-jose[cryptography]==3.3.0
 pyjwt[crypto]==2.8.0
 httpx>=0.25.0
 better-auth>=0.0.1b11
-httpx>=0.25.0
