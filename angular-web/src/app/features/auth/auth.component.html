@@ -2,7 +2,7 @@
   <div class="auth-card">
     <h1 class="auth-title">{{ isLoginMode ? 'Sign In' : 'Sign Up' }}</h1>
 
-    <div *ngIf="errorMessage" class="error-message">
+    <div *ngIf="errorMessage" class="error-message" role="alert">
       {{ errorMessage }}
     </div>
 

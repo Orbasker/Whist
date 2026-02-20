@@ -1,15 +1,18 @@
 <div class="flex gap-2 flex-wrap">
   <button
     *ngFor="let option of trumpOptions"
+    type="button"
     (click)="selectTrump(option.value)"
+    [attr.aria-pressed]="selectedTrump === option.value"
+    [attr.aria-label]="'קלף שולט: ' + option.label"
     [class.bg-amber-500]="selectedTrump === option.value"
     [class.bg-slate-700]="selectedTrump !== option.value"
     [class.text-white]="selectedTrump === option.value"
     [class.text-slate-300]="selectedTrump !== option.value"
     [class]="option.color"
-    class="min-h-touch px-4 py-2.5 sm:py-2 rounded-lg font-medium text-sm sm:text-base transition-colors hover:bg-amber-600"
+    class="min-h-touch px-4 py-2.5 sm:py-2 rounded-lg font-medium text-sm sm:text-base transition-colors hover:bg-amber-600 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800"
   >
-    <span *ngIf="option.icon" class="mr-2">{{ option.icon }}</span>
+    <span *ngIf="option.icon" class="mr-2" aria-hidden="true">{{ option.icon }}</span>
     {{ option.label }}
   </button>
 </div>

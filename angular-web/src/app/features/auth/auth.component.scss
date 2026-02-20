@@ -1,10 +1,16 @@
+/* Auth uses app gradient and design-system tokens for consistency */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(
+    to bottom right,
+    var(--bg-primary),
+    var(--bg-secondary),
+    var(--bg-primary)
+  );
 
   @media (min-width: 640px) {
     padding: 2rem;
@@ -12,12 +18,13 @@
 }
 
 .auth-card {
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 12px;
   padding: 1.5rem;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--bg-tertiary);
 
   @media (min-width: 640px) {
     padding: 2.5rem;
@@ -29,7 +36,7 @@
   font-weight: 700;
   margin-bottom: 1.5rem;
   text-align: center;
-  color: #1a202c;
+  color: var(--text-primary);
 
   @media (min-width: 640px) {
     font-size: 2rem;
@@ -51,58 +58,63 @@
 
 label {
   font-weight: 600;
-  color: #4a5568;
+  color: var(--text-secondary);
   font-size: 0.875rem;
 }
 
 input {
   padding: 0.75rem;
   min-height: 44px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--input-border);
   border-radius: 8px;
   font-size: 16px; // Prevents zoom on iOS when focused
-  transition: border-color 0.2s;
-  background-color: white;
-  color: #1a202c; // Explicit dark text color for visibility
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
 
   @media (min-width: 640px) {
     font-size: 1rem;
   }
 
   &::placeholder {
-    color: #a0aec0; // Light gray for placeholder text
+    color: var(--text-secondary);
+    opacity: 0.8;
   }
 
   &:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
   }
 
   &.error {
-    border-color: #e53e3e;
+    border-color: var(--error-border);
   }
 }
 
 .field-error {
-  color: #e53e3e;
+  color: #f87171;
   font-size: 0.875rem;
   margin-top: -0.25rem;
 }
 
 .error-message {
-  background-color: #fed7d7;
-  color: #c53030;
+  background: var(--error-bg);
+  color: #fca5a5;
   padding: 0.75rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
   font-size: 0.875rem;
+  border: 1px solid var(--error-border);
 }
 
 .submit-button {
   padding: 0.875rem;
   min-height: 44px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--accent-primary);
+  color: var(--bg-primary);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -113,7 +125,7 @@ input {
     transform 0.2s;
 
   &:hover:not(:disabled) {
-    opacity: 0.9;
+    opacity: 0.95;
     transform: translateY(-1px);
   }
 
@@ -126,7 +138,7 @@ input {
 .toggle-mode {
   margin-top: 1.5rem;
   text-align: center;
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 0.875rem;
 
   p {
@@ -137,7 +149,7 @@ input {
 .link-button {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--accent-secondary);
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
@@ -148,7 +160,7 @@ input {
   align-items: center;
 
   &:hover {
-    color: #764ba2;
+    color: var(--accent-primary);
   }
 }
 
@@ -162,11 +174,11 @@ input {
 .divider-line {
   flex: 1;
   height: 1px;
-  background-color: #e2e8f0;
+  background-color: var(--input-border);
 }
 
 .divider-text {
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -185,9 +197,9 @@ input {
   width: 100%;
   padding: 0.875rem;
   min-height: 44px;
-  background: white;
-  color: #3c4043;
-  border: 2px solid #e2e8f0;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 2px solid var(--input-border);
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
@@ -195,9 +207,8 @@ input {
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background-color: #f8f9fa;
-    border-color: #dadce0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-color: var(--input-border-focus);
+    background: var(--bg-secondary);
   }
 
   &:disabled {
@@ -207,11 +218,8 @@ input {
 }
 
 .github-button {
-  color: #24292e;
-
   &:hover:not(:disabled) {
-    background-color: #f6f8fa;
-    border-color: #d1d5da;
+    border-color: var(--accent-primary);
   }
 }
 

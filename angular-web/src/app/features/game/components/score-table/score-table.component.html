@@ -1,133 +1,108 @@
-<div
-  class="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4"
-  (click)="onClose()"
->
-  <div
-    class="bg-slate-800 rounded-t-xl sm:rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6"
-    (click)="$event.stopPropagation()"
-  >
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl sm:text-2xl font-bold text-white">טבלת ניקוד</h2>
-      <button
-        (click)="onClose()"
-        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-2 text-slate-400 hover:text-white"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          ></path>
-        </svg>
-      </button>
-    </div>
-
-    <div *ngIf="gameState" class="space-y-4">
-      <!-- Current Scores -->
-      <div class="bg-slate-700 rounded-lg p-3 sm:p-4">
-        <h3 class="text-base sm:text-lg font-semibold text-white mb-3">ניקוד נוכחי</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <div *ngFor="let player of gameState.players; let i = index" class="text-center">
-            <div class="text-slate-400 text-sm mb-1 flex items-center justify-center gap-1">
-              <ng-container *ngIf="editingPlayerIndex !== i">
-                <span>{{ player }}</span>
-                <button
-                  *ngIf="canEditPlayerName(i)"
-                  type="button"
-                  (click)="startEditName(i)"
-                  class="min-h-touch min-w-touch inline-flex items-center justify-center text-amber-400 hover:text-amber-300 p-1 -m-1"
-                  title="ערוך את השם המוצג במשחק"
-                >
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    />
-                  </svg>
-                </button>
-              </ng-container>
-              <ng-container *ngIf="editingPlayerIndex === i">
-                <input
-                  type="text"
-                  [(ngModel)]="editingName"
-                  (keydown.enter)="savePlayerName()"
-                  (keydown.escape)="cancelEditName()"
-                  (blur)="savePlayerName()"
-                  class="w-24 px-2 py-0.5 bg-slate-600 text-white text-sm rounded border border-slate-500"
-                />
-              </ng-container>
-            </div>
-            <div
-              class="text-xl sm:text-2xl font-bold"
-              [class.text-green-400]="gameState.scores[i] > 0"
-              [class.text-red-400]="gameState.scores[i] < 0"
-            >
-              {{ gameState.scores[i] }}
-            </div>
+<app-modal title="טבלת ניקוד" size="lg" (close)="onClose()">
+  <div *ngIf="gameState" class="space-y-4">
+    <!-- Current Scores -->
+    <div class="bg-slate-700 rounded-lg p-3 sm:p-4">
+      <h3 class="text-base sm:text-lg font-semibold text-white mb-3">ניקוד נוכחי</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div *ngFor="let player of gameState.players; let i = index" class="text-center">
+          <div class="text-slate-400 text-sm mb-1 flex items-center justify-center gap-1">
+            <ng-container *ngIf="editingPlayerIndex !== i">
+              <span>{{ player }}</span>
+              <button
+                *ngIf="canEditPlayerName(i)"
+                type="button"
+                (click)="startEditName(i)"
+                class="min-h-touch min-w-touch inline-flex items-center justify-center text-amber-400 hover:text-amber-300 p-1 -m-1"
+                title="ערוך את השם המוצג במשחק"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  />
+                </svg>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="editingPlayerIndex === i">
+              <input
+                type="text"
+                [(ngModel)]="editingName"
+                (keydown.enter)="savePlayerName()"
+                (keydown.escape)="cancelEditName()"
+                (blur)="savePlayerName()"
+                class="w-24 px-2 py-0.5 bg-slate-600 text-white text-sm rounded border border-slate-500"
+              />
+            </ng-container>
+          </div>
+          <div
+            class="text-xl sm:text-2xl font-bold"
+            [class.text-green-400]="gameState.scores[i] > 0"
+            [class.text-red-400]="gameState.scores[i] < 0"
+          >
+            {{ gameState.scores[i] }}
           </div>
         </div>
       </div>
-
-      <!-- Round Info -->
-      <div class="text-slate-400 text-sm text-center">
-        סיבוב {{ gameState.current_round }} מתוך 13
-      </div>
-
-      <!-- Reset by vote -->
-      <div *ngIf="canProposeOrVoteReset" class="bg-slate-700 rounded-lg p-4 space-y-2">
-        <h3 class="text-sm font-semibold text-white">איפוס משחק</h3>
-        <p class="text-slate-400 text-xs">איפוס מתבצע רק כאשר כל השחקנים מצביעים כן.</p>
-        <div *ngIf="!resetRequestedAt" class="flex gap-2">
-          <button
-            (click)="onRequestReset()"
-            [disabled]="resetLoading"
-            class="bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
-          >
-            הצע איפוס
-          </button>
-        </div>
-        <div *ngIf="resetRequestedAt" class="space-y-2">
-          <p class="text-slate-300 text-xs">
-            הצבעה לאיפוס פתוחה. {{ gameState.reset_vote_user_ids?.length ?? 0 }} הצביעו.
-          </p>
-          <button
-            *ngIf="!hasVotedReset"
-            (click)="onVoteReset()"
-            [disabled]="resetLoading"
-            class="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
-          >
-            הצבעת כן
-          </button>
-          <span *ngIf="hasVotedReset" class="text-green-400 text-sm">הצבעת כן</span>
-          <button
-            *ngIf="isGameOwner"
-            (click)="onCancelResetRequest()"
-            [disabled]="resetLoading"
-            class="mr-2 bg-slate-600 hover:bg-slate-500 text-white text-sm py-2 px-4 rounded-lg transition-colors"
-          >
-            בטל איפוס
-          </button>
-        </div>
-      </div>
     </div>
 
-    <div class="flex flex-wrap gap-2 mt-6">
-      <button
-        *ngIf="isGameOwner"
-        (click)="onDeleteGame()"
-        class="min-h-touch bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
-      >
-        מחק משחק
-      </button>
-      <button
-        (click)="onClose()"
-        class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
-      >
-        סגור
-      </button>
+    <!-- Round Info -->
+    <div class="text-slate-400 text-sm text-center">
+      סיבוב {{ gameState.current_round }} מתוך 13
+    </div>
+
+    <!-- Reset by vote -->
+    <div *ngIf="canProposeOrVoteReset" class="bg-slate-700 rounded-lg p-4 space-y-2">
+      <h3 class="text-sm font-semibold text-white">איפוס משחק</h3>
+      <p class="text-slate-400 text-xs">איפוס מתבצע רק כאשר כל השחקנים מצביעים כן.</p>
+      <div *ngIf="!resetRequestedAt" class="flex gap-2">
+        <button
+          (click)="onRequestReset()"
+          [disabled]="resetLoading"
+          class="bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
+        >
+          הצע איפוס
+        </button>
+      </div>
+      <div *ngIf="resetRequestedAt" class="space-y-2">
+        <p class="text-slate-300 text-xs">
+          הצבעה לאיפוס פתוחה. {{ gameState.reset_vote_user_ids?.length ?? 0 }} הצביעו.
+        </p>
+        <button
+          *ngIf="!hasVotedReset"
+          (click)="onVoteReset()"
+          [disabled]="resetLoading"
+          class="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
+        >
+          הצבעת כן
+        </button>
+        <span *ngIf="hasVotedReset" class="text-green-400 text-sm">הצבעת כן</span>
+        <button
+          *ngIf="isGameOwner"
+          (click)="onCancelResetRequest()"
+          [disabled]="resetLoading"
+          class="mr-2 bg-slate-600 hover:bg-slate-500 text-white text-sm py-2 px-4 rounded-lg transition-colors"
+        >
+          בטל איפוס
+        </button>
+      </div>
     </div>
   </div>
-</div>
+
+  <div class="flex flex-wrap gap-2 mt-6">
+    <button
+      *ngIf="isGameOwner"
+      (click)="onDeleteGame()"
+      class="min-h-touch bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
+    >
+      מחק משחק
+    </button>
+    <button
+      (click)="onClose()"
+      class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
+    >
+      סגור
+    </button>
+  </div>
+</app-modal>
