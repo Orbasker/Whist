@@ -4,6 +4,7 @@
     "ms-python.debugpy",
     "ms-python.black-formatter",
     "charliermarsh.ruff",
-    "ms-python.mypy-type-checker"
+    "ms-python.mypy-type-checker",
+    "bloop.vibe-kanban"
   ]
 }
