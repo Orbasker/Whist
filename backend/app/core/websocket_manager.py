@@ -6,6 +6,8 @@ from typing import Dict, Set
 
 from fastapi import WebSocket
 
+from app.core.realtime_publisher import get_or_create_realtime_publisher
+
 logger = logging.getLogger(__name__)
 
 
@@ -75,31 +77,29 @@ class ConnectionManager:
 
     async def broadcast_game_update(self, game_id: str, game_state: dict):
         """Broadcast game state update to all connections in a game room"""
-        if game_id not in self.active_connections:
-            return
+        message_dict = {"type": "game_update", "game": game_state}
+        message = json.dumps(message_dict)
 
-        message = json.dumps({"type": "game_update", "game": game_state})
+        if game_id in self.active_connections:
+            logger.info(
+                f"Broadcasting game_update for game {game_id} to {len(self.active_connections[game_id])} connections"
+            )
+            disconnected = set()
+            for connection in self.active_connections[game_id]:
+                try:
+                    await connection.send_text(message)
+                except Exception as e:
+                    logger.warning(f"Failed to send message to WebSocket: {e}")
+                    disconnected.add(connection)
+            for connection in disconnected:
+                self.disconnect(connection, game_id)
 
-        logger.info(
-            f"Broadcasting game_update for game {game_id} to {len(self.active_connections[game_id])} connections"
-        )
-
-        disconnected = set()
-        for connection in self.active_connections[game_id]:
-            try:
-                await connection.send_text(message)
-            except Exception as e:
-                logger.warning(f"Failed to send message to WebSocket: {e}")
-                disconnected.add(connection)
-
-        for connection in disconnected:
-            self.disconnect(connection, game_id)
+        publisher = get_or_create_realtime_publisher()
+        if publisher and publisher.enabled:
+            await publisher.publish(game_id, message_dict)
 
     async def broadcast_phase_update(self, game_id: str, phase: str):
         """Broadcast phase change to all connections in a game room"""
-        if game_id not in self.active_connections:
-            return
-
         if game_id not in self.game_states:
             self.game_states[game_id] = {
                 "bid_selections": {},
@@ -109,29 +109,29 @@ class ConnectionManager:
             }
         self.game_states[game_id]["phase"] = phase
 
-        message = json.dumps({"type": "phase_update", "phase": phase})
+        message_dict = {"type": "phase_update", "phase": phase}
+        message = json.dumps(message_dict)
 
-        logger.info(
-            f"Broadcasting phase_update for game {game_id}: {phase} to {len(self.active_connections[game_id])} connections"
-        )
+        if game_id in self.active_connections:
+            logger.info(
+                f"Broadcasting phase_update for game {game_id}: {phase} to {len(self.active_connections[game_id])} connections"
+            )
+            disconnected = set()
+            for connection in self.active_connections[game_id]:
+                try:
+                    await connection.send_text(message)
+                except Exception as e:
+                    logger.warning(f"Failed to send phase update to WebSocket: {e}")
+                    disconnected.add(connection)
+            for connection in disconnected:
+                self.disconnect(connection, game_id)
 
-        disconnected = set()
-        for connection in self.active_connections[game_id]:
-            try:
-                await connection.send_text(message)
-            except Exception as e:
-                logger.warning(f"Failed to send phase update to WebSocket: {e}")
-                disconnected.add(connection)
-
-        for connection in disconnected:
-            self.disconnect(connection, game_id)
+        publisher = get_or_create_realtime_publisher()
+        if publisher and publisher.enabled:
+            await publisher.publish(game_id, message_dict)
 
     async def broadcast_bid_selection(self, game_id: str, player_index: int, bid: int):
         """Broadcast a player's bid selection to all connections in a game room"""
-        if game_id not in self.active_connections:
-            logger.warning(f"No active connections for game {game_id}")
-            return
-
         if game_id not in self.game_states:
             self.game_states[game_id] = {
                 "bid_selections": {},
@@ -141,31 +141,34 @@ class ConnectionManager:
             }
         self.game_states[game_id]["bid_selections"][str(player_index)] = bid
 
-        message = json.dumps(
-            {"type": "bid_selection", "data": {"player_index": player_index, "bid": bid}}
-        )
+        message_dict = {
+            "type": "bid_selection",
+            "data": {"player_index": player_index, "bid": bid},
+        }
+        message = json.dumps(message_dict)
 
-        logger.info(
-            f"Broadcasting bid_selection for game {game_id}: player {player_index} bid {bid} to {len(self.active_connections[game_id])} connections"
-        )
+        if game_id in self.active_connections:
+            logger.info(
+                f"Broadcasting bid_selection for game {game_id}: player {player_index} bid {bid} to {len(self.active_connections[game_id])} connections"
+            )
+            disconnected = set()
+            for connection in self.active_connections[game_id]:
+                try:
+                    await connection.send_text(message)
+                except Exception as e:
+                    logger.warning(f"Failed to send bid selection to WebSocket: {e}")
+                    disconnected.add(connection)
+            for connection in disconnected:
+                self.disconnect(connection, game_id)
+        else:
+            logger.warning(f"No active connections for game {game_id}")
 
-        disconnected = set()
-        for connection in self.active_connections[game_id]:
-            try:
-                await connection.send_text(message)
-            except Exception as e:
-                logger.warning(f"Failed to send bid selection to WebSocket: {e}")
-                disconnected.add(connection)
-
-        for connection in disconnected:
-            self.disconnect(connection, game_id)
+        publisher = get_or_create_realtime_publisher()
+        if publisher and publisher.enabled:
+            await publisher.publish(game_id, message_dict)
 
     async def broadcast_trick_selection(self, game_id: str, player_index: int, trick: int):
         """Broadcast a player's trick selection to all connections in a game room"""
-        if game_id not in self.active_connections:
-            logger.warning(f"No active connections for game {game_id}")
-            return
-
         if game_id not in self.game_states:
             self.game_states[game_id] = {
                 "bid_selections": {},
@@ -175,30 +178,34 @@ class ConnectionManager:
             }
         self.game_states[game_id]["trick_selections"][str(player_index)] = trick
 
-        message = json.dumps(
-            {"type": "trick_selection", "data": {"player_index": player_index, "trick": trick}}
-        )
+        message_dict = {
+            "type": "trick_selection",
+            "data": {"player_index": player_index, "trick": trick},
+        }
+        message = json.dumps(message_dict)
 
-        logger.info(
-            f"Broadcasting trick_selection for game {game_id}: player {player_index} trick {trick} to {len(self.active_connections[game_id])} connections"
-        )
+        if game_id in self.active_connections:
+            logger.info(
+                f"Broadcasting trick_selection for game {game_id}: player {player_index} trick {trick} to {len(self.active_connections[game_id])} connections"
+            )
+            disconnected = set()
+            for connection in self.active_connections[game_id]:
+                try:
+                    await connection.send_text(message)
+                except Exception as e:
+                    logger.warning(f"Failed to send trick selection to WebSocket: {e}")
+                    disconnected.add(connection)
+            for connection in disconnected:
+                self.disconnect(connection, game_id)
+        else:
+            logger.warning(f"No active connections for game {game_id}")
 
-        disconnected = set()
-        for connection in self.active_connections[game_id]:
-            try:
-                await connection.send_text(message)
-            except Exception as e:
-                logger.warning(f"Failed to send trick selection to WebSocket: {e}")
-                disconnected.add(connection)
-
-        for connection in disconnected:
-            self.disconnect(connection, game_id)
+        publisher = get_or_create_realtime_publisher()
+        if publisher and publisher.enabled:
+            await publisher.publish(game_id, message_dict)
 
     async def broadcast_trump_selection(self, game_id: str, trump_suit: str):
         """Broadcast trump suit selection to all connections in a game room"""
-        if game_id not in self.active_connections:
-            return
-
         if game_id not in self.game_states:
             self.game_states[game_id] = {
                 "bid_selections": {},
@@ -208,42 +215,53 @@ class ConnectionManager:
             }
         self.game_states[game_id]["trump_selection"] = trump_suit
 
-        message = json.dumps({"type": "trump_selection", "data": {"trump_suit": trump_suit}})
+        message_dict = {"type": "trump_selection", "data": {"trump_suit": trump_suit}}
+        message = json.dumps(message_dict)
 
-        logger.info(
-            f"Broadcasting trump_selection for game {game_id}: {trump_suit} to {len(self.active_connections[game_id])} connections"
-        )
+        if game_id in self.active_connections:
+            logger.info(
+                f"Broadcasting trump_selection for game {game_id}: {trump_suit} to {len(self.active_connections[game_id])} connections"
+            )
+            disconnected = set()
+            for connection in self.active_connections[game_id]:
+                try:
+                    await connection.send_text(message)
+                except Exception as e:
+                    logger.warning(f"Failed to send trump selection to WebSocket: {e}")
+                    disconnected.add(connection)
+            for connection in disconnected:
+                self.disconnect(connection, game_id)
 
-        disconnected = set()
-        for connection in self.active_connections[game_id]:
-            try:
-                await connection.send_text(message)
-            except Exception as e:
-                logger.warning(f"Failed to send trump selection to WebSocket: {e}")
-                disconnected.add(connection)
-
-        for connection in disconnected:
-            self.disconnect(connection, game_id)
+        publisher = get_or_create_realtime_publisher()
+        if publisher and publisher.enabled:
+            await publisher.publish(game_id, message_dict)
 
     async def broadcast_message(self, game_id: str, message: str):
-        """Broadcast a custom message to all connections in a game room"""
-        if game_id not in self.active_connections:
-            return
+        """Broadcast a custom message to all connections in a game room.
 
-        logger.info(
-            f"Broadcasting custom message for game {game_id} to {len(self.active_connections[game_id])} connections"
-        )
+        message is a JSON string; for Supabase we parse and publish the dict.
+        """
+        if game_id in self.active_connections:
+            logger.info(
+                f"Broadcasting custom message for game {game_id} to {len(self.active_connections[game_id])} connections"
+            )
+            disconnected = set()
+            for connection in self.active_connections[game_id]:
+                try:
+                    await connection.send_text(message)
+                except Exception as e:
+                    logger.warning(f"Failed to send custom message to WebSocket: {e}")
+                    disconnected.add(connection)
+            for connection in disconnected:
+                self.disconnect(connection, game_id)
 
-        disconnected = set()
-        for connection in self.active_connections[game_id]:
+        publisher = get_or_create_realtime_publisher()
+        if publisher and publisher.enabled:
             try:
-                await connection.send_text(message)
-            except Exception as e:
-                logger.warning(f"Failed to send custom message to WebSocket: {e}")
-                disconnected.add(connection)
-
-        for connection in disconnected:
-            self.disconnect(connection, game_id)
+                message_dict = json.loads(message)
+                await publisher.publish(game_id, message_dict)
+            except (json.JSONDecodeError, TypeError):
+                pass
 
 
 connection_manager = ConnectionManager()

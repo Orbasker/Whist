@@ -6,4 +6,7 @@ export const environment = {
   // Go to: Neon Dashboard → Users → Configuration → Auth URL
   // Format: https://ep-xxx.neonauth.region.aws.neon.tech/neondb/auth
   authUrl: 'https://ep-xxx-staging.neonauth.region.aws.neon.tech/neondb/auth',
+  useSupabaseRealtime: false,
+  supabaseUrl: '',
+  supabaseAnonKey: '',
 };

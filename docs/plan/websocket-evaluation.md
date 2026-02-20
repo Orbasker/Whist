@@ -117,6 +117,8 @@ Examples: **Pusher**, **Ably**, **Supabase Realtime**, **Firebase Realtime**, et
 
 **Verdict**: Reasonable for **future scaling** or if the team wants to avoid operating WebSocket infrastructure. For current scale and “one game room per process” model, FastAPI WebSockets are simpler and sufficient.
 
+**Note on Neon**: Neon (our current database and auth provider) does **not** offer a managed real-time/pub-sub product. It provides serverless Postgres and Neon Auth only. For a managed real-time layer we use a separate service such as **Supabase Realtime** (Broadcast) or **Firebase Realtime**. See [Managed real-time implementation](managed-realtime-implementation.md) for an implementation plan using Supabase or Firebase alongside Neon.
+
 ---
 
 ## 3. Recommendation

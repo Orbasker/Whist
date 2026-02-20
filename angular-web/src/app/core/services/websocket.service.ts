@@ -1,41 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { GameState, Round } from '../models/game-state.model';
+import { RealtimeService, WebSocketMessage } from './realtime.types';
 
-export interface WebSocketMessage {
-  type:
-    | 'game_update'
-    | 'phase_update'
-    | 'bids_submitted'
-    | 'tricks_submitted'
-    | 'bid_selection'
-    | 'trick_selection'
-    | 'trump_selection'
-    | 'bet_sent'
-    | 'bet_change'
-    | 'bet_locked'
-    | 'round_result_changed'
-    | 'round_result_sent'
-    | 'round_score_locked'
-    | 'error';
-  game?: GameState;
-  phase?: 'bidding' | 'tricks';
-  round?: Round;
-  data?: {
-    player_index?: number;
-    bid?: number;
-    trick?: number;
-    trump_suit?: string | null;
-    bids?: number[];
-  };
-  message?: string;
-}
+export { WebSocketMessage } from './realtime.types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WebSocketService {
+export class WebSocketService implements RealtimeService {
   private ws: WebSocket | null = null;
   private messageSubject = new Subject<WebSocketMessage>();
   private connectionStatus$ = new BehaviorSubject<boolean>(false);

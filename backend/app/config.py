@@ -41,6 +41,26 @@ class Settings(BaseSettings):
     frontend_url: str = ""  # Frontend URL for invitation links. If empty, defaults to https://whist.orbasker.com in production.
     invitation_secret: str = ""  # Secret for signing invitation JWT tokens (INVITATION_SECRET in .env, defaults to resend_email if not set)
 
+    # Supabase Realtime (optional; for managed real-time broadcast alongside or instead of WebSockets)
+    # Get from Supabase project: Settings → API → Project URL and service_role key
+    supabase_url: str = ""  # e.g. https://<project_ref>.supabase.co
+    supabase_service_role_key: str = (
+        ""  # Server-side only; used to publish to Realtime Broadcast API
+    )
+
+    @property
+    def use_supabase_realtime(self) -> bool:
+        """True when Supabase Realtime broadcast is configured."""
+        return bool(self.supabase_url.strip() and self.supabase_service_role_key.strip())
+
+    @property
+    def supabase_realtime_broadcast_url(self) -> str:
+        """URL for Supabase Realtime Broadcast API (empty if not configured)."""
+        if not self.supabase_url:
+            return ""
+        base = self.supabase_url.rstrip("/")
+        return f"{base}/realtime/v1/api/broadcast"
+
     @property
     def effective_database_url(self) -> str:
         """Get the effective database URL."""
