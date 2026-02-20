@@ -1,6 +1,6 @@
-<app-modal title="היסטוריית סיבובים" size="full" (close)="onClose()">
+<app-modal [title]="'game.roundHistory' | translate" size="full" (close)="onClose()">
   <div *ngIf="rounds.length === 0" class="text-slate-400 text-center py-12 px-6">
-    אין סיבובים עדיין
+    {{ 'game.roundsEmpty' | translate }}
   </div>
 
   <div
@@ -10,8 +10,12 @@
     <table class="w-full text-xs sm:text-sm text-right border-collapse min-w-[640px]">
       <thead>
         <tr class="text-slate-400 border-b-2 border-slate-600">
-          <th class="py-3 pr-4 pl-2 font-semibold w-16 sticky right-0 bg-slate-800 z-10">סיבוב</th>
-          <th class="py-3 px-2 font-semibold w-12 text-center">קלף</th>
+          <th class="py-3 pr-4 pl-2 font-semibold w-16 sticky right-0 bg-slate-800 z-10">
+            {{ 'game.roundHistoryTable.round' | translate }}
+          </th>
+          <th class="py-3 px-2 font-semibold w-12 text-center">
+            {{ 'game.roundHistoryTable.card' | translate }}
+          </th>
           <ng-container *ngFor="let player of players; let pi = index">
             <th
               colspan="5"
@@ -24,7 +28,7 @@
             >
               {{ player
               }}<span *ngIf="isCurrentPlayer(pi)" class="mr-1 text-amber-400 font-bold"
-                >(את/ה)</span
+                >({{ 'common.you' | translate }})</span
               >
             </th>
           </ng-container>
@@ -37,31 +41,31 @@
               class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
               [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
             >
-              הצעה
+              {{ 'game.roundHistoryTable.bid' | translate }}
             </th>
             <th
               class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
               [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
             >
-              לקח
+              {{ 'game.roundHistoryTable.took' | translate }}
             </th>
             <th
               class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
               [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
             >
-              שינוי
+              {{ 'game.roundHistoryTable.change' | translate }}
             </th>
             <th
               class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
               [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
             >
-              לפני
+              {{ 'game.roundHistoryTable.before' | translate }}
             </th>
             <th
               class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
               [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
             >
-              אחרי
+              {{ 'game.roundHistoryTable.after' | translate }}
             </th>
           </ng-container>
         </tr>

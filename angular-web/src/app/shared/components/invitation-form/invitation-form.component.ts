@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InvitationService } from '../../../core/services/invitation.service';
 import { GameService } from '../../../core/services/game.service';
 import { GameState } from '../../../core/models/game-state.model';
@@ -9,7 +10,7 @@ import { GameState } from '../../../core/models/game-state.model';
 @Component({
   selector: 'app-invitation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslateModule],
   templateUrl: './invitation-form.component.html',
 })
 export class InvitationFormComponent {
@@ -107,7 +108,8 @@ export class InvitationFormComponent {
   constructor(
     private fb: FormBuilder,
     private invitationService: InvitationService,
-    private gameService: GameService
+    private gameService: GameService,
+    private translate: TranslateService
   ) {
     this.invitationForm = this.fb.group({
       email1: ['', [Validators.email]],
@@ -151,12 +153,12 @@ export class InvitationFormComponent {
     const { emails: validEmails, indices: playerIndices } = this.getValidEmailsAndIndices();
 
     if (validEmails.length === 0) {
-      this.errorMessage = 'אנא הזן לפחות כתובת אימייל אחת תקינה';
+      this.errorMessage = this.translate.instant('invitationForm.atLeastOneEmail');
       return;
     }
 
     if (!this.gameId) {
-      this.errorMessage = 'מזהה משחק חסר';
+      this.errorMessage = this.translate.instant('invitationForm.gameIdMissing');
       return;
     }
 
@@ -172,7 +174,10 @@ export class InvitationFormComponent {
       );
 
       if (result.sent > 0) {
-        this.successMessage = `נשלחו ${result.sent} מתוך ${result.total} הזמנות בהצלחה`;
+        this.successMessage = this.translate.instant('home.invitationsSentSuccess', {
+          sent: result.sent,
+          total: result.total,
+        });
         this.invitationsSent.emit({ sent: result.sent, total: result.total });
 
         setTimeout(() => {
@@ -180,11 +185,13 @@ export class InvitationFormComponent {
           this.cancelled.emit();
         }, 2000);
       } else {
-        this.errorMessage = 'לא הצלחנו לשלוח את ההזמנות. אנא נסה שוב.';
+        this.errorMessage = this.translate.instant('home.invitationsSendFailed');
       }
     } catch (error: unknown) {
       console.error('Error sending invitations:', error);
-      this.errorMessage = (error instanceof Error ? error.message : null) || 'שגיאה בשליחת ההזמנות';
+      this.errorMessage =
+        (error instanceof Error ? error.message : null) ||
+        this.translate.instant('invitationForm.sendError');
     } finally {
       this.sending = false;
     }

@@ -1,0 +1,26 @@
+<footer class="app-footer" role="contentinfo">
+  <div class="footer-inner">
+    <span class="footer-label" aria-hidden="true">{{ 'footer.language' | translate }}:</span>
+    <div class="language-switcher" role="group" [attr.aria-label]="'footer.language' | translate">
+      <button
+        type="button"
+        class="lang-btn"
+        [class.active]="currentLang === 'he'"
+        (click)="setHebrew()"
+        [attr.aria-pressed]="currentLang === 'he'"
+      >
+        {{ 'footer.hebrew' | translate }}
+      </button>
+      <span class="separator" aria-hidden="true">/</span>
+      <button
+        type="button"
+        class="lang-btn"
+        [class.active]="currentLang === 'en'"
+        (click)="setEnglish()"
+        [attr.aria-pressed]="currentLang === 'en'"
+      >
+        {{ 'footer.english' | translate }}
+      </button>
+    </div>
+  </div>
+</footer>

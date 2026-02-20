@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InvitationService, InvitationInfo } from '../../core/services/invitation.service';
 import { AuthService } from '../../core/services/auth.service';
 import { GameService } from '../../core/services/game.service';
@@ -8,7 +9,7 @@ import { GameService } from '../../core/services/game.service';
 @Component({
   selector: 'app-invite',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './invite.component.html',
 })
 export class InviteComponent implements OnInit {
@@ -24,14 +25,15 @@ export class InviteComponent implements OnInit {
     private router: Router,
     private invitationService: InvitationService,
     private authService: AuthService,
-    private gameService: GameService
+    private gameService: GameService,
+    private translate: TranslateService
   ) {}
 
   async ngOnInit() {
     this.token = this.route.snapshot.paramMap.get('token') || '';
 
     if (!this.token) {
-      this.error = 'קישור הזמנה לא תקין';
+      this.error = this.translate.instant('invite.invalidLink');
       this.loading = false;
       return;
     }
@@ -42,7 +44,9 @@ export class InviteComponent implements OnInit {
       this.invitationInfo = await this.invitationService.getInvitationInfo(this.token);
     } catch (error: unknown) {
       console.error('Error loading invitation:', error);
-      this.error = (error instanceof Error ? error.message : null) || 'שגיאה בטעינת פרטי ההזמנה';
+      this.error =
+        (error instanceof Error ? error.message : null) ||
+        this.translate.instant('invite.loadError');
     } finally {
       this.loading = false;
     }
@@ -68,7 +72,9 @@ export class InviteComponent implements OnInit {
       this.router.navigate(['/game']);
     } catch (error: unknown) {
       console.error('Error accepting invitation:', error);
-      this.error = (error instanceof Error ? error.message : null) || 'שגיאה בקבלת ההזמנה';
+      this.error =
+        (error instanceof Error ? error.message : null) ||
+        this.translate.instant('invite.acceptError');
       this.accepting = false;
     }
   }
@@ -81,7 +87,8 @@ export class InviteComponent implements OnInit {
 
   formatDate(timestamp: number): string {
     const date = new Date(timestamp * 1000);
-    return date.toLocaleDateString('he-IL', {
+    const locale = this.translate.currentLang === 'en' ? 'en-US' : 'he-IL';
+    return date.toLocaleDateString(locale, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',

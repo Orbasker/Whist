@@ -1,0 +1,60 @@
+.app-footer {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  background: rgba(15, 23, 42, 0.6);
+  border-top: 1px solid rgba(71, 85, 105, 0.3);
+  flex-shrink: 0;
+}
+
+.footer-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-label {
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.8125rem;
+}
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.lang-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.375rem 0.75rem;
+  background: transparent;
+  border: 1px solid rgba(71, 85, 105, 0.6);
+  border-radius: 6px;
+  color: rgba(203, 213, 225, 0.9);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.lang-btn:hover {
+  background: rgba(51, 65, 85, 0.5);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #f8fafc;
+}
+
+.lang-btn.active {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.6);
+  color: #fbbf24;
+}
+
+.separator {
+  color: rgba(100, 116, 139, 0.8);
+  font-size: 0.875rem;
+  user-select: none;
+}
