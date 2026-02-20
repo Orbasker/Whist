@@ -1,0 +1,9 @@
+// Responsive breakpoints (align with Tailwind: sm 640, md 768, lg 1024)
+// Mobile-first: base = mobile, then sm = large phone/small tablet, md = tablet, lg = desktop
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+// Minimum touch target size (WCAG 2.5.5)
+$touch-target-min: 44px;
