@@ -20,8 +20,7 @@ def get_round_repository(db: Session = Depends(get_db)) -> RoundRepository:
 
 
 def get_round_service(
-    db: Session = Depends(get_db),
-    round_repo: RoundRepository = Depends(get_round_repository)
+    db: Session = Depends(get_db), round_repo: RoundRepository = Depends(get_round_repository)
 ) -> RoundService:
     """Dependency for round service"""
     return RoundService(db, round_repo)
@@ -30,7 +29,7 @@ def get_round_service(
 def get_game_service(
     db: Session = Depends(get_db),
     game_repo: GameRepository = Depends(get_game_repository),
-    round_service: RoundService = Depends(get_round_service)
+    round_service: RoundService = Depends(get_round_service),
 ) -> GameService:
     """Dependency for game service"""
     return GameService(db, game_repo, round_service)

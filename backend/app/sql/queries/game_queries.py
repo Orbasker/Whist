@@ -3,7 +3,7 @@
 
 class GameQueries:
     """Raw SQL queries for complex game operations"""
-    
+
     def get_games_with_round_count(self) -> str:
         """Get games with round count using JOIN"""
         return """
@@ -20,7 +20,7 @@ class GameQueries:
             GROUP BY g.id, g.players, g.scores, g.current_round, g.status
             ORDER BY g.created_at DESC
         """
-    
+
     def get_player_history(self) -> str:
         """Get player's game history"""
         # Note: This query works with PostgreSQL JSON functions

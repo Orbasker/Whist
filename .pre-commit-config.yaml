@@ -46,7 +46,7 @@ repos:
       - id: eslint
         name: eslint (frontend)
         language: system
-        entry: bash -c 'cd angular-web && npm run lint'
+        entry: bash -c 'cd angular-web && npx eslint "src/**/*.ts" --max-warnings=0'
         pass_filenames: false
         files: ^angular-web/src/.*\.(ts|html)$
         stages: [pre-commit]
@@ -54,7 +54,7 @@ repos:
       - id: prettier
         name: prettier format check (frontend)
         language: system
-        entry: bash -c 'cd angular-web && npm run format:check'
+        entry: bash -c 'cd angular-web && npx prettier --check "src/**/*.{ts,html,scss,css}"'
         pass_filenames: false
         files: ^angular-web/src/.*\.(ts|html|scss|css)$
         stages: [pre-commit]

@@ -23,8 +23,8 @@ async def proxy_to_better_auth(path: str) -> JSONResponse:
         status_code=501,
         content={
             "error": "Use Neon Auth directly",
-            "detail": "With Neon Auth, the frontend should communicate directly with Neon Auth endpoints. " +
-                      "FastAPI verifies JWTs issued by Neon Auth, but does not proxy auth requests.",
-            "neon_auth_docs": "https://neon.tech/docs/auth"
+            "detail": "With Neon Auth, the frontend should communicate directly with Neon Auth endpoints. "
+            + "FastAPI verifies JWTs issued by Neon Auth, but does not proxy auth requests.",
+            "neon_auth_docs": "https://neon.tech/docs/auth",
         },
     )

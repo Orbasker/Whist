@@ -3,7 +3,7 @@
 
 class RoundQueries:
     """Raw SQL queries for complex round operations"""
-    
+
     def get_round_statistics(self) -> str:
         """Get round statistics"""
         return """
