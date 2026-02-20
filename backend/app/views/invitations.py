@@ -72,7 +72,6 @@ async def create_invitations(
 
     # Generate tokens and send emails
     sent_count = 0
-    tokens = []
 
     for email, player_index in zip(emails, player_indices):
         try:
@@ -82,7 +81,6 @@ async def create_invitations(
                 invitee_email=email,
                 player_index=player_index,
             )
-            tokens.append(token)
 
             # Send email
             success = await _email_service.send_invitation(
@@ -102,7 +100,6 @@ async def create_invitations(
     return {
         "sent": sent_count,
         "total": len(emails),
-        "tokens": tokens,  # For testing/debugging
     }
 
 

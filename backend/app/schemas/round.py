@@ -1,7 +1,14 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
 from uuid import UUID
+
+from pydantic import BaseModel, Field, field_validator
+
+
+def _validate_bid_trick_range(v: int) -> int:
+    if not (0 <= v <= 13):
+        raise ValueError("each value must be between 0 and 13")
+    return v
 
 
 class RoundCreate(BaseModel):
@@ -11,6 +18,13 @@ class RoundCreate(BaseModel):
     trump_suit: Optional[str] = Field(
         None, description="Trump suit: spades, clubs, diamonds, hearts, no-trump"
     )
+
+    @field_validator("bids", mode="after")
+    @classmethod
+    def bids_in_range(cls, v: List[int]) -> List[int]:
+        for bid in v:
+            _validate_bid_trick_range(bid)
+        return v
 
 
 class TricksSubmit(BaseModel):
@@ -28,6 +42,13 @@ class TricksSubmit(BaseModel):
     trump_suit: Optional[str] = Field(
         None, description="Trump suit: spades, clubs, diamonds, hearts, no-trump"
     )
+
+    @field_validator("tricks", "bids", mode="after")
+    @classmethod
+    def values_in_range(cls, v: List[int]) -> List[int]:
+        for x in v:
+            _validate_bid_trick_range(x)
+        return v
 
 
 class RoundResponse(BaseModel):

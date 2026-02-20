@@ -4,6 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.core.auth import get_current_user_id
 from app.core.dependencies import get_game_service, get_round_service
 from app.core.websocket_manager import connection_manager
 from app.schemas.round import RoundCreate, RoundResponse, TricksSubmit
@@ -16,9 +17,15 @@ router = APIRouter(prefix="/games/{game_id}/rounds", tags=["rounds"])
 
 @router.post("/bids", response_model=dict)
 async def submit_bids(
-    game_id: UUID, round_data: RoundCreate, game_service: GameService = Depends(get_game_service)
+    game_id: UUID,
+    round_data: RoundCreate,
+    user_id: str = Depends(get_current_user_id),
+    game_service: GameService = Depends(get_game_service),
 ):
-    """Submit bids for current round"""
+    """Submit bids for current round. Only participants can submit."""
+    game = await game_service.get_game_if_participant(game_id, UUID(user_id))
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
     try:
         game = await game_service.submit_bids(
             game_id=game_id, bids=round_data.bids, trump_suit=round_data.trump_suit
@@ -41,10 +48,14 @@ async def submit_bids(
 async def submit_tricks(
     game_id: UUID,
     tricks_data: TricksSubmit,
+    user_id: str = Depends(get_current_user_id),
     game_service: GameService = Depends(get_game_service),
     round_service: RoundService = Depends(get_round_service),
 ):
-    """Submit tricks and create round"""
+    """Submit tricks and create round. Only participants can submit."""
+    game = await game_service.get_game_if_participant(game_id, UUID(user_id))
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
     try:
         game = await game_service.get_game(game_id)
         if not game:
@@ -74,7 +85,15 @@ async def submit_tricks(
 
 
 @router.get("/", response_model=list[RoundResponse])
-async def get_rounds(game_id: UUID, round_service: RoundService = Depends(get_round_service)):
-    """Get all rounds for a game"""
+async def get_rounds(
+    game_id: UUID,
+    user_id: str = Depends(get_current_user_id),
+    game_service: GameService = Depends(get_game_service),
+    round_service: RoundService = Depends(get_round_service),
+):
+    """Get all rounds for a game. Only participants can list rounds."""
+    game = await game_service.get_game_if_participant(game_id, UUID(user_id))
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
     rounds = round_service.get_rounds_by_game(game_id)
     return [RoundResponse.model_validate(round) for round in rounds]

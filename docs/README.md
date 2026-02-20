@@ -16,6 +16,10 @@ Complete deployment guide for Whist game backend (Render) and frontend (Vercel).
 - [ ] Vercel account (https://vercel.com)
 - [ ] DNS access for `orbasker.com`
 
+## Database migrations
+
+Migrations run automatically before the backend starts (see Start Command below). Each environment must have `DATABASE_URL` set to the **correct** database (staging vs production). For full details and troubleshooting, see **[Migrations (Alembic)](./migrations.md)**.
+
 ## Backend Deployment (Render)
 
 ### 1. Create Service

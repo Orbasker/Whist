@@ -28,6 +28,7 @@ export class GameService {
   constructor(
     private apiService: ApiService,
     private wsService: WebSocketService,
+    private authService: AuthService,
     private injector: Injector
   ) {}
 
@@ -137,7 +138,7 @@ export class GameService {
         if (this.currentGameId !== gameId) {
           this.disconnectWebSocket();
           this.currentGameId = gameId;
-          this.connectWebSocket(gameId);
+          await this.connectWebSocket(gameId);
         }
         return game;
       }
@@ -308,8 +309,9 @@ export class GameService {
     );
   }
 
-  private connectWebSocket(gameId: string): void {
-    this.wsSubscription = this.wsService.connect(gameId).subscribe((message) => {
+  private async connectWebSocket(gameId: string): Promise<void> {
+    const token = await this.authService.getToken();
+    this.wsSubscription = this.wsService.connect(gameId, token).subscribe((message) => {
       if (message.type === 'game_update' && message.game) {
         this.gameState$.next(message.game);
         this.setCurrentPlayerIndex(message.game).catch((e) => {

@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import CHAR, Column, DateTime, TypeDecorator
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
@@ -34,8 +34,13 @@ class GUID(TypeDecorator):
         return uuid.UUID(value)
 
 
+def _utc_now() -> datetime:
+    """Timezone-aware UTC now for SQLAlchemy defaults."""
+    return datetime.now(timezone.utc)
+
+
 class TimestampMixin:
     """Mixin for created_at and updated_at timestamps"""
 
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=_utc_now)
+    updated_at = Column(DateTime, nullable=False, default=_utc_now, onupdate=_utc_now)

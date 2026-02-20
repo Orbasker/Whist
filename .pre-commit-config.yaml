@@ -25,7 +25,7 @@ repos:
       - id: ruff-ty
         name: ruff ty type check (backend)
         language: system
-        entry: bash -c 'cd backend && uv sync --all-extras && uv run ty check .'
+        entry: bash -c 'cd backend && uv sync --all-extras && uv run ty check app/'
         pass_filenames: false
         files: ^backend/
 
