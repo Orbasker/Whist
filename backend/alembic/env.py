@@ -9,11 +9,11 @@ from alembic import context
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from app.config import settings
+from app.config import settings  # noqa: E402
 
 # Import all models so Alembic can detect them
-from app.models import Game, Round  # noqa: F401
-from app.models.base import Base
+from app.models import Game, Round  # noqa: E402, F401
+from app.models.base import Base  # noqa: E402
 
 # Alembic Config object
 config = context.config
@@ -50,9 +50,7 @@ def run_migrations_online() -> None:
         poolclass=pool.NullPool,
     )
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

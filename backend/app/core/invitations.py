@@ -1,9 +1,7 @@
 """JWT-based invitation token generation and validation"""
 
 import logging
-import time
 from datetime import datetime, timedelta
-from typing import Optional
 from uuid import UUID
 
 import jwt as pyjwt

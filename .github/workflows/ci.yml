@@ -35,8 +35,8 @@ jobs:
       - name: Ruff format check
         run: ruff format --check .
 
-      - name: Mypy type check
-        run: mypy .
+      - name: ty type check
+        run: ty check .
 
       - name: Pytest with coverage
         run: pytest tests/ --cov=. --cov-report=term-missing --cov-report=xml
