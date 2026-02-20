@@ -9,6 +9,7 @@ import { TricksPhaseComponent } from './components/tricks-phase/tricks-phase.com
 import { RoundSummaryComponent } from './components/round-summary/round-summary.component';
 import { ScoreTableComponent } from './components/score-table/score-table.component';
 import { ScoreboardIconComponent } from '../../shared/components/scoreboard-icon/scoreboard-icon.component';
+import { RoundHistoryComponent } from './components/round-history/round-history.component';
 
 @Component({
   selector: 'app-game',
@@ -19,7 +20,8 @@ import { ScoreboardIconComponent } from '../../shared/components/scoreboard-icon
     TricksPhaseComponent,
     RoundSummaryComponent,
     ScoreTableComponent,
-    ScoreboardIconComponent
+    ScoreboardIconComponent,
+    RoundHistoryComponent
   ],
   templateUrl: './game.component.html'
 })
