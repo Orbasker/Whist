@@ -47,14 +47,13 @@ export class GameService {
     }
   }
 
-  /** Reset live selections, locked sets, and current bids/trump for a new round. */
+  /** Reset live selections and locked sets for a new round. Does not touch loading$; call sites manage loading. */
   private clearRoundState(): void {
     this.liveBidSelections$.next({});
     this.liveTrickSelections$.next({});
     this.liveTrumpSelection$.next(null);
     this.lockedBids$.next(new Set());
     this.lockedTricks$.next(new Set());
-    this.loading$.next(false);
   }
 
   getGameState(): Observable<GameState | null> {
@@ -740,6 +739,7 @@ export class GameService {
     this.currentTrumpSuit$.next(null);
     this.clearRoundState();
     this.setPlayerIndex(null);
+    this.loading$.next(false);
     this.error$.next(null);
   }
 }
