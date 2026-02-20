@@ -9,10 +9,16 @@
     <div class="flex items-center justify-between p-3 sm:p-4">
       <button
         (click)="goBack()"
-        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-slate-400 hover:text-white transition-colors"
+        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-slate-400 hover:text-white transition-colors rounded-lg"
         [attr.aria-label]="'game.back' | translate"
       >
-        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-5 h-5 sm:w-6 sm:h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -31,8 +37,8 @@
       </div>
       <button
         (click)="showScoreTable = true"
-        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-amber-400 hover:text-amber-300 transition-colors"
-        [title]="'game.scoreTable' | translate"
+        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-amber-400 hover:text-amber-300 transition-colors rounded-lg"
+        [attr.aria-label]="'game.scoreTable' | translate"
       >
         <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
       </button>

@@ -21,4 +21,12 @@ $amber-600: #d97706;
   --text-secondary: #{$slate-400};
   --accent-primary: #{$amber-500};
   --accent-secondary: #{$amber-400};
+  --focus-ring: 0 0 0 2px #{$slate-900}, 0 0 0 4px #{$amber-500};
+  --input-border: #{$slate-600};
+  --input-border-focus: #{$amber-500};
+  --input-bg: #{$slate-700};
+  --error-border: #dc2626;
+  --error-bg: rgba(220, 38, 38, 0.15);
+  --success-border: #16a34a;
+  --modal-backdrop: rgba(0, 0, 0, 0.5);
 }

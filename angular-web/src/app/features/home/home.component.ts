@@ -12,6 +12,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { InvitationService } from '../../core/services/invitation.service';
 import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -25,6 +26,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     FormsModule,
     InvitationFormComponent,
     TranslateModule,
+    ModalComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
