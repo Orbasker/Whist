@@ -68,6 +68,14 @@
     [results]="roundResults"
     (close)="onRoundSummaryClose()"
   ></app-round-summary>
+
+  <!-- Round History Modal -->
+  <app-round-history
+    *ngIf="showRoundHistory"
+    [rounds]="rounds"
+    [players]="gameState.players"
+    (close)="showRoundHistory = false">
+  </app-round-history>
 </div>
 
 <div *ngIf="!gameState" class="min-h-screen bg-slate-900 flex items-center justify-center">
