@@ -10,6 +10,7 @@ import { Router, RouterModule } from '@angular/router';
 import { GameService } from '../../core/services/game.service';
 import { AuthService } from '../../core/services/auth.service';
 import { InvitationService } from '../../core/services/invitation.service';
+import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
 import { CommonModule } from '@angular/common';
 
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit {
   userName: string | null = null;
   userEmail: string | null = null;
   userId: string | null = null;
-  games: any[] = [];
+  games: GameState[] = [];
   loading = false;
   showNewGameForm = false;
   newGameName = '';
@@ -132,9 +133,11 @@ export class HomeComponent implements OnInit {
         this.showNewGameForm = false;
         await this.loadGames();
         this.router.navigate(['/game']);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Failed to create game:', error);
-        const errorMessage = error?.message || 'Failed to create game. Please try again.';
+        const errorMessage =
+          (error instanceof Error ? error.message : null) ||
+          'Failed to create game. Please try again.';
         alert(errorMessage);
         if (
           errorMessage.includes('401') ||
@@ -165,7 +168,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getGameDisplayName(game: any): string {
+  getGameDisplayName(game: GameState): string {
     return game.name || game.players.join(', ') || 'משחק ללא שם';
   }
 

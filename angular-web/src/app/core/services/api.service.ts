@@ -73,9 +73,9 @@ export class ApiService {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  submitBids(gameId: string, bids: number[], trumpSuit?: string): Observable<any> {
+  submitBids(gameId: string, bids: number[], trumpSuit?: string): Observable<GameState> {
     return this.http
-      .post(`${this.baseUrl}/games/${gameId}/rounds/bids`, {
+      .post<GameState>(`${this.baseUrl}/games/${gameId}/rounds/bids`, {
         bids,
         trump_suit: trumpSuit,
       })
@@ -87,9 +87,9 @@ export class ApiService {
     tricks: number[],
     bids: number[],
     trumpSuit?: string
-  ): Observable<any> {
+  ): Observable<GameState> {
     return this.http
-      .post(`${this.baseUrl}/games/${gameId}/rounds/tricks`, {
+      .post<GameState>(`${this.baseUrl}/games/${gameId}/rounds/tricks`, {
         tricks,
         bids,
         trump_suit: trumpSuit,

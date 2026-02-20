@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GameService } from '../../core/services/game.service';
-import { GameState, Round } from '../../core/models/game-state.model';
+import { GameState, Round, RoundSummaryResults } from '../../core/models/game-state.model';
 import { BiddingPhaseComponent } from './components/bidding-phase/bidding-phase.component';
 import { TricksPhaseComponent } from './components/tricks-phase/tricks-phase.component';
 import { RoundSummaryComponent } from './components/round-summary/round-summary.component';
@@ -30,7 +30,7 @@ export class GameComponent implements OnInit, OnDestroy {
   phase: 'bidding' | 'tricks' = 'bidding';
   showScoreTable = false;
   showRoundSummary = false;
-  roundResults: any = null;
+  roundResults: RoundSummaryResults | null = null;
   rounds: Round[] = [];
   showRoundHistory = false;
   currentPlayerIndex: number | null = null;

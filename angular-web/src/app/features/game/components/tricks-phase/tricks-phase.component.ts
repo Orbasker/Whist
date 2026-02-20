@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angu
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { GameService } from '../../../../core/services/game.service';
+import { GameState } from '../../../../core/models/game-state.model';
 import { TricksInputGridComponent } from '../../../../shared/components/tricks-input-grid/tricks-input-grid.component';
 
 @Component({
@@ -21,7 +22,7 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
   currentPlayerIndex: number | null = null;
   lockedTricks: Set<number> = new Set();
   isGameOwner: boolean = false;
-  gameState: any = null;
+  gameState: GameState | null = null;
   private subscriptions = new Subscription();
 
   constructor(private gameService: GameService) {

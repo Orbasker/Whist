@@ -1,0 +1,26 @@
+---
+description: Pre-commit hook order and why commits might fail
+alwaysApply: true
+---
+
+# Pre-commit order (run before committing)
+
+Before committing, run from repo root: **`pre-commit run --all-files`**. Hooks run in this order. If any fail, the commit is blocked until fixed.
+
+## Order and what can fail
+
+1. **ruff lint (backend)** – Lint `backend/`. Fix: `cd backend && uv run ruff check . --fix`
+2. **ruff format (backend)** – Format `backend/`. Fix: `cd backend && uv run ruff format .`
+3. **black format (backend)** – Black format `backend/`. Fix: `cd backend && uv run black .`
+4. **ruff ty type check (backend)** – Type check backend. Fix type errors in `backend/`.
+5. **pytest (backend unit tests)** – Backend tests. Fix failing tests in `backend/tests/`.
+6. **eslint (frontend)** – Lint `angular-web/src/**/*.ts` (uses local `./node_modules/.bin/eslint`, max 99 warnings). Fix: `cd angular-web && ./node_modules/.bin/eslint "src/**/*.ts" --fix`. If **CI** runs `npm run lint` with `--max-warnings=0`, that can fail on `@typescript-eslint/no-explicit-any`; fix types or align max-warnings.
+7. **prettier format check (frontend)** – Prettier on `angular-web/src` (ts, html, scss, css). Fix: `cd angular-web && npx prettier --write "src/**/*.{ts,html,scss,css}"`
+
+## Quick fix command
+
+From repo root:
+```bash
+pre-commit run --all-files
+```
+If it fails, read the hook name in the output and fix that layer (backend lint/format/types/tests or frontend eslint/prettier).

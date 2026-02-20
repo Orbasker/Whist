@@ -89,8 +89,8 @@ export class GameService {
     try {
       const games = await firstValueFrom(this.apiService.listGames());
       return games || [];
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to load games');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to load games');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -108,8 +108,8 @@ export class GameService {
         return game;
       }
       throw new Error('Failed to create game');
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to create game');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to create game');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -134,8 +134,8 @@ export class GameService {
         return game;
       }
       throw new Error('Game not found');
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to load game');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to load game');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -189,11 +189,12 @@ export class GameService {
   /**
    * Extract user ID from AuthService user object
    */
-  private extractUserIdFromUser(user: any): string | null {
+  private extractUserIdFromUser(
+    user: { id?: string; user_id?: string; sub?: string; userId?: string } | null
+  ): string | null {
     if (!user) return null;
 
-    const userId =
-      (user as any).id || (user as any).user_id || (user as any).sub || (user as any).userId;
+    const userId = user.id || user.user_id || user.sub || user.userId;
     return userId ? String(userId).trim() : null;
   }
 
@@ -284,8 +285,9 @@ export class GameService {
     try {
       const authService = this.injector.get(AuthService);
       const user = await authService.getUser();
-      if (user) {
-        const userId = (user as any).id || (user as any).user_id || (user as any).sub;
+      if (user && typeof user === 'object' && 'id' in user) {
+        const u = user as { id?: string; user_id?: string; sub?: string };
+        const userId = u.id || u.user_id || u.sub;
         if (userId) {
           return String(userId).trim() === String(game.owner_id).trim();
         }
@@ -443,7 +445,7 @@ export class GameService {
           });
           this.currentBids$.next(bidsArray);
         }
-        const messageData = message.data as any;
+        const messageData = message.data as { bids?: number[]; trump_suit?: string } | undefined;
         if (messageData && messageData.bids && Array.isArray(messageData.bids)) {
           this.currentBids$.next(messageData.bids);
         }
@@ -505,8 +507,8 @@ export class GameService {
           trump_suit: trumpSuit,
         },
       });
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to submit bids');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to submit bids');
       this.currentBids$.next(null);
       this.currentTrumpSuit$.next(null);
       throw error;
@@ -515,7 +517,7 @@ export class GameService {
     }
   }
 
-  async submitTricks(tricks: number[]): Promise<any> {
+  async submitTricks(tricks: number[]): Promise<{ game: GameState | null; round: Round | null }> {
     const game = this.gameState$.value;
     let bids = this.currentBids$.value;
     const trumpSuit = this.currentTrumpSuit$.value;
@@ -584,8 +586,8 @@ export class GameService {
         game: this.gameState$.value,
         round: null,
       };
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to submit tricks');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to submit tricks');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -606,8 +608,8 @@ export class GameService {
     try {
       const rounds = await firstValueFrom(this.apiService.getRounds(gameId));
       return rounds || [];
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to load rounds');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to load rounds');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -619,8 +621,8 @@ export class GameService {
     this.error$.next(null);
     try {
       await firstValueFrom(this.apiService.deleteGame(gameId));
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to delete game');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to delete game');
       throw error;
     } finally {
       this.loading$.next(false);
