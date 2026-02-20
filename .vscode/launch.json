@@ -22,12 +22,12 @@
       },
       "envFile": "${workspaceFolder}/backend/.env",
       "console": "integratedTerminal",
-      "python": "${workspaceFolder}/backend/.venv/bin/python",
+      "python": "${workspaceFolder}/backend/.venv/bin/python3",
       "gevent": false,
       "subProcess": true
     },
     {
-      "name": "Backend: Production (Supabase)",
+      "name": "Backend: Production (Neon)",
       "type": "debugpy",
       "request": "launch",
       "module": "uvicorn",
@@ -47,7 +47,37 @@
       },
       "envFile": "${workspaceFolder}/backend/.env.prod",
       "console": "integratedTerminal",
-      "python": "${workspaceFolder}/backend/.venv/bin/python"
+      "python": "${workspaceFolder}/backend/.venv/bin/python3"
+    },
+    {
+      "name": "Frontend: Serve (Dev → localhost:8000)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run start",
+      "cwd": "${workspaceFolder}/angular-web"
+    },
+    {
+      "name": "Frontend: Chrome Debug",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/angular-web/src",
+      "sourceMapPathOverrides": {
+        "webpack:/*": "${webRoot}/*",
+        "/./*": "${webRoot}/*",
+        "/src/*": "${webRoot}/*",
+        "/*": "*",
+        "/./~/*": "${workspaceFolder}/node_modules/*"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack: BE (prod DB) + FE",
+      "configurations": [
+        "Backend: Dev (Local PostgreSQL)",
+        "Frontend: Serve (Dev → localhost:8000)"
+      ]
     }
   ]
 }

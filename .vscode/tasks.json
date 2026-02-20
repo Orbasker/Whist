@@ -36,6 +36,28 @@
         "cwd": "${workspaceFolder}/backend"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Frontend: Serve (Dev)",
+      "type": "shell",
+      "command": "npm run start",
+      "options": {
+        "cwd": "${workspaceFolder}/angular-web"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "angular",
+        "pattern": {
+          "regexp": "^ERROR in (.*)$",
+          "file": 1,
+          "message": 1
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Building\\.\\.\\.",
+          "endsPattern": "Compiled successfully|Failed to compile"
+        }
+      }
     }
   ]
 }
