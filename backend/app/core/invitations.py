@@ -1,7 +1,7 @@
 """JWT-based invitation token generation and validation"""
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
 import jwt as pyjwt
@@ -36,7 +36,7 @@ def generate_invitation_token(
     Returns:
         JWT token string
     """
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     expires_at = now + timedelta(days=INVITATION_EXPIRY_DAYS)
 
     payload = {

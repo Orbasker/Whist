@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, JSON, String
 from sqlalchemy.orm import relationship
@@ -20,7 +20,7 @@ class Round(Base):
         String, nullable=True
     )  # 'spades', 'clubs', 'diamonds', 'hearts', 'no-trump'
     created_by = Column(GUID(), nullable=True)  # Phase 2: Who submitted
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     game = relationship("Game", back_populates="rounds")

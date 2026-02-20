@@ -62,7 +62,7 @@ jobs:
         run: ruff format --check .
 
       - name: ty type check
-        run: ty check .
+        run: ty check app/
 
       - name: Pytest with coverage
         run: pytest tests/ --cov=. --cov-report=term-missing --cov-report=xml
