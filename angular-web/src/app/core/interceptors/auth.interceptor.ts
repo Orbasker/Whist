@@ -11,26 +11,30 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   return from(authService.getToken()).pipe(
-    switchMap(token => {
+    switchMap((token) => {
       if (!token) {
-        console.warn(`[AuthInterceptor] No token available for request to ${req.url}. Request will likely fail with 401.`);
+        console.warn(
+          `[AuthInterceptor] No token available for request to ${req.url}. Request will likely fail with 401.`
+        );
         console.warn(`[AuthInterceptor] Check if user is logged in and session is valid.`);
       } else {
         console.debug(`[AuthInterceptor] Token found for ${req.url}, length: ${token.length}`);
       }
-      
+
       const clonedReq = req.clone({
-        setHeaders: token ? {
-          Authorization: `Bearer ${token}`
-        } : {},
-        withCredentials: true
+        setHeaders: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
+        withCredentials: true,
       });
       return next(clonedReq);
     }),
     catchError((error) => {
       console.error(`[AuthInterceptor] Error getting token for ${req.url}:`, error);
       const clonedReq = req.clone({
-        withCredentials: true
+        withCredentials: true,
       });
       return next(clonedReq);
     })

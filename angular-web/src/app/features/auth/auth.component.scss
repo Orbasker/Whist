@@ -89,7 +89,9 @@ input {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
 
   &:hover:not(:disabled) {
     opacity: 0.9;
@@ -183,7 +185,7 @@ input {
 
 .github-button {
   color: #24292e;
-  
+
   &:hover:not(:disabled) {
     background-color: #f6f8fa;
     border-color: #d1d5da;

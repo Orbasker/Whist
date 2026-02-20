@@ -1,13 +1,19 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" dir="rtl" *ngIf="gameState">
+<div
+  class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+  dir="rtl"
+  *ngIf="gameState"
+>
   <!-- Header -->
   <div class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-lg border-b border-slate-700/50">
     <div class="flex items-center justify-between p-4">
-      <button
-        (click)="goBack()"
-        class="p-2 text-slate-400 hover:text-white transition-colors"
-      >
+      <button (click)="goBack()" class="p-2 text-slate-400 hover:text-white transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
         </svg>
       </button>
       <div class="text-center">
@@ -48,7 +54,12 @@
       class="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold rounded-full shadow-lg shadow-amber-500/30 transition-colors"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 10h16M4 14h16M4 18h16"
+        ></path>
       </svg>
       סיבובים ({{ rounds.length }}/13)
     </button>
@@ -58,8 +69,8 @@
   <app-score-table
     *ngIf="showScoreTable"
     [gameState]="gameState"
-    (close)="showScoreTable = false"
-    (reset)="resetGame()"
+    (dismiss)="showScoreTable = false"
+    (resetRequested)="resetGame()"
   ></app-score-table>
 
   <!-- Round Summary Modal -->
@@ -74,10 +85,14 @@
     *ngIf="showRoundHistory"
     [rounds]="rounds"
     [players]="gameState.players"
-    (close)="showRoundHistory = false">
+    [currentPlayerIndex]="currentPlayerIndex"
+    (close)="showRoundHistory = false"
+  >
   </app-round-history>
 </div>
 
 <div *ngIf="!gameState" class="min-h-screen bg-slate-900 flex items-center justify-center">
-  <div class="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full"></div>
+  <div
+    class="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full"
+  ></div>
 </div>

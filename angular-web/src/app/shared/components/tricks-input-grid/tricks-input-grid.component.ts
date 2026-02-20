@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-tricks-input-grid',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './tricks-input-grid.component.html'
+  templateUrl: './tricks-input-grid.component.html',
 })
 export class TricksInputGridComponent {
   @Input() selectedTrick: number = 0;
@@ -14,7 +14,7 @@ export class TricksInputGridComponent {
 
   numbers = [
     [6, 5, 4, 3, 2, 1, 0],
-    [13, 12, 11, 10, 9, 8, 7]
+    [13, 12, 11, 10, 9, 8, 7],
   ];
 
   selectTrick(trick: number) {

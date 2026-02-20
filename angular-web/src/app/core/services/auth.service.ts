@@ -4,12 +4,12 @@ import { environment } from '../../../environments/environment';
 
 /**
  * Neon Auth client service for Angular
- * 
+ *
  * This service provides authentication functionality using Neon Auth.
  * It wraps the Neon Auth client and provides Angular-friendly methods.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private authClient = createAuthClient(environment.authUrl);
@@ -77,7 +77,7 @@ export class AuthService {
   async signInWithGoogle() {
     return await this.authClient.signIn.social({
       provider: 'google',
-      callbackURL: window.location.origin + '/login'
+      callbackURL: window.location.origin + '/login',
     });
   }
 
@@ -87,7 +87,7 @@ export class AuthService {
   async signInWithGitHub() {
     return await this.authClient.signIn.social({
       provider: 'github',
-      callbackURL: window.location.origin + '/login'
+      callbackURL: window.location.origin + '/login',
     });
   }
 
@@ -105,36 +105,36 @@ export class AuthService {
   async getToken(): Promise<string | null> {
     try {
       const session = await this.getSession();
-      
+
       if (!session) {
         console.warn('[AuthService] getToken - No session returned');
         return null;
       }
-      
+
       const sessionAny = session as any;
-      
+
       if (sessionAny?.data?.session?.token) {
         return sessionAny.data.session.token;
       }
-      
+
       if (sessionAny?.data?.session?.accessToken) {
         return sessionAny.data.session.accessToken;
       }
-      
+
       if (sessionAny?.data?.token) {
         const token = sessionAny.data.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
           return token;
         }
       }
-      
+
       if (sessionAny?.session?.token) {
         const token = sessionAny.session.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
           return token;
         }
       }
-      
+
       if (sessionAny?.token) {
         const token = sessionAny.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
@@ -144,12 +144,12 @@ export class AuthService {
 
       const findTokenInObject = (obj: any): string | null => {
         if (!obj || typeof obj !== 'object') return null;
-        
-        for (const [key, value] of Object.entries(obj)) {
+
+        for (const [, value] of Object.entries(obj)) {
           if (typeof value === 'string' && value.startsWith('eyJ') && value.length > 100) {
             return value;
           }
-          
+
           if (typeof value === 'object' && value !== null) {
             const found = findTokenInObject(value);
             if (found) return found;
@@ -157,24 +157,28 @@ export class AuthService {
         }
         return null;
       };
-      
+
       const foundToken = findTokenInObject(sessionAny);
       if (foundToken) {
         return foundToken;
       }
-      
+
       try {
         const cookies = document.cookie.split(';');
         for (const cookie of cookies) {
           const [name, value] = cookie.trim().split('=');
-          if (name === 'neon-auth.session_token' || name.includes('auth-token') || name.includes('session_token')) {
+          if (
+            name === 'neon-auth.session_token' ||
+            name.includes('auth-token') ||
+            name.includes('session_token')
+          ) {
             const decodedValue = decodeURIComponent(value);
             if (decodedValue.startsWith('eyJ')) {
               return decodedValue;
             }
           }
         }
-      } catch (e) {
+      } catch {
         // Continue to next option
       }
 
@@ -185,7 +189,7 @@ export class AuthService {
           return token;
         }
       }
-      
+
       return null;
     } catch (error) {
       console.error('[AuthService] Error getting token:', error);

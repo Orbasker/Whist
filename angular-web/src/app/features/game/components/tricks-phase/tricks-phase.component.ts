@@ -8,14 +8,14 @@ import { TricksInputGridComponent } from '../../../../shared/components/tricks-i
   selector: 'app-tricks-phase',
   standalone: true,
   imports: [CommonModule, TricksInputGridComponent],
-  templateUrl: './tricks-phase.component.html'
+  templateUrl: './tricks-phase.component.html',
 })
 export class TricksPhaseComponent implements OnInit, OnDestroy {
   @Input() players: string[] = [];
   @Output() tricksSubmit = new EventEmitter<number[]>();
 
   tricks: number[] = [0, 0, 0, 0];
-  liveTricks: {[playerIndex: number]: number} = {};
+  liveTricks: { [playerIndex: number]: number } = {};
   bids: number[] = [0, 0, 0, 0];
   totalTricks = 0;
   currentPlayerIndex: number | null = null;
@@ -29,20 +29,20 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
     if (currentBids) {
       this.bids = [...currentBids];
     }
-    
+
     this.subscriptions.add(
-      this.gameService.getCurrentBids().subscribe(bids => {
+      this.gameService.getCurrentBids().subscribe((bids) => {
         if (bids && bids.length === 4) {
           this.bids = [...bids];
         }
       })
     );
-    
+
     this.subscriptions.add(
-      this.gameService.getLiveBidSelections().subscribe(selections => {
+      this.gameService.getLiveBidSelections().subscribe((selections) => {
         if (Object.keys(selections).length === 4) {
           const bidsArray = Array(4).fill(0);
-          Object.keys(selections).forEach(playerIdx => {
+          Object.keys(selections).forEach((playerIdx) => {
             const idx = parseInt(playerIdx);
             if (idx >= 0 && idx < 4) {
               bidsArray[idx] = selections[idx];
@@ -56,28 +56,28 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentPlayerIndex = this.gameService.getCurrentPlayerIndex();
-    
+
     this.subscriptions.add(
-      this.gameService.getCurrentPlayerIndex$().subscribe(index => {
+      this.gameService.getCurrentPlayerIndex$().subscribe((index) => {
         this.currentPlayerIndex = index;
       })
     );
-    
+
     this.subscriptions.add(
-      this.gameService.getGameState().subscribe(game => {
+      this.gameService.getGameState().subscribe((game) => {
         this.gameState = game;
         if (game) {
-          this.gameService.isGameOwnerAsync().then(isOwner => {
+          this.gameService.isGameOwnerAsync().then((isOwner) => {
             this.isGameOwner = isOwner;
           });
         }
       })
     );
-    
+
     this.subscriptions.add(
-      this.gameService.getLiveTrickSelections().subscribe(selections => {
+      this.gameService.getLiveTrickSelections().subscribe((selections) => {
         this.liveTricks = { ...selections };
-        Object.keys(this.liveTricks).forEach(playerIdx => {
+        Object.keys(this.liveTricks).forEach((playerIdx) => {
           const idx = parseInt(playerIdx);
           if (idx >= 0 && idx < this.tricks.length) {
             this.tricks[idx] = this.liveTricks[idx];
@@ -88,11 +88,11 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.add(
-      this.gameService.getLockedTricks().subscribe(locked => {
+      this.gameService.getLockedTricks().subscribe((locked) => {
         this.lockedTricks = locked;
       })
     );
-    
+
     this.updateTotalTricks();
   }
 
@@ -104,7 +104,7 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
     if (!this.isGameOwner && playerIndex !== this.currentPlayerIndex) {
       return;
     }
-    
+
     this.tricks[playerIndex] = trick;
     this.gameService.sendTrickSelection(playerIndex, trick, this.isGameOwner);
     this.updateTotalTricks();
@@ -112,8 +112,8 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
 
   private updateTotalTricks() {
     const allTricks = [...this.tricks];
-    
-    Object.keys(this.liveTricks).forEach(playerIdx => {
+
+    Object.keys(this.liveTricks).forEach((playerIdx) => {
       const idx = parseInt(playerIdx);
       if (idx >= 0 && idx < allTricks.length) {
         allTricks[idx] = this.liveTricks[idx];
@@ -122,7 +122,7 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
         }
       }
     });
-    
+
     this.totalTricks = allTricks.reduce((a, b) => a + b, 0);
   }
 
@@ -135,7 +135,7 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.totalTricks === 13 && this.tricks.every(trick => trick >= 0 && trick <= 13)) {
+    if (this.totalTricks === 13 && this.tricks.every((trick) => trick >= 0 && trick <= 13)) {
       this.tricksSubmit.emit(this.tricks);
     }
   }
@@ -154,7 +154,7 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
     if (this.isGameOwner) {
       return !this.lockedTricks.has(playerIndex);
     }
-    
+
     if (this.currentPlayerIndex === null) {
       return false;
     }
@@ -169,11 +169,11 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
     if (this.lockedTricks.has(playerIndex)) {
       return false;
     }
-    
+
     if (this.isGameOwner) {
       return true;
     }
-    
+
     const isOwnTrick = playerIndex === this.currentPlayerIndex;
     return isOwnTrick && this.currentPlayerIndex !== null;
   }

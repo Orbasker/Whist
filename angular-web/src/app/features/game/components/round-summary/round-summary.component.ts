@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-round-summary',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './round-summary.component.html'
+  templateUrl: './round-summary.component.html',
 })
 export class RoundSummaryComponent {
   @Input() results: any;

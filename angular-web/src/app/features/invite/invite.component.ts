@@ -9,7 +9,7 @@ import { GameService } from '../../core/services/game.service';
   selector: 'app-invite',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './invite.component.html'
+  templateUrl: './invite.component.html',
 })
 export class InviteComponent implements OnInit {
   token: string = '';
@@ -29,7 +29,7 @@ export class InviteComponent implements OnInit {
 
   async ngOnInit() {
     this.token = this.route.snapshot.paramMap.get('token') || '';
-    
+
     if (!this.token) {
       this.error = 'קישור הזמנה לא תקין';
       this.loading = false;
@@ -50,8 +50,8 @@ export class InviteComponent implements OnInit {
 
   async acceptInvitation() {
     if (!this.isAuthenticated) {
-      this.router.navigate(['/login'], { 
-        queryParams: { returnUrl: `/invite/${this.token}` }
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: `/invite/${this.token}` },
       });
       return;
     }
@@ -61,10 +61,10 @@ export class InviteComponent implements OnInit {
 
     try {
       const result = await this.invitationService.acceptInvitation(this.token);
-      
+
       await this.gameService.loadGame(result.game_id);
       localStorage.setItem('whist_game_id', result.game_id);
-      
+
       this.router.navigate(['/game']);
     } catch (error: any) {
       console.error('Error accepting invitation:', error);
@@ -74,8 +74,8 @@ export class InviteComponent implements OnInit {
   }
 
   goToLogin() {
-    this.router.navigate(['/login'], { 
-      queryParams: { returnUrl: `/invite/${this.token}` }
+    this.router.navigate(['/login'], {
+      queryParams: { returnUrl: `/invite/${this.token}` },
     });
   }
 
@@ -86,7 +86,7 @@ export class InviteComponent implements OnInit {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 

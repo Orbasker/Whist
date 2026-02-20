@@ -7,7 +7,7 @@ import { InvitationService } from '../../../core/services/invitation.service';
   selector: 'app-invitation-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './invitation-form.component.html'
+  templateUrl: './invitation-form.component.html',
 })
 export class InvitationFormComponent {
   @Input() gameId: string = '';
@@ -29,7 +29,7 @@ export class InvitationFormComponent {
       email1: ['', [Validators.email]],
       email2: ['', [Validators.email]],
       email3: ['', [Validators.email]],
-      email4: ['', [Validators.email]]
+      email4: ['', [Validators.email]],
     });
   }
 
@@ -58,7 +58,7 @@ export class InvitationFormComponent {
 
   async onSend() {
     const validEmails = this.getValidEmails();
-    
+
     if (validEmails.length === 0) {
       this.errorMessage = 'אנא הזן לפחות כתובת אימייל אחת תקינה';
       return;
@@ -75,11 +75,11 @@ export class InvitationFormComponent {
 
     try {
       const result = await this.invitationService.sendInvitations(this.gameId, validEmails);
-      
+
       if (result.sent > 0) {
         this.successMessage = `נשלחו ${result.sent} מתוך ${result.total} הזמנות בהצלחה`;
         this.invitationsSent.emit({ sent: result.sent, total: result.total });
-        
+
         setTimeout(() => {
           this.invitationForm.reset();
           this.cancelled.emit();

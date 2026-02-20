@@ -21,9 +21,9 @@ import { RoundHistoryComponent } from './components/round-history/round-history.
     RoundSummaryComponent,
     ScoreTableComponent,
     ScoreboardIconComponent,
-    RoundHistoryComponent
+    RoundHistoryComponent,
   ],
-  templateUrl: './game.component.html'
+  templateUrl: './game.component.html',
 })
 export class GameComponent implements OnInit, OnDestroy {
   gameState: GameState | null = null;
@@ -33,6 +33,7 @@ export class GameComponent implements OnInit, OnDestroy {
   roundResults: any = null;
   rounds: Round[] = [];
   showRoundHistory = false;
+  currentPlayerIndex: number | null = null;
   private gameId: string | null = null;
 
   private subscriptions = new Subscription();
@@ -51,14 +52,20 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptions.add(
-      this.gameService.getGameState().subscribe(state => {
+      this.gameService.getGameState().subscribe((state) => {
         this.gameState = state;
       })
     );
 
     this.subscriptions.add(
-      this.gameService.getCurrentPhase().subscribe(phase => {
+      this.gameService.getCurrentPhase().subscribe((phase) => {
         this.phase = phase;
+      })
+    );
+
+    this.subscriptions.add(
+      this.gameService.getCurrentPlayerIndex$().subscribe((index) => {
+        this.currentPlayerIndex = index;
       })
     );
   }
