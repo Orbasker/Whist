@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Green background -->
+  <rect width="32" height="32" rx="6" fill="#166534"/>
+  <!-- Four Aces in a row (spade club diamond heart) -->
+  <text x="16" y="12" text-anchor="middle" font-size="9" fill="white" font-family="system-ui, sans-serif" font-weight="bold">&#9824; &#9827; &#9830; &#9829;</text>
+  <!-- Whist text -->
+  <text x="16" y="24" text-anchor="middle" font-size="7" fill="white" font-family="system-ui, sans-serif" font-weight="bold">Whist</text>
+</svg>
