@@ -40,9 +40,9 @@ export class InviteComponent implements OnInit {
 
     try {
       this.invitationInfo = await this.invitationService.getInvitationInfo(this.token);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error loading invitation:', error);
-      this.error = error?.message || 'שגיאה בטעינת פרטי ההזמנה';
+      this.error = (error instanceof Error ? error.message : null) || 'שגיאה בטעינת פרטי ההזמנה';
     } finally {
       this.loading = false;
     }
@@ -66,9 +66,9 @@ export class InviteComponent implements OnInit {
       localStorage.setItem('whist_game_id', result.game_id);
 
       this.router.navigate(['/game']);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error accepting invitation:', error);
-      this.error = error?.message || 'שגיאה בקבלת ההזמנה';
+      this.error = (error instanceof Error ? error.message : null) || 'שגיאה בקבלת ההזמנה';
       this.accepting = false;
     }
   }

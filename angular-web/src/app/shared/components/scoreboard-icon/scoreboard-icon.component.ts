@@ -43,7 +43,7 @@ export class ScoreboardIconComponent {
     return `${viewBoxOffset} ${viewBoxOffset} ${viewBoxSize} ${viewBoxSize}`;
   }
 
-  getStyle(): any {
+  getStyle(): Record<string, string | number | undefined> {
     const transforms = [];
     if (this.rotation !== 0) transforms.push(`rotate(${this.rotation}deg)`);
     if (this.flipHorizontal) transforms.push('scaleX(-1)');

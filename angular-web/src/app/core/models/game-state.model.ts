@@ -41,3 +41,12 @@ export interface TricksSubmit {
   bids: number[];
   trump_suit?: string;
 }
+
+/** Round summary display data (players, bids, tricks, round scores, new totals) */
+export interface RoundSummaryResults {
+  players: string[];
+  bids: number[];
+  tricks: number[];
+  roundScores: number[];
+  newTotalScores: number[];
+}

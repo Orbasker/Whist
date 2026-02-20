@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { GameState, Round } from '../models/game-state.model';
 
 export interface WebSocketMessage {
   type:
@@ -18,9 +19,9 @@ export interface WebSocketMessage {
     | 'round_result_sent'
     | 'round_score_locked'
     | 'error';
-  game?: any;
+  game?: GameState;
   phase?: 'bidding' | 'tricks';
-  round?: any;
+  round?: Round;
   data?: {
     player_index?: number;
     bid?: number;
@@ -41,7 +42,7 @@ export class WebSocketService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 3000; // 3 seconds
-  private reconnectTimer: any = null;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private currentGameId: string | null = null;
 
   constructor() {}
@@ -115,7 +116,7 @@ export class WebSocketService {
     return this.ws !== null && this.ws.readyState === WebSocket.OPEN;
   }
 
-  send(message: any): void {
+  send(message: WebSocketMessage | Record<string, unknown>): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message));
     } else {
