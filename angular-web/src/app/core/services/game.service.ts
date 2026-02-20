@@ -644,8 +644,8 @@ export class GameService {
         this.gameState$.next(game);
       }
       return game;
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to update name');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to update name');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -661,8 +661,8 @@ export class GameService {
         this.gameState$.next(game);
       }
       return game;
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to request reset');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to request reset');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -678,8 +678,8 @@ export class GameService {
         this.gameState$.next(game);
       }
       return game;
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to vote');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to vote');
       throw error;
     } finally {
       this.loading$.next(false);
@@ -695,8 +695,8 @@ export class GameService {
         this.gameState$.next(game);
       }
       return game;
-    } catch (error: any) {
-      this.error$.next(error.message || 'Failed to cancel reset');
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to cancel reset');
       throw error;
     } finally {
       this.loading$.next(false);

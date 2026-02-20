@@ -67,7 +67,12 @@ export class HomeComponent implements OnInit {
       if (user) {
         this.userName = user.name || null;
         this.userEmail = user.email || null;
-        const id = (user as any).id ?? (user as any).user_id ?? (user as any).sub;
+        const u = user as {
+          id?: string | number;
+          user_id?: string | number;
+          sub?: string | number;
+        };
+        const id = u.id ?? u.user_id ?? u.sub;
         this.userId = id ? String(id).trim() : null;
       }
       await this.loadGames();
@@ -225,9 +230,10 @@ export class HomeComponent implements OnInit {
         localStorage.removeItem('whist_game_id');
         this.router.navigate(['/']);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to delete game:', err);
-      alert(err?.message || 'לא ניתן למחוק את המשחק.');
+      const message = err instanceof Error ? err.message : 'לא ניתן למחוק את המשחק.';
+      alert(message);
     }
   }
 }
