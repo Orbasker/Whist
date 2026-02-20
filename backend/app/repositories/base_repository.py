@@ -1,18 +1,20 @@
-from typing import Generic, TypeVar, Type, Optional, List
+from typing import Any, Generic, List, Optional, Type, TypeVar
+
 from sqlalchemy.orm import Session
+
 from app.models.base import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
 
 
 class BaseRepository(Generic[ModelType]):
-    """Base repository with common CRUD operations"""
+    """Base repository with common CRUD operations."""
 
     def __init__(self, db: Session, model: Type[ModelType]):
         self.db = db
         self.model = model
 
-    def get_by_id(self, id) -> Optional[ModelType]:
+    def get_by_id(self, id: Any) -> Optional[ModelType]:
         """Get entity by ID"""
         return self.db.query(self.model).filter(self.model.id == id).first()
 

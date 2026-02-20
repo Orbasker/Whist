@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.models.game import Game
+from app.models.game import Game, GameStatus
 from app.repositories.base_repository import BaseRepository
 from app.sql.queries.game_queries import GameQueries
 
@@ -22,9 +22,7 @@ class GameRepository(BaseRepository[Game]):
         return self.db.query(Game).filter(Game.id == game_id).first()
 
     def get_active_games(self) -> List[Game]:
-        """Get all active games using ORM"""
-        from app.models.game import GameStatus
-
+        """Get all active games using ORM."""
         return self.db.query(Game).filter(Game.status == GameStatus.ACTIVE).all()
 
     # Raw SQL methods for complex queries

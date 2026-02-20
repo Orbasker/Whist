@@ -1,4 +1,4 @@
-"""WebSocket endpoints for real-time game updates"""
+"""WebSocket endpoints for real-time game updates."""
 
 import json
 import logging
@@ -7,7 +7,12 @@ from uuid import UUID
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, status
 
 from app.core.websocket_manager import connection_manager
+from app.database.connection import SessionLocal
+from app.repositories.game_repository import GameRepository
+from app.repositories.round_repository import RoundRepository
+from app.schemas.round import RoundResponse
 from app.services.game_service import GameService
+from app.services.round_service import RoundService
 
 logger = logging.getLogger(__name__)
 
@@ -40,20 +45,13 @@ async def websocket_endpoint(
 
     await connection_manager.connect(websocket, game_id)
 
-    from app.database.connection import SessionLocal
-    from app.repositories.game_repository import GameRepository
-    from app.repositories.round_repository import RoundRepository
-
     db = SessionLocal()
+    game_repo = GameRepository(db)
+    round_repo = RoundRepository(db)
+    round_service = RoundService(db, round_repo)
+    game_service = GameService(db, game_repo, round_service)
 
     try:
-        game_repo = GameRepository(db)
-        round_repo = RoundRepository(db)
-        from app.services.round_service import RoundService as RS
-
-        round_service = RS(db, round_repo)
-        game_service = GameService(db, game_repo, round_service)
-
         game = await game_service.get_game(game_uuid)
         if game:
             rounds = round_repo.get_by_game_id(game_uuid)
@@ -85,13 +83,6 @@ async def websocket_endpoint(
                     trump_suit = message.get("data", {}).get("trump_suit")
 
                     try:
-                        game_repo = GameRepository(db)
-                        round_repo = RoundRepository(db)
-                        from app.services.round_service import RoundService as RS
-
-                        round_service = RS(db, round_repo)
-                        game_service = GameService(db, game_repo, round_service)
-
                         game = await game_service.submit_bids(game_uuid, bids, trump_suit)
                         if game:
                             if game_id in connection_manager.game_states:
@@ -130,13 +121,6 @@ async def websocket_endpoint(
                     trump_suit = message.get("data", {}).get("trump_suit")
 
                     try:
-                        game_repo = GameRepository(db)
-                        round_repo = RoundRepository(db)
-                        from app.services.round_service import RoundService as RS
-
-                        round_service = RS(db, round_repo)
-                        game_service = GameService(db, game_repo, round_service)
-
                         result = await game_service.submit_tricks(
                             game_uuid, tricks, bids, trump_suit, None
                         )
@@ -152,8 +136,6 @@ async def websocket_endpoint(
                                 game_id, updated_game.model_dump(mode="json")
                             )
                             await connection_manager.broadcast_phase_update(game_id, "bidding")
-
-                            from app.schemas.round import RoundResponse
 
                             round_response = RoundResponse.model_validate(round_obj).model_dump(
                                 mode="json"
