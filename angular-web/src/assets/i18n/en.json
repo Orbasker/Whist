@@ -103,13 +103,15 @@
   "game": {
     "back": "Back",
     "round": "Round",
+    "scoreBoard": "Score board",
+    "roundsPlayed": "{{count}} rounds",
     "bidding": "Bidding",
     "tricks": "Tricks",
     "scoreTable": "Score table",
-    "roundsHistory": "Rounds ({{count}}/13)",
+    "roundsHistory": "Score board ({{count}} rounds)",
     "roundsEmpty": "No rounds yet",
     "roundSummary": "Round summary",
-    "roundHistory": "Round history",
+    "roundHistory": "Score board",
     "biddingPhase": {
       "title": "Bids",
       "subtitle": "Choose trump and bid for each player",
@@ -138,9 +140,9 @@
       "finishRound": "Finish round"
     },
     "scoreTable": {
-      "title": "Score table",
+      "title": "Score board",
       "currentScore": "Current score",
-      "roundOf": "Round {{current}} of 13",
+      "roundsPlayed": "Rounds played: {{current}}",
       "resetGame": "Reset game",
       "resetDescription": "Reset only happens when all players vote yes.",
       "voteOpen": "Reset vote open. {{count}} voted.",

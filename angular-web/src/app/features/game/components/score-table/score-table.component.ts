@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GameState } from '../../../../core/models/game-state.model';
 import { GameService } from '../../../../core/services/game.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -26,7 +26,10 @@ export class ScoreTableComponent {
   resetLoading = false;
   nameLoading = false;
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private translate: TranslateService
+  ) {}
 
   onClose() {
     this.dismiss.emit();
@@ -123,7 +126,7 @@ export class ScoreTableComponent {
   }
 
   onDeleteGame() {
-    if (confirm('האם אתה בטוח שברצונך למחוק את המשחק?')) {
+    if (confirm(this.translate.instant('home.confirmDeleteGame'))) {
       this.deleteRequested.emit();
     }
   }

@@ -49,9 +49,9 @@
       </div>
     </div>
 
-    <!-- Round Info -->
+    <!-- Rounds played -->
     <div class="text-slate-400 text-sm text-center">
-      {{ 'game.scoreTable.roundOf' | translate: { current: gameState.current_round } }}
+      {{ 'game.scoreTable.roundsPlayed' | translate: { current: gameState.current_round - 1 } }}
     </div>
 
     <!-- Reset by vote -->

@@ -9,6 +9,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
   standalone: true,
   imports: [CommonModule, TranslateModule, ModalComponent],
   templateUrl: './round-history.component.html',
+  styleUrl: './round-history.component.scss',
 })
 export class RoundHistoryComponent {
   @Input() rounds: Round[] = [];

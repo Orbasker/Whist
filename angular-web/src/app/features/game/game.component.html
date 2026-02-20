@@ -29,9 +29,11 @@
       </button>
       <div class="text-center flex-1 min-w-0">
         <h1 class="text-base sm:text-lg font-semibold text-white">
-          {{ 'game.round' | translate }} {{ gameState.current_round }}
+          {{ 'game.scoreBoard' | translate }}
         </h1>
         <p class="text-xs text-slate-400">
+          {{ 'game.roundsPlayed' | translate: { count: gameState.current_round - 1 } }}
+          ·
           {{ phase === 'bidding' ? ('game.bidding' | translate) : ('game.tricks' | translate) }}
         </p>
       </div>
