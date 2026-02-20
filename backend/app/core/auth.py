@@ -34,29 +34,29 @@ async def get_jwks() -> dict:
     """
     global _jwks_cache, _jwks_cache_expiry
     import time
-    
+
     current_time = time.time()
-    
+
     # Return cached JWKS if still valid
     if _jwks_cache and _jwks_cache_expiry and current_time < _jwks_cache_expiry:
         return _jwks_cache
-    
+
     if not settings.neon_auth_jwks_url:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Auth not configured (NEON_AUTH_JWKS_URL)",
         )
-    
+
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(settings.neon_auth_jwks_url)
             response.raise_for_status()
             jwks = response.json()
-            
+
             # Cache the JWKS
             _jwks_cache = jwks
             _jwks_cache_expiry = current_time + JWKS_CACHE_TTL
-            
+
             return jwks
     except httpx.RequestError as e:
         raise HTTPException(
@@ -73,15 +73,15 @@ def get_signing_key(jwks: dict, token: str) -> Optional[dict]:
         # Decode token header to get kid (using PyJWT)
         unverified_header = pyjwt.get_unverified_header(token)
         kid = unverified_header.get("kid")
-        
+
         if not kid:
             return None
-        
+
         # Find the key with matching kid
         for key in jwks.get("keys", []):
             if key.get("kid") == kid:
                 return key
-        
+
         return None
     except Exception:
         return None
@@ -92,11 +92,12 @@ async def verify_token_with_jwks(token: str) -> dict:
     Verify JWT token using JWKS from Neon Auth.
     """
     import logging
+
     logger = logging.getLogger(__name__)
-    
+
     jwks = await get_jwks()
     signing_key = get_signing_key(jwks, token)
-    
+
     if not signing_key:
         logger.warning("Token verification failed: No matching signing key found in JWKS")
         raise HTTPException(
@@ -104,28 +105,28 @@ async def verify_token_with_jwks(token: str) -> dict:
             detail="Invalid token: no matching key found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     # Convert JWK to PEM format for verification
     # Support both RSA (RS256) and EdDSA/Ed25519 (EdDSA) algorithms
     if signing_key.get("kty") == "RSA":
         # Decode base64url encoded values
         n_bytes = base64url_decode(signing_key["n"].encode())
         e_bytes = base64url_decode(signing_key["e"].encode())
-        
+
         # Convert bytes to integers
         n_int = int.from_bytes(n_bytes, byteorder="big")
         e_int = int.from_bytes(e_bytes, byteorder="big")
-        
+
         # Create RSA public key
         public_numbers = rsa.RSAPublicNumbers(e_int, n_int)
         public_key = public_numbers.public_key()
-        
+
         # Serialize to PEM format
         pem_key = public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
+            format=serialization.PublicFormat.SubjectPublicKeyInfo,
         )
-        
+
         # Verify token (using PyJWT)
         try:
             payload = pyjwt.decode(
@@ -145,16 +146,16 @@ async def verify_token_with_jwks(token: str) -> dict:
         # EdDSA/Ed25519 support (used by Neon Auth)
         # Decode base64url encoded public key
         x_bytes = base64url_decode(signing_key["x"].encode())
-        
+
         # Create Ed25519 public key
         public_key = Ed25519PublicKey.from_public_bytes(x_bytes)
-        
+
         # Serialize to PEM format
         pem_key = public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
-            format=serialization.PublicFormat.SubjectPublicKeyInfo
+            format=serialization.PublicFormat.SubjectPublicKeyInfo,
         )
-        
+
         # Verify token (EdDSA algorithm using PyJWT)
         try:
             payload = pyjwt.decode(
@@ -189,17 +190,20 @@ async def get_current_user_id(
     (neon-auth.session_token) when same domain. Uses Neon's JWKS for verification (RS256).
     """
     import logging
+
     logger = logging.getLogger(__name__)
-    
+
     token = (credentials.credentials if credentials else None) or session_cookie
     if not token:
-        logger.warning("Authentication failed: No token provided (no Authorization header or session cookie)")
+        logger.warning(
+            "Authentication failed: No token provided (no Authorization header or session cookie)"
+        )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authenticated",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     try:
         payload = await verify_token_with_jwks(token)
         sub = payload.get("sub")

@@ -36,5 +36,6 @@ class GUID(TypeDecorator):
 
 class TimestampMixin:
     """Mixin for created_at and updated_at timestamps"""
+
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
