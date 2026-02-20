@@ -1,0 +1,63 @@
+repos:
+  # ── Backend (Python) ────────────────────────────────────────────────────────
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff
+        name: ruff lint (backend)
+        args: [--fix]
+        files: ^backend/
+      - id: ruff-format
+        name: ruff format (backend)
+        files: ^backend/
+
+  - repo: https://github.com/psf/black
+    rev: 23.11.0
+    hooks:
+      - id: black
+        name: black format (backend)
+        files: ^backend/
+        language_version: python3.11
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        name: mypy type check (backend)
+        files: ^backend/
+        args: [--config-file=backend/pyproject.toml]
+        additional_dependencies:
+          - pydantic==2.5.0
+          - sqlalchemy==2.0.23
+          - fastapi==0.104.1
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest (backend unit tests)
+        language: system
+        entry: bash -c 'cd backend && python -m pytest tests/ -x -q'
+        pass_filenames: false
+        files: ^backend/
+        stages: [pre-commit]
+
+  # ── Frontend (Angular / Node) ───────────────────────────────────────────────
+
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint (frontend)
+        language: system
+        entry: bash -c 'cd angular-web && npm run lint'
+        pass_filenames: false
+        files: ^angular-web/src/.*\.(ts|html)$
+        stages: [pre-commit]
+
+      - id: prettier
+        name: prettier format check (frontend)
+        language: system
+        entry: bash -c 'cd angular-web && npm run format:check'
+        pass_filenames: false
+        files: ^angular-web/src/.*\.(ts|html|scss|css)$
+        stages: [pre-commit]
