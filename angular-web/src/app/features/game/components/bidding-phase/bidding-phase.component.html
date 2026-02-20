@@ -1,12 +1,12 @@
-<div class="space-y-6">
+<div class="space-y-4 sm:space-y-6">
   <div>
-    <h2 class="text-2xl font-bold text-white mb-2">הימורים</h2>
-    <p class="text-slate-400">בחר קלף שולט והימור לכל שחקן</p>
+    <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">הימורים</h2>
+    <p class="text-slate-400 text-sm sm:text-base">בחר קלף שולט והימור לכל שחקן</p>
   </div>
 
   <!-- Trump Selector -->
   <div>
-    <h3 class="text-lg font-semibold text-white mb-3">קלף שולט (טראמפ)</h3>
+    <h3 class="text-base sm:text-lg font-semibold text-white mb-3">קלף שולט (טראמפ)</h3>
     <app-trump-selector
       [selectedTrump]="selectedTrumpSuit"
       (trumpSelect)="onTrumpSelect($event)"
@@ -14,10 +14,10 @@
   </div>
 
   <!-- Total Bids Display -->
-  <div class="bg-slate-800 rounded-lg p-4">
+  <div class="bg-slate-800 rounded-lg p-3 sm:p-4">
     <div class="flex items-center justify-between mb-2">
-      <span class="text-slate-400">סה"כ הימורים</span>
-      <span class="text-2xl font-bold text-white">{{ totalBids }}</span>
+      <span class="text-slate-400 text-sm sm:text-base">סה"כ הימורים</span>
+      <span class="text-xl sm:text-2xl font-bold text-white">{{ totalBids }}</span>
     </div>
     <div class="w-full bg-slate-700 rounded-full h-2 mb-2">
       <div
@@ -36,7 +36,7 @@
 
   <!-- Bid Input for Each Player -->
   <div class="space-y-4">
-    <div *ngFor="let player of players; let i = index" class="bg-slate-800 rounded-lg p-4">
+    <div *ngFor="let player of players; let i = index" class="bg-slate-800 rounded-lg p-3 sm:p-4">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
           <span class="text-white font-medium">{{ player }}</span>
@@ -69,7 +69,7 @@
       <button
         *ngIf="canLockBid(i)"
         (click)="onLockBid(i)"
-        class="mt-2 w-full bg-green-600 hover:bg-green-500 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
+        class="min-h-touch mt-2 w-full bg-green-600 hover:bg-green-500 text-white text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors"
       >
         {{ currentPlayerIndex === i ? 'נעל בחירה' : 'נעל בחירת שחקן' }}
       </button>
@@ -85,7 +85,7 @@
     [class.bg-slate-600]="!canSubmit()"
     [class.cursor-not-allowed]="!canSubmit()"
     [class.opacity-50]="!canSubmit()"
-    class="w-full text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+    class="min-h-touch w-full text-white font-semibold py-3 px-6 rounded-lg transition-colors"
   >
     המשך
   </button>

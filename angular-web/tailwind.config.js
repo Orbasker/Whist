@@ -5,6 +5,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: '375px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
+      },
       colors: {
         slate: {
           900: '#0f172a',
@@ -23,7 +30,13 @@ module.exports = {
           400: '#fbbf24',
           300: '#fcd34d',
         }
-      }
+      },
+      minHeight: {
+        touch: '44px',
+      },
+      minWidth: {
+        touch: '44px',
+      },
     },
   },
   plugins: [],

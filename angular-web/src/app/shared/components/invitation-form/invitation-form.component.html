@@ -1,19 +1,19 @@
 <div class="bg-slate-800 rounded-lg">
   <!-- Game full: no slots available -->
   <div *ngIf="isGameFull" class="text-center py-4">
-    <p class="text-slate-300 mb-4">המשחק מלא. אין מקומות פנויים להזמנה.</p>
+    <p class="text-slate-300 mb-4 text-sm sm:text-base">המשחק מלא. אין מקומות פנויים להזמנה.</p>
     <button
       type="button"
       (click)="onCancel()"
-      class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+      class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
     >
       סגור
     </button>
   </div>
 
   <ng-container *ngIf="!isGameFull">
-    <h3 class="text-lg font-semibold text-white mb-4">שלח הזמנות למשחק</h3>
-    <p class="text-slate-400 text-sm mb-4">הזן כתובות אימייל למקומות הפנויים</p>
+    <h3 class="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">שלח הזמנות למשחק</h3>
+    <p class="text-slate-400 text-sm mb-3 sm:mb-4">הזן כתובות אימייל למקומות הפנויים</p>
 
     <!-- Players already in the match (editable: owner for placeholders, user for own slot) -->
     <div *ngIf="(players ?? []).length > 0" class="mb-4 p-3 bg-slate-700/50 rounded-lg">
@@ -71,7 +71,7 @@
             type="email"
             [formControlName]="'email' + (slotIndex + 1)"
             [placeholder]="'מקום ' + (slotIndex + 1) + ' - כתובת אימייל'"
-            class="flex-1 bg-slate-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            class="min-h-touch flex-1 min-w-0 bg-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-base"
           />
           <div
             *ngIf="
@@ -99,11 +99,11 @@
         {{ successMessage }}
       </div>
 
-      <div class="flex gap-3">
+      <div class="flex flex-wrap gap-3">
         <button
           type="submit"
           [disabled]="!hasValidEmails() || sending"
-          class="flex-1 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+          class="min-h-touch flex-1 min-w-[8rem] bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
         >
           <span *ngIf="!sending">שלח הזמנות</span>
           <span *ngIf="sending">שולח...</span>
@@ -112,7 +112,7 @@
           type="button"
           (click)="onCancel()"
           [disabled]="sending"
-          class="bg-slate-600 hover:bg-slate-500 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+          class="min-h-touch bg-slate-600 hover:bg-slate-500 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
         >
           ביטול
         </button>

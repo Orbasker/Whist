@@ -3,25 +3,38 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 1rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
 }
 
 .auth-card {
   background: white;
   border-radius: 12px;
-  padding: 2.5rem;
+  padding: 1.5rem;
   width: 100%;
   max-width: 400px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 640px) {
+    padding: 2.5rem;
+  }
 }
 
 .auth-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-align: center;
   color: #1a202c;
+
+  @media (min-width: 640px) {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
 }
 
 .auth-form {
@@ -44,12 +57,17 @@ label {
 
 input {
   padding: 0.75rem;
+  min-height: 44px;
   border: 2px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 16px; // Prevents zoom on iOS when focused
   transition: border-color 0.2s;
   background-color: white;
   color: #1a202c; // Explicit dark text color for visibility
+
+  @media (min-width: 640px) {
+    font-size: 1rem;
+  }
 
   &::placeholder {
     color: #a0aec0; // Light gray for placeholder text
@@ -82,6 +100,7 @@ input {
 
 .submit-button {
   padding: 0.875rem;
+  min-height: 44px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
@@ -122,8 +141,11 @@ input {
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
-  padding: 0;
-  margin-left: 0.25rem;
+  padding: 0.5rem 0.25rem;
+  margin: -0.5rem 0 -0.5rem 0.25rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 
   &:hover {
     color: #764ba2;
@@ -162,6 +184,7 @@ input {
   gap: 0.75rem;
   width: 100%;
   padding: 0.875rem;
+  min-height: 44px;
   background: white;
   color: #3c4043;
   border: 2px solid #e2e8f0;
