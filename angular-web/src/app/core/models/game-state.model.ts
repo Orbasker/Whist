@@ -10,6 +10,8 @@ export interface GameState {
   player_user_ids?: (string | null)[];
   is_shared: boolean;
   share_code?: string;
+  reset_requested_at?: string | null;
+  reset_vote_user_ids?: string[] | null;
   created_at: string;
   updated_at: string;
 }

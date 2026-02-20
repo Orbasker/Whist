@@ -629,6 +629,80 @@ export class GameService {
     }
   }
 
+  async updatePlayerDisplayName(
+    gameId: string,
+    playerIndex: number,
+    displayName: string
+  ): Promise<GameState> {
+    this.loading$.next(true);
+    this.error$.next(null);
+    try {
+      const game = await firstValueFrom(
+        this.apiService.updatePlayerDisplayName(gameId, playerIndex, displayName)
+      );
+      if (game && this.gameState$.value?.id === gameId) {
+        this.gameState$.next(game);
+      }
+      return game;
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to update name');
+      throw error;
+    } finally {
+      this.loading$.next(false);
+    }
+  }
+
+  async requestReset(gameId: string): Promise<GameState> {
+    this.loading$.next(true);
+    this.error$.next(null);
+    try {
+      const game = await firstValueFrom(this.apiService.requestReset(gameId));
+      if (game && this.gameState$.value?.id === gameId) {
+        this.gameState$.next(game);
+      }
+      return game;
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to request reset');
+      throw error;
+    } finally {
+      this.loading$.next(false);
+    }
+  }
+
+  async voteReset(gameId: string): Promise<GameState> {
+    this.loading$.next(true);
+    this.error$.next(null);
+    try {
+      const game = await firstValueFrom(this.apiService.voteReset(gameId));
+      if (game && this.gameState$.value?.id === gameId) {
+        this.gameState$.next(game);
+      }
+      return game;
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to vote');
+      throw error;
+    } finally {
+      this.loading$.next(false);
+    }
+  }
+
+  async cancelResetRequest(gameId: string): Promise<GameState> {
+    this.loading$.next(true);
+    this.error$.next(null);
+    try {
+      const game = await firstValueFrom(this.apiService.cancelResetRequest(gameId));
+      if (game && this.gameState$.value?.id === gameId) {
+        this.gameState$.next(game);
+      }
+      return game;
+    } catch (error: unknown) {
+      this.error$.next(error instanceof Error ? error.message : 'Failed to cancel reset');
+      throw error;
+    } finally {
+      this.loading$.next(false);
+    }
+  }
+
   sendBidSelection(playerIndex: number, bid: number, isGameOwner: boolean = false): void {
     if (!this.wsService.isConnected()) {
       return;

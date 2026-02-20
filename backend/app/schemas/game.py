@@ -7,6 +7,12 @@ from pydantic import BaseModel, Field, field_validator
 from app.models.game import GameMode, GameStatus
 
 
+class PlayerDisplayNameUpdate(BaseModel):
+    """Schema for updating a player's display name"""
+
+    display_name: str = Field(..., min_length=1, max_length=200)
+
+
 class GameCreate(BaseModel):
     """Schema for creating a new game"""
 
@@ -39,6 +45,8 @@ class GameResponse(BaseModel):
     player_user_ids: Optional[List[Optional[UUID]]] = None
     is_shared: bool = False
     share_code: Optional[str] = None
+    reset_requested_at: Optional[datetime] = None
+    reset_vote_user_ids: Optional[List[str]] = None
     created_at: datetime
     updated_at: datetime
 

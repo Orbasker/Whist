@@ -1,7 +1,7 @@
 import enum
 import uuid
 
-from sqlalchemy import JSON, Boolean, Column, Enum, Integer, String
+from sqlalchemy import JSON, Boolean, Column, DateTime, Enum, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.models.base import GUID, Base, TimestampMixin
@@ -38,6 +38,10 @@ class Game(Base, TimestampMixin):
 
     # Phase 3
     game_mode = Column(Enum(GameMode), default=GameMode.SCORING_ONLY)
+
+    # Reset by vote: when set, players can vote; when all voted, game resets
+    reset_requested_at = Column(DateTime(timezone=True), nullable=True)
+    reset_vote_user_ids = Column(JSON, nullable=True)  # list of user id strings who voted yes
 
     # Relationships
     rounds = relationship("Round", back_populates="game", cascade="all, delete-orphan")

@@ -1,5 +1,6 @@
 """Game service for game orchestration"""
 
+from datetime import datetime, timezone
 from typing import List, Optional
 from uuid import UUID
 
@@ -35,6 +36,11 @@ class GameService:
         Returns:
             Created game response
         """
+        # Owner occupies slot 0; other slots are placeholders until claimed via invite
+        player_user_ids = None
+        if owner_id is not None:
+            player_user_ids = [str(owner_id), None, None, None]
+
         game = Game(
             players=game_data.players,
             scores=[0, 0, 0, 0],
@@ -43,6 +49,7 @@ class GameService:
             game_mode=GameMode.SCORING_ONLY,
             owner_id=owner_id,
             name=game_data.name,
+            player_user_ids=player_user_ids,
         )
 
         saved_game = self.game_repo.create(game)
@@ -91,6 +98,126 @@ class GameService:
         self.db.commit()
         self.db.refresh(updated_game)
 
+        return GameResponse.model_validate(updated_game)
+
+    async def update_player_display_name(
+        self, game_id: UUID, player_index: int, display_name: str, current_user_id: UUID
+    ) -> Optional[GameResponse]:
+        """
+        Update display name for a player slot.
+        Manager can update only slots with no linked user (placeholder).
+        Any user can update their own slot's name (hold their seat).
+        """
+        if not 0 <= player_index <= 3:
+            raise ValueError("player_index must be between 0 and 3")
+
+        game = self.game_repo.get_by_id(game_id)
+        if not game:
+            return None
+
+        # Normalize to list of 4
+        player_user_ids = game.player_user_ids or [None, None, None, None]
+        while len(player_user_ids) < 4:
+            player_user_ids.append(None)
+        slot_user_id = player_user_ids[player_index]
+        slot_user_id_str = str(slot_user_id) if slot_user_id is not None else None
+        current_user_str = str(current_user_id)
+
+        # Manager can edit placeholder slots (no linked user)
+        is_owner = game.owner_id is not None and str(game.owner_id) == current_user_str
+        if slot_user_id is None:
+            if not is_owner:
+                raise ValueError("Only the game owner can edit placeholder player names")
+        else:
+            # Slot has a linked user: only that user can edit their display name
+            if slot_user_id_str != current_user_str:
+                raise ValueError("You can only edit your own display name")
+
+        # Update players list
+        players = list(game.players) if game.players else ["", "", "", ""]
+        while len(players) < 4:
+            players.append("")
+        players[player_index] = display_name.strip()
+        game.players = players
+
+        updated_game = self.game_repo.update(game)
+        self.db.commit()
+        self.db.refresh(updated_game)
+        return GameResponse.model_validate(updated_game)
+
+    def _eligible_reset_voters(self, game: Game) -> set:
+        """Set of user id strings who are linked players and must vote to reset."""
+        pids = game.player_user_ids or [None, None, None, None]
+        return {str(pid) for pid in pids if pid is not None}
+
+    async def request_reset(self, game_id: UUID, user_id: UUID) -> Optional[GameResponse]:
+        """Propose a reset. Any linked player can propose. Opens voting."""
+        game = self.game_repo.get_by_id(game_id)
+        if not game:
+            return None
+        eligible = self._eligible_reset_voters(game)
+        if not eligible:
+            raise ValueError("No linked players to vote")
+        if str(user_id) not in eligible:
+            raise ValueError("Only a player in this game can request a reset")
+        game.reset_requested_at = datetime.now(timezone.utc)
+        game.reset_vote_user_ids = []
+        updated_game = self.game_repo.update(game)
+        self.db.commit()
+        self.db.refresh(updated_game)
+        return GameResponse.model_validate(updated_game)
+
+    async def vote_reset(self, game_id: UUID, user_id: UUID) -> Optional[GameResponse]:
+        """Vote yes for reset. When all linked players have voted, reset is performed."""
+        game = self.game_repo.get_by_id(game_id)
+        if not game:
+            return None
+        if game.reset_requested_at is None:
+            raise ValueError("No reset has been requested for this game")
+        eligible = self._eligible_reset_voters(game)
+        if str(user_id) not in eligible:
+            raise ValueError("Only a player in this game can vote to reset")
+        vote_ids = list(game.reset_vote_user_ids or [])
+        user_str = str(user_id)
+        if user_str in vote_ids:
+            return GameResponse.model_validate(game)  # already voted
+        vote_ids.append(user_str)
+        game.reset_vote_user_ids = vote_ids
+
+        if set(vote_ids) >= eligible:
+            # Unanimous: perform reset
+            for r in game.rounds:
+                self.db.delete(r)
+            game.scores = [0, 0, 0, 0]
+            game.current_round = 1
+            game.reset_requested_at = None
+            game.reset_vote_user_ids = None
+        else:
+            updated_game = self.game_repo.update(game)
+            self.db.commit()
+            self.db.refresh(updated_game)
+            return GameResponse.model_validate(updated_game)
+
+        updated_game = self.game_repo.update(game)
+        self.db.commit()
+        self.db.refresh(updated_game)
+        return GameResponse.model_validate(updated_game)
+
+    async def cancel_reset_request(self, game_id: UUID, user_id: UUID) -> Optional[GameResponse]:
+        """Cancel an open reset request (e.g. by proposer or owner)."""
+        game = self.game_repo.get_by_id(game_id)
+        if not game:
+            return None
+        if game.reset_requested_at is None:
+            return GameResponse.model_validate(game)
+        is_owner = game.owner_id is not None and str(game.owner_id) == str(user_id)
+        if not is_owner:
+            raise ValueError("Only the game owner can cancel a reset request")
+        game.reset_requested_at = None
+        game.reset_vote_user_ids = None
+        updated_game = self.game_repo.update(game)
+        self.db.commit()
+        self.db.refresh(updated_game)
         return GameResponse.model_validate(updated_game)
 
     async def delete_game(self, game_id: UUID) -> bool:

@@ -107,6 +107,15 @@
               >
                 📧 הזמן
               </button>
+              <button
+                *ngIf="isGameOwner(game)"
+                type="button"
+                (click)="deleteGame(game.id, $event)"
+                class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1 rounded transition-colors"
+                title="מחק משחק"
+              >
+                🗑 מחק
+              </button>
               <span
                 [class]="game.status === 'active' ? 'bg-green-500' : 'bg-slate-500'"
                 class="px-2 py-1 rounded text-xs text-white"

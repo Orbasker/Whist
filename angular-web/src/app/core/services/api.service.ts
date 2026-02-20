@@ -43,6 +43,36 @@ export class ApiService {
       .pipe(retry(2), catchError(this.handleError));
   }
 
+  updatePlayerDisplayName(
+    gameId: string,
+    playerIndex: number,
+    displayName: string
+  ): Observable<GameState> {
+    return this.http
+      .patch<GameState>(`${this.baseUrl}/games/${gameId}/players/${playerIndex}`, {
+        display_name: displayName,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  requestReset(gameId: string): Observable<GameState> {
+    return this.http
+      .post<GameState>(`${this.baseUrl}/games/${gameId}/reset-request`, {})
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  voteReset(gameId: string): Observable<GameState> {
+    return this.http
+      .post<GameState>(`${this.baseUrl}/games/${gameId}/reset-vote`, {})
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  cancelResetRequest(gameId: string): Observable<GameState> {
+    return this.http
+      .delete<GameState>(`${this.baseUrl}/games/${gameId}/reset-request`)
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
   submitBids(gameId: string, bids: number[], trumpSuit?: string): Observable<GameState> {
     return this.http
       .post<GameState>(`${this.baseUrl}/games/${gameId}/rounds/bids`, {
