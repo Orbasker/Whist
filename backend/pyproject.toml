@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "whist-game-backend"
 version = "1.0.0"
@@ -28,6 +32,9 @@ dev = [
     "ruff==0.1.6",
     "ty>=0.0.1",
 ]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
 
 [tool.ruff]
 line-length = 100
