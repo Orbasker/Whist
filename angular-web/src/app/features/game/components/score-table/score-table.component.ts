@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { GameState } from '../../../../core/models/game-state.model';
 import { GameService } from '../../../../core/services/game.service';
 
 @Component({
   selector: 'app-score-table',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './score-table.component.html',
 })
 export class ScoreTableComponent {

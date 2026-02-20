@@ -1,15 +1,17 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import { TrumpSelectorComponent } from '../../../../shared/components/trump-selector/trump-selector.component';
 import { BidInputGridComponent } from '../../../../shared/components/bid-input-grid/bid-input-grid.component';
+import { TranslateModule } from '@ngx-translate/core';
 import { GameService } from '../../../../core/services/game.service';
 import { GameState } from '../../../../core/models/game-state.model';
 
 @Component({
   selector: 'app-bidding-phase',
   standalone: true,
-  imports: [CommonModule, TrumpSelectorComponent, BidInputGridComponent],
+  imports: [CommonModule, TrumpSelectorComponent, BidInputGridComponent, TranslateModule],
   templateUrl: './bidding-phase.component.html',
 })
 export class BiddingPhaseComponent implements OnInit, OnDestroy {
@@ -27,7 +29,10 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
   gameState: GameState | null = null;
   private subscriptions = new Subscription();
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
     this.currentPlayerIndex = this.gameService.getCurrentPlayerIndex();
@@ -141,11 +146,11 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
   getStatusMessage(): string {
     const diff = Math.abs(13 - this.totalBids);
     if (this.totalBids === 13) {
-      return '❌ לא ניתן להימר בדיוק 13 - חייב להיות יותר או פחות';
+      return '❌ ' + this.translate.instant('game.biddingPhase.cannotBid13');
     } else if (this.totalBids < 13) {
-      return `מצב אנדר - חסרות ${diff} לקיחות`;
+      return this.translate.instant('game.biddingPhase.underMode', { diff });
     } else {
-      return `מצב אובר - עודפות ${diff} לקיחות`;
+      return this.translate.instant('game.biddingPhase.overMode', { diff });
     }
   }
 

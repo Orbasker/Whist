@@ -13,11 +13,19 @@ import { InvitationService } from '../../core/services/invitation.service';
 import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule, InvitationFormComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    FormsModule,
+    InvitationFormComponent,
+    TranslateModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -43,7 +51,8 @@ export class HomeComponent implements OnInit {
     private gameService: GameService,
     private router: Router,
     private authService: AuthService,
-    private invitationService: InvitationService
+    private invitationService: InvitationService,
+    private translate: TranslateService
   ) {
     this.playerForm = this.fb.group({
       player1: ['', [Validators.required, Validators.minLength(1)]],
@@ -109,7 +118,7 @@ export class HomeComponent implements OnInit {
     const isAuth = await this.authService.isAuthenticated();
     if (!isAuth) {
       console.error('Cannot create game: User is not authenticated');
-      alert('You must be logged in to create a game. Please log in and try again.');
+      alert(this.translate.instant('home.mustBeLoggedIn'));
       this.router.navigate(['/login']);
       return;
     }
@@ -117,7 +126,7 @@ export class HomeComponent implements OnInit {
     const token = await this.authService.getToken();
     if (!token) {
       console.error('Cannot create game: No authentication token available');
-      alert('Authentication token is missing. Please log in again.');
+      alert(this.translate.instant('home.authTokenMissing'));
       this.router.navigate(['/login']);
       return;
     }
@@ -143,7 +152,7 @@ export class HomeComponent implements OnInit {
         console.error('Failed to create game:', error);
         const errorMessage =
           (error instanceof Error ? error.message : null) ||
-          'Failed to create game. Please try again.';
+          this.translate.instant('home.createGameFailed');
         alert(errorMessage);
         if (
           errorMessage.includes('401') ||
@@ -175,12 +184,13 @@ export class HomeComponent implements OnInit {
   }
 
   getGameDisplayName(game: GameState): string {
-    return game.name || game.players.join(', ') || 'משחק ללא שם';
+    return game.name || game.players.join(', ') || this.translate.instant('home.gameNameDefault');
   }
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('he-IL', {
+    const locale = this.translate.currentLang === 'en' ? 'en-US' : 'he-IL';
+    return date.toLocaleDateString(locale, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -191,7 +201,8 @@ export class HomeComponent implements OnInit {
 
   openInvitationForm(game: GameState) {
     this.selectedGameId = game.id;
-    this.selectedGameName = game.name || game.players.join(', ') || 'משחק ללא שם';
+    this.selectedGameName =
+      game.name || game.players.join(', ') || this.translate.instant('home.gameNameDefault');
     this.selectedGame = game;
     this.showInvitationForm = true;
     this.invitationError = null;
@@ -209,12 +220,15 @@ export class HomeComponent implements OnInit {
 
   async onInvitationsSent(result: { sent: number; total: number }) {
     if (result.sent > 0) {
-      this.invitationSuccess = `נשלחו ${result.sent} מתוך ${result.total} הזמנות בהצלחה!`;
+      this.invitationSuccess = this.translate.instant('home.invitationsSentSuccess', {
+        sent: result.sent,
+        total: result.total,
+      });
       setTimeout(() => {
         this.closeInvitationForm();
       }, 2000);
     } else {
-      this.invitationError = 'לא הצלחנו לשלוח את ההזמנות. אנא נסה שוב.';
+      this.invitationError = this.translate.instant('home.invitationsSendFailed');
     }
   }
 
@@ -233,7 +247,7 @@ export class HomeComponent implements OnInit {
 
   async deleteGame(gameId: string, event: Event) {
     event.stopPropagation();
-    if (!confirm('האם אתה בטוח שברצונך למחוק את המשחק?')) return;
+    if (!confirm(this.translate.instant('home.confirmDeleteGame'))) return;
     try {
       await this.gameService.deleteGameAsync(gameId);
       await this.loadGames();
@@ -243,7 +257,8 @@ export class HomeComponent implements OnInit {
       }
     } catch (err: unknown) {
       console.error('Failed to delete game:', err);
-      const message = err instanceof Error ? err.message : 'לא ניתן למחוק את המשחק.';
+      const message =
+        err instanceof Error ? err.message : this.translate.instant('home.deleteGameFailed');
       alert(message);
     }
   }

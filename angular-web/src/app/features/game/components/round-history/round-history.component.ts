@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { Round } from '../../../../core/models/game-state.model';
 
 @Component({
   selector: 'app-round-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './round-history.component.html',
 })
 export class RoundHistoryComponent {

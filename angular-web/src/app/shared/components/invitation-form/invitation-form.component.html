@@ -1,39 +1,49 @@
 <div class="bg-slate-800 rounded-lg">
   <!-- Game full: no slots available -->
   <div *ngIf="isGameFull" class="text-center py-4">
-    <p class="text-slate-300 mb-4 text-sm sm:text-base">המשחק מלא. אין מקומות פנויים להזמנה.</p>
+    <p class="text-slate-300 mb-4 text-sm sm:text-base">
+      {{ 'invitationForm.gameFull' | translate }}
+    </p>
     <button
       type="button"
       (click)="onCancel()"
       class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
     >
-      סגור
+      {{ 'common.close' | translate }}
     </button>
   </div>
 
   <ng-container *ngIf="!isGameFull">
-    <h3 class="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">שלח הזמנות למשחק</h3>
-    <p class="text-slate-400 text-sm mb-3 sm:mb-4">הזן כתובות אימייל למקומות הפנויים</p>
+    <h3 class="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
+      {{ 'invitationForm.title' | translate }}
+    </h3>
+    <p class="text-slate-400 text-sm mb-3 sm:mb-4">
+      {{ 'invitationForm.enterEmails' | translate }}
+    </p>
 
     <!-- Players already in the match (editable: owner for placeholders, user for own slot) -->
     <div *ngIf="(players ?? []).length > 0" class="mb-4 p-3 bg-slate-700/50 rounded-lg">
-      <p class="text-slate-300 text-sm font-medium mb-2">שחקנים במשחק</p>
+      <p class="text-slate-300 text-sm font-medium mb-2">
+        {{ 'invitationForm.playersInGame' | translate }}
+      </p>
       <ul class="space-y-1.5 text-sm">
         <li *ngFor="let name of players; let i = index" class="flex items-center gap-2 flex-wrap">
           <ng-container *ngIf="editingPlayerIndex !== i">
-            <span class="text-white">שחקן {{ i + 1 }}: {{ name || '—' }}</span>
+            <span class="text-white">{{
+              'invitationForm.playerLabel' | translate: { n: i + 1, name: name || '—' }
+            }}</span>
             <span
               *ngIf="isRealUser(i)"
               class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-600/80 text-white"
             >
-              משתמש רשום
+              {{ 'invitationForm.registeredUser' | translate }}
             </span>
             <button
               *ngIf="canEditPlayerName(i)"
               type="button"
               (click)="startEditName(i)"
               class="text-amber-400 hover:text-amber-300 p-0.5"
-              title="ערוך שם במשחק"
+              [title]="'invitationForm.editNameInGame' | translate"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -53,14 +63,16 @@
               (keydown.escape)="cancelEditName()"
               (blur)="savePlayerName()"
               class="flex-1 min-w-0 max-w-[12rem] px-2 py-1 bg-slate-600 text-white text-sm rounded border border-slate-500"
-              [placeholder]="'שם שחקן ' + (i + 1)"
+              [placeholder]="'invitationForm.playerNamePlaceholder' | translate: { n: i + 1 }"
             />
-            <span *ngIf="nameLoading" class="text-slate-400 text-xs">שומר...</span>
+            <span *ngIf="nameLoading" class="text-slate-400 text-xs">{{
+              'common.saving' | translate
+            }}</span>
           </ng-container>
         </li>
       </ul>
       <p class="text-slate-500 text-xs mt-1.5">
-        השם המוצג במשחק. בעלים יכול לערוך מקומות ריקים; משתמש רשום יכול לערוך את השם שלו.
+        {{ 'invitationForm.displayNameHint' | translate }}
       </p>
     </div>
 
@@ -70,7 +82,7 @@
           <input
             type="email"
             [formControlName]="'email' + (slotIndex + 1)"
-            [placeholder]="'מקום ' + (slotIndex + 1) + ' - כתובת אימייל'"
+            [placeholder]="'invitationForm.slotPlaceholder' | translate: { n: slotIndex + 1 }"
             class="min-h-touch flex-1 min-w-0 bg-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-base"
           />
           <div
@@ -80,7 +92,7 @@
             "
             class="text-red-400 text-xs"
           >
-            אימייל לא תקין
+            {{ 'invitationForm.invalidEmail' | translate }}
           </div>
         </div>
       </div>
@@ -105,8 +117,8 @@
           [disabled]="!hasValidEmails() || sending"
           class="min-h-touch flex-1 min-w-[8rem] bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
         >
-          <span *ngIf="!sending">שלח הזמנות</span>
-          <span *ngIf="sending">שולח...</span>
+          <span *ngIf="!sending">{{ 'invitationForm.sendInvitations' | translate }}</span>
+          <span *ngIf="sending">{{ 'invitationForm.sending' | translate }}</span>
         </button>
         <button
           type="button"
@@ -114,7 +126,7 @@
           [disabled]="sending"
           class="min-h-touch bg-slate-600 hover:bg-slate-500 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
         >
-          ביטול
+          {{ 'common.cancel' | translate }}
         </button>
       </div>
     </form>

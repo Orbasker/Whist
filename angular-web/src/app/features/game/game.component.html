@@ -1,6 +1,5 @@
 <div
   class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
-  dir="rtl"
   *ngIf="gameState"
 >
   <!-- Header -->
@@ -11,7 +10,7 @@
       <button
         (click)="goBack()"
         class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-slate-400 hover:text-white transition-colors"
-        aria-label="חזור"
+        [attr.aria-label]="'game.back' | translate"
       >
         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -24,16 +23,16 @@
       </button>
       <div class="text-center flex-1 min-w-0">
         <h1 class="text-base sm:text-lg font-semibold text-white">
-          סיבוב {{ gameState.current_round }}
+          {{ 'game.round' | translate }} {{ gameState.current_round }}
         </h1>
         <p class="text-xs text-slate-400">
-          {{ phase === 'bidding' ? 'הימורים' : 'לקיחות' }}
+          {{ phase === 'bidding' ? ('game.bidding' | translate) : ('game.tricks' | translate) }}
         </p>
       </div>
       <button
         (click)="showScoreTable = true"
         class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-amber-400 hover:text-amber-300 transition-colors"
-        title="טבלת ניקוד"
+        [title]="'game.scoreTable' | translate"
       >
         <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
       </button>
@@ -69,7 +68,7 @@
           d="M4 6h16M4 10h16M4 14h16M4 18h16"
         ></path>
       </svg>
-      סיבובים ({{ rounds.length }}/13)
+      {{ 'game.roundsHistory' | translate: { count: rounds.length } }}
     </button>
   </div>
 

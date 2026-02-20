@@ -7,7 +7,9 @@
     (click)="$event.stopPropagation()"
   >
     <div class="bg-amber-500 rounded-lg p-3 sm:p-4 mb-4 text-center">
-      <h2 class="text-xl sm:text-2xl font-bold text-slate-900">סיכום סיבוב</h2>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+        {{ 'game.roundSummary.title' | translate }}
+      </h2>
     </div>
 
     <div class="space-y-3" *ngIf="results">
@@ -19,7 +21,10 @@
           <div>
             <div class="text-white font-medium">{{ player }}</div>
             <div class="text-slate-400 text-sm">
-              הימר {{ results.bids[i] }}, לקח {{ results.tricks[i] }}
+              {{
+                'game.roundSummary.bidTook'
+                  | translate: { bid: results.bids[i], took: results.tricks[i] }
+              }}
             </div>
           </div>
           <div class="text-right">
@@ -30,7 +35,9 @@
             >
               {{ results.roundScores[i] > 0 ? '+' : '' }}{{ results.roundScores[i] }}
             </div>
-            <div class="text-slate-400 text-sm">סה"כ: {{ results.newTotalScores[i] }}</div>
+            <div class="text-slate-400 text-sm">
+              {{ 'game.roundSummary.total' | translate }}: {{ results.newTotalScores[i] }}
+            </div>
           </div>
         </div>
       </div>
@@ -40,7 +47,7 @@
       (click)="onContinue()"
       class="min-h-touch w-full mt-6 bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
     >
-      המשך לסיבוב הבא
+      {{ 'game.roundSummary.continueNext' | translate }}
     </button>
   </div>
 </div>

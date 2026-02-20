@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })
@@ -22,7 +23,8 @@ export class AuthComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -67,7 +69,7 @@ export class AuthComponent implements OnInit {
       } catch (error: unknown) {
         let errorMsg =
           (error instanceof Error ? error.message : null) ||
-          'Login failed. Please check your credentials.';
+          this.translate.instant('auth.loginFailed');
         // Clean up error message - remove leading periods/dots and trim
         errorMsg = errorMsg.replace(/^\.+\s*/, '').trim();
         this.errorMessage = errorMsg;
@@ -96,7 +98,8 @@ export class AuthComponent implements OnInit {
         }
       } catch (error: unknown) {
         let errorMsg =
-          (error instanceof Error ? error.message : null) || 'Signup failed. Please try again.';
+          (error instanceof Error ? error.message : null) ||
+          this.translate.instant('auth.signupFailed');
         // Clean up error message - remove leading periods/dots and trim
         errorMsg = errorMsg.replace(/^\.+\s*/, '').trim();
         this.errorMessage = errorMsg;
@@ -124,26 +127,24 @@ export class AuthComponent implements OnInit {
       console.error('Google sign-in error:', error);
 
       // Extract more meaningful error message
-      let errorMsg = 'Google sign-in failed. Please try again.';
+      let errorMsg = this.translate.instant('auth.googleSignInFailed');
       const err = error as { message?: string; status?: number; statusCode?: number };
 
       if (err?.message) {
         // Check for HTTP status codes
         if (err.message.includes('403') || err.message.includes('HTTP 403')) {
-          errorMsg =
-            'Google sign-in is not configured. Please contact support or configure Google OAuth in Neon Auth dashboard.';
+          errorMsg = this.translate.instant('auth.googleNotConfigured');
         } else if (err.message.includes('401') || err.message.includes('HTTP 401')) {
-          errorMsg = 'Google sign-in authentication failed. Please try again.';
+          errorMsg = this.translate.instant('auth.authFailed');
         } else if (err.message.includes('400') || err.message.includes('HTTP 400')) {
-          errorMsg = 'Invalid request. Please check your configuration.';
+          errorMsg = this.translate.instant('auth.invalidRequest');
         } else {
           errorMsg = err.message;
         }
       } else if (err?.status === 403 || err?.statusCode === 403) {
-        errorMsg =
-          'Google sign-in is not configured. Please contact support or configure Google OAuth in Neon Auth dashboard.';
+        errorMsg = this.translate.instant('auth.googleNotConfigured');
       } else if (err?.status === 401 || err?.statusCode === 401) {
-        errorMsg = 'Google sign-in authentication failed. Please try again.';
+        errorMsg = this.translate.instant('auth.authFailed');
       }
 
       this.errorMessage = errorMsg;
@@ -168,26 +169,24 @@ export class AuthComponent implements OnInit {
       console.error('GitHub sign-in error:', error);
 
       // Extract more meaningful error message
-      let errorMsg = 'GitHub sign-in failed. Please try again.';
+      let errorMsg = this.translate.instant('auth.githubSignInFailed');
       const err = error as { message?: string; status?: number; statusCode?: number };
 
       if (err?.message) {
         // Check for HTTP status codes
         if (err.message.includes('403') || err.message.includes('HTTP 403')) {
-          errorMsg =
-            'GitHub sign-in is not configured. Please contact support or configure GitHub OAuth in Neon Auth dashboard.';
+          errorMsg = this.translate.instant('auth.githubNotConfigured');
         } else if (err.message.includes('401') || err.message.includes('HTTP 401')) {
-          errorMsg = 'GitHub sign-in authentication failed. Please try again.';
+          errorMsg = this.translate.instant('auth.authFailed');
         } else if (err.message.includes('400') || err.message.includes('HTTP 400')) {
-          errorMsg = 'Invalid request. Please check your configuration.';
+          errorMsg = this.translate.instant('auth.invalidRequest');
         } else {
           errorMsg = err.message;
         }
       } else if (err?.status === 403 || err?.statusCode === 403) {
-        errorMsg =
-          'GitHub sign-in is not configured. Please contact support or configure GitHub OAuth in Neon Auth dashboard.';
+        errorMsg = this.translate.instant('auth.githubNotConfigured');
       } else if (err?.status === 401 || err?.statusCode === 401) {
-        errorMsg = 'GitHub sign-in authentication failed. Please try again.';
+        errorMsg = this.translate.instant('auth.authFailed');
       }
 
       this.errorMessage = errorMsg;

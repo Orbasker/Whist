@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { GameService } from '../../../../core/services/game.service';
 import { GameState } from '../../../../core/models/game-state.model';
+import { TranslateModule } from '@ngx-translate/core';
 import { TricksInputGridComponent } from '../../../../shared/components/tricks-input-grid/tricks-input-grid.component';
 
 @Component({
   selector: 'app-tricks-phase',
   standalone: true,
-  imports: [CommonModule, TricksInputGridComponent],
+  imports: [CommonModule, TricksInputGridComponent, TranslateModule],
   templateUrl: './tricks-phase.component.html',
 })
 export class TricksPhaseComponent implements OnInit, OnDestroy {
