@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GameState } from '../../../../core/models/game-state.model';
 import { GameService } from '../../../../core/services/game.service';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-score-table',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalComponent],
   templateUrl: './score-table.component.html',
 })
 export class ScoreTableComponent {

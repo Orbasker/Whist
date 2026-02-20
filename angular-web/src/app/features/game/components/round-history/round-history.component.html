@@ -1,143 +1,119 @@
-<div
-  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-  (click)="onClose()"
->
-  <div
-    class="bg-slate-800 rounded-xl max-w-5xl w-full max-h-[85vh] overflow-hidden flex flex-col shadow-xl"
-    (click)="$event.stopPropagation()"
-  >
-    <div class="flex items-center justify-between p-5 border-b border-slate-700 shrink-0">
-      <h2 class="text-2xl font-bold text-white">היסטוריית סיבובים</h2>
-      <button
-        (click)="onClose()"
-        class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700 transition-colors"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          ></path>
-        </svg>
-      </button>
-    </div>
-
-    <div *ngIf="rounds.length === 0" class="text-slate-400 text-center py-12 px-6">
-      אין סיבובים עדיין
-    </div>
-
-    <div *ngIf="rounds.length > 0" class="overflow-auto flex-1 p-4">
-      <table class="w-full text-sm text-right border-collapse min-w-[640px]">
-        <thead>
-          <tr class="text-slate-400 border-b-2 border-slate-600">
-            <th class="py-3 pr-4 pl-2 font-semibold w-16 sticky right-0 bg-slate-800 z-10">
-              סיבוב
-            </th>
-            <th class="py-3 px-2 font-semibold w-12 text-center">קלף</th>
-            <ng-container *ngFor="let player of players; let pi = index">
-              <th
-                colspan="5"
-                class="py-2 px-1 font-semibold text-center border-r border-slate-700"
-                [ngClass]="{
-                  'bg-amber-500/15': isCurrentPlayer(pi),
-                  'text-amber-200': isCurrentPlayer(pi),
-                  'border-amber-500/40': isCurrentPlayer(pi),
-                }"
-              >
-                {{ player
-                }}<span *ngIf="isCurrentPlayer(pi)" class="mr-1 text-amber-400 font-bold"
-                  >(את/ה)</span
-                >
-              </th>
-            </ng-container>
-          </tr>
-          <tr class="text-slate-500 border-b border-slate-700">
-            <th class="py-2 pr-4 pl-2 sticky right-0 bg-slate-800 z-10"></th>
-            <th class="py-2 px-2"></th>
-            <ng-container *ngFor="let player of players; let pi = index">
-              <th
-                class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
-              >
-                הצעה
-              </th>
-              <th
-                class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
-              >
-                לקח
-              </th>
-              <th
-                class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
-              >
-                שינוי
-              </th>
-              <th
-                class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
-              >
-                לפני
-              </th>
-              <th
-                class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
-                [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
-              >
-                אחרי
-              </th>
-            </ng-container>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let round of rounds; let ri = index"
-            class="border-b border-slate-700 hover:bg-slate-700/40 transition-colors"
-          >
-            <td class="py-2.5 pr-4 pl-2 text-white font-medium sticky right-0 bg-slate-800 z-10">
-              {{ round.round_number }}
-            </td>
-            <td class="py-2.5 px-2 text-center text-lg">{{ getTrumpSymbol(round.trump_suit) }}</td>
-            <ng-container *ngFor="let player of players; let pi = index">
-              <td
-                class="py-2.5 px-1.5 text-center text-slate-300 border-r border-slate-700/80"
-                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
-              >
-                {{ round.bids[pi] }}
-              </td>
-              <td
-                class="py-2.5 px-1.5 text-center text-slate-300 border-r border-slate-700/80"
-                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
-              >
-                {{ round.tricks[pi] }}
-              </td>
-              <td
-                class="py-2.5 px-1.5 text-center font-semibold border-r border-slate-700/80 tabular-nums"
-                [ngClass]="{
-                  'bg-amber-500/10': isCurrentPlayer(pi),
-                  'text-green-400': round.scores[pi] > 0,
-                  'text-red-400': round.scores[pi] < 0,
-                  'text-slate-400': round.scores[pi] === 0,
-                }"
-              >
-                {{ formatGainLoss(round.scores[pi]) }}
-              </td>
-              <td
-                class="py-2.5 px-1.5 text-center text-slate-400 border-r border-slate-700/80 tabular-nums"
-                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
-              >
-                {{ getScoreBefore(ri, pi) }}
-              </td>
-              <td
-                class="py-2.5 px-1.5 text-center font-medium text-slate-200 border-r border-slate-700/80 tabular-nums"
-                [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
-              >
-                {{ getScoreAfter(ri, pi) }}
-              </td>
-            </ng-container>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<app-modal title="היסטוריית סיבובים" size="full" (close)="onClose()">
+  <div *ngIf="rounds.length === 0" class="text-slate-400 text-center py-12 px-6">
+    אין סיבובים עדיין
   </div>
-</div>
+
+  <div
+    *ngIf="rounds.length > 0"
+    class="overflow-auto flex-1 p-3 sm:p-4 -webkit-overflow-scrolling-touch"
+  >
+    <table class="w-full text-xs sm:text-sm text-right border-collapse min-w-[640px]">
+      <thead>
+        <tr class="text-slate-400 border-b-2 border-slate-600">
+          <th class="py-3 pr-4 pl-2 font-semibold w-16 sticky right-0 bg-slate-800 z-10">סיבוב</th>
+          <th class="py-3 px-2 font-semibold w-12 text-center">קלף</th>
+          <ng-container *ngFor="let player of players; let pi = index">
+            <th
+              colspan="5"
+              class="py-2 px-1 font-semibold text-center border-r border-slate-700"
+              [ngClass]="{
+                'bg-amber-500/15': isCurrentPlayer(pi),
+                'text-amber-200': isCurrentPlayer(pi),
+                'border-amber-500/40': isCurrentPlayer(pi),
+              }"
+            >
+              {{ player
+              }}<span *ngIf="isCurrentPlayer(pi)" class="mr-1 text-amber-400 font-bold"
+                >(את/ה)</span
+              >
+            </th>
+          </ng-container>
+        </tr>
+        <tr class="text-slate-500 border-b border-slate-700">
+          <th class="py-2 pr-4 pl-2 sticky right-0 bg-slate-800 z-10"></th>
+          <th class="py-2 px-2"></th>
+          <ng-container *ngFor="let player of players; let pi = index">
+            <th
+              class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
+              [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
+            >
+              הצעה
+            </th>
+            <th
+              class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
+              [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
+            >
+              לקח
+            </th>
+            <th
+              class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
+              [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
+            >
+              שינוי
+            </th>
+            <th
+              class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
+              [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
+            >
+              לפני
+            </th>
+            <th
+              class="py-2 px-1.5 font-normal text-center border-r border-slate-700/80"
+              [ngClass]="{ 'bg-slate-700/30': isCurrentPlayer(pi) }"
+            >
+              אחרי
+            </th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let round of rounds; let ri = index"
+          class="border-b border-slate-700 hover:bg-slate-700/40 transition-colors"
+        >
+          <td class="py-2.5 pr-4 pl-2 text-white font-medium sticky right-0 bg-slate-800 z-10">
+            {{ round.round_number }}
+          </td>
+          <td class="py-2.5 px-2 text-center text-lg">{{ getTrumpSymbol(round.trump_suit) }}</td>
+          <ng-container *ngFor="let player of players; let pi = index">
+            <td
+              class="py-2.5 px-1.5 text-center text-slate-300 border-r border-slate-700/80"
+              [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
+            >
+              {{ round.bids[pi] }}
+            </td>
+            <td
+              class="py-2.5 px-1.5 text-center text-slate-300 border-r border-slate-700/80"
+              [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
+            >
+              {{ round.tricks[pi] }}
+            </td>
+            <td
+              class="py-2.5 px-1.5 text-center font-semibold border-r border-slate-700/80 tabular-nums"
+              [ngClass]="{
+                'bg-amber-500/10': isCurrentPlayer(pi),
+                'text-green-400': round.scores[pi] > 0,
+                'text-red-400': round.scores[pi] < 0,
+                'text-slate-400': round.scores[pi] === 0,
+              }"
+            >
+              {{ formatGainLoss(round.scores[pi]) }}
+            </td>
+            <td
+              class="py-2.5 px-1.5 text-center text-slate-400 border-r border-slate-700/80 tabular-nums"
+              [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
+            >
+              {{ getScoreBefore(ri, pi) }}
+            </td>
+            <td
+              class="py-2.5 px-1.5 text-center font-medium text-slate-200 border-r border-slate-700/80 tabular-nums"
+              [ngClass]="{ 'bg-amber-500/10': isCurrentPlayer(pi) }"
+            >
+              {{ getScoreAfter(ri, pi) }}
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</app-modal>

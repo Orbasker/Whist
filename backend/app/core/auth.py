@@ -59,9 +59,11 @@ async def get_jwks() -> dict:
 
             return jwks
     except httpx.RequestError as e:
+        logger = __import__("logging").getLogger(__name__)
+        logger.warning("Failed to fetch JWKS: %s", e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch JWKS: {str(e)}",
+            detail="Authentication service unavailable",
         ) from e
 
 
@@ -137,9 +139,10 @@ async def verify_token_with_jwks(token: str) -> dict:
             )
             return payload
         except (DecodeError, InvalidTokenError) as e:
+            logger.debug("JWT verification failed (RSA): %s", e)
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Invalid or expired token: {str(e)}",
+                detail="Invalid or expired token",
                 headers={"WWW-Authenticate": "Bearer"},
             ) from e
     elif signing_key.get("kty") == "OKP" and signing_key.get("crv") == "Ed25519":
@@ -166,9 +169,10 @@ async def verify_token_with_jwks(token: str) -> dict:
             )
             return payload
         except (DecodeError, InvalidTokenError) as e:
+            logger.debug("JWT verification failed (Ed25519): %s", e)
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Invalid or expired token: {str(e)}",
+                detail="Invalid or expired token",
                 headers={"WWW-Authenticate": "Bearer"},
             ) from e
     else:
@@ -219,10 +223,10 @@ async def get_current_user_id(
         # Re-raise HTTP exceptions (already logged in verify_token_with_jwks)
         raise
     except Exception as e:
-        logger.error(f"Authentication error: {str(e)}", exc_info=True)
+        logger.error("Authentication error: %s", e, exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Authentication failed: {str(e)}",
+            detail="Authentication failed",
             headers={"WWW-Authenticate": "Bearer"},
         )
 

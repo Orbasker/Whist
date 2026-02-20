@@ -1,0 +1,77 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-backdrop);
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+  align-items: flex-end;
+  padding: 0;
+
+  @media (min-width: 640px) {
+    align-items: center;
+    padding: 1rem;
+  }
+}
+
+.modal-panel {
+  background: var(--bg-secondary);
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--bg-tertiary);
+  border-radius: 1rem 1rem 0 0;
+
+  @media (min-width: 640px) {
+    border-radius: 0.75rem;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--bg-tertiary);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modal-close {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.25rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.modal-body {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+
+  @media (min-width: 640px) {
+    padding: 1.5rem;
+  }
+}

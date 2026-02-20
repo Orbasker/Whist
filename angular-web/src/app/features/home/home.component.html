@@ -1,12 +1,19 @@
 <div
-  class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4"
+  class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 sm:p-6 md:p-8"
   dir="rtl"
 >
-  <div class="w-full max-w-md">
+  <div class="w-full max-w-md md:max-w-lg lg:max-w-xl">
     <!-- Header -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-amber-500 rounded-lg mb-4">
-        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="text-center mb-6 sm:mb-8">
+      <div
+        class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-amber-500 rounded-lg mb-3 sm:mb-4"
+      >
+        <svg
+          class="w-8 h-8 sm:w-10 sm:h-10 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -15,14 +22,14 @@
           ></path>
         </svg>
       </div>
-      <h1 class="text-4xl font-bold text-white mb-2">וויסט</h1>
-      <p class="text-slate-400">ניקוד משחקים</p>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">וויסט</h1>
+      <p class="text-slate-400 text-sm sm:text-base">ניקוד משחקים</p>
       <div class="mt-4">
         <!-- Show login link if not authenticated -->
         <a
           *ngIf="!isAuthenticated"
           routerLink="/login"
-          class="text-amber-400 hover:text-amber-300 text-sm underline"
+          class="inline-flex items-center justify-center min-h-touch min-w-touch text-amber-400 hover:text-amber-300 text-sm underline"
         >
           התחבר / הירשם
         </a>
@@ -35,7 +42,7 @@
           </div>
           <button
             (click)="logout()"
-            class="text-amber-400 hover:text-amber-300 text-sm underline bg-transparent border-none cursor-pointer p-0"
+            class="min-h-touch inline-flex items-center justify-center px-3 text-amber-400 hover:text-amber-300 text-sm underline bg-transparent border-none cursor-pointer"
           >
             התנתק
           </button>
@@ -44,12 +51,12 @@
     </div>
 
     <!-- Games List (only shown when authenticated) -->
-    <div *ngIf="isAuthenticated" class="bg-slate-800 rounded-lg p-6 shadow-xl mb-4">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-semibold text-white">המשחקים שלי</h2>
+    <div *ngIf="isAuthenticated" class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl mb-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4 sm:mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-white">המשחקים שלי</h2>
         <button
           (click)="toggleNewGameForm()"
-          class="bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+          class="min-h-touch bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -79,15 +86,17 @@
         <div
           *ngFor="let game of games"
           (click)="continueGame(game.id)"
-          class="bg-slate-700 hover:bg-slate-600 rounded-lg p-4 cursor-pointer transition-colors border border-slate-600 hover:border-amber-500"
+          class="bg-slate-700 hover:bg-slate-600 rounded-lg p-3 sm:p-4 cursor-pointer transition-colors border border-slate-600 hover:border-amber-500"
         >
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <h3 class="text-white font-semibold mb-1">{{ getGameDisplayName(game) }}</h3>
-              <p class="text-slate-400 text-sm mb-2">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex-1 min-w-0">
+              <h3 class="text-white font-semibold mb-1 text-sm sm:text-base truncate">
+                {{ getGameDisplayName(game) }}
+              </h3>
+              <p class="text-slate-400 text-xs sm:text-sm mb-2 truncate">
                 {{ game.players.join(', ') }}
               </p>
-              <div class="flex items-center gap-4 text-xs text-slate-500">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-500">
                 <span>סיבוב {{ game.current_round }}</span>
                 <span>•</span>
                 <span>ניקוד: {{ game.scores.join(' - ') }}</span>
@@ -95,44 +104,69 @@
                 <span>{{ formatDate(game.updated_at) }}</span>
               </div>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 shrink-0">
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openInvitationForm(game); $event.stopPropagation()"
-                class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1 rounded transition-colors"
-                title="שלח הזמנות"
+                class="min-h-touch min-w-touch inline-flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded transition-colors"
+                aria-label="שלח הזמנות"
               >
-                📧 הזמן
+                <svg
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                הזמן
               </button>
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="deleteGame(game.id, $event)"
-                class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1 rounded transition-colors"
-                title="מחק משחק"
+                class="min-h-touch min-w-touch inline-flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-2 rounded transition-colors"
+                aria-label="מחק משחק"
               >
-                🗑 מחק
+                <svg
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                מחק
               </button>
               <span
                 [class]="game.status === 'active' ? 'bg-green-500' : 'bg-slate-500'"
-                class="px-2 py-1 rounded text-xs text-white"
+                class="px-2 py-1.5 rounded text-xs text-white"
               >
                 {{ game.status === 'active' ? 'פעיל' : 'הושלם' }}
               </span>
-              <svg
-                class="w-5 h-5 text-slate-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                ></path>
-              </svg>
+              <span class="text-slate-400" aria-hidden="true">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </span>
             </div>
           </div>
         </div>
@@ -140,51 +174,29 @@
     </div>
 
     <!-- Invitation Modal (shown when showInvitationForm is true) -->
-    <div
+    <app-modal
       *ngIf="showInvitationForm"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-      (click)="closeInvitationForm()"
+      title="שלח הזמנות"
+      size="md"
+      (close)="closeInvitationForm()"
     >
-      <div
-        class="bg-slate-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-6"
-        (click)="$event.stopPropagation()"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-white">שלח הזמנות</h2>
-          <button
-            type="button"
-            (click)="closeInvitationForm()"
-            class="text-slate-400 hover:text-white p-1"
-            title="סגור"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <app-invitation-form
-          [gameId]="selectedGameId || ''"
-          [gameName]="selectedGameName"
-          [players]="selectedGame?.players || []"
-          [playerUserIds]="selectedGame?.player_user_ids || []"
-          [currentUserId]="userId"
-          [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
-          (invitationsSent)="onInvitationsSent($event)"
-          (cancelled)="closeInvitationForm()"
-          (playerNameUpdated)="onPlayerNameUpdated($event)"
-        ></app-invitation-form>
-      </div>
-    </div>
+      <app-invitation-form
+        [gameId]="selectedGameId || ''"
+        [gameName]="selectedGameName"
+        [players]="selectedGame?.players || []"
+        [playerUserIds]="selectedGame?.player_user_ids || []"
+        [currentUserId]="userId"
+        [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
+        (invitationsSent)="onInvitationsSent($event)"
+        (cancelled)="closeInvitationForm()"
+        (playerNameUpdated)="onPlayerNameUpdated($event)"
+      ></app-invitation-form>
+    </app-modal>
 
     <!-- New Game Form (shown when showNewGameForm is true) -->
-    <div *ngIf="showNewGameForm" class="bg-slate-800 rounded-lg p-6 shadow-xl">
-      <div class="flex items-center gap-2 mb-6">
-        <h2 class="text-xl font-semibold text-white">משחק חדש</h2>
+    <div *ngIf="showNewGameForm" class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl">
+      <div class="flex items-center gap-2 mb-4 sm:mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-white">משחק חדש</h2>
         <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             stroke-linecap="round"
@@ -225,14 +237,14 @@
           <button
             type="button"
             (click)="toggleNewGameForm()"
-            class="flex-1 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            class="min-h-touch flex-1 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
           >
             ביטול
           </button>
           <button
             type="submit"
             [disabled]="!playerForm.valid"
-            class="flex-1 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+            class="min-h-touch flex-1 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -257,10 +269,10 @@
     <!-- Player Input Form (shown when not authenticated or when showNewGameForm is false and no games exist) -->
     <div
       *ngIf="!isAuthenticated || (!showNewGameForm && games.length === 0 && !loading)"
-      class="bg-slate-800 rounded-lg p-6 shadow-xl"
+      class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl"
     >
-      <div class="flex items-center gap-2 mb-6">
-        <h2 class="text-xl font-semibold text-white">שמות השחקנים</h2>
+      <div class="flex items-center gap-2 mb-4 sm:mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-white">שמות השחקנים</h2>
         <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             stroke-linecap="round"
@@ -284,7 +296,7 @@
         <button
           type="submit"
           [disabled]="!playerForm.valid"
-          class="w-full mt-6 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+          class="min-h-touch w-full mt-6 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

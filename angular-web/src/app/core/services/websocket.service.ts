@@ -20,7 +20,7 @@ export class WebSocketService implements RealtimeService {
 
   constructor() {}
 
-  connect(gameId: string): Observable<WebSocketMessage> {
+  connect(gameId: string, token?: string | null): Observable<WebSocketMessage> {
     if (this.ws && this.ws.readyState === WebSocket.OPEN && this.currentGameId === gameId) {
       return this.messageSubject.asObservable();
     }
@@ -30,7 +30,8 @@ export class WebSocketService implements RealtimeService {
     }
 
     this.currentGameId = gameId;
-    const wsUrl = this.getWebSocketUrl(gameId);
+    this.lastToken = token ?? null;
+    const wsUrl = this.getWebSocketUrl(gameId, token);
 
     try {
       this.ws = new WebSocket(wsUrl);
@@ -98,12 +99,18 @@ export class WebSocketService implements RealtimeService {
     }
   }
 
-  private getWebSocketUrl(gameId: string): string {
+  private getWebSocketUrl(gameId: string, token?: string | null): string {
     const apiUrl = environment.apiUrl;
     const baseUrl = apiUrl.replace('/api/v1', '');
     const wsUrl = baseUrl.replace(/^http/, 'ws');
-    return `${wsUrl}/api/v1/ws/games/${gameId}`;
+    const path = `${wsUrl}/api/v1/ws/games/${gameId}`;
+    if (token) {
+      return `${path}?token=${encodeURIComponent(token)}`;
+    }
+    return path;
   }
+
+  private lastToken: string | null = null;
 
   private attemptReconnect(gameId: string): void {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
@@ -114,7 +121,7 @@ export class WebSocketService implements RealtimeService {
     this.reconnectAttempts++;
 
     this.reconnectTimer = setTimeout(() => {
-      this.connect(gameId);
+      this.connect(gameId, this.lastToken);
     }, this.reconnectDelay);
   }
 }

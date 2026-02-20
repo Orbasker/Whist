@@ -33,7 +33,7 @@ export interface WebSocketMessage {
 
 /** Abstraction for real-time game updates (WebSocket or Supabase Realtime). */
 export interface RealtimeService {
-  connect(gameId: string): Observable<WebSocketMessage>;
+  connect(gameId: string, token?: string | null): Observable<WebSocketMessage>;
   disconnect(): void;
   send(message: WebSocketMessage | Record<string, unknown>): void;
   isConnected(): boolean;

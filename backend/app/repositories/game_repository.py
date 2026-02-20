@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.models.game import Game
+from app.models.game import Game, GameStatus
 from app.repositories.base_repository import BaseRepository
 from app.sql.queries.game_queries import GameQueries
 
@@ -22,9 +22,7 @@ class GameRepository(BaseRepository[Game]):
         return self.db.query(Game).filter(Game.id == game_id).first()
 
     def get_active_games(self) -> List[Game]:
-        """Get all active games using ORM"""
-        from app.models.game import GameStatus
-
+        """Get all active games using ORM."""
         return self.db.query(Game).filter(Game.status == GameStatus.ACTIVE).all()
 
     # Raw SQL methods for complex queries
@@ -43,37 +41,18 @@ class GameRepository(BaseRepository[Game]):
     def get_games_by_user(self, user_id: UUID) -> List[Game]:
         """
         Get all games for a user (games they own or are a player in).
-
-        Args:
-            user_id: User UUID
-
-        Returns:
-            List of games
+        Uses DB-side filtering for performance (no loading all games into memory).
         """
-        # Get games where user is the owner
-        owner_games = self.db.query(Game).filter(Game.owner_id == user_id).all()
+        dialect_name = self.db.get_bind().dialect.name
+        if dialect_name == "postgresql":
+            query = self.sql_queries.get_games_by_user_ids_postgresql()
+        else:
+            query = self.sql_queries.get_games_by_user_ids_sqlite()
 
-        # Get games where user is a player (check player_user_ids JSON array)
-        # Query games where player_user_ids is not null
-        player_games = self.db.query(Game).filter(Game.player_user_ids.isnot(None)).all()
+        result = self.db.execute(text(query), {"user_id": user_id, "user_id_str": str(user_id)})
+        ids_in_order = [row[0] for row in result]
+        if not ids_in_order:
+            return []
 
-        # Filter in Python for games where user_id is in player_user_ids
-        # Handle both UUID objects and string UUIDs in the JSON array
-        player_games_filtered = []
-        for game in player_games:
-            if not game.player_user_ids:
-                continue
-            for pid in game.player_user_ids:
-                if pid is None:
-                    continue
-                # Compare UUIDs: handle both UUID objects and string UUIDs
-                pid_uuid = UUID(str(pid)) if not isinstance(pid, UUID) else pid
-                if pid_uuid == user_id:
-                    player_games_filtered.append(game)
-                    break
-
-        # Combine and deduplicate by game ID
-        all_games = {game.id: game for game in owner_games + player_games_filtered}
-
-        # Sort by created_at descending (most recent first)
-        return sorted(all_games.values(), key=lambda g: g.created_at, reverse=True)
+        games = self.db.query(Game).filter(Game.id.in_(ids_in_order)).all()
+        return sorted(games, key=lambda g: ids_in_order.index(g.id))

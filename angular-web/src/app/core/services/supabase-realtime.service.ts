@@ -20,7 +20,7 @@ export class SupabaseRealtimeService implements RealtimeService {
 
   constructor(private apiService: ApiService) {}
 
-  connect(gameId: string): Observable<WebSocketMessage> {
+  connect(gameId: string, _token?: string | null): Observable<WebSocketMessage> {
     if (this.channel && this.currentGameId === gameId) {
       return this.messageSubject.asObservable();
     }
@@ -62,10 +62,12 @@ export class SupabaseRealtimeService implements RealtimeService {
   private async sendInitialGameState(gameId: string): Promise<void> {
     try {
       const game = await firstValueFrom(this.apiService.getGame(gameId));
-      if (game) {
-        this.messageSubject.next({ type: 'game_update', game });
-        this.messageSubject.next({ type: 'phase_update', phase: 'bidding' });
-      }
+      if (!game) return;
+      this.messageSubject.next({ type: 'game_update', game });
+      const rounds = await firstValueFrom(this.apiService.getRounds(gameId));
+      const hasRoundForCurrent = rounds.some((r) => r.round_number === game.current_round);
+      const phase = hasRoundForCurrent ? 'tricks' : 'bidding';
+      this.messageSubject.next({ type: 'phase_update', phase });
     } catch (err) {
       console.error('Failed to fetch initial game state for Supabase Realtime:', err);
     }

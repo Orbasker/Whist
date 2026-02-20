@@ -17,9 +17,7 @@ async def list_games(
     user_id: str = Depends(get_current_user_id),
     game_service: GameService = Depends(get_game_service),
 ):
-    """List all games for the authenticated user (games they own or are a player in)"""
-    from uuid import UUID
-
+    """List all games for the authenticated user (games they own or are a player in)."""
     return await game_service.list_games(UUID(user_id))
 
 
@@ -29,16 +27,20 @@ async def create_game(
     user_id: str = Depends(get_current_user_id),
     game_service: GameService = Depends(get_game_service),
 ):
-    """Create a new game (requires authentication)"""
-    from uuid import UUID
-
+    """Create a new game (requires authentication)."""
     return await game_service.create_game(game_data, owner_id=UUID(user_id))
 
 
 @router.get("/{game_id}", response_model=GameResponse)
-async def get_game(game_id: UUID, game_service: GameService = Depends(get_game_service)):
-    """Get game by ID"""
-    game = await game_service.get_game(game_id)
+async def get_game(
+    game_id: UUID,
+    user_id: str = Depends(get_current_user_id),
+    game_service: GameService = Depends(get_game_service),
+):
+    """Get game by ID. Only participants (owner or player) can access."""
+    from uuid import UUID
+
+    game = await game_service.get_game_if_participant(game_id, UUID(user_id))
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
     return game
@@ -46,13 +48,21 @@ async def get_game(game_id: UUID, game_service: GameService = Depends(get_game_s
 
 @router.put("/{game_id}", response_model=GameResponse)
 async def update_game(
-    game_id: UUID, game_update: GameUpdate, game_service: GameService = Depends(get_game_service)
+    game_id: UUID,
+    game_update: GameUpdate,
+    user_id: str = Depends(get_current_user_id),
+    game_service: GameService = Depends(get_game_service),
 ):
-    """Update a game"""
-    game = await game_service.update_game(game_id, game_update)
+    """Update a game. Only participants can update."""
+    from uuid import UUID
+
+    game = await game_service.get_game_if_participant(game_id, UUID(user_id))
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
-    return game
+    updated = await game_service.update_game(game_id, game_update)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Game not found")
+    return updated
 
 
 @router.patch(
@@ -144,8 +154,6 @@ async def delete_game(
     game_service: GameService = Depends(get_game_service),
 ):
     """Delete a game. Only the game owner can delete."""
-    from uuid import UUID
-
     game = await game_service.get_game(game_id)
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
