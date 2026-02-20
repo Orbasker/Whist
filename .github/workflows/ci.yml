@@ -15,6 +15,21 @@ jobs:
       run:
         working-directory: backend
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: whist_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
 
@@ -28,6 +43,11 @@ jobs:
 
       - name: Install dependencies
         run: uv pip install --system ".[dev]"
+
+      - name: Run Alembic migrations
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/whist_ci"
+        run: uv run alembic upgrade head
 
       - name: Ruff lint
         run: ruff check .

@@ -238,7 +238,7 @@ Deploy the Whist game backend (FastAPI) and frontend (Angular) to production wit
 
 ### Risk 4: Database Migrations
 - **Risk:** Migrations need to run on deployment
-- **Mitigation:** Automate migrations in deployment process, document manual steps
+- **Mitigation:** Implemented. CI runs `alembic upgrade head` (pipeline fails if migrations fail). Render start command runs migrations before uvicorn. Per-environment instructions and troubleshooting: see [docs/migrations.md](../migrations.md).
 
 ## Next Steps
 

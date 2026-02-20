@@ -52,7 +52,7 @@ For Neon, the database is created when you create the project.
 uv run alembic upgrade head
 ```
 
-This will create the `games` and `rounds` tables in your PostgreSQL database.
+This will create the `games` and `rounds` tables in your PostgreSQL database. For how to run migrations in CI, staging, and production, see **[docs/migrations.md](../docs/migrations.md)**.
 
 4. Start the server:
 ```bash
