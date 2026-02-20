@@ -1,9 +1,9 @@
 <app-modal title="טבלת ניקוד" size="lg" (close)="onClose()">
   <div *ngIf="gameState" class="space-y-4">
     <!-- Current Scores -->
-    <div class="bg-slate-700 rounded-lg p-4">
-      <h3 class="text-lg font-semibold text-white mb-3">ניקוד נוכחי</h3>
-      <div class="grid grid-cols-4 gap-4">
+    <div class="bg-slate-700 rounded-lg p-3 sm:p-4">
+      <h3 class="text-base sm:text-lg font-semibold text-white mb-3">ניקוד נוכחי</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <div *ngFor="let player of gameState.players; let i = index" class="text-center">
           <div class="text-slate-400 text-sm mb-1 flex items-center justify-center gap-1">
             <ng-container *ngIf="editingPlayerIndex !== i">
@@ -12,7 +12,7 @@
                 *ngIf="canEditPlayerName(i)"
                 type="button"
                 (click)="startEditName(i)"
-                class="text-amber-400 hover:text-amber-300 p-0.5"
+                class="min-h-touch min-w-touch inline-flex items-center justify-center text-amber-400 hover:text-amber-300 p-1 -m-1"
                 title="ערוך את השם המוצג במשחק"
               >
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@
             </ng-container>
           </div>
           <div
-            class="text-2xl font-bold"
+            class="text-xl sm:text-2xl font-bold"
             [class.text-green-400]="gameState.scores[i] > 0"
             [class.text-red-400]="gameState.scores[i] < 0"
           >
@@ -94,13 +94,13 @@
     <button
       *ngIf="isGameOwner"
       (click)="onDeleteGame()"
-      class="bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+      class="min-h-touch bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
     >
       מחק משחק
     </button>
     <button
       (click)="onClose()"
-      class="bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+      class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
     >
       סגור
     </button>

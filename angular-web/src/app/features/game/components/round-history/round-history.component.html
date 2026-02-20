@@ -3,8 +3,11 @@
     אין סיבובים עדיין
   </div>
 
-  <div *ngIf="rounds.length > 0" class="overflow-auto flex-1 p-4">
-    <table class="w-full text-sm text-right border-collapse min-w-[640px]">
+  <div
+    *ngIf="rounds.length > 0"
+    class="overflow-auto flex-1 p-3 sm:p-4 -webkit-overflow-scrolling-touch"
+  >
+    <table class="w-full text-xs sm:text-sm text-right border-collapse min-w-[640px]">
       <thead>
         <tr class="text-slate-400 border-b-2 border-slate-600">
           <th class="py-3 pr-4 pl-2 font-semibold w-16 sticky right-0 bg-slate-800 z-10">סיבוב</th>

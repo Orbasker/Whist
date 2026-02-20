@@ -3,15 +3,19 @@
   inset: 0;
   background: var(--modal-backdrop);
   display: flex;
-  align-items: center;
   justify-content: center;
   z-index: 50;
-  padding: 1rem;
+  align-items: flex-end;
+  padding: 0;
+
+  @media (min-width: 640px) {
+    align-items: center;
+    padding: 1rem;
+  }
 }
 
 .modal-panel {
   background: var(--bg-secondary);
-  border-radius: 0.75rem;
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
@@ -19,6 +23,11 @@
   flex-direction: column;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--bg-tertiary);
+  border-radius: 1rem 1rem 0 0;
+
+  @media (min-width: 640px) {
+    border-radius: 0.75rem;
+  }
 }
 
 .modal-header {
@@ -38,6 +47,8 @@
 }
 
 .modal-close {
+  min-height: 44px;
+  min-width: 44px;
   padding: 0.25rem;
   color: var(--text-secondary);
   background: none;
@@ -55,7 +66,12 @@
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 1rem;
   overflow-y: auto;
   flex: 1;
+  -webkit-overflow-scrolling: touch;
+
+  @media (min-width: 640px) {
+    padding: 1.5rem;
+  }
 }

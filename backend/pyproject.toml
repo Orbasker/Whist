@@ -51,3 +51,7 @@ target-version = ["py311"]
 invalid-key = "ignore"
 invalid-argument-type = "ignore"
 invalid-method-override = "ignore"
+
+[tool.ty.src]
+# Exclude tests so `ty check .` does not require resolving pytest in CI
+exclude = ["tests"]

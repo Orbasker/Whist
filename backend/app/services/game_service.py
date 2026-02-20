@@ -1,4 +1,4 @@
-"""Game service for game orchestration"""
+"""Game service for game orchestration."""
 
 from datetime import datetime, timezone
 from typing import List, Optional
@@ -12,6 +12,39 @@ from app.repositories.game_repository import GameRepository
 from app.schemas.game import GameCreate, GameResponse, GameUpdate
 from app.services.round_service import RoundService
 from app.services.scoring_service import ScoringService
+
+NUM_PLAYERS = 4
+VALID_BID_RANGE = (0, 13)
+BIDS_SUM_FORBIDDEN = 13
+TRICKS_SUM_REQUIRED = 13
+
+
+def _ensure_four_slots(items: Optional[List], default) -> List:
+    """Return a list of exactly 4 elements, padding with default if needed."""
+    result = list(items) if items else []
+    while len(result) < NUM_PLAYERS:
+        result.append(default)
+    return result[:NUM_PLAYERS]
+
+
+def _validate_bids(bids: List[int]) -> None:
+    """Raise ValueError if bids are invalid (must be 4 values 0–13, sum != 13)."""
+    if len(bids) != NUM_PLAYERS or not all(
+        VALID_BID_RANGE[0] <= b <= VALID_BID_RANGE[1] for b in bids
+    ):
+        raise ValueError("Invalid bids: must be 4 values, each between 0 and 13")
+    if sum(bids) == BIDS_SUM_FORBIDDEN:
+        raise ValueError("Invalid bids: total bids cannot equal 13. Must be more or less than 13.")
+
+
+def _validate_tricks(tricks: List[int]) -> None:
+    """Raise ValueError if tricks are invalid (4 values 0–13, sum = 13)."""
+    if len(tricks) != NUM_PLAYERS or not all(
+        VALID_BID_RANGE[0] <= t <= VALID_BID_RANGE[1] for t in tricks
+    ):
+        raise ValueError("Invalid tricks: must be 4 values, each between 0 and 13")
+    if sum(tricks) != TRICKS_SUM_REQUIRED:
+        raise ValueError(f"Invalid tricks: sum must be 13, got {sum(tricks)}")
 
 
 class GameService:
@@ -70,6 +103,32 @@ class GameService:
             return None
         return GameResponse.model_validate(game)
 
+    def _user_is_participant(self, game: Game, user_id: UUID) -> bool:
+        """Return True if user_id is the owner or one of the players in the game."""
+        if game.owner_id is not None and game.owner_id == user_id:
+            return True
+        if not game.player_user_ids:
+            return False
+        user_str = str(user_id)
+        for pid in game.player_user_ids:
+            if pid is not None and str(pid) == user_str:
+                return True
+        return False
+
+    async def get_game_if_participant(self, game_id: UUID, user_id: UUID) -> Optional[GameResponse]:
+        """
+        Get game by ID only if the user is a participant (owner or player).
+
+        Returns:
+            Game response if found and user is participant, else None.
+        """
+        game = self.game_repo.get_by_id(game_id)
+        if not game:
+            return None
+        if not self._user_is_participant(game, user_id):
+            return None
+        return GameResponse.model_validate(game)
+
     async def update_game(self, game_id: UUID, game_update: GameUpdate) -> Optional[GameResponse]:
         """
         Update a game.
@@ -115,10 +174,7 @@ class GameService:
         if not game:
             return None
 
-        # Normalize to list of 4
-        player_user_ids = game.player_user_ids or [None, None, None, None]
-        while len(player_user_ids) < 4:
-            player_user_ids.append(None)
+        player_user_ids = _ensure_four_slots(game.player_user_ids, None)
         slot_user_id = player_user_ids[player_index]
         slot_user_id_str = str(slot_user_id) if slot_user_id is not None else None
         current_user_str = str(current_user_id)
@@ -133,10 +189,7 @@ class GameService:
             if slot_user_id_str != current_user_str:
                 raise ValueError("You can only edit your own display name")
 
-        # Update players list
-        players = list(game.players) if game.players else ["", "", "", ""]
-        while len(players) < 4:
-            players.append("")
+        players = _ensure_four_slots(game.players, "")
         players[player_index] = display_name.strip()
         game.players = players
 
@@ -147,7 +200,7 @@ class GameService:
 
     def _eligible_reset_voters(self, game: Game) -> set:
         """Set of user id strings who are linked players and must vote to reset."""
-        pids = game.player_user_ids or [None, None, None, None]
+        pids = _ensure_four_slots(game.player_user_ids, None)
         return {str(pid) for pid in pids if pid is not None}
 
     async def request_reset(self, game_id: UUID, user_id: UUID) -> Optional[GameResponse]:
@@ -185,9 +238,10 @@ class GameService:
         game.reset_vote_user_ids = vote_ids
 
         if set(vote_ids) >= eligible:
-            # Unanimous: perform reset
-            for r in game.rounds:
-                self.db.delete(r)
+            # Unanimous: perform reset (bulk delete rounds for performance)
+            from app.models.round import Round
+
+            self.db.query(Round).filter(Round.game_id == game_id).delete()
             game.scores = [0, 0, 0, 0]
             game.current_round = 1
             game.reset_requested_at = None
@@ -273,18 +327,11 @@ class GameService:
         if not game:
             raise ValueError("Game not found")
 
-        # Initialize player_user_ids if None
-        if game.player_user_ids is None:
-            game.player_user_ids = [None, None, None, None]
-        else:
-            # Ensure it's a list of 4 elements
-            while len(game.player_user_ids) < 4:
-                game.player_user_ids.append(None)
-            # Convert any existing UUID objects to strings for JSON compatibility
-            game.player_user_ids = [
-                str(pid) if pid is not None and not isinstance(pid, str) else pid
-                for pid in game.player_user_ids
-            ]
+        player_user_ids = _ensure_four_slots(game.player_user_ids, None)
+        game.player_user_ids = [
+            str(pid) if pid is not None and not isinstance(pid, str) else pid
+            for pid in player_user_ids
+        ]
 
         # Check if seat is already taken
         # Compare as strings since JSON stores UUIDs as strings
@@ -325,16 +372,7 @@ class GameService:
         if not game:
             return None
 
-        # Validation: bids must be 4 values, each 0-13
-        if len(bids) != 4 or not all(0 <= bid <= 13 for bid in bids):
-            raise ValueError("Invalid bids: must be 4 values, each between 0 and 13")
-
-        # Validation: sum of bids cannot equal 13 (game rule)
-        total_bids = sum(bids)
-        if total_bids == 13:
-            raise ValueError(
-                "Invalid bids: total bids cannot equal 13. Must be more or less than 13."
-            )
+        _validate_bids(bids)
 
         # Game state is updated when tricks are submitted
         # This method just validates and returns current game state
@@ -365,22 +403,8 @@ class GameService:
         if not game:
             return None
 
-        # Validation: tricks must be 4 values, each 0-13, sum = 13
-        if len(tricks) != 4 or not all(0 <= trick <= 13 for trick in tricks):
-            raise ValueError("Invalid tricks: must be 4 values, each between 0 and 13")
-        if sum(tricks) != 13:
-            raise ValueError(f"Invalid tricks: sum must be 13, got {sum(tricks)}")
-
-        # Validation: bids must be 4 values, each 0-13
-        if len(bids) != 4 or not all(0 <= bid <= 13 for bid in bids):
-            raise ValueError("Invalid bids: must be 4 values, each between 0 and 13")
-
-        # Validation: sum of bids cannot equal 13 (game rule)
-        total_bids = sum(bids)
-        if total_bids == 13:
-            raise ValueError(
-                "Invalid bids: total bids cannot equal 13. Must be more or less than 13."
-            )
+        _validate_tricks(tricks)
+        _validate_bids(bids)
 
         # Create round with calculated scores
         round_obj = self.round_service.create_round(
@@ -392,12 +416,10 @@ class GameService:
             created_by=created_by,
         )
 
-        # Update game scores and round number
-        round_scores = round_obj.scores
-        new_scores = [game.scores[i] + round_scores[i] for i in range(4)]
+        game_scores = _ensure_four_slots(game.scores, 0)
+        round_scores = _ensure_four_slots(round_obj.scores, 0)
+        new_scores = [game_scores[i] + round_scores[i] for i in range(NUM_PLAYERS)]
         new_round = game.current_round + 1
-
-        from app.schemas.game import GameUpdate
 
         updated_game = await self.update_game(
             game_id, GameUpdate(scores=new_scores, current_round=new_round)
