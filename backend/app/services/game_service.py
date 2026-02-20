@@ -389,8 +389,9 @@ class GameService:
             created_by=created_by,
         )
 
-        round_scores = round_obj.scores
-        new_scores = [game.scores[i] + round_scores[i] for i in range(NUM_PLAYERS)]
+        game_scores = _ensure_four_slots(game.scores, 0)
+        round_scores = _ensure_four_slots(round_obj.scores, 0)
+        new_scores = [game_scores[i] + round_scores[i] for i in range(NUM_PLAYERS)]
         new_round = game.current_round + 1
 
         updated_game = await self.update_game(
