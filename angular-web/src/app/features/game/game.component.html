@@ -69,8 +69,11 @@
   <app-score-table
     *ngIf="showScoreTable"
     [gameState]="gameState"
+    [isGameOwner]="isGameOwner"
+    [currentPlayerIndex]="currentPlayerIndex"
+    [currentUserId]="currentUserId"
     (dismiss)="showScoreTable = false"
-    (resetRequested)="resetGame()"
+    (deleteRequested)="onDeleteGameRequested()"
   ></app-score-table>
 
   <!-- Round Summary Modal -->

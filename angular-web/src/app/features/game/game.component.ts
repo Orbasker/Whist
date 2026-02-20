@@ -34,6 +34,8 @@ export class GameComponent implements OnInit, OnDestroy {
   rounds: Round[] = [];
   showRoundHistory = false;
   currentPlayerIndex: number | null = null;
+  isGameOwner = false;
+  currentUserId: string | null = null;
   private gameId: string | null = null;
 
   private subscriptions = new Subscription();
@@ -52,8 +54,15 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptions.add(
-      this.gameService.getGameState().subscribe((state) => {
+      this.gameService.getGameState().subscribe(async (state) => {
         this.gameState = state;
+        this.updateCurrentUserId();
+        if (state) {
+          this.isGameOwner = await this.gameService.isGameOwnerAsync();
+        }
+        if (state && this.gameId && state.id === this.gameId && state.current_round === 1) {
+          this.rounds = await this.gameService.getRounds(this.gameId);
+        }
       })
     );
 
@@ -66,8 +75,19 @@ export class GameComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.gameService.getCurrentPlayerIndex$().subscribe((index) => {
         this.currentPlayerIndex = index;
+        this.updateCurrentUserId();
       })
     );
+  }
+
+  private updateCurrentUserId() {
+    const game = this.gameState;
+    if (game?.player_user_ids && this.currentPlayerIndex != null) {
+      const id = game.player_user_ids[this.currentPlayerIndex];
+      this.currentUserId = id != null ? String(id).trim() : null;
+    } else {
+      this.currentUserId = null;
+    }
   }
 
   ngOnDestroy() {
@@ -119,7 +139,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.showRoundSummary = false;
   }
 
-  async resetGame() {
+  async onDeleteGameRequested() {
     if (this.gameState) {
       await this.gameService.deleteGameAsync(this.gameState.id);
       localStorage.removeItem('whist_game_id');

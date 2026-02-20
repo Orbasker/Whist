@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
   isAuthenticated = false;
   userName: string | null = null;
   userEmail: string | null = null;
+  userId: string | null = null;
   games: any[] = [];
   loading = false;
   showNewGameForm = false;
@@ -65,6 +66,8 @@ export class HomeComponent implements OnInit {
       if (user) {
         this.userName = user.name || null;
         this.userEmail = user.email || null;
+        const id = (user as any).id ?? (user as any).user_id ?? (user as any).sub;
+        this.userId = id ? String(id).trim() : null;
       }
       await this.loadGames();
     }
@@ -204,7 +207,24 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  isGameOwner(_game: unknown): boolean {
-    return true;
+  isGameOwner(game: { owner_id?: string | null }): boolean {
+    if (!game?.owner_id || !this.userId) return false;
+    return String(game.owner_id).trim() === this.userId;
+  }
+
+  async deleteGame(gameId: string, event: Event) {
+    event.stopPropagation();
+    if (!confirm('האם אתה בטוח שברצונך למחוק את המשחק?')) return;
+    try {
+      await this.gameService.deleteGameAsync(gameId);
+      await this.loadGames();
+      if (localStorage.getItem('whist_game_id') === gameId) {
+        localStorage.removeItem('whist_game_id');
+        this.router.navigate(['/']);
+      }
+    } catch (err: any) {
+      console.error('Failed to delete game:', err);
+      alert(err?.message || 'לא ניתן למחוק את המשחק.');
+    }
   }
 }
