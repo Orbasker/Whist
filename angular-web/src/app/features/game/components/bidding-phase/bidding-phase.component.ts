@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { TrumpSelectorComponent } from '../../../../shared/components/trump-selector/trump-selector.component';
 import { BidInputGridComponent } from '../../../../shared/components/bid-input-grid/bid-input-grid.component';
 import { GameService } from '../../../../core/services/game.service';
+import { GameState } from '../../../../core/models/game-state.model';
 
 @Component({
   selector: 'app-bidding-phase',
@@ -23,7 +24,7 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
   currentPlayerIndex: number | null = null;
   lockedBids: Set<number> = new Set();
   isGameOwner: boolean = false;
-  gameState: any = null;
+  gameState: GameState | null = null;
   private subscriptions = new Subscription();
 
   constructor(private gameService: GameService) {}

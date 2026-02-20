@@ -111,38 +111,43 @@ export class AuthService {
         return null;
       }
 
-      const sessionAny = session as any;
+      type SessionLike = {
+        data?: { session?: { token?: string; accessToken?: string }; token?: string };
+        session?: { token?: string };
+        token?: string;
+      };
+      const s = session as SessionLike;
 
-      if (sessionAny?.data?.session?.token) {
-        return sessionAny.data.session.token;
+      if (s?.data?.session?.token) {
+        return s.data.session.token;
       }
 
-      if (sessionAny?.data?.session?.accessToken) {
-        return sessionAny.data.session.accessToken;
+      if (s?.data?.session?.accessToken) {
+        return s.data.session.accessToken;
       }
 
-      if (sessionAny?.data?.token) {
-        const token = sessionAny.data.token;
+      if (s?.data?.token) {
+        const token = s.data.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
           return token;
         }
       }
 
-      if (sessionAny?.session?.token) {
-        const token = sessionAny.session.token;
+      if (s?.session?.token) {
+        const token = s.session.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
           return token;
         }
       }
 
-      if (sessionAny?.token) {
-        const token = sessionAny.token;
+      if (s?.token) {
+        const token = s.token;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
           return token;
         }
       }
 
-      const findTokenInObject = (obj: any): string | null => {
+      const findTokenInObject = (obj: unknown): string | null => {
         if (!obj || typeof obj !== 'object') return null;
 
         for (const [, value] of Object.entries(obj)) {
@@ -158,7 +163,7 @@ export class AuthService {
         return null;
       };
 
-      const foundToken = findTokenInObject(sessionAny);
+      const foundToken = findTokenInObject(s);
       if (foundToken) {
         return foundToken;
       }
@@ -182,9 +187,10 @@ export class AuthService {
         // Continue to next option
       }
 
-      const clientAny = this.authClient as any;
-      if (clientAny._token || clientAny.token || clientAny.accessToken) {
-        const token = clientAny._token || clientAny.token || clientAny.accessToken;
+      type ClientLike = { _token?: string; token?: string; accessToken?: string };
+      const clientLike = this.authClient as ClientLike;
+      if (clientLike._token || clientLike.token || clientLike.accessToken) {
+        const token = clientLike._token || clientLike.token || clientLike.accessToken;
         if (typeof token === 'string' && token.startsWith('eyJ')) {
           return token;
         }

@@ -87,9 +87,9 @@ export class InvitationFormComponent {
       } else {
         this.errorMessage = 'לא הצלחנו לשלוח את ההזמנות. אנא נסה שוב.';
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error sending invitations:', error);
-      this.errorMessage = error?.message || 'שגיאה בשליחת ההזמנות';
+      this.errorMessage = (error instanceof Error ? error.message : null) || 'שגיאה בשליחת ההזמנות';
     } finally {
       this.sending = false;
     }
