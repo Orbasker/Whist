@@ -178,7 +178,7 @@ export class AuthService {
             }
           }
         }
-      } catch (e) {
+      } catch {
         // Continue to next option
       }
 

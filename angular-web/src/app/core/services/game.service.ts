@@ -176,11 +176,11 @@ export class GameService {
           const payload = JSON.parse(atob(parts[1]));
           const userId = payload.sub || payload.user_id || payload.id;
           return userId ? String(userId).trim() : null;
-        } catch (e) {
+        } catch {
           return null;
         }
       }
-    } catch (e) {
+    } catch {
       return null;
     }
     return null;
@@ -540,7 +540,7 @@ export class GameService {
             }
           }
         }
-      } catch (error) {
+      } catch {
         // Silently continue if rounds can't be fetched
       }
     }
