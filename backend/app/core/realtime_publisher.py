@@ -2,7 +2,7 @@
 
 When SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set, broadcast messages
 are also sent to Supabase so clients can subscribe via Supabase Realtime
-instead of (or in addition to) WebSockets. See docs/plan/managed-realtime-implementation.md.
+instead of (or in addition to) WebSockets.
 """
 
 import logging
