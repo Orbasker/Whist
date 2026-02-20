@@ -2,16 +2,25 @@
 
 import json
 import logging
-from uuid import UUID
+from urllib.parse import parse_qs
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, status
 
+from app.core.auth import verify_token_with_jwks
 from app.core.websocket_manager import connection_manager
 from app.services.game_service import GameService
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/ws", tags=["websocket"])
+
+
+def _get_token_from_scope(websocket: WebSocket) -> str | None:
+    """Extract token from WebSocket query string (?token=...)."""
+    qs = websocket.scope.get("query_string", b"").decode("utf-8")
+    params = parse_qs(qs)
+    tokens = params.get("token", [])
+    return tokens[0] if tokens else None
 
 
 @router.websocket("/games/{game_id}")
@@ -21,6 +30,9 @@ async def websocket_endpoint(
 ):
     """
     WebSocket endpoint for real-time game state updates and commands.
+
+    Requires authentication: pass JWT in query string, e.g. /ws/games/{game_id}?token=<jwt>.
+    The user must be a participant (owner or player) in the game.
 
     Clients connect to this endpoint to:
     - Receive game state updates (broadcasted to all clients)
@@ -32,28 +44,63 @@ async def websocket_endpoint(
         "data": { ... }
     }
     """
+    from uuid import UUID
+
     try:
         game_uuid = UUID(game_id)
     except ValueError:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
         return
 
-    await connection_manager.connect(websocket, game_id)
+    await websocket.accept()
+
+    token = _get_token_from_scope(websocket)
+    if not token:
+        await websocket.send_text(
+            json.dumps({"type": "error", "message": "Authentication required"})
+        )
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
+
+    try:
+        payload = await verify_token_with_jwks(token)
+    except Exception:
+        await websocket.send_text(
+            json.dumps({"type": "error", "message": "Invalid or expired token"})
+        )
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
+
+    user_id_str = payload.get("sub")
+    if not user_id_str:
+        await websocket.send_text(json.dumps({"type": "error", "message": "Invalid token"}))
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
 
     from app.database.connection import SessionLocal
     from app.repositories.game_repository import GameRepository
     from app.repositories.round_repository import RoundRepository
 
     db = SessionLocal()
+    game_repo = GameRepository(db)
+    round_repo = RoundRepository(db)
+    from app.services.round_service import RoundService as RS
+
+    round_service = RS(db, round_repo)
+    game_service = GameService(db, game_repo, round_service)
+
+    participant_game = await game_service.get_game_if_participant(game_uuid, UUID(user_id_str))
+    if not participant_game:
+        db.close()
+        await websocket.send_text(
+            json.dumps({"type": "error", "message": "Access denied to this game"})
+        )
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
+
+    await connection_manager.connect(websocket, game_id)
 
     try:
-        game_repo = GameRepository(db)
-        round_repo = RoundRepository(db)
-        from app.services.round_service import RoundService as RS
-
-        round_service = RS(db, round_repo)
-        game_service = GameService(db, game_repo, round_service)
-
         game = await game_service.get_game(game_uuid)
         if game:
             rounds = round_repo.get_by_game_id(game_uuid)
