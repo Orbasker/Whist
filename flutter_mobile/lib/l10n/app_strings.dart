@@ -102,6 +102,31 @@ class AppStrings {
   static const invitationsSendFailed =
       "We couldn't send the invitations. Please try again.";
 
+  // Bidding phase (game.biddingPhase)
+  static const biddingPhaseTitle = 'Bids';
+  static const biddingPhaseSubtitle = 'Choose trump and bid for each player';
+  static const biddingPhaseTrump = 'Trump';
+  static const biddingPhaseTotalBids = 'Total bids';
+  static const biddingPhaseCannotBid13 = 'Cannot bid exactly 13 - must be over or under';
+  static String biddingPhaseUnderMode(int diff) => 'Under mode - $diff tricks short';
+  static String biddingPhaseOverMode(int diff) => 'Over mode - $diff tricks extra';
+  static const biddingPhaseManager = 'Manager';
+  static const biddingPhaseYou = '(you)';
+  static const biddingPhaseLocked = 'Locked';
+  static const biddingPhaseChoice = '(choice)';
+  static const biddingPhaseTricks = 'tricks';
+  static const biddingPhaseCannotEdit = 'Cannot edit - user not identified in game';
+  static const biddingPhaseLockChoice = 'Lock choice';
+  static const biddingPhaseLockPlayerChoice = 'Lock player choice';
+  static const biddingPhaseContinue = 'Continue';
+
+  // Trump options (trump.*)
+  static const trumpNoTrump = 'No trump';
+  static const trumpSpades = 'Spades';
+  static const trumpClubs = 'Clubs';
+  static const trumpDiamonds = 'Diamonds';
+  static const trumpHearts = 'Hearts';
+
   // Tricks phase (game.tricksPhase)
   static const tricksPhaseQuestion = 'How many tricks did each player actually take?';
   static const tricksPhaseTotalTricks = 'Total tricks';

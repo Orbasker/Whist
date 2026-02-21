@@ -33,6 +33,7 @@ class GameService extends ChangeNotifier {
   String? _currentTrumpSuit;
   final Map<int, int> _liveBidSelections = {};
   final Map<int, int> _liveTrickSelections = {};
+  final Set<int> _lockedBids = {};
   String? _liveTrumpSelection;
   String? _realtimeError;
 
@@ -51,6 +52,7 @@ class GameService extends ChangeNotifier {
   Map<int, int> get liveBidSelections => Map.unmodifiable(_liveBidSelections);
   Map<int, int> get liveTrickSelections =>
       Map.unmodifiable(_liveTrickSelections);
+  Set<int> get lockedBids => Set.unmodifiable(_lockedBids);
   String? get liveTrumpSelection => _liveTrumpSelection;
   String? get realtimeError => _realtimeError;
   bool get isRealtimeConnected => _realtime?.isConnected ?? false;
@@ -69,8 +71,8 @@ class GameService extends ChangeNotifier {
   bool get isGameOwner {
     final g = _gameState;
     if (g?.ownerId == null) return false;
-    final o = _normalize(g!.ownerId);
-    if (_currentUserId != null && o == _normalize(_currentUserId)) return true;
+    final o = _normalize(g!.ownerId!);
+    if (_currentUserId != null && o == _normalize(_currentUserId!)) return true;
     return false;
   }
 
@@ -105,6 +107,7 @@ class GameService extends ChangeNotifier {
     _liveBidSelections.clear();
     _liveTrickSelections.clear();
     _liveTrumpSelection = null;
+    _lockedBids.clear();
     _realtimeError = null;
   }
 
@@ -117,8 +120,9 @@ class GameService extends ChangeNotifier {
     if (_realtime != null) {
       _realtimeSubscription?.cancel();
       _realtime!.disconnect();
+      final token = await _api.getToken?.call() ?? _authToken;
       _realtimeSubscription = _realtime!
-          .connect(gameId, token: _authToken)
+          .connect(gameId, token: token)
           .listen(_onRealtimeMessage);
     }
 
@@ -219,8 +223,16 @@ class GameService extends ChangeNotifier {
         }
         break;
       case 'bet_locked':
+        final d = msg.data;
+        if (d != null) {
+          final idx = _intKey(d['player_index']);
+          if (idx != null) {
+            _lockedBids.add(idx);
+            notifyListeners();
+          }
+        }
+        break;
       case 'round_score_locked':
-        // Can be used by UI to show locked state; we don't track locked set here
         break;
       case 'round_result_changed':
         final d = msg.data;
@@ -318,6 +330,31 @@ class GameService extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool isBidLocked(int playerIndex) => _lockedBids.contains(playerIndex);
+
+  bool isPlayerOwner(int playerIndex) {
+    final g = _gameState;
+    if (g?.ownerId == null ||
+        g?.playerUserIds == null ||
+        playerIndex < 0 ||
+        playerIndex >= g!.playerUserIds!.length) {
+      return false;
+    }
+    final playerUserId = g.playerUserIds![playerIndex];
+    if (playerUserId == null) return false;
+    return _normalize(playerUserId) == _normalize(g.ownerId);
+  }
+
+  /// Locks a player's bid over realtime (if allowed). Use after checking [canLockBid] in UI.
+  Future<void> lockBid(int playerIndex) async {
+    if (!isRealtimeConnected) return;
+    if (isBidLocked(playerIndex)) return;
+    final isOwnBid = playerIndex == currentPlayerIndex;
+    if ((isOwnBid && currentPlayerIndex != null) || isGameOwner) {
+      sendBetLocked(playerIndex);
+    }
+  }
+
   // --- Send over realtime (same contract as Angular) ---
 
   void sendSubmitBids(List<int> bids, {String? trumpSuit}) {
@@ -356,7 +393,7 @@ class GameService extends ChangeNotifier {
     });
   }
 
-  void sendTrumpSelection(String trumpSuit) {
+  void sendTrumpSelection(String? trumpSuit) {
     _requireRealtime();
     _realtime!.send({
       'type': 'trump_selection',
