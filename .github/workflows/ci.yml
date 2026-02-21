@@ -107,3 +107,30 @@ jobs:
 
       - name: Angular tests
         run: npm test -- --watch=false --browsers=ChromeHeadless
+
+  # ── Flutter ──────────────────────────────────────────────────────────────────
+  flutter:
+    name: Flutter (Mobile)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flutter_mobile
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.x"
+          channel: "stable"
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Flutter analyze
+        run: flutter analyze
+
+      - name: Flutter test
+        run: flutter test

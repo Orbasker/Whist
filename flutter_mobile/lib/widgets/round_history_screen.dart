@@ -129,7 +129,7 @@ class RoundHistoryScreen extends StatelessWidget {
         ),
         // Header row 2: empty | empty | Bid Took Change Before After (x4 players = 20 cells)
         TableRow(
-          decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.7)),
+          decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.7)),
           children: [
             _pad(const SizedBox(), cellPad),
             _pad(const SizedBox(), cellPad),
@@ -181,7 +181,7 @@ class RoundHistoryScreen extends StatelessWidget {
         // Footer: Total row (one total per player in last column of each block)
         TableRow(
           decoration: BoxDecoration(
-            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+            color: theme.colorScheme.primaryContainer.withOpacity(0.3),
             border: Border(top: BorderSide(color: theme.dividerColor, width: 2)),
           ),
           children: [

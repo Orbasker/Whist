@@ -128,7 +128,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             color: Theme.of(context)
                                 .colorScheme
                                 .errorContainer
-                                .withValues(alpha: 0.3),
+                                .withOpacity(0.3),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(

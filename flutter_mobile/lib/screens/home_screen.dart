@@ -412,7 +412,7 @@ class _GameListTile extends StatelessWidget {
             children: [
               Icon(
                 Icons.emoji_events_outlined,
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
                 size: 32,
               ),
               const SizedBox(width: 12),
