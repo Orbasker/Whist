@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/game_state.dart';
+import '../models/invitation.dart';
 import '../models/round.dart';
 
-/// API client aligned with Angular ApiService and backend routes.
-/// Use [getToken] to supply Bearer token from AuthService (Neon Auth).
+/// HTTP client for Whist backend (games, rounds, invitations).
+/// Uses same API base URL and auth; use [getToken] to supply Bearer token when set.
 class ApiService {
   ApiService({
     required this.baseUrl,
@@ -32,6 +33,8 @@ class ApiService {
     return map;
   }
 
+  // —— Games ——
+
   Future<List<GameState>> listGames() async {
     final r = await http.get(
       Uri.parse('$baseUrl/games'),
@@ -42,13 +45,11 @@ class ApiService {
     return list.map((e) => GameState.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<GameState> createGame(List<String> players, {String? name}) async {
-    final body = <String, dynamic>{'players': players};
-    if (name != null && name.trim().isNotEmpty) body['name'] = name.trim();
+  Future<GameState> createGame(GameCreate body) async {
     final r = await http.post(
       Uri.parse('$baseUrl/games'),
       headers: await _headers,
-      body: jsonEncode(body),
+      body: jsonEncode(body.toJson()),
     );
     _checkResponse(r);
     return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
@@ -63,12 +64,99 @@ class ApiService {
     return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
   }
 
+  Future<GameState> updateGame(String gameId, GameUpdate body) async {
+    final r = await http.put(
+      Uri.parse('$baseUrl/games/$gameId'),
+      headers: await _headers,
+      body: jsonEncode(body.toJson()),
+    );
+    _checkResponse(r);
+    return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
   Future<void> deleteGame(String gameId) async {
     final r = await http.delete(
       Uri.parse('$baseUrl/games/$gameId'),
       headers: await _headers,
     );
     _checkResponse(r);
+  }
+
+  Future<GameState> updatePlayerDisplayName(
+    String gameId,
+    int playerIndex,
+    PlayerDisplayNameUpdate body,
+  ) async {
+    final r = await http.patch(
+      Uri.parse('$baseUrl/games/$gameId/players/$playerIndex'),
+      headers: await _headers,
+      body: jsonEncode(body.toJson()),
+    );
+    _checkResponse(r);
+    return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  Future<GameState> requestReset(String gameId) async {
+    final r = await http.post(
+      Uri.parse('$baseUrl/games/$gameId/reset-request'),
+      headers: await _headers,
+      body: '{}',
+    );
+    _checkResponse(r);
+    return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  Future<GameState> voteReset(String gameId) async {
+    final r = await http.post(
+      Uri.parse('$baseUrl/games/$gameId/reset-vote'),
+      headers: await _headers,
+      body: '{}',
+    );
+    _checkResponse(r);
+    return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  Future<GameState> cancelResetRequest(String gameId) async {
+    final r = await http.delete(
+      Uri.parse('$baseUrl/games/$gameId/reset-request'),
+      headers: await _headers,
+    );
+    _checkResponse(r);
+    return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  // —— Rounds ——
+
+  /// Submit bids for current round. Returns { game, round_mode, total_bids }.
+  Future<Map<String, dynamic>> submitBids(String gameId, RoundCreate body) async {
+    final r = await http.post(
+      Uri.parse('$baseUrl/games/$gameId/rounds/bids'),
+      headers: await _headers,
+      body: jsonEncode(body.toJson()),
+    );
+    _checkResponse(r);
+    final map = jsonDecode(r.body) as Map<String, dynamic>;
+    if (map['game'] != null) {
+      map['game'] = GameState.fromJson(map['game'] as Map<String, dynamic>);
+    }
+    return map;
+  }
+
+  /// Submit tricks and create round. Returns typed result with game and round.
+  Future<SubmitTricksResult> submitTricks(String gameId, TricksSubmit body) async {
+    final r = await http.post(
+      Uri.parse('$baseUrl/games/$gameId/rounds/tricks'),
+      headers: await _headers,
+      body: jsonEncode(body.toJson()),
+    );
+    _checkResponse(r);
+    final map = jsonDecode(r.body) as Map<String, dynamic>;
+    final gameMap = map['game'] as Map<String, dynamic>? ?? map;
+    final roundMap = map['round'] as Map<String, dynamic>?;
+    return SubmitTricksResult(
+      game: GameState.fromJson(gameMap),
+      round: roundMap != null ? Round.fromJson(roundMap) : null,
+    );
   }
 
   Future<List<Round>> getRounds(String gameId) async {
@@ -81,72 +169,53 @@ class ApiService {
     return list.map((e) => Round.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  /// Send invitations for a game. Requires auth; only game owner can invite.
-  /// [playerIndices] optional slot indices (0-3) for each email; if null, assigned sequentially.
+  // —— Invitations ——
+
+  /// Send invitations for a game (DTO). Requires auth; only game owner can invite.
   Future<InvitationResponse> sendInvitations(
+    String gameId,
+    InvitationCreate body,
+  ) async {
+    final r = await http.post(
+      Uri.parse('$baseUrl/invite/games/$gameId/invite'),
+      headers: await _headers,
+      body: jsonEncode(body.toJson()),
+    );
+    _checkResponse(r);
+    return InvitationResponse.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  /// Convenience: send invitations by emails and optional slot indices.
+  /// [playerIndices] optional slot indices (0-3) for each email; if null, assigned sequentially.
+  Future<InvitationResponse> sendInvitationsByEmails(
     String gameId,
     List<String> emails, [
     List<int>? playerIndices,
   ]) async {
-    final body = <String, dynamic>{'emails': emails};
-    if (playerIndices != null) body['player_indices'] = playerIndices;
-    final r = await http.post(
-      Uri.parse('$baseUrl/invite/games/$gameId/invite'),
-      headers: await _headers,
-      body: jsonEncode(body),
-    );
-    _checkResponse(r);
-    return InvitationResponse.fromJson(
-      jsonDecode(r.body) as Map<String, dynamic>,
+    return sendInvitations(
+      gameId,
+      InvitationCreate(emails: emails, playerIndices: playerIndices),
     );
   }
 
-  /// Submit bids for current round. Returns updated game.
-  Future<GameState> submitBids(
-    String gameId,
-    List<int> bids, {
-    String? trumpSuit,
-  }) async {
-    final body = <String, dynamic>{
-      'bids': bids,
-      if (trumpSuit != null && trumpSuit.isNotEmpty) 'trump_suit': trumpSuit,
-    };
-    final r = await http.post(
-      Uri.parse('$baseUrl/games/$gameId/rounds/bids'),
+  /// Get invitation info from token (public, no auth required).
+  Future<InvitationInfo> getInvitationInfo(String token) async {
+    final r = await http.get(
+      Uri.parse('$baseUrl/invite/$token'),
       headers: await _headers,
-      body: jsonEncode(body),
     );
     _checkResponse(r);
-    final map = jsonDecode(r.body) as Map<String, dynamic>;
-    final game = map['game'] as Map<String, dynamic>? ?? map;
-    return GameState.fromJson(game);
+    return InvitationInfo.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
   }
 
-  /// Submit tricks for current round. Returns updated game and the created round.
-  Future<SubmitTricksResult> submitTricks(
-    String gameId,
-    List<int> tricks,
-    List<int> bids, {
-    String? trumpSuit,
-  }) async {
-    final body = <String, dynamic>{
-      'tricks': tricks,
-      'bids': bids,
-      if (trumpSuit != null && trumpSuit.isNotEmpty) 'trump_suit': trumpSuit,
-    };
+  Future<InvitationAcceptResponse> acceptInvitation(String token) async {
     final r = await http.post(
-      Uri.parse('$baseUrl/games/$gameId/rounds/tricks'),
+      Uri.parse('$baseUrl/invite/$token/accept'),
       headers: await _headers,
-      body: jsonEncode(body),
+      body: '{}',
     );
     _checkResponse(r);
-    final map = jsonDecode(r.body) as Map<String, dynamic>;
-    final gameMap = map['game'] as Map<String, dynamic>? ?? map;
-    final roundMap = map['round'] as Map<String, dynamic>?;
-    return SubmitTricksResult(
-      game: GameState.fromJson(gameMap),
-      round: roundMap != null ? Round.fromJson(roundMap) : null,
-    );
+    return InvitationAcceptResponse.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
   }
 
   void _checkResponse(http.Response r) {
@@ -162,19 +231,6 @@ class ApiException implements Exception {
   final String body;
   @override
   String toString() => 'ApiException($statusCode): $body';
-}
-
-/// Response from POST /invite/games/:gameId/invite
-class InvitationResponse {
-  const InvitationResponse({required this.sent, required this.total});
-  final int sent;
-  final int total;
-  factory InvitationResponse.fromJson(Map<String, dynamic> json) {
-    return InvitationResponse(
-      sent: json['sent'] as int,
-      total: json['total'] as int,
-    );
-  }
 }
 
 /// Result of submitTricks: updated game and the round that was created.

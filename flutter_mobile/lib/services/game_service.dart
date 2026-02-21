@@ -97,7 +97,7 @@ class GameService extends ChangeNotifier {
   }
 
   Future<GameState> createGame(List<String> players, {String? name}) async {
-    final game = await _api.createGame(players, name: name);
+    final game = await _api.createGame(GameCreate(players: players, name: name));
     _gameState = game;
     _rounds = await _api.getRounds(game.id);
     return game;
@@ -136,7 +136,11 @@ class GameService extends ChangeNotifier {
     List<int> bids, {
     String? trumpSuit,
   }) async {
-    final game = await _api.submitBids(gameId, bids, trumpSuit: trumpSuit);
+    final result = await _api.submitBids(
+      gameId,
+      RoundCreate(bids: bids, trumpSuit: trumpSuit),
+    );
+    final game = result['game'] as GameState;
     if (_gameState?.id == gameId) {
       _gameState = game;
       _phase = GamePhase.tricks;
@@ -156,9 +160,11 @@ class GameService extends ChangeNotifier {
     }
     final result = await _api.submitTricks(
       gameId,
-      tricks,
-      bids,
-      trumpSuit: _currentTrumpSuit,
+      TricksSubmit(
+        tricks: tricks,
+        bids: bids,
+        trumpSuit: _currentTrumpSuit,
+      ),
     );
     if (_gameState?.id != gameId) return result.round;
     _gameState = result.game;

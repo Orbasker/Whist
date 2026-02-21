@@ -116,7 +116,7 @@ class _InvitationFormState extends State<InvitationForm> {
     });
 
     try {
-      final result = await widget.api.sendInvitations(
+      final result = await widget.api.sendInvitationsByEmails(
         widget.gameId,
         emails,
         indices.isEmpty ? null : indices,
