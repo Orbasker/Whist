@@ -16,7 +16,7 @@
       type="button"
       (click)="onClose()"
       [attr.aria-label]="'common.close' | translate"
-      class="score-table-close"
+      class="btn btn-icon score-table-close"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -44,7 +44,7 @@
                   *ngIf="canEditPlayerName(i)"
                   type="button"
                   (click)="startEditName(i)"
-                  class="min-h-touch min-w-touch inline-flex items-center justify-center text-amber-400 hover:text-amber-300 p-1 -m-1"
+                  class="btn btn-icon bg-transparent text-amber-400 hover:text-amber-300 p-1 -m-1"
                   [title]="'game.scoreTable.editNameTitle' | translate"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,11 +91,7 @@
         </h3>
         <p class="text-slate-400 text-xs">{{ 'game.scoreTable.resetDescription' | translate }}</p>
         <div *ngIf="!resetRequestedAt" class="flex gap-2">
-          <button
-            (click)="onRequestReset()"
-            [disabled]="resetLoading"
-            class="bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
-          >
+          <button (click)="onRequestReset()" [disabled]="resetLoading" class="btn btn-primary">
             {{ 'game.scoreTable.proposeReset' | translate }}
           </button>
         </div>
@@ -110,7 +106,7 @@
             *ngIf="!hasVotedReset"
             (click)="onVoteReset()"
             [disabled]="resetLoading"
-            class="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors"
+            class="btn btn-success"
           >
             {{ 'game.scoreTable.voteYes' | translate }}
           </button>
@@ -121,7 +117,7 @@
             *ngIf="isGameOwner"
             (click)="onCancelResetRequest()"
             [disabled]="resetLoading"
-            class="mr-2 bg-slate-600 hover:bg-slate-500 text-white text-sm py-2 px-4 rounded-lg transition-colors"
+            class="btn btn-secondary mr-2"
           >
             {{ 'game.scoreTable.cancelReset' | translate }}
           </button>
@@ -130,17 +126,10 @@
     </div>
 
     <div class="flex flex-wrap gap-2 mt-4">
-      <button
-        *ngIf="isGameOwner"
-        (click)="onDeleteGame()"
-        class="min-h-touch bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm"
-      >
+      <button *ngIf="isGameOwner" (click)="onDeleteGame()" class="btn btn-danger">
         {{ 'game.scoreTable.deleteGame' | translate }}
       </button>
-      <button
-        (click)="onClose()"
-        class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm"
-      >
+      <button (click)="onClose()" class="btn btn-secondary">
         {{ 'common.close' | translate }}
       </button>
     </div>
