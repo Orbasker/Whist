@@ -13,6 +13,7 @@ import { InvitationService } from '../../core/services/invitation.service';
 import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
 import { UiBadgeComponent } from '../../shared/components/ui/badge/badge.component';
 import { UiButtonComponent } from '../../shared/components/ui/button/button.component';
 import {
@@ -37,6 +38,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     InvitationFormComponent,
     TranslateModule,
     ModalComponent,
+    ConfirmModalComponent,
     UiBadgeComponent,
     UiButtonComponent,
     UiCardComponent,
@@ -67,6 +69,8 @@ export class HomeComponent implements OnInit {
   invitationSuccess: string | null = null;
   /** Game shown in the trophy quick-look modal (score preview only). */
   quickLookGame: GameState | null = null;
+  showDeleteConfirm = false;
+  deleteGameIdPending: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -165,9 +169,7 @@ export class HomeComponent implements OnInit {
         const gameName = this.newGameName.trim() || undefined;
         const game = await this.gameService.createGame(players, gameName);
         localStorage.setItem('whist_game_id', game.id);
-        this.playerForm.reset();
-        this.newGameName = '';
-        this.showNewGameForm = false;
+        this.closeNewGameForm();
         await this.loadGames();
         this.router.navigate(['/game']);
       } catch (error: unknown) {
@@ -210,10 +212,22 @@ export class HomeComponent implements OnInit {
 
   toggleNewGameForm() {
     this.showNewGameForm = !this.showNewGameForm;
-    if (!this.showNewGameForm) {
+    if (this.showNewGameForm) {
+      const creatorName =
+        this.userName || this.userEmail || this.translate.instant('home.creatorSeatLabel');
+      this.playerForm.patchValue({
+        player1: creatorName,
+      });
+    } else {
       this.playerForm.reset();
       this.newGameName = '';
     }
+  }
+
+  closeNewGameForm() {
+    this.showNewGameForm = false;
+    this.playerForm.reset();
+    this.newGameName = '';
   }
 
   getGameDisplayName(game: GameState): string {
@@ -278,9 +292,21 @@ export class HomeComponent implements OnInit {
     return String(game.owner_id).trim() === this.userId;
   }
 
-  async deleteGame(gameId: string, event: Event) {
+  openDeleteConfirm(gameId: string, event: Event) {
     event.stopPropagation();
-    if (!confirm(this.translate.instant('home.confirmDeleteGame'))) return;
+    this.deleteGameIdPending = gameId;
+    this.showDeleteConfirm = true;
+  }
+
+  closeDeleteConfirm() {
+    this.showDeleteConfirm = false;
+    this.deleteGameIdPending = null;
+  }
+
+  async doDeleteGame() {
+    const gameId = this.deleteGameIdPending;
+    this.closeDeleteConfirm();
+    if (!gameId) return;
     try {
       await this.gameService.deleteGameAsync(gameId);
       await this.loadGames();

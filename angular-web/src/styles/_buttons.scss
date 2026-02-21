@@ -1,0 +1,122 @@
+/* Shared button styles: same size/height and visual weight across the app */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--btn-min-height);
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  font-weight: var(--btn-font-weight);
+  font-size: 0.9375rem;
+  line-height: 1.25;
+  border-radius: var(--btn-radius);
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    opacity 0.2s;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Icon-only button: square touch target */
+.btn-icon {
+  min-width: var(--btn-min-height);
+  padding: 0.25rem;
+}
+
+.btn-primary {
+  background: #d97706; /* amber-600 */
+  color: white;
+  &:hover:not(:disabled) {
+    background: #f59e0b; /* amber-500 */
+  }
+  &:disabled {
+    background: var(--bg-tertiary);
+  }
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  &:hover:not(:disabled) {
+    background: #475569;
+  }
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+  &:hover:not(:disabled) {
+    background: #ef4444;
+  }
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white;
+  &:hover:not(:disabled) {
+    background: #22c55e;
+  }
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--accent-secondary);
+  &:hover:not(:disabled) {
+    color: var(--accent-primary);
+  }
+}
+
+/* Compact action buttons in lists (invite, delete) – same height, slightly smaller padding */
+.btn-compact {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  min-height: var(--btn-min-height);
+}
+
+/* Game card actions: same size for Invite, Delete, Active/Completed – color only differs */
+.game-card-action {
+  min-width: 7rem;
+}
+
+.game-card-action-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7rem;
+  min-height: var(--btn-min-height);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: var(--btn-font-weight);
+  line-height: 1.25;
+  border-radius: var(--btn-radius);
+  color: white;
+}
+
+/* Narrow screens: smaller min-width so three actions fit without squishing content */
+@media (max-width: 480px) {
+  .game-card-action,
+  .game-card-action-pill {
+    min-width: 5.25rem;
+  }
+  .game-card-action-pill {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  .game-card-action.btn-compact {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}

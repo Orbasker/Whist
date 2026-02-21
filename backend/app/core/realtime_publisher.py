@@ -1,8 +1,9 @@
 """Optional publisher for Supabase Realtime Broadcast API.
 
-When SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set, broadcast messages
-are also sent to Supabase so clients can subscribe via Supabase Realtime
-instead of (or in addition to) WebSockets.
+When the frontend uses Supabase Realtime, the backend must have SUPABASE_URL and
+SUPABASE_SERVICE_ROLE_KEY set in its environment (e.g. backend/.env). Then REST
+calls (submit_bids, submit_tricks) will publish game_update/phase_update to the
+Supabase channel so all connected clients see changes in real time.
 """
 
 import logging

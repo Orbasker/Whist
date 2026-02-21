@@ -3,7 +3,9 @@
     "cancel": "Cancel",
     "close": "Close",
     "saving": "Saving...",
-    "you": "you"
+    "you": "you",
+    "confirmDelete": "Confirm delete",
+    "delete": "Delete"
   },
   "footer": {
     "language": "Language",
@@ -39,6 +41,7 @@
     "gameNamePlaceholder": "e.g. Family game",
     "playerNames": "Player names",
     "player": "Player",
+    "creatorSeatLabel": "You (creator)",
     "startGame": "Start game",
     "invitationsSentSuccess": "{{sent}} of {{total}} invitations sent successfully!",
     "invitationsSendFailed": "We couldn't send the invitations. Please try again.",
@@ -156,6 +159,7 @@
     },
     "roundSummary": {
       "title": "Round summary",
+      "playerTotals": "Player totals",
       "bidTook": "Bid {{bid}}, took {{took}}",
       "total": "Total",
       "continueNext": "Continue to next round"

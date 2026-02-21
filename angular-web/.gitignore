@@ -45,3 +45,6 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Generated dev environment (contains values from .env; template is environment.ts.example)
+src/environments/environment.ts

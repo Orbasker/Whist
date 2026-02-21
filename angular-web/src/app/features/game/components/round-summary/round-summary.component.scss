@@ -1,0 +1,30 @@
+/* Results layout: sticky header + scrollable totals (matches bids pattern) */
+.round-summary-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.round-summary-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sticky header stays visible when scrolling totals */
+.round-summary-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-secondary);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.round-summary-continue {
+  flex-shrink: 0;
+  margin-top: 1rem;
+}

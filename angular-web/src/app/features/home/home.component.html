@@ -101,10 +101,10 @@
                 class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground"
               >
                 <span>{{ 'home.round' | translate }} {{ game.current_round }}</span>
-                <span>•</span>
+                <span class="text-slate-600" aria-hidden="true">•</span>
                 <span>{{ 'home.score' | translate }}: {{ game.scores.join(' - ') }}</span>
-                <span>•</span>
-                <span>{{ formatDate(game.updated_at) }}</span>
+                <span class="text-slate-600" aria-hidden="true">•</span>
+                <span class="truncate">{{ formatDate(game.updated_at) }}</span>
               </div>
             </div>
             <!-- Actions: same-size icon buttons -->
@@ -128,7 +128,7 @@
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
-                (click)="deleteGame(game.id, $event)"
+                (click)="openDeleteConfirm(game.id, $event)"
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/80 text-destructive transition-colors hover:bg-destructive/20"
                 [attr.aria-label]="'home.deleteGame' | translate"
               >
@@ -239,6 +239,17 @@
         (playerNameUpdated)="onPlayerNameUpdated($event)"
       ></app-invitation-form>
     </app-modal>
+
+    <!-- Delete game confirmation -->
+    <app-confirm-modal
+      *ngIf="showDeleteConfirm"
+      [title]="'common.confirmDelete' | translate"
+      [message]="'home.confirmDeleteGame' | translate"
+      [confirmLabel]="'common.delete' | translate"
+      [cancelLabel]="'common.cancel' | translate"
+      (confirmed)="doDeleteGame()"
+      (cancelled)="closeDeleteConfirm()"
+    ></app-confirm-modal>
 
     <!-- New Game Form (shown when showNewGameForm is true) -->
     <app-ui-card *ngIf="showNewGameForm" class="shadow-xl">

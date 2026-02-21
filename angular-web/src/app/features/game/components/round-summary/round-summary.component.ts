@@ -9,6 +9,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
   standalone: true,
   imports: [CommonModule, TranslateModule, ModalComponent],
   templateUrl: './round-summary.component.html',
+  styleUrl: './round-summary.component.scss',
 })
 export class RoundSummaryComponent {
   @Input() results: RoundSummaryResults | null = null;

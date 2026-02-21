@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build:prod": "node scripts/replace-env.js src/environments/environment.prod.ts && ng build --configuration production",
-    "build:staging": "node scripts/replace-env.js src/environments/environment.staging.ts && ng build --configuration staging",
-    "watch": "ng build --watch --configuration development",
+    "start": "node scripts/replace-env.js src/environments/environment.ts && ng serve",
+    "build": "node scripts/replace-env.js src/environments/environment.ts && ng build",
+    "build:prod": "node scripts/replace-env.js src/environments/environment.ts && node scripts/replace-env.js src/environments/environment.prod.ts && ng build --configuration production",
+    "build:staging": "node scripts/replace-env.js src/environments/environment.ts && node scripts/replace-env.js src/environments/environment.staging.ts && ng build --configuration staging",
+    "watch": "node scripts/replace-env.js src/environments/environment.ts && ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint \"src/**/*.ts\" --max-warnings=0",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,css}\""
@@ -31,6 +31,7 @@
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
+    "dotenv": "^16.4.5",
     "@angular-devkit/build-angular": "^18.0.0",
     "@angular-eslint/builder": "^18.0.0",
     "@angular-eslint/eslint-plugin": "^18.0.0",

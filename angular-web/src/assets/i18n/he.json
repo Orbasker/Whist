@@ -3,7 +3,9 @@
     "cancel": "ביטול",
     "close": "סגור",
     "saving": "שומר...",
-    "you": "אתה"
+    "you": "אתה",
+    "confirmDelete": "אישור מחיקה",
+    "delete": "מחק"
   },
   "footer": {
     "language": "שפה",
@@ -39,6 +41,7 @@
     "gameNamePlaceholder": "לדוגמה: משחק עם המשפחה",
     "playerNames": "שמות השחקנים",
     "player": "שחקן",
+    "creatorSeatLabel": "אתה (יוצר המשחק)",
     "startGame": "התחל משחק",
     "invitationsSentSuccess": "נשלחו {{sent}} מתוך {{total}} הזמנות בהצלחה!",
     "invitationsSendFailed": "לא הצלחנו לשלוח את ההזמנות. אנא נסה שוב.",
@@ -156,6 +159,7 @@
     },
     "roundSummary": {
       "title": "סיכום סיבוב",
+      "playerTotals": "סיכום שחקנים",
       "bidTook": "הימר {{bid}}, לקח {{took}}",
       "total": "סה\"כ",
       "continueNext": "המשך לסיבוב הבא"
