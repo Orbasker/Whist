@@ -145,9 +145,7 @@ export class HomeComponent implements OnInit {
         const gameName = this.newGameName.trim() || undefined;
         const game = await this.gameService.createGame(players, gameName);
         localStorage.setItem('whist_game_id', game.id);
-        this.playerForm.reset();
-        this.newGameName = '';
-        this.showNewGameForm = false;
+        this.closeNewGameForm();
         await this.loadGames();
         this.router.navigate(['/game']);
       } catch (error: unknown) {
@@ -183,6 +181,12 @@ export class HomeComponent implements OnInit {
       this.playerForm.reset();
       this.newGameName = '';
     }
+  }
+
+  closeNewGameForm() {
+    this.showNewGameForm = false;
+    this.playerForm.reset();
+    this.newGameName = '';
   }
 
   getGameDisplayName(game: GameState): string {
