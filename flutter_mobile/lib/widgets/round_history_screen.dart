@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../l10n/app_strings.dart';
+import '../l10n/app_localizations.dart';
 import '../models/round.dart';
 
 /// Round history: table with round, trump, bid/took/change/before/after per player, total row. Aligned with Angular round-history.
@@ -58,19 +58,20 @@ class RoundHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.roundHistoryTitle),
+        title: Text(l10n.roundHistoryTitle),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: onClose,
-          tooltip: AppStrings.close,
+          tooltip: l10n.close,
         ),
       ),
       body: rounds.isEmpty
           ? Center(
               child: Text(
-                AppStrings.roundsEmpty,
+                l10n.roundsEmpty,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -81,14 +82,14 @@ class RoundHistoryScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: _buildTable(theme),
+                  child: _buildTable(context, theme),
                 ),
               ),
             ),
     );
   }
 
-  Widget _buildTable(ThemeData theme) {
+  Widget _buildTable(BuildContext context, ThemeData theme) {
     const cellPad = EdgeInsets.symmetric(horizontal: 8, vertical: 10);
     const headerStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 12);
     const cellStyle = TextStyle(fontSize: 12);
@@ -104,8 +105,8 @@ class RoundHistoryScreen extends StatelessWidget {
         TableRow(
           decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest),
           children: [
-            _pad(Text(AppStrings.roundCol, style: headerStyle), cellPad),
-            _pad(Text(AppStrings.cardCol, style: headerStyle), cellPad),
+            _pad(Text(AppLocalizations.of(context)!.roundCol, style: headerStyle), cellPad),
+            _pad(Text(AppLocalizations.of(context)!.cardCol, style: headerStyle), cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final pi = c ~/ colsPerPlayer;
               if (c % colsPerPlayer != 0 || pi >= players.length) return _pad(const SizedBox(), cellPad);
@@ -117,7 +118,7 @@ class RoundHistoryScreen extends StatelessWidget {
                     if (isCurrentPlayer(pi))
                       Padding(
                         padding: const EdgeInsets.only(left: 4),
-                        child: Text('(${AppStrings.you})', style: TextStyle(fontSize: 10, color: theme.colorScheme.primary)),
+                        child: Text('(${AppLocalizations.of(context)!.you})', style: TextStyle(fontSize: 10, color: theme.colorScheme.primary)),
                       ),
                   ],
                 ),
@@ -133,7 +134,8 @@ class RoundHistoryScreen extends StatelessWidget {
             _pad(const SizedBox(), cellPad),
             _pad(const SizedBox(), cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
-              final labels = [AppStrings.bidCol, AppStrings.tookCol, AppStrings.changeCol, AppStrings.beforeCol, AppStrings.afterCol];
+              final l10n = AppLocalizations.of(context)!;
+              final labels = [l10n.bidCol, l10n.tookCol, l10n.changeCol, l10n.beforeCol, l10n.afterCol];
               return _pad(Text(labels[c % colsPerPlayer], style: headerStyle), const EdgeInsets.symmetric(horizontal: 4, vertical: 4));
             }),
           ],
@@ -183,7 +185,7 @@ class RoundHistoryScreen extends StatelessWidget {
             border: Border(top: BorderSide(color: theme.dividerColor, width: 2)),
           ),
           children: [
-            _pad(Text(AppStrings.total, style: totalStyle), cellPad),
+            _pad(Text(AppLocalizations.of(context)!.total, style: totalStyle), cellPad),
             _pad(const SizedBox(), cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final pi = c ~/ colsPerPlayer;
