@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../l10n/app_strings.dart';
+import '../l10n/app_localizations.dart';
+import '../providers/locale_provider.dart';
+import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../services/game_service.dart';
 import '../widgets/round_history_screen.dart';
@@ -68,8 +70,10 @@ class _GameScreenState extends State<GameScreen> {
             body: Center(child: CircularProgressIndicator()),
           );
         }
+        final l10n = AppLocalizations.of(context)!;
         if (_error != null) {
           return Scaffold(
+            appBar: AppBar(title: Text(l10n.appTitle), actions: [_buildLanguageMenu(context)]),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -86,7 +90,7 @@ class _GameScreenState extends State<GameScreen> {
                         });
                         _loadGame();
                       },
-                      child: const Text('Retry'),
+                      child: Text(l10n.retry),
                     ),
                   ],
                 ),
@@ -96,20 +100,24 @@ class _GameScreenState extends State<GameScreen> {
         }
         if (gameState == null) {
           return Scaffold(
+            appBar: AppBar(title: Text(l10n.appTitle), actions: [_buildLanguageMenu(context)]),
             body: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('No game loaded. Create or join a game on the web app.'),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: () {
-                      setState(() => _loading = true);
-                      _loadGame();
-                    },
-                    child: const Text('Refresh'),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.noGameLoaded, textAlign: TextAlign.center),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      onPressed: () {
+                        setState(() => _loading = true);
+                        _loadGame();
+                      },
+                      child: Text(l10n.refresh),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -117,41 +125,52 @@ class _GameScreenState extends State<GameScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('Score board · ${gameState.currentRound - 1} rounds'),
+            title: Text(l10n.appBarTitleRounds(gameState.currentRound - 1)),
             actions: [
+              _RealtimeIndicator(isConnected: gameService.isRealtimeConnected),
               IconButton(
                 icon: const Icon(Icons.history),
-                tooltip: 'Round history',
+                tooltip: l10n.roundHistoryTooltip,
                 onPressed: () => _openRoundHistory(context, gameService),
               ),
               IconButton(
                 icon: const Icon(Icons.emoji_events_outlined),
-                tooltip: 'Score table',
+                tooltip: l10n.scoreTableTooltip,
                 onPressed: () => _openScoreTableSheet(context, gameService),
               ),
               PopupMenuButton<String>(
                 icon: const Icon(Icons.account_circle_outlined),
-                tooltip: AppStrings.logOut,
+                tooltip: 'Log out',
                 onSelected: (value) {
                   if (value == 'logout') _logout(context);
                 },
                 itemBuilder: (context) => [
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'logout',
-                    child: Text(AppStrings.logOut),
+                    child: Text('Log out'),
                   ),
                 ],
               ),
+              _buildLanguageMenu(context),
             ],
           ),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Game: ${gameState.name ?? gameState.id}'),
-                Text('Players: ${gameState.players.join(", ")}'),
+                if (gameService.realtimeError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      gameService.realtimeError!,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                Text('${l10n.gameLabel}: ${gameState.name ?? gameState.id}'),
+                Text('${l10n.playersLabel}: ${gameState.players.join(", ")}'),
                 const SizedBox(height: 16),
-                Text('Current scores: ${gameState.scores.join(", ")}'),
+                Text('${l10n.currentScoresLabel}: ${gameState.scores.join(", ")}'),
               ],
             ),
           ),
@@ -198,6 +217,65 @@ class _GameScreenState extends State<GameScreen> {
           players: gameState.players,
           currentPlayerIndex: gameService.currentPlayerIndex,
           onClose: () => Navigator.of(context).pop(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageMenu(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final localeProvider = context.watch<LocaleProvider>();
+    return PopupMenuButton<AppLocale>(
+      tooltip: l10n.language,
+      icon: const Icon(Icons.language),
+      onSelected: (locale) => localeProvider.setLocale(locale),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: AppLocale.he,
+          child: Row(
+            children: [
+              if (localeProvider.appLocale == AppLocale.he)
+                const Icon(Icons.check, size: 20),
+              if (localeProvider.appLocale == AppLocale.he) const SizedBox(width: 8),
+              Text(l10n.hebrew),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: AppLocale.en,
+          child: Row(
+            children: [
+              if (localeProvider.appLocale == AppLocale.en)
+                const Icon(Icons.check, size: 20),
+              if (localeProvider.appLocale == AppLocale.en) const SizedBox(width: 8),
+              Text(l10n.english),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RealtimeIndicator extends StatelessWidget {
+  const _RealtimeIndicator({required this.isConnected});
+
+  final bool isConnected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Tooltip(
+          message: isConnected ? 'Live updates connected' : 'Realtime disconnected',
+          child: Icon(
+            isConnected ? Icons.circle : Icons.circle_outlined,
+            size: 10,
+            color: isConnected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline,
+          ),
         ),
       ),
     );
