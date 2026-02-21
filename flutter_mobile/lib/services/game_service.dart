@@ -7,6 +7,12 @@ import '../models/round.dart';
 import 'api_service.dart';
 import 'realtime_types.dart';
 
+/// Current game phase: bidding or tricks (matches Angular/backend).
+enum GamePhase {
+  bidding,
+  tricks,
+}
+
 /// Holds current game state and rounds; aligns with Angular GameService for score table / round history / delete.
 /// When [RealtimeService] is set, connects to the same backend WebSocket for game_update, phase_update,
 /// bid_selection, trick_selection, etc., and can send submit_bids, submit_tricks, bid_selection, etc.
@@ -21,7 +27,10 @@ class GameService extends ChangeNotifier {
   String? _currentUserId;
   String? _authToken;
   StreamSubscription<RealtimeMessage>? _realtimeSubscription;
-  String? _currentPhase; // 'bidding' | 'tricks'
+  String? _currentPhase; // 'bidding' | 'tricks' from realtime
+  GamePhase _phase = GamePhase.bidding; // local when using REST submitBids/submitTricks
+  List<int>? _currentBids;
+  String? _currentTrumpSuit;
   final Map<int, int> _liveBidSelections = {};
   final Map<int, int> _liveTrickSelections = {};
   String? _liveTrumpSelection;
@@ -31,6 +40,14 @@ class GameService extends ChangeNotifier {
   List<Round> get rounds => List.unmodifiable(_rounds);
   String? get currentUserId => _currentUserId;
   String? get currentPhase => _currentPhase;
+  /// Resolves to realtime phase when set, otherwise local _phase (REST flow).
+  GamePhase get phase {
+    if (_currentPhase == 'tricks') return GamePhase.tricks;
+    if (_currentPhase == 'bidding') return GamePhase.bidding;
+    return _phase;
+  }
+  List<int>? get currentBids => _currentBids;
+  String? get currentTrumpSuit => _currentTrumpSuit;
   Map<int, int> get liveBidSelections => Map.unmodifiable(_liveBidSelections);
   Map<int, int> get liveTrickSelections =>
       Map.unmodifiable(_liveTrickSelections);
@@ -107,6 +124,46 @@ class GameService extends ChangeNotifier {
 
     notifyListeners();
     return game;
+  }
+
+  /// Submit bids for current round via REST; switches to tricks phase and stores bids/trump.
+  Future<GameState> submitBids(
+    String gameId,
+    List<int> bids, {
+    String? trumpSuit,
+  }) async {
+    final game = await _api.submitBids(gameId, bids, trumpSuit: trumpSuit);
+    if (_gameState?.id == gameId) {
+      _gameState = game;
+      _phase = GamePhase.tricks;
+      _currentBids = List<int>.from(bids);
+      _currentTrumpSuit = trumpSuit;
+      notifyListeners();
+    }
+    return game;
+  }
+
+  /// Submit tricks for current round via REST. Uses stored currentBids/currentTrumpSuit.
+  /// Returns the created round for showing round summary; updates game state and rounds.
+  Future<Round?> submitTricks(String gameId, List<int> tricks) async {
+    final bids = _currentBids;
+    if (bids == null || bids.length != 4) {
+      throw StateError('No bids for this round. Submit bids first.');
+    }
+    final result = await _api.submitTricks(
+      gameId,
+      tricks,
+      bids,
+      trumpSuit: _currentTrumpSuit,
+    );
+    if (_gameState?.id != gameId) return result.round;
+    _gameState = result.game;
+    _phase = GamePhase.bidding;
+    _currentBids = null;
+    _currentTrumpSuit = null;
+    _rounds = await _api.getRounds(gameId);
+    notifyListeners();
+    return result.round;
   }
 
   void _onRealtimeMessage(RealtimeMessage msg) {
@@ -235,6 +292,9 @@ class GameService extends ChangeNotifier {
       _rounds = [];
       _clearRoundState();
       _currentPhase = null;
+      _phase = GamePhase.bidding;
+      _currentBids = null;
+      _currentTrumpSuit = null;
       notifyListeners();
     }
   }
@@ -251,6 +311,9 @@ class GameService extends ChangeNotifier {
     _rounds = [];
     _clearRoundState();
     _currentPhase = null;
+    _phase = GamePhase.bidding;
+    _currentBids = null;
+    _currentTrumpSuit = null;
     _realtimeError = null;
     notifyListeners();
   }

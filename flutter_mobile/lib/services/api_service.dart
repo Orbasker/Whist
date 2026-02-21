@@ -81,6 +81,54 @@ class ApiService {
     return list.map((e) => Round.fromJson(e as Map<String, dynamic>)).toList();
   }
 
+  /// Submit bids for current round. Returns updated game.
+  Future<GameState> submitBids(
+    String gameId,
+    List<int> bids, {
+    String? trumpSuit,
+  }) async {
+    final body = <String, dynamic>{
+      'bids': bids,
+      if (trumpSuit != null && trumpSuit.isNotEmpty) 'trump_suit': trumpSuit,
+    };
+    final r = await http.post(
+      Uri.parse('$baseUrl/games/$gameId/rounds/bids'),
+      headers: await _headers,
+      body: jsonEncode(body),
+    );
+    _checkResponse(r);
+    final map = jsonDecode(r.body) as Map<String, dynamic>;
+    final game = map['game'] as Map<String, dynamic>? ?? map;
+    return GameState.fromJson(game);
+  }
+
+  /// Submit tricks for current round. Returns updated game and the created round.
+  Future<SubmitTricksResult> submitTricks(
+    String gameId,
+    List<int> tricks,
+    List<int> bids, {
+    String? trumpSuit,
+  }) async {
+    final body = <String, dynamic>{
+      'tricks': tricks,
+      'bids': bids,
+      if (trumpSuit != null && trumpSuit.isNotEmpty) 'trump_suit': trumpSuit,
+    };
+    final r = await http.post(
+      Uri.parse('$baseUrl/games/$gameId/rounds/tricks'),
+      headers: await _headers,
+      body: jsonEncode(body),
+    );
+    _checkResponse(r);
+    final map = jsonDecode(r.body) as Map<String, dynamic>;
+    final gameMap = map['game'] as Map<String, dynamic>? ?? map;
+    final roundMap = map['round'] as Map<String, dynamic>?;
+    return SubmitTricksResult(
+      game: GameState.fromJson(gameMap),
+      round: roundMap != null ? Round.fromJson(roundMap) : null,
+    );
+  }
+
   void _checkResponse(http.Response r) {
     if (r.statusCode >= 400) {
       throw ApiException(r.statusCode, r.body);
@@ -94,4 +142,11 @@ class ApiException implements Exception {
   final String body;
   @override
   String toString() => 'ApiException($statusCode): $body';
+}
+
+/// Result of submitTricks: updated game and the round that was created.
+class SubmitTricksResult {
+  const SubmitTricksResult({required this.game, this.round});
+  final GameState game;
+  final Round? round;
 }

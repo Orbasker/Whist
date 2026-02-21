@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
+import '../l10n/app_strings.dart';
+import '../models/game_state.dart';
 import '../providers/locale_provider.dart';
 import '../services/auth_service.dart';
 import '../services/game_service.dart';
 import '../widgets/round_history_screen.dart';
 import '../widgets/score_table_sheet.dart';
+import '../widgets/tricks_phase_content.dart';
 
 /// Game screen: shows scoreboard icon -> score table sheet; round history button -> round history screen; delete game (owner) from score table.
 /// When [gameId] is provided (e.g. from Home), loads that game. Otherwise tries current game or first from list.
@@ -126,13 +129,17 @@ class _GameScreenState extends State<GameScreen> {
           );
         }
 
+        final phaseLabel = gameService.phase == GamePhase.tricks
+            ? AppStrings.gameTricks
+            : AppStrings.gameBidding;
+
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title: Text(l10n.appBarTitleRounds(gameState.currentRound - 1)),
+            title: Text('${l10n.appBarTitleRounds(gameState.currentRound - 1)} · $phaseLabel'),
             actions: [
               _RealtimeIndicator(isConnected: gameService.isRealtimeConnected),
               IconButton(
@@ -161,26 +168,17 @@ class _GameScreenState extends State<GameScreen> {
               _buildLanguageMenu(context),
             ],
           ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (gameService.realtimeError != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      gameService.realtimeError!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                Text('${l10n.gameLabel}: ${gameState.name ?? gameState.id}'),
-                Text('${l10n.playersLabel}: ${gameState.players.join(", ")}'),
-                const SizedBox(height: 16),
-                Text('${l10n.currentScoresLabel}: ${gameState.scores.join(", ")}'),
-              ],
-            ),
-          ),
+          body: gameService.phase == GamePhase.tricks
+              ? TricksPhaseContent(
+                  gameState: gameState,
+                  onOpenScoreTable: () => _openScoreTableSheet(context, gameService),
+                  onOpenRoundHistory: () => _openRoundHistory(context, gameService),
+                  onRoundComplete: () => setState(() {}),
+                )
+              : _BiddingPlaceholder(
+                  gameState: gameState,
+                  onBidsSubmitted: () => setState(() {}),
+                ),
         );
       },
     );
@@ -282,6 +280,103 @@ class _RealtimeIndicator extends StatelessWidget {
                 : Theme.of(context).colorScheme.outline,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Placeholder when in bidding phase: submit bids to transition to tricks.
+class _BiddingPlaceholder extends StatefulWidget {
+  const _BiddingPlaceholder({
+    required this.gameState,
+    required this.onBidsSubmitted,
+  });
+
+  final GameState gameState;
+  final VoidCallback onBidsSubmitted;
+
+  @override
+  State<_BiddingPlaceholder> createState() => _BiddingPlaceholderState();
+}
+
+class _BiddingPlaceholderState extends State<_BiddingPlaceholder> {
+  final List<int> _bids = [0, 0, 0, 0];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final gameService = context.read<GameService>();
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Game: ${widget.gameState.name ?? widget.gameState.id}',
+            style: theme.textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Players: ${widget.gameState.players.join(", ")}',
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Current scores: ${widget.gameState.scores.join(", ")}',
+            style: theme.textTheme.bodySmall,
+          ),
+          const SizedBox(height: 24),
+          const Text('Bidding phase – enter bids to continue to tricks'),
+          const SizedBox(height: 12),
+          ...List.generate(4, (i) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      widget.gameState.players[i],
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 60,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Bid',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (s) {
+                        final v = int.tryParse(s);
+                        if (v != null && v >= 0 && v <= 13) {
+                          setState(() => _bids[i] = v);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+          const SizedBox(height: 16),
+          FilledButton(
+            onPressed: () async {
+              try {
+                await gameService.submitBids(widget.gameState.id, _bids);
+                if (context.mounted) widget.onBidsSubmitted();
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to submit bids: $e')),
+                  );
+                }
+              }
+            },
+            child: const Text('Submit bids → Tricks phase'),
+          ),
+        ],
       ),
     );
   }
