@@ -6,19 +6,28 @@ import '../models/game_state.dart';
 import '../models/round.dart';
 
 /// API client aligned with Angular ApiService and backend routes.
+/// Use [getToken] to supply Bearer token from AuthService (Neon Auth).
 class ApiService {
-  ApiService({required this.baseUrl, this.authToken});
+  ApiService({
+    required this.baseUrl,
+    this.authToken,
+    this.getToken,
+  }) : assert(authToken == null || getToken == null, 'Use either authToken or getToken');
 
   final String baseUrl;
   final String? authToken;
+  /// When set, used for each request to attach Bearer token (overrides [authToken]).
+  final Future<String?> Function()? getToken;
 
-  Map<String, String> get _headers {
+  Future<Map<String, String>> get _headers async {
     final map = <String, String>{
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
-    if (authToken != null && authToken!.isNotEmpty) {
-      map['Authorization'] = 'Bearer $authToken';
+    String? token = authToken;
+    if (getToken != null) token = await getToken!();
+    if (token != null && token.isNotEmpty) {
+      map['Authorization'] = 'Bearer $token';
     }
     return map;
   }
@@ -26,17 +35,29 @@ class ApiService {
   Future<List<GameState>> listGames() async {
     final r = await http.get(
       Uri.parse('$baseUrl/games'),
-      headers: _headers,
+      headers: await _headers,
     );
     _checkResponse(r);
     final list = jsonDecode(r.body) as List;
     return list.map((e) => GameState.fromJson(e as Map<String, dynamic>)).toList();
   }
 
+  Future<GameState> createGame(List<String> players, {String? name}) async {
+    final body = <String, dynamic>{'players': players};
+    if (name != null && name.trim().isNotEmpty) body['name'] = name.trim();
+    final r = await http.post(
+      Uri.parse('$baseUrl/games'),
+      headers: await _headers,
+      body: jsonEncode(body),
+    );
+    _checkResponse(r);
+    return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
   Future<GameState> getGame(String gameId) async {
     final r = await http.get(
       Uri.parse('$baseUrl/games/$gameId'),
-      headers: _headers,
+      headers: await _headers,
     );
     _checkResponse(r);
     return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
@@ -45,7 +66,7 @@ class ApiService {
   Future<void> deleteGame(String gameId) async {
     final r = await http.delete(
       Uri.parse('$baseUrl/games/$gameId'),
-      headers: _headers,
+      headers: await _headers,
     );
     _checkResponse(r);
   }
@@ -53,7 +74,7 @@ class ApiService {
   Future<List<Round>> getRounds(String gameId) async {
     final r = await http.get(
       Uri.parse('$baseUrl/games/$gameId/rounds'),
-      headers: _headers,
+      headers: await _headers,
     );
     _checkResponse(r);
     final list = jsonDecode(r.body) as List;
@@ -72,7 +93,7 @@ class ApiService {
     };
     final r = await http.post(
       Uri.parse('$baseUrl/games/$gameId/rounds/bids'),
-      headers: _headers,
+      headers: await _headers,
       body: jsonEncode(body),
     );
     _checkResponse(r);
@@ -95,7 +116,7 @@ class ApiService {
     };
     final r = await http.post(
       Uri.parse('$baseUrl/games/$gameId/rounds/tricks'),
-      headers: _headers,
+      headers: await _headers,
       body: jsonEncode(body),
     );
     _checkResponse(r);
