@@ -73,6 +73,17 @@ class GameService extends ChangeNotifier {
     return s.trim().toLowerCase().replaceAll('-', '');
   }
 
+  Future<List<GameState>> listGames() async {
+    return _api.listGames();
+  }
+
+  Future<GameState> createGame(List<String> players, {String? name}) async {
+    final game = await _api.createGame(players, name: name);
+    _gameState = game;
+    _rounds = await _api.getRounds(game.id);
+    return game;
+  }
+
   void _clearRoundState() {
     _liveBidSelections.clear();
     _liveTrickSelections.clear();

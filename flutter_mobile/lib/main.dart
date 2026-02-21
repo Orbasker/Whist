@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/locale_provider.dart';
 import 'screens/auth_screen.dart';
-import 'screens/game_screen.dart';
+import 'screens/home_screen.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/game_service.dart';
@@ -80,7 +80,7 @@ class WhistApp extends StatelessWidget {
   }
 }
 
-/// Shows AuthScreen when not authenticated, GameScreen when authenticated.
+/// Shows AuthScreen when not authenticated, HomeScreen when authenticated.
 /// Loads session on first build.
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -102,7 +102,7 @@ class _AuthGateState extends State<AuthGate> {
         if (!auth.isAuthenticated) {
           return const AuthScreen();
         }
-        return const GameScreen();
+        return const HomeScreen();
       },
     );
   }

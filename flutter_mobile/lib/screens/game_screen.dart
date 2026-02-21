@@ -3,15 +3,17 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/locale_provider.dart';
-import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../services/game_service.dart';
 import '../widgets/round_history_screen.dart';
 import '../widgets/score_table_sheet.dart';
 
 /// Game screen: shows scoreboard icon -> score table sheet; round history button -> round history screen; delete game (owner) from score table.
+/// When [gameId] is provided (e.g. from Home), loads that game. Otherwise tries current game or first from list.
 class GameScreen extends StatefulWidget {
-  const GameScreen({super.key});
+  const GameScreen({super.key, this.gameId});
+
+  final String? gameId;
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -34,22 +36,19 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<void> _loadGame() async {
-    // In a full app, gameId would come from route args or storage
     setState(() {
       _loading = true;
       _error = null;
     });
     try {
       final gameService = context.read<GameService>();
-      // Demo: try loading first game from list, or use a stored game id
-      final games = await gameService.gameState != null
-          ? null
-          : (await context.read<ApiService>().listGames());
-      String? id;
-      if (gameService.gameState != null) {
+      String? id = widget.gameId;
+      if (id == null && gameService.gameState != null) {
         id = gameService.gameState!.id;
-      } else if (games != null && games.isNotEmpty) {
-        id = games.first.id;
+      }
+      if (id == null) {
+        final games = await gameService.listGames();
+        if (games.isNotEmpty) id = games.first.id;
       }
       if (id != null) await gameService.loadGame(id);
     } catch (e) {
@@ -100,7 +99,14 @@ class _GameScreenState extends State<GameScreen> {
         }
         if (gameState == null) {
           return Scaffold(
-            appBar: AppBar(title: Text(l10n.appTitle), actions: [_buildLanguageMenu(context)]),
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: Text(l10n.appTitle),
+              actions: [_buildLanguageMenu(context)],
+            ),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -110,11 +116,8 @@ class _GameScreenState extends State<GameScreen> {
                     Text(l10n.noGameLoaded, textAlign: TextAlign.center),
                     const SizedBox(height: 16),
                     FilledButton(
-                      onPressed: () {
-                        setState(() => _loading = true);
-                        _loadGame();
-                      },
-                      child: Text(l10n.refresh),
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Back to Home'),
                     ),
                   ],
                 ),
@@ -125,6 +128,10 @@ class _GameScreenState extends State<GameScreen> {
 
         return Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             title: Text(l10n.appBarTitleRounds(gameState.currentRound - 1)),
             actions: [
               _RealtimeIndicator(isConnected: gameService.isRealtimeConnected),
@@ -192,11 +199,9 @@ class _GameScreenState extends State<GameScreen> {
           await gameService.deleteGame(gameState.id);
           if (!context.mounted) return;
           Navigator.of(context).pop(); // close sheet
-          setState(() => gameService.clearGame());
+          gameService.clearGame();
           if (!context.mounted) return;
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const GameScreen()),
-          );
+          Navigator.of(context).pop(); // back to Home
         },
       ),
     );
