@@ -1,16 +1,14 @@
 <app-modal [title]="'game.roundHistory' | translate" size="full" (close)="onClose()">
-  <div class="flex min-h-0 flex-1 flex-col">
+  <div class="round-history-root flex min-h-0 flex-1 flex-col overflow-hidden">
     <div *ngIf="rounds.length === 0" class="py-12 px-6 text-center text-muted-foreground">
       {{ 'game.roundsEmpty' | translate }}
     </div>
 
     <div
       *ngIf="rounds.length > 0"
-      class="round-history-scroll flex min-h-0 flex-1 flex-col p-3 sm:p-4"
+      class="round-history-scroll flex min-h-0 flex-1 flex-col overflow-hidden p-3 sm:p-4"
     >
-      <div
-        class="round-history-table-wrap min-h-0 flex-1 overflow-auto -webkit-overflow-scrolling-touch"
-      >
+      <div class="round-history-table-wrap min-h-0 flex-1 overflow-auto">
         <table
           class="round-history-table min-w-[640px] w-full border-collapse text-right text-xs sm:text-sm"
         >

@@ -80,10 +80,10 @@
             (click)="continueGame(game.id)"
             class="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm transition-colors hover:border-primary hover:shadow-md sm:p-4"
           >
-            <!-- Trophy: quick view score (opens game) - fills left, same action as row -->
+            <!-- Trophy: quick look only (score preview modal); rest of row opens game -->
             <button
               type="button"
-              (click)="$event.stopPropagation(); continueGame(game.id)"
+              (click)="openQuickLook(game, $event)"
               class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/15 transition-colors hover:bg-primary/25"
               [attr.aria-label]="'game.scoreBoard' | translate"
             >
@@ -175,6 +175,50 @@
         </div>
       </app-ui-card-content>
     </app-ui-card>
+
+    <!-- Quick look: score preview (trophy only); "Open game" enters the game -->
+    <app-modal
+      *ngIf="quickLookGame"
+      [title]="getGameDisplayName(quickLookGame)"
+      size="md"
+      (close)="closeQuickLook()"
+    >
+      <div class="space-y-4">
+        <div class="rounded-xl border border-border bg-muted/50 p-4">
+          <h3 class="mb-3 text-sm font-semibold text-muted-foreground">
+            {{ 'game.scoreTable.currentScore' | translate }}
+          </h3>
+          <div class="grid grid-cols-2 gap-3">
+            <div
+              *ngFor="let player of quickLookGame.players; let i = index"
+              class="text-center rounded-lg border border-border bg-card p-2"
+            >
+              <p class="truncate text-sm text-foreground">{{ player }}</p>
+              <p
+                class="text-lg font-bold"
+                [class.text-success]="quickLookGame.scores[i] > 0"
+                [class.text-destructive]="quickLookGame.scores[i] < 0"
+                [class.text-foreground]="quickLookGame.scores[i] === 0"
+              >
+                {{ quickLookGame.scores[i] }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-muted-foreground">
+          {{ 'home.round' | translate }} {{ quickLookGame.current_round }}
+          ·
+          {{
+            quickLookGame.status === 'active'
+              ? ('home.active' | translate)
+              : ('home.completed' | translate)
+          }}
+        </p>
+        <app-ui-button type="button" class="w-full" (click)="continueGame(quickLookGame!.id)">
+          {{ 'home.openGame' | translate }}
+        </app-ui-button>
+      </div>
+    </app-modal>
 
     <!-- Invitation Modal (shown when showInvitationForm is true) -->
     <app-modal

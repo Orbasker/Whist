@@ -2,6 +2,7 @@
   <div
     class="modal-panel"
     [class]="sizeClass"
+    [class.modal-panel--full]="size === 'full'"
     (click)="onPanelClick($event)"
     role="dialog"
     [attr.aria-modal]="true"

@@ -34,13 +34,35 @@
           {{ phase === 'bidding' ? ('game.bidding' | translate) : ('game.tricks' | translate) }}
         </p>
       </div>
-      <button
-        (click)="showScoreTable = true"
-        class="-m-1 flex min-h-touch min-w-touch items-center justify-center rounded-xl p-2 text-primary transition-colors hover:bg-primary/15 hover:text-primary"
-        [attr.aria-label]="'game.scoreTable' | translate"
-      >
-        <app-scoreboard-icon [size]="22" color="currentColor"></app-scoreboard-icon>
-      </button>
+      <div class="flex shrink-0 items-center gap-0.5">
+        <button
+          (click)="showRoundHistory = true"
+          class="-m-1 flex min-h-touch min-w-touch items-center justify-center rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          [attr.aria-label]="'game.roundsHistory' | translate: { count: rounds.length }"
+        >
+          <svg
+            class="h-5 w-5 sm:h-6 sm:w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 10h16M4 14h16M4 18h16"
+            />
+          </svg>
+        </button>
+        <button
+          (click)="showScoreTable = true"
+          class="-m-1 flex min-h-touch min-w-touch items-center justify-center rounded-xl p-2 text-primary transition-colors hover:bg-primary/15 hover:text-primary"
+          [attr.aria-label]="'game.scoreTable' | translate"
+        >
+          <app-scoreboard-icon [size]="22" color="currentColor"></app-scoreboard-icon>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -61,24 +83,6 @@
       (tricksSubmit)="onTricksSubmit($event)"
       (openScoreTable)="showScoreTable = true"
     ></app-tricks-phase>
-  </div>
-
-  <!-- Floating rounds history button -->
-  <div class="floating-scoreboard-wrap">
-    <button
-      (click)="showRoundHistory = true"
-      class="flex min-h-touch items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-xl shadow-primary/30 transition-all hover:scale-[1.02] hover:bg-primary/90 hover:shadow-2xl sm:text-base text-sm"
-    >
-      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 10h16M4 14h16M4 18h16"
-        ></path>
-      </svg>
-      {{ 'game.roundsHistory' | translate: { count: rounds.length } }}
-    </button>
   </div>
 
   <!-- Score Table Modal -->

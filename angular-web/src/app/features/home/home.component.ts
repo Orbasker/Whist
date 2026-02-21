@@ -65,6 +65,8 @@ export class HomeComponent implements OnInit {
   selectedGame: GameState | null = null;
   invitationError: string | null = null;
   invitationSuccess: string | null = null;
+  /** Game shown in the trophy quick-look modal (score preview only). */
+  quickLookGame: GameState | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -186,6 +188,7 @@ export class HomeComponent implements OnInit {
   }
 
   async continueGame(gameId: string) {
+    this.closeQuickLook();
     try {
       await this.gameService.loadGame(gameId);
       localStorage.setItem('whist_game_id', gameId);
@@ -193,6 +196,16 @@ export class HomeComponent implements OnInit {
     } catch (error) {
       console.error('Failed to load game:', error);
     }
+  }
+
+  /** Open quick-look modal (score preview). Trophy only; does not open the game. */
+  openQuickLook(game: GameState, event: Event) {
+    event.stopPropagation();
+    this.quickLookGame = game;
+  }
+
+  closeQuickLook() {
+    this.quickLookGame = null;
   }
 
   toggleNewGameForm() {

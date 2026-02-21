@@ -28,6 +28,12 @@
   @media (min-width: 640px) {
     border-radius: var(--radius-lg);
   }
+
+  /* Full-size modals (e.g. round history table) get fixed height so content scrolls inside */
+  &.modal-panel--full {
+    height: 85vh;
+    max-height: 85vh;
+  }
 }
 
 .modal-header {

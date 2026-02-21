@@ -1,10 +1,15 @@
+.round-history-root {
+  // Takes modal body height; overflow hidden so only table-wrap scrolls
+}
+
 .round-history-scroll {
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .round-history-table-wrap {
-  // Scroll container for sticky thead/tfoot
+  -webkit-overflow-scrolling: touch;
 }
 
 .round-history-thead th {

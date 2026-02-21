@@ -47,7 +47,8 @@
     "deleteGameFailed": "לא ניתן למחוק את המשחק.",
     "mustBeLoggedIn": "עליך להתחבר כדי ליצור משחק. התחבר ונסה שוב.",
     "authTokenMissing": "חסר טוקן אימות. התחבר שוב.",
-    "createGameFailed": "יצירת המשחק נכשלה. נסה שוב."
+    "createGameFailed": "יצירת המשחק נכשלה. נסה שוב.",
+    "openGame": "פתח משחק"
   },
   "auth": {
     "signIn": "התחברות",
