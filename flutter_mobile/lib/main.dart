@@ -28,8 +28,9 @@ class WhistApp extends StatelessWidget {
               authToken: null, // Set from auth when implemented
             ),
           ),
-          ProxyProvider<ApiService, GameService>(
-            update: (_, api, __) => GameService(api),
+          ChangeNotifierProxyProvider<ApiService, GameService>(
+            create: (context) => GameService(context.read<ApiService>()),
+            update: (_, api, previous) => previous!,
           ),
         ],
         child: const GameScreen(),

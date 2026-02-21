@@ -3,10 +3,11 @@ import 'package:provider/provider.dart';
 
 import '../services/api_service.dart';
 import '../services/game_service.dart';
+import '../widgets/bidding_phase_content.dart';
 import '../widgets/round_history_screen.dart';
 import '../widgets/score_table_sheet.dart';
 
-/// Game screen: shows scoreboard icon -> score table sheet; round history button -> round history screen; delete game (owner) from score table.
+/// Game screen: bidding phase (players, live bids, trump, submit) or placeholder for tricks; score table and round history.
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
 
@@ -108,9 +109,13 @@ class _GameScreenState extends State<GameScreen> {
           );
         }
 
+        final phase = gameService.phase;
+        final roundsPlayed = gameState.currentRound - 1;
+        final phaseLabel = phase == 'bidding' ? 'Bidding' : 'Tricks';
+
         return Scaffold(
           appBar: AppBar(
-            title: Text('Score board · ${gameState.currentRound - 1} rounds'),
+            title: Text('Score board · $roundsPlayed rounds · $phaseLabel'),
             actions: [
               IconButton(
                 icon: const Icon(Icons.history),
@@ -124,17 +129,24 @@ class _GameScreenState extends State<GameScreen> {
               ),
             ],
           ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Game: ${gameState.name ?? gameState.id}'),
-                Text('Players: ${gameState.players.join(", ")}'),
-                const SizedBox(height: 16),
-                Text('Current scores: ${gameState.scores.join(", ")}'),
-              ],
-            ),
-          ),
+          body: phase == 'bidding'
+              ? BiddingPhaseContent(
+                  gameState: gameState,
+                  roundsPlayed: roundsPlayed,
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Game: ${gameState.name ?? gameState.id}'),
+                      Text('Players: ${gameState.players.join(', ')}'),
+                      const SizedBox(height: 16),
+                      Text('Current scores: ${gameState.scores.join(', ')}'),
+                      const SizedBox(height: 8),
+                      Text('Tricks phase – coming next', style: Theme.of(context).textTheme.bodySmall),
+                    ],
+                  ),
+                ),
         );
       },
     );
