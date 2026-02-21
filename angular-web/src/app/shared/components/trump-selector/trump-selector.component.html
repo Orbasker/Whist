@@ -5,12 +5,13 @@
     (click)="selectTrump(option.value)"
     [attr.aria-pressed]="selectedTrump === option.value"
     [attr.aria-label]="('game.biddingPhase.trump' | translate) + ': ' + (option.label | translate)"
+    [class.rounded-full]="selectedTrump === option.value"
     [class.bg-primary]="selectedTrump === option.value"
     [class.text-primary-foreground]="selectedTrump === option.value"
     [class.bg-muted]="selectedTrump !== option.value"
     [class.text-muted-foreground]="selectedTrump !== option.value"
     [class]="option.color"
-    class="min-h-touch rounded-lg px-4 py-2.5 font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:bg-primary/90 sm:py-2 sm:text-base"
+    class="min-h-touch rounded-xl px-4 py-2.5 font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:bg-primary/90 sm:py-2 sm:text-base"
   >
     <span *ngIf="option.icon" class="mr-2" aria-hidden="true">{{ option.icon }}</span>
     {{ option.label | translate }}

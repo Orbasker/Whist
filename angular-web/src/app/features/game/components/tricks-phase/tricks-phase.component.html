@@ -5,7 +5,7 @@
     </p>
   </div>
 
-  <div class="rounded-lg border border-success/30 bg-success/15 px-3 py-4 sm:p-4">
+  <div class="rounded-xl border border-success/30 bg-success/15 px-4 py-4 shadow-sm sm:p-5">
     <div class="text-center">
       <span class="text-base font-semibold text-foreground sm:text-lg"
         >{{ 'game.tricksPhase.totalTricks' | translate }} {{ totalTricks }}</span
@@ -16,7 +16,7 @@
   <div class="space-y-4">
     <div
       *ngFor="let player of players; let i = index"
-      class="rounded-lg border border-border bg-card p-3 sm:p-4"
+      class="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5"
     >
       <div class="mb-3 flex items-center justify-between">
         <div class="text-sm text-foreground">
@@ -28,19 +28,22 @@
           >
         </div>
         <div class="text-right">
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center justify-end gap-2">
             <span class="font-medium text-foreground">{{ player }}</span>
             <span
+              *ngIf="currentPlayerIndex === i"
+              class="rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-medium text-primary"
+              aria-label="Current player"
+              >{{ 'game.biddingPhase.you' | translate }}</span
+            >
+            <span
               *ngIf="isPlayerOwner(i)"
-              class="rounded px-2 py-0.5 text-xs font-semibold bg-primary/20 text-primary"
+              class="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
               [title]="'game.biddingPhase.manager' | translate"
               >{{ 'game.biddingPhase.manager' | translate }}</span
             >
             <span class="text-sm text-muted-foreground"
               >{{ 'game.tricksPhase.bid' | translate }}: {{ bids[i] }}</span
-            >
-            <span *ngIf="currentPlayerIndex === i" class="text-xs text-success"
-              >({{ 'game.biddingPhase.you' | translate }})</span
             >
           </div>
         </div>
@@ -53,7 +56,7 @@
       <button
         *ngIf="canLockTrick(i)"
         (click)="onLockTrick(i)"
-        class="mt-2 w-full min-h-touch rounded-lg bg-success py-2.5 px-4 text-sm font-semibold text-success-foreground transition-colors hover:bg-success/90"
+        class="mt-3 w-full min-h-touch rounded-xl bg-success py-3 px-4 text-sm font-semibold text-success-foreground shadow-sm transition-colors hover:bg-success/90"
       >
         {{
           currentPlayerIndex === i
@@ -69,8 +72,8 @@
     [disabled]="totalTricks !== 13"
     [ngClass]="
       totalTricks === 13
-        ? 'w-full min-h-touch rounded-lg bg-primary py-3 px-6 font-semibold text-primary-foreground transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50'
-        : 'w-full min-h-touch rounded-lg bg-muted py-3 px-6 font-semibold text-muted-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50'
+        ? 'w-full min-h-touch rounded-xl bg-primary py-3.5 px-6 font-semibold text-primary-foreground shadow-md transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50'
+        : 'w-full min-h-touch rounded-xl bg-muted py-3.5 px-6 font-semibold text-muted-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50'
     "
   >
     {{ 'game.tricksPhase.finishRound' | translate }}

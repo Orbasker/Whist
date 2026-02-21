@@ -30,9 +30,11 @@
                     'bg-primary/15 text-primary-foreground border-primary/40': isCurrentPlayer(pi),
                   }"
                 >
-                  {{ player
-                  }}<span *ngIf="isCurrentPlayer(pi)" class="mr-1 font-bold text-primary"
-                    >({{ 'common.you' | translate }})</span
+                  <span>{{ player }}</span>
+                  <span
+                    *ngIf="isCurrentPlayer(pi)"
+                    class="mr-1 ml-1 inline-block rounded-full bg-primary/30 px-2 py-0.5 text-xs font-medium"
+                    >{{ 'common.you' | translate }}</span
                   >
                 </th>
               </ng-container>

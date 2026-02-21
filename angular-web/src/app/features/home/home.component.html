@@ -78,8 +78,18 @@
           <div
             *ngFor="let game of games"
             (click)="continueGame(game.id)"
-            class="flex cursor-pointer items-start justify-between gap-2 rounded-lg border border-border bg-muted/50 p-3 transition-colors hover:border-primary hover:bg-muted/80 sm:p-4"
+            class="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm transition-colors hover:border-primary hover:shadow-md sm:p-4"
           >
+            <!-- Trophy: quick view score (opens game) - fills left, same action as row -->
+            <button
+              type="button"
+              (click)="$event.stopPropagation(); continueGame(game.id)"
+              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/15 transition-colors hover:bg-primary/25"
+              [attr.aria-label]="'game.scoreBoard' | translate"
+            >
+              <img src="assets/icons/trophy-icon.svg" alt="" class="h-6 w-6" />
+            </button>
+            <!-- Game info (tap row = open game) -->
             <div class="min-w-0 flex-1">
               <h3 class="mb-1 truncate text-sm font-semibold text-card-foreground sm:text-base">
                 {{ getGameDisplayName(game) }}
@@ -97,15 +107,16 @@
                 <span>{{ formatDate(game.updated_at) }}</span>
               </div>
             </div>
-            <div class="flex shrink-0 items-center gap-1.5">
-              <app-ui-button
+            <!-- Actions: same-size icon buttons -->
+            <div class="flex shrink-0 items-center gap-1">
+              <button
                 *ngIf="isGameOwner(game)"
-                variant="secondary"
                 type="button"
                 (click)="openInvitationForm(game); $event.stopPropagation()"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/80 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                 [attr.aria-label]="'home.sendInvites' | translate"
               >
-                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -113,16 +124,15 @@
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                {{ 'home.invite' | translate }}
-              </app-ui-button>
-              <app-ui-button
+              </button>
+              <button
                 *ngIf="isGameOwner(game)"
-                variant="destructive"
                 type="button"
                 (click)="deleteGame(game.id, $event)"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/80 text-destructive transition-colors hover:bg-destructive/20"
                 [attr.aria-label]="'home.deleteGame' | translate"
               >
-                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -130,23 +140,34 @@
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-                {{ 'home.delete' | translate }}
-              </app-ui-button>
-              <app-ui-badge [variant]="game.status === 'active' ? 'default' : 'secondary'">
+              </button>
+              <!-- Round status pill (not a button) -->
+              <span
+                class="flex h-10 shrink-0 items-center justify-center rounded-full px-3 text-xs font-medium"
+                [ngClass]="
+                  game.status === 'active'
+                    ? 'bg-primary/20 text-primary'
+                    : 'bg-muted text-muted-foreground'
+                "
+                aria-label="Status"
+              >
                 {{
                   game.status === 'active'
                     ? ('home.active' | translate)
                     : ('home.completed' | translate)
                 }}
-              </app-ui-badge>
-              <span class="text-muted-foreground" aria-hidden="true">
+              </span>
+              <span
+                class="flex h-10 w-6 shrink-0 items-center justify-end text-muted-foreground"
+                aria-hidden="true"
+              >
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
                     d="M9 5l7 7-7 7"
-                  ></path>
+                  />
                 </svg>
               </span>
             </div>
