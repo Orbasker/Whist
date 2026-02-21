@@ -78,6 +78,55 @@ class AppStrings {
   // Home / delete
   static const confirmDeleteGame = 'Are you sure you want to delete this game?';
 
+  // Invitation form (aligned with Angular invitationForm / home)
+  static const invite = 'Invite';
+  static const sendInvitations = 'Send invitations';
+  static const invitationFormGameFull =
+      'Game is full. No slots available for invitation.';
+  static const invitationFormTitle = 'Send game invitations';
+  static const invitationFormEnterEmails =
+      'Enter email addresses for available slots';
+  static const invitationFormPlayersInGame = 'Players in game';
+  static String invitationFormPlayerLabel(int n, String name) =>
+      'Player $n: $name';
+  static String invitationFormSlotPlaceholder(int n) => 'Slot $n – Email address';
+  static const invitationFormInvalidEmail = 'Invalid email';
+  static const invitationFormSendInvitations = 'Send invitations';
+  static const invitationFormSending = 'Sending...';
+  static const invitationFormAtLeastOneEmail =
+      'Please enter at least one valid email address';
+  static const invitationFormGameIdMissing = 'Game ID is missing';
+  static const invitationFormSendError = 'Error sending invitations';
+  static String invitationsSentSuccess(int sent, int total) =>
+      '$sent of $total invitations sent successfully!';
+  static const invitationsSendFailed =
+      "We couldn't send the invitations. Please try again.";
+
+  // Bidding phase (game.biddingPhase)
+  static const biddingPhaseTitle = 'Bids';
+  static const biddingPhaseSubtitle = 'Choose trump and bid for each player';
+  static const biddingPhaseTrump = 'Trump';
+  static const biddingPhaseTotalBids = 'Total bids';
+  static const biddingPhaseCannotBid13 = 'Cannot bid exactly 13 - must be over or under';
+  static String biddingPhaseUnderMode(int diff) => 'Under mode - $diff tricks short';
+  static String biddingPhaseOverMode(int diff) => 'Over mode - $diff tricks extra';
+  static const biddingPhaseManager = 'Manager';
+  static const biddingPhaseYou = '(you)';
+  static const biddingPhaseLocked = 'Locked';
+  static const biddingPhaseChoice = '(choice)';
+  static const biddingPhaseTricks = 'tricks';
+  static const biddingPhaseCannotEdit = 'Cannot edit - user not identified in game';
+  static const biddingPhaseLockChoice = 'Lock choice';
+  static const biddingPhaseLockPlayerChoice = 'Lock player choice';
+  static const biddingPhaseContinue = 'Continue';
+
+  // Trump options (trump.*)
+  static const trumpNoTrump = 'No trump';
+  static const trumpSpades = 'Spades';
+  static const trumpClubs = 'Clubs';
+  static const trumpDiamonds = 'Diamonds';
+  static const trumpHearts = 'Hearts';
+
   // Tricks phase (game.tricksPhase)
   static const tricksPhaseQuestion = 'How many tricks did each player actually take?';
   static const tricksPhaseTotalTricks = 'Total tricks';

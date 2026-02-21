@@ -171,6 +171,7 @@ class ApiService {
 
   // —— Invitations ——
 
+  /// Send invitations for a game (DTO). Requires auth; only game owner can invite.
   Future<InvitationResponse> sendInvitations(
     String gameId,
     InvitationCreate body,
@@ -182,6 +183,19 @@ class ApiService {
     );
     _checkResponse(r);
     return InvitationResponse.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  /// Convenience: send invitations by emails and optional slot indices.
+  /// [playerIndices] optional slot indices (0-3) for each email; if null, assigned sequentially.
+  Future<InvitationResponse> sendInvitationsByEmails(
+    String gameId,
+    List<String> emails, [
+    List<int>? playerIndices,
+  ]) async {
+    return sendInvitations(
+      gameId,
+      InvitationCreate(emails: emails, playerIndices: playerIndices),
+    );
   }
 
   /// Get invitation info from token (public, no auth required).
