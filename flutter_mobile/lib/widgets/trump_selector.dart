@@ -14,11 +14,17 @@ class TrumpSelector extends StatelessWidget {
   final String? selectedTrump;
   final ValueChanged<String?> onTrumpSelect;
 
-  static const List<({String? value, String label, String icon, bool isRed})> _options = [
+  static const List<({String? value, String label, String icon, bool isRed})>
+      _options = [
     (value: null, label: AppStrings.trumpNoTrump, icon: '✕', isRed: false),
     (value: 'spades', label: AppStrings.trumpSpades, icon: '♠', isRed: false),
     (value: 'clubs', label: AppStrings.trumpClubs, icon: '♣', isRed: false),
-    (value: 'diamonds', label: AppStrings.trumpDiamonds, icon: '♦', isRed: true),
+    (
+      value: 'diamonds',
+      label: AppStrings.trumpDiamonds,
+      icon: '♦',
+      isRed: true
+    ),
     (value: 'hearts', label: AppStrings.trumpHearts, icon: '♥', isRed: true),
   ];
 
@@ -32,7 +38,9 @@ class TrumpSelector extends StatelessWidget {
       children: _options.map((opt) {
         final isSelected = selectedTrump == opt.value;
         return Material(
-          color: isSelected ? colorScheme.primary : colorScheme.surfaceContainerHighest,
+          color: isSelected
+              ? colorScheme.primary
+              : colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
           child: InkWell(
             onTap: () => onTrumpSelect(opt.value),
@@ -50,14 +58,18 @@ class TrumpSelector extends StatelessWidget {
                         style: TextStyle(
                           color: isSelected
                               ? colorScheme.onPrimary
-                              : (opt.isRed ? Colors.red.shade700 : colorScheme.onSurfaceVariant),
+                              : (opt.isRed
+                                  ? Colors.red.shade700
+                                  : colorScheme.onSurfaceVariant),
                         ),
                       ),
                     ),
                   Text(
                     opt.label,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+                      color: isSelected
+                          ? colorScheme.onPrimary
+                          : colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

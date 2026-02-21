@@ -13,10 +13,12 @@ class ApiService {
     required this.baseUrl,
     this.authToken,
     this.getToken,
-  }) : assert(authToken == null || getToken == null, 'Use either authToken or getToken');
+  }) : assert(authToken == null || getToken == null,
+            'Use either authToken or getToken');
 
   final String baseUrl;
   final String? authToken;
+
   /// When set, used for each request to attach Bearer token (overrides [authToken]).
   final Future<String?> Function()? getToken;
 
@@ -42,7 +44,9 @@ class ApiService {
     );
     _checkResponse(r);
     final list = jsonDecode(r.body) as List;
-    return list.map((e) => GameState.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => GameState.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<GameState> createGame(GameCreate body) async {
@@ -128,7 +132,8 @@ class ApiService {
   // —— Rounds ——
 
   /// Submit bids for current round. Returns { game, round_mode, total_bids }.
-  Future<Map<String, dynamic>> submitBids(String gameId, RoundCreate body) async {
+  Future<Map<String, dynamic>> submitBids(
+      String gameId, RoundCreate body) async {
     final r = await http.post(
       Uri.parse('$baseUrl/games/$gameId/rounds/bids'),
       headers: await _headers,
@@ -143,7 +148,8 @@ class ApiService {
   }
 
   /// Submit tricks and create round. Returns typed result with game and round.
-  Future<SubmitTricksResult> submitTricks(String gameId, TricksSubmit body) async {
+  Future<SubmitTricksResult> submitTricks(
+      String gameId, TricksSubmit body) async {
     final r = await http.post(
       Uri.parse('$baseUrl/games/$gameId/rounds/tricks'),
       headers: await _headers,
@@ -182,7 +188,8 @@ class ApiService {
       body: jsonEncode(body.toJson()),
     );
     _checkResponse(r);
-    return InvitationResponse.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+    return InvitationResponse.fromJson(
+        jsonDecode(r.body) as Map<String, dynamic>);
   }
 
   /// Convenience: send invitations by emails and optional slot indices.
@@ -215,7 +222,8 @@ class ApiService {
       body: '{}',
     );
     _checkResponse(r);
-    return InvitationAcceptResponse.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+    return InvitationAcceptResponse.fromJson(
+        jsonDecode(r.body) as Map<String, dynamic>);
   }
 
   void _checkResponse(http.Response r) {

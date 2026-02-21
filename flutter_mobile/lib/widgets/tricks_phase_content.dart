@@ -60,7 +60,8 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
           round.tricks.length >= 4 &&
           round.scores.length >= 4) {
         final players = widget.gameState.players;
-        final newScores = gameService.gameState?.scores ?? widget.gameState.scores;
+        final newScores =
+            gameService.gameState?.scores ?? widget.gameState.scores;
         final results = RoundSummaryResults(
           players: players,
           bids: round.bids,
@@ -90,7 +91,8 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final gameService = context.watch<GameService>();
-    final bids = gameService.currentBids ?? List.filled(widget.gameState.players.length, 0);
+    final bids = gameService.currentBids ??
+        List.filled(widget.gameState.players.length, 0);
     final roundsPlayed = widget.gameState.currentRound - 1;
 
     return SingleChildScrollView(
@@ -157,7 +159,8 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
                     widget.gameState.playerUserIds != null &&
                     i < widget.gameState.playerUserIds!.length &&
                     widget.gameState.ownerId != null &&
-                    widget.gameState.playerUserIds![i] == widget.gameState.ownerId,
+                    widget.gameState.playerUserIds![i] ==
+                        widget.gameState.ownerId,
               ),
             );
           }),
@@ -180,10 +183,12 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
 
   String _validationMessage() {
     if (_totalTricks < _totalRequired) {
-      return AppStrings.tricksPhaseValidationMissing(_totalRequired - _totalTricks);
+      return AppStrings.tricksPhaseValidationMissing(
+          _totalRequired - _totalTricks);
     }
     if (_totalTricks > _totalRequired) {
-      return AppStrings.tricksPhaseValidationExtra(_totalTricks - _totalRequired);
+      return AppStrings.tricksPhaseValidationExtra(
+          _totalTricks - _totalRequired);
     }
     return AppStrings.tricksPhaseFinishRound;
   }
@@ -237,7 +242,8 @@ class _PlayerTrickCard extends StatelessWidget {
                     ),
                     if (isCurrentPlayer)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(12),
@@ -251,7 +257,8 @@ class _PlayerTrickCard extends StatelessWidget {
                       ),
                     if (isOwner)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(12),

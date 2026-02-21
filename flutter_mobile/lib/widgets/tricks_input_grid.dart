@@ -41,7 +41,9 @@ class TricksInputGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Material(
-        color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+        color: isSelected
+            ? theme.colorScheme.primary
+            : theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: enabled ? () => onTrickSelected(value) : null,
@@ -52,7 +54,9 @@ class TricksInputGrid extends StatelessWidget {
             child: Text(
               '$value',
               style: theme.textTheme.titleSmall?.copyWith(
-                color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurfaceVariant,
+                color: isSelected
+                    ? theme.colorScheme.onPrimary
+                    : theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w500,
               ),
             ),

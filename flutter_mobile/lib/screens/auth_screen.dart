@@ -4,6 +4,18 @@ import 'package:provider/provider.dart';
 import '../l10n/app_strings.dart';
 import '../services/auth_service.dart';
 
+/// Google-style icon (blue "g").
+class _GoogleIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.g_mobiledata,
+      size: 22,
+      color: Color(0xFF4285F4),
+    );
+  }
+}
+
 /// Login / sign-up screen (Neon Auth). Toggle between modes; show errors.
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -97,6 +109,34 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  Future<void> _onGoogleSignIn() async {
+    if (_isLoading) return;
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final auth = context.read<AuthService>();
+      await auth.signInWithGoogle();
+      if (!mounted) return;
+      // AuthService.notifyListeners() will cause AuthGate to rebuild.
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = e.message.replaceAll(RegExp(r'^\.+\s*'), '').trim();
+        if (_errorMessage!.isEmpty)
+          _errorMessage = AppStrings.googleSignInFailed;
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = AppStrings.googleSignInFailed;
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,9 +191,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 setState(() => _isLoginMode = !_isLoginMode);
                               },
                         child: Text(
-                          _isLoginMode
-                              ? AppStrings.signUp
-                              : AppStrings.signIn,
+                          _isLoginMode ? AppStrings.signUp : AppStrings.signIn,
                         ),
                       ),
                     ],
@@ -182,7 +220,8 @@ class _AuthScreenState extends State<AuthScreen> {
               hintText: AppStrings.enterEmail,
             ),
             validator: (v) {
-              if (v == null || v.trim().isEmpty) return AppStrings.emailRequired;
+              if (v == null || v.trim().isEmpty)
+                return AppStrings.emailRequired;
               if (!RegExp(r'^[\w.-]+@[\w.-]+\.\w+$').hasMatch(v.trim())) {
                 return AppStrings.invalidEmail;
               }
@@ -209,6 +248,32 @@ class _AuthScreenState extends State<AuthScreen> {
           FilledButton(
             onPressed: _isLoading ? null : _onLogin,
             child: Text(_isLoading ? AppStrings.signingIn : AppStrings.signIn),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const Expanded(child: Divider()),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  AppStrings.or,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+              ),
+              const Expanded(child: Divider()),
+            ],
+          ),
+          const SizedBox(height: 20),
+          OutlinedButton.icon(
+            onPressed: _isLoading ? null : _onGoogleSignIn,
+            icon: _GoogleIcon(),
+            label: Text(
+              _isLoading
+                  ? AppStrings.connecting
+                  : AppStrings.continueWithGoogle,
+            ),
           ),
         ],
       ),
@@ -244,7 +309,8 @@ class _AuthScreenState extends State<AuthScreen> {
               hintText: AppStrings.enterEmail,
             ),
             validator: (v) {
-              if (v == null || v.trim().isEmpty) return AppStrings.emailRequired;
+              if (v == null || v.trim().isEmpty)
+                return AppStrings.emailRequired;
               if (!RegExp(r'^[\w.-]+@[\w.-]+\.\w+$').hasMatch(v.trim())) {
                 return AppStrings.invalidEmail;
               }

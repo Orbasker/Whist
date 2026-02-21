@@ -21,6 +21,10 @@ class AppStrings {
   static const loginFailed = 'Login failed';
   static const signupFailed = 'Sign up failed';
   static const logOut = 'Log out';
+  static const continueWithGoogle = 'Continue with Google';
+  static const connecting = 'Connecting…';
+  static const googleSignInFailed = 'Google sign-in failed';
+  static const or = 'Or';
 
   // Common
   static const close = 'Close';
@@ -34,7 +38,8 @@ class AppStrings {
   static const currentScore = 'Current score';
   static const roundsPlayed = 'Rounds played: %s';
   static const resetGame = 'Reset game';
-  static const resetDescription = 'Reset only happens when all players vote yes.';
+  static const resetDescription =
+      'Reset only happens when all players vote yes.';
   static const deleteGame = 'Delete game';
 
   // Round history (game.roundHistory, game.roundHistoryTable)
@@ -89,7 +94,8 @@ class AppStrings {
   static const invitationFormPlayersInGame = 'Players in game';
   static String invitationFormPlayerLabel(int n, String name) =>
       'Player $n: $name';
-  static String invitationFormSlotPlaceholder(int n) => 'Slot $n – Email address';
+  static String invitationFormSlotPlaceholder(int n) =>
+      'Slot $n – Email address';
   static const invitationFormInvalidEmail = 'Invalid email';
   static const invitationFormSendInvitations = 'Send invitations';
   static const invitationFormSending = 'Sending...';
@@ -107,15 +113,19 @@ class AppStrings {
   static const biddingPhaseSubtitle = 'Choose trump and bid for each player';
   static const biddingPhaseTrump = 'Trump';
   static const biddingPhaseTotalBids = 'Total bids';
-  static const biddingPhaseCannotBid13 = 'Cannot bid exactly 13 - must be over or under';
-  static String biddingPhaseUnderMode(int diff) => 'Under mode - $diff tricks short';
-  static String biddingPhaseOverMode(int diff) => 'Over mode - $diff tricks extra';
+  static const biddingPhaseCannotBid13 =
+      'Cannot bid exactly 13 - must be over or under';
+  static String biddingPhaseUnderMode(int diff) =>
+      'Under mode - $diff tricks short';
+  static String biddingPhaseOverMode(int diff) =>
+      'Over mode - $diff tricks extra';
   static const biddingPhaseManager = 'Manager';
   static const biddingPhaseYou = '(you)';
   static const biddingPhaseLocked = 'Locked';
   static const biddingPhaseChoice = '(choice)';
   static const biddingPhaseTricks = 'tricks';
-  static const biddingPhaseCannotEdit = 'Cannot edit - user not identified in game';
+  static const biddingPhaseCannotEdit =
+      'Cannot edit - user not identified in game';
   static const biddingPhaseLockChoice = 'Lock choice';
   static const biddingPhaseLockPlayerChoice = 'Lock player choice';
   static const biddingPhaseContinue = 'Continue';
@@ -128,7 +138,8 @@ class AppStrings {
   static const trumpHearts = 'Hearts';
 
   // Tricks phase (game.tricksPhase)
-  static const tricksPhaseQuestion = 'How many tricks did each player actually take?';
+  static const tricksPhaseQuestion =
+      'How many tricks did each player actually take?';
   static const tricksPhaseTotalTricks = 'Total tricks';
   static const tricksPhaseTricks = 'tricks';
   static const tricksPhaseBid = 'Bid';
@@ -140,7 +151,8 @@ class AppStrings {
 
   // Round summary (game.roundSummary)
   static const roundSummaryTitle = 'Round summary';
-  static String roundSummaryBidTook(int bid, int took) => 'Bid $bid, took $took';
+  static String roundSummaryBidTook(int bid, int took) =>
+      'Bid $bid, took $took';
   static const roundSummaryContinueNext = 'Continue to next round';
 
   // Game phase

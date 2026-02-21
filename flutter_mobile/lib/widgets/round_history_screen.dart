@@ -41,7 +41,9 @@ class RoundHistoryScreen extends StatelessWidget {
   int scoreBefore(int roundIndex, int playerIndex) {
     int sum = 0;
     for (var r = 0; r < roundIndex && r < rounds.length; r++) {
-      final s = rounds[r].scores.length > playerIndex ? rounds[r].scores[playerIndex] : 0;
+      final s = rounds[r].scores.length > playerIndex
+          ? rounds[r].scores[playerIndex]
+          : 0;
       sum += s;
     }
     return sum;
@@ -50,10 +52,13 @@ class RoundHistoryScreen extends StatelessWidget {
   int scoreAfter(int roundIndex, int playerIndex) {
     if (roundIndex >= rounds.length) return 0;
     return scoreBefore(roundIndex, playerIndex) +
-        (rounds[roundIndex].scores.length > playerIndex ? rounds[roundIndex].scores[playerIndex] : 0);
+        (rounds[roundIndex].scores.length > playerIndex
+            ? rounds[roundIndex].scores[playerIndex]
+            : 0);
   }
 
-  bool isCurrentPlayer(int pi) => currentPlayerIndex != null && currentPlayerIndex == pi;
+  bool isCurrentPlayer(int pi) =>
+      currentPlayerIndex != null && currentPlayerIndex == pi;
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +108,20 @@ class RoundHistoryScreen extends StatelessWidget {
       children: [
         // Header row 1: Round | Card | then 5 cols per player (player name in first of 5)
         TableRow(
-          decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest),
+          decoration:
+              BoxDecoration(color: theme.colorScheme.surfaceContainerHighest),
           children: [
-            _pad(Text(AppLocalizations.of(context)!.roundCol, style: headerStyle), cellPad),
-            _pad(Text(AppLocalizations.of(context)!.cardCol, style: headerStyle), cellPad),
+            _pad(
+                Text(AppLocalizations.of(context)!.roundCol,
+                    style: headerStyle),
+                cellPad),
+            _pad(
+                Text(AppLocalizations.of(context)!.cardCol, style: headerStyle),
+                cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final pi = c ~/ colsPerPlayer;
-              if (c % colsPerPlayer != 0 || pi >= players.length) return _pad(const SizedBox(), cellPad);
+              if (c % colsPerPlayer != 0 || pi >= players.length)
+                return _pad(const SizedBox(), cellPad);
               return _pad(
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -118,7 +130,10 @@ class RoundHistoryScreen extends StatelessWidget {
                     if (isCurrentPlayer(pi))
                       Padding(
                         padding: const EdgeInsets.only(left: 4),
-                        child: Text('(${AppLocalizations.of(context)!.you})', style: TextStyle(fontSize: 10, color: theme.colorScheme.primary)),
+                        child: Text('(${AppLocalizations.of(context)!.you})',
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: theme.colorScheme.primary)),
                       ),
                   ],
                 ),
@@ -129,14 +144,23 @@ class RoundHistoryScreen extends StatelessWidget {
         ),
         // Header row 2: empty | empty | Bid Took Change Before After (x4 players = 20 cells)
         TableRow(
-          decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.7)),
+          decoration: BoxDecoration(
+              color:
+                  theme.colorScheme.surfaceContainerHighest.withOpacity(0.7)),
           children: [
             _pad(const SizedBox(), cellPad),
             _pad(const SizedBox(), cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final l10n = AppLocalizations.of(context)!;
-              final labels = [l10n.bidCol, l10n.tookCol, l10n.changeCol, l10n.beforeCol, l10n.afterCol];
-              return _pad(Text(labels[c % colsPerPlayer], style: headerStyle), const EdgeInsets.symmetric(horizontal: 4, vertical: 4));
+              final labels = [
+                l10n.bidCol,
+                l10n.tookCol,
+                l10n.changeCol,
+                l10n.beforeCol,
+                l10n.afterCol
+              ];
+              return _pad(Text(labels[c % colsPerPlayer], style: headerStyle),
+                  const EdgeInsets.symmetric(horizontal: 4, vertical: 4));
             }),
           ],
         ),
@@ -146,17 +170,29 @@ class RoundHistoryScreen extends StatelessWidget {
           return TableRow(
             children: [
               _pad(Text('${round.roundNumber}', style: cellStyle), cellPad),
-              _pad(Text(trumpSymbol(round.trumpSuit), style: cellStyle.copyWith(fontSize: 16)), cellPad),
+              _pad(
+                  Text(trumpSymbol(round.trumpSuit),
+                      style: cellStyle.copyWith(fontSize: 16)),
+                  cellPad),
               ...List.generate(numPlayers * colsPerPlayer, (c) {
                 final pi = c ~/ colsPerPlayer;
-                if (pi >= players.length) return _pad(const SizedBox(), cellPad);
+                if (pi >= players.length)
+                  return _pad(const SizedBox(), cellPad);
                 final bid = round.bids.length > pi ? round.bids[pi] : 0;
                 final took = round.tricks.length > pi ? round.tricks[pi] : 0;
                 final score = round.scores.length > pi ? round.scores[pi] : 0;
                 final before = scoreBefore(ri, pi);
                 final after = scoreAfter(ri, pi);
                 final col = c % colsPerPlayer;
-                final value = col == 0 ? '$bid' : col == 1 ? '$took' : col == 2 ? formatGainLoss(score) : col == 3 ? '$before' : '$after';
+                final value = col == 0
+                    ? '$bid'
+                    : col == 1
+                        ? '$took'
+                        : col == 2
+                            ? formatGainLoss(score)
+                            : col == 3
+                                ? '$before'
+                                : '$after';
                 final isChange = col == 2;
                 return _pad(
                   Text(
@@ -182,16 +218,19 @@ class RoundHistoryScreen extends StatelessWidget {
         TableRow(
           decoration: BoxDecoration(
             color: theme.colorScheme.primaryContainer.withOpacity(0.3),
-            border: Border(top: BorderSide(color: theme.dividerColor, width: 2)),
+            border:
+                Border(top: BorderSide(color: theme.dividerColor, width: 2)),
           ),
           children: [
-            _pad(Text(AppLocalizations.of(context)!.total, style: totalStyle), cellPad),
+            _pad(Text(AppLocalizations.of(context)!.total, style: totalStyle),
+                cellPad),
             _pad(const SizedBox(), cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final pi = c ~/ colsPerPlayer;
               final col = c % colsPerPlayer;
               if (col == colsPerPlayer - 1 && pi < players.length) {
-                final total = rounds.isNotEmpty ? scoreAfter(rounds.length - 1, pi) : 0;
+                final total =
+                    rounds.isNotEmpty ? scoreAfter(rounds.length - 1, pi) : 0;
                 return _pad(Text('$total', style: totalStyle), cellPad);
               }
               return _pad(const SizedBox(), cellPad);

@@ -29,9 +29,12 @@ class Round {
       id: json['id'] as int,
       gameId: json['game_id'] as String,
       roundNumber: json['round_number'] as int,
-      bids: List<int>.from((json['bids'] as List).map((e) => e is int ? e : int.parse('$e'))),
-      tricks: List<int>.from((json['tricks'] as List).map((e) => e is int ? e : int.parse('$e'))),
-      scores: List<int>.from((json['scores'] as List).map((e) => e is int ? e : int.parse('$e'))),
+      bids: List<int>.from(
+          (json['bids'] as List).map((e) => e is int ? e : int.parse('$e'))),
+      tricks: List<int>.from(
+          (json['tricks'] as List).map((e) => e is int ? e : int.parse('$e'))),
+      scores: List<int>.from(
+          (json['scores'] as List).map((e) => e is int ? e : int.parse('$e'))),
       roundMode: json['round_mode'] as String? ?? 'over',
       trumpSuit: json['trump_suit'] as String?,
       createdBy: json['created_by']?.toString(),

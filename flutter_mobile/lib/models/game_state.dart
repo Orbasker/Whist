@@ -38,7 +38,8 @@ class GameState {
     return GameState(
       id: json['id'].toString(),
       players: List<String>.from(json['players'] as List),
-      scores: List<int>.from((json['scores'] as List).map((e) => e is int ? e : int.parse('$e'))),
+      scores: List<int>.from(
+          (json['scores'] as List).map((e) => e is int ? e : int.parse('$e'))),
       currentRound: json['current_round'] as int,
       status: json['status'] as String,
       gameMode: json['game_mode'] as String?,
@@ -46,7 +47,9 @@ class GameState {
       name: json['name'] as String?,
       playerUserIds: json['player_user_ids'] == null
           ? null
-          : (json['player_user_ids'] as List).map((e) => e?.toString()).toList(),
+          : (json['player_user_ids'] as List)
+              .map((e) => e?.toString())
+              .toList(),
       isShared: json['is_shared'] as bool? ?? false,
       shareCode: json['share_code'] as String?,
       resetRequestedAt: json['reset_requested_at'] == null

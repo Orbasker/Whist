@@ -1,8 +1,18 @@
 # whist_flutter
 
-A new Flutter project.
+Whist game scoring – Flutter app (same auth and API as the Angular web app).
 
 ## Getting Started
+
+### Google Sign-In (optional)
+
+Login with Google uses the same Neon Auth backend as the web app. To enable it:
+
+1. **Google Cloud Console**: In the same project used for Neon Auth (or your web app), create an **iOS** OAuth 2.0 Client ID (Credentials → Create credentials → OAuth client ID → iOS). Note the **iOS client ID** (e.g. `123-xxx.apps.googleusercontent.com`).
+2. **iOS**: In `ios/Runner/Info.plist`, replace `com.googleusercontent.apps.YOUR-IOS-CLIENT-ID-REVERSED` in `CFBundleURLSchemes` with your **reversed** iOS client ID (e.g. if the client ID is `123-abc.apps.googleusercontent.com`, use `com.googleusercontent.apps.123-abc`).
+3. Neon Auth must have Google OAuth configured (same as for the web app). The app sends the Google ID token to Neon Auth’s `sign-in/social` endpoint.
+
+## Getting Started (Flutter)
 
 This project is a starting point for a Flutter application.
 

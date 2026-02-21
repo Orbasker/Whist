@@ -28,7 +28,8 @@ class GameService extends ChangeNotifier {
   String? _authToken;
   StreamSubscription<RealtimeMessage>? _realtimeSubscription;
   String? _currentPhase; // 'bidding' | 'tricks' from realtime
-  GamePhase _phase = GamePhase.bidding; // local when using REST submitBids/submitTricks
+  GamePhase _phase =
+      GamePhase.bidding; // local when using REST submitBids/submitTricks
   List<int>? _currentBids;
   String? _currentTrumpSuit;
   final Map<int, int> _liveBidSelections = {};
@@ -41,12 +42,14 @@ class GameService extends ChangeNotifier {
   List<Round> get rounds => List.unmodifiable(_rounds);
   String? get currentUserId => _currentUserId;
   String? get currentPhase => _currentPhase;
+
   /// Resolves to realtime phase when set, otherwise local _phase (REST flow).
   GamePhase get phase {
     if (_currentPhase == 'tricks') return GamePhase.tricks;
     if (_currentPhase == 'bidding') return GamePhase.bidding;
     return _phase;
   }
+
   List<int>? get currentBids => _currentBids;
   String? get currentTrumpSuit => _currentTrumpSuit;
   Map<int, int> get liveBidSelections => Map.unmodifiable(_liveBidSelections);
@@ -97,7 +100,8 @@ class GameService extends ChangeNotifier {
   }
 
   Future<GameState> createGame(List<String> players, {String? name}) async {
-    final game = await _api.createGame(GameCreate(players: players, name: name));
+    final game =
+        await _api.createGame(GameCreate(players: players, name: name));
     _gameState = game;
     _rounds = await _api.getRounds(game.id);
     return game;
@@ -121,9 +125,8 @@ class GameService extends ChangeNotifier {
       _realtimeSubscription?.cancel();
       _realtime!.disconnect();
       final token = await _api.getToken?.call() ?? _authToken;
-      _realtimeSubscription = _realtime!
-          .connect(gameId, token: token)
-          .listen(_onRealtimeMessage);
+      _realtimeSubscription =
+          _realtime!.connect(gameId, token: token).listen(_onRealtimeMessage);
     }
 
     notifyListeners();

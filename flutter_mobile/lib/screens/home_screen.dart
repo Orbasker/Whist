@@ -78,140 +78,164 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           SafeArea(
             child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 8),
-                    Icon(
-                      Icons.emoji_events_outlined,
-                      size: 48,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      AppStrings.homeTitle,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      AppStrings.homeSubtitle,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                    ),
-                    const SizedBox(height: 16),
-                    // User info placeholder (no auth in Flutter yet)
-                    Text(
-                      'Not signed in',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Card(
+              slivers: [
+                SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              AppStrings.myGames,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            FilledButton.icon(
-                              onPressed: _openNewGameForm,
-                              icon: const Icon(Icons.add, size: 20),
-                              label: const Text(AppStrings.newGame),
-                            ),
-                          ],
+                        const SizedBox(height: 8),
+                        Icon(
+                          Icons.emoji_events_outlined,
+                          size: 48,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         const SizedBox(height: 12),
-                        if (_loading)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 24),
-                            child: Center(child: CircularProgressIndicator()),
-                          )
-                        else if (_error != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: Column(
-                              children: [
-                                Text(
-                                  _error!,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.error,
+                        Text(
+                          AppStrings.homeTitle,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          AppStrings.homeSubtitle,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                   ),
-                                ),
-                                const SizedBox(height: 12),
-                                OutlinedButton(
-                                  onPressed: _loadGames,
-                                  child: const Text(AppStrings.retry),
-                                ),
-                              ],
-                            ),
-                          )
-                        else if (_games.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24),
-                            child: Column(
-                              children: [
-                                Text(
-                                  AppStrings.noGames,
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                      ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  AppStrings.createGameToStart,
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          )
-                        else
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _games.length,
-                            separatorBuilder: (_, __) => const SizedBox(height: 8),
-                            itemBuilder: (context, index) {
-                              final game = _games[index];
-                              return _GameListTile(
-                                game: game,
-                                displayName: _getGameDisplayName(game),
-                                formattedDate: _formatDate(game.updatedAt),
-                                onTap: () => _openGame(game.id),
-                              );
-                            },
-                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        // User info placeholder (no auth in Flutter yet)
+                        Text(
+                          'Not signed in',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppStrings.myGames,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                FilledButton.icon(
+                                  onPressed: _openNewGameForm,
+                                  icon: const Icon(Icons.add, size: 20),
+                                  label: const Text(AppStrings.newGame),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            if (_loading)
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 24),
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                              )
+                            else if (_error != null)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      _error!,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(context).colorScheme.error,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    OutlinedButton(
+                                      onPressed: _loadGames,
+                                      child: const Text(AppStrings.retry),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            else if (_games.isEmpty)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 24),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      AppStrings.noGames,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      AppStrings.createGameToStart,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            else
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _games.length,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(height: 8),
+                                itemBuilder: (context, index) {
+                                  final game = _games[index];
+                                  return _GameListTile(
+                                    game: game,
+                                    displayName: _getGameDisplayName(game),
+                                    formattedDate: _formatDate(game.updatedAt),
+                                    onTap: () => _openGame(game.id),
+                                  );
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),  // SafeArea (first child of Stack)
-        if (_showNewGameForm)
+          ), // SafeArea (first child of Stack)
+          if (_showNewGameForm)
             _NewGameModal(
               onClose: _closeNewGameForm,
               onCreate: (game) async {
@@ -265,14 +289,19 @@ class _NewGameModalState extends State<_NewGameModal> {
     try {
       final gameService = context.read<GameService>();
       final name = _nameController.text.trim();
-      final game = await gameService.createGame(players, name: name.isEmpty ? null : name);
+      final game = await gameService.createGame(players,
+          name: name.isEmpty ? null : name);
       if (!mounted) return;
       widget.onCreate(game);
     } catch (e) {
       if (mounted) {
         setState(() {
           _submitting = false;
-          _submitError = e.toString().replaceFirst('ApiException(', '').split('):').join(': ');
+          _submitError = e
+              .toString()
+              .replaceFirst('ApiException(', '')
+              .split('):')
+              .join(': ');
         });
       }
     } finally {
@@ -336,8 +365,9 @@ class _NewGameModalState extends State<_NewGameModal> {
                               labelText: '${AppStrings.player} ${i + 1}',
                               border: const OutlineInputBorder(),
                             ),
-                            validator: (v) =>
-                                (v == null || v.trim().isEmpty) ? 'Required' : null,
+                            validator: (v) => (v == null || v.trim().isEmpty)
+                                ? 'Required'
+                                : null,
                           ),
                           if (i < 3) const SizedBox(height: 12),
                         ],
@@ -345,7 +375,8 @@ class _NewGameModalState extends State<_NewGameModal> {
                           const SizedBox(height: 12),
                           Text(
                             _submitError!,
-                            style: TextStyle(color: Theme.of(context).colorScheme.error),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.error),
                           ),
                         ],
                         const SizedBox(height: 24),
@@ -365,7 +396,8 @@ class _NewGameModalState extends State<_NewGameModal> {
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,
-                                        child: CircularProgressIndicator(strokeWidth: 2),
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2),
                                       )
                                     : const Text(AppStrings.startGame),
                               ),
@@ -429,7 +461,8 @@ class _GameListTile extends StatelessWidget {
                     Text(
                       game.players.join(', '),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -439,7 +472,8 @@ class _GameListTile extends StatelessWidget {
                       '${AppStrings.round} ${game.currentRound} · '
                       '${AppStrings.score}: ${game.scores.join(' - ')} · $formattedDate',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -448,7 +482,8 @@ class _GameListTile extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: isActive
                       ? Theme.of(context).colorScheme.primaryContainer
