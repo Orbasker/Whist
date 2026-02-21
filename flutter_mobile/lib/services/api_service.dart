@@ -60,6 +60,26 @@ class ApiService {
     return list.map((e) => Round.fromJson(e as Map<String, dynamic>)).toList();
   }
 
+  /// Send invitations for a game. Requires auth; only game owner can invite.
+  /// [playerIndices] optional slot indices (0-3) for each email; if null, assigned sequentially.
+  Future<InvitationResponse> sendInvitations(
+    String gameId,
+    List<String> emails, [
+    List<int>? playerIndices,
+  ]) async {
+    final body = <String, dynamic>{'emails': emails};
+    if (playerIndices != null) body['player_indices'] = playerIndices;
+    final r = await http.post(
+      Uri.parse('$baseUrl/invite/games/$gameId/invite'),
+      headers: _headers,
+      body: jsonEncode(body),
+    );
+    _checkResponse(r);
+    return InvitationResponse.fromJson(
+      jsonDecode(r.body) as Map<String, dynamic>,
+    );
+  }
+
   void _checkResponse(http.Response r) {
     if (r.statusCode >= 400) {
       throw ApiException(r.statusCode, r.body);
@@ -73,4 +93,17 @@ class ApiException implements Exception {
   final String body;
   @override
   String toString() => 'ApiException($statusCode): $body';
+}
+
+/// Response from POST /invite/games/:gameId/invite
+class InvitationResponse {
+  const InvitationResponse({required this.sent, required this.total});
+  final int sent;
+  final int total;
+  factory InvitationResponse.fromJson(Map<String, dynamic> json) {
+    return InvitationResponse(
+      sent: json['sent'] as int,
+      total: json['total'] as int,
+    );
+  }
 }
