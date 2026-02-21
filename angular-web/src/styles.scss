@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import './styles/variables';
+@import './styles/shadcn-theme';
 @import './styles/theme';
 @import './styles/rtl';
 @import './styles/breakpoints';
@@ -41,6 +42,20 @@ body {
 
   .safe-area-inset-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* shadcn-style input (used by app-ui-input and by class "ui-input" on raw inputs) */
+@layer components {
+  .ui-input input,
+  .ui-input textarea,
+  input.ui-input,
+  textarea.ui-input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background;
+    @apply placeholder:text-muted-foreground;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+    min-height: 44px;
   }
 }
 

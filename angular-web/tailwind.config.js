@@ -1,43 +1,79 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
       screens: {
-        xs: '375px',
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
+        xs: "375px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
       },
       colors: {
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        popover: {
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
+        },
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
         slate: {
-          900: '#0f172a',
-          800: '#1e293b',
-          700: '#334155',
-          600: '#475569',
-          500: '#64748b',
-          400: '#94a3b8',
-          300: '#cbd5e1',
-          200: '#e2e8f0',
-          100: '#f1f5f9',
+          900: "#0f172a",
+          800: "#1e293b",
+          700: "#334155",
+          600: "#475569",
+          500: "#64748b",
+          400: "#94a3b8",
+          300: "#cbd5e1",
+          200: "#e2e8f0",
+          100: "#f1f5f9",
         },
         amber: {
-          600: '#d97706',
-          500: '#f59e0b',
-          400: '#fbbf24',
-          300: '#fcd34d',
-        }
+          600: "#d97706",
+          500: "#f59e0b",
+          400: "#fbbf24",
+          300: "#fcd34d",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius-lg)",
+        md: "var(--radius)",
+        sm: "var(--radius-sm)",
       },
       minHeight: {
-        touch: '44px',
+        touch: "44px",
       },
       minWidth: {
-        touch: '44px',
+        touch: "44px",
       },
     },
   },
   plugins: [],
-}
+};

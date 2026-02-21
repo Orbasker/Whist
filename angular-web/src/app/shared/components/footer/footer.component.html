@@ -1,23 +1,40 @@
-<footer class="app-footer" role="contentinfo">
-  <div class="footer-inner">
-    <span class="footer-label" aria-hidden="true">{{ 'footer.language' | translate }}:</span>
-    <div class="language-switcher" role="group" [attr.aria-label]="'footer.language' | translate">
+<footer
+  class="fixed bottom-0 left-0 right-0 z-[60] flex shrink-0 justify-center border-t border-border bg-background/95 py-3 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] text-center"
+  role="contentinfo"
+>
+  <div class="inline-flex flex-wrap items-center justify-center gap-2">
+    <span class="text-muted-foreground text-[0.8125rem]" aria-hidden="true">
+      {{ 'footer.language' | translate }}:
+    </span>
+    <div
+      class="inline-flex items-center gap-1"
+      role="group"
+      [attr.aria-label]="'footer.language' | translate"
+    >
       <button
         type="button"
-        class="lang-btn"
-        [class.active]="currentLang === 'he'"
-        (click)="setHebrew()"
+        class="min-h-touch min-w-touch rounded-md border px-3 py-1.5 text-sm font-medium transition-colors"
+        [ngClass]="
+          currentLang === 'he'
+            ? 'border-primary bg-primary/20 text-primary'
+            : 'border-input text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+        "
         [attr.aria-pressed]="currentLang === 'he'"
+        (click)="setHebrew()"
       >
         {{ 'footer.hebrew' | translate }}
       </button>
-      <span class="separator" aria-hidden="true">/</span>
+      <span class="select-none text-sm text-muted-foreground/80" aria-hidden="true">/</span>
       <button
         type="button"
-        class="lang-btn"
-        [class.active]="currentLang === 'en'"
-        (click)="setEnglish()"
+        class="min-h-touch min-w-touch rounded-md border px-3 py-1.5 text-sm font-medium transition-colors"
+        [ngClass]="
+          currentLang === 'en'
+            ? 'border-primary bg-primary/20 text-primary'
+            : 'border-input text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+        "
         [attr.aria-pressed]="currentLang === 'en'"
+        (click)="setEnglish()"
       >
         {{ 'footer.english' | translate }}
       </button>
