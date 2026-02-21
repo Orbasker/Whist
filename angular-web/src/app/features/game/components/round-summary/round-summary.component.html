@@ -1,40 +1,50 @@
 <app-modal [title]="'game.roundSummary.title' | translate" size="sm" (close)="onContinue()">
-  <div class="flex-1 min-h-0 overflow-y-auto -webkit-overflow-scrolling-touch">
-    <div class="space-y-3" *ngIf="results">
-      <div
-        *ngFor="let player of results.players; let i = index"
-        class="bg-slate-700 rounded-lg p-3"
-      >
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-white font-medium">{{ player }}</div>
-            <div class="text-slate-400 text-sm">
-              {{
-                'game.roundSummary.bidTook'
-                  | translate: { bid: results.bids[i], took: results.tricks[i] }
-              }}
+  <div class="round-summary-body">
+    <!-- Scrollable area: sticky header + totals list -->
+    <div class="round-summary-scroll">
+      <!-- Sticky summary header (stays visible when scrolling, like bids) -->
+      <div class="round-summary-sticky">
+        <p class="text-slate-400 text-sm">
+          {{ 'game.roundSummary.playerTotals' | translate }}
+        </p>
+      </div>
+      <!-- Totals list scrolls below the sticky header -->
+      <div class="space-y-3" *ngIf="results">
+        <div
+          *ngFor="let player of results.players; let i = index"
+          class="bg-slate-700 rounded-lg p-3"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-white font-medium">{{ player }}</div>
+              <div class="text-slate-400 text-sm">
+                {{
+                  'game.roundSummary.bidTook'
+                    | translate: { bid: results.bids[i], took: results.tricks[i] }
+                }}
+              </div>
             </div>
-          </div>
-          <div class="text-right">
-            <div
-              [class.text-green-400]="results.roundScores[i] > 0"
-              [class.text-red-400]="results.roundScores[i] < 0"
-              class="font-bold"
-            >
-              {{ results.roundScores[i] > 0 ? '+' : '' }}{{ results.roundScores[i] }}
-            </div>
-            <div class="text-slate-400 text-sm">
-              {{ 'game.roundSummary.total' | translate }}: {{ results.newTotalScores[i] }}
+            <div class="text-right">
+              <div
+                [class.text-green-400]="results.roundScores[i] > 0"
+                [class.text-red-400]="results.roundScores[i] < 0"
+                class="font-bold"
+              >
+                {{ results.roundScores[i] > 0 ? '+' : '' }}{{ results.roundScores[i] }}
+              </div>
+              <div class="text-slate-400 text-sm">
+                {{ 'game.roundSummary.total' | translate }}: {{ results.newTotalScores[i] }}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <button
+      (click)="onContinue()"
+      class="round-summary-continue min-h-touch w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+    >
+      {{ 'game.roundSummary.continueNext' | translate }}
+    </button>
   </div>
-  <button
-    (click)="onContinue()"
-    class="min-h-touch w-full mt-6 bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-  >
-    {{ 'game.roundSummary.continueNext' | translate }}
-  </button>
 </app-modal>
