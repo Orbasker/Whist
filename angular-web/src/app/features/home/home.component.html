@@ -48,12 +48,17 @@
 
     <!-- Games List (only shown when authenticated) -->
     <div *ngIf="isAuthenticated" class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl mb-4">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-4 sm:mb-6">
-        <h2 class="text-lg sm:text-xl font-semibold text-white">
+      <div
+        class="flex flex-col gap-3 mb-4 sm:mb-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+      >
+        <h2 class="text-lg sm:text-xl font-semibold text-white order-1 sm:order-none">
           {{ 'home.myGames' | translate }}
         </h2>
-        <button (click)="toggleNewGameForm()" class="btn btn-primary flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button
+          (click)="toggleNewGameForm()"
+          class="btn btn-primary flex items-center justify-center gap-2 w-full sm:w-auto order-2 sm:order-none"
+        >
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -83,7 +88,7 @@
           (click)="continueGame(game.id)"
           class="bg-slate-700 hover:bg-slate-600 rounded-lg p-3 sm:p-4 cursor-pointer transition-colors border border-slate-600 hover:border-amber-500"
         >
-          <div class="flex items-start justify-between gap-2">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
             <div class="flex-1 min-w-0">
               <h3 class="text-white font-semibold mb-1 text-sm sm:text-base truncate">
                 {{ getGameDisplayName(game) }}
@@ -91,20 +96,22 @@
               <p class="text-slate-400 text-xs sm:text-sm mb-2 truncate">
                 {{ game.players.join(', ') }}
               </p>
-              <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-500">
+              <div
+                class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 min-w-0"
+              >
                 <span>{{ 'home.round' | translate }} {{ game.current_round }}</span>
-                <span>•</span>
+                <span class="text-slate-600" aria-hidden="true">•</span>
                 <span>{{ 'home.score' | translate }}: {{ game.scores.join(' - ') }}</span>
-                <span>•</span>
-                <span>{{ formatDate(game.updated_at) }}</span>
+                <span class="text-slate-600" aria-hidden="true">•</span>
+                <span class="truncate">{{ formatDate(game.updated_at) }}</span>
               </div>
             </div>
-            <div class="flex items-center gap-1.5 shrink-0">
+            <div class="flex items-center gap-1.5 shrink-0 flex-wrap">
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openInvitationForm(game); $event.stopPropagation()"
-                class="btn btn-compact bg-blue-600 hover:bg-blue-500 text-white inline-flex gap-1.5"
+                class="btn btn-compact game-card-action bg-blue-600 hover:bg-blue-500 text-white inline-flex gap-1.5"
                 [attr.aria-label]="'home.sendInvites' | translate"
               >
                 <svg
@@ -127,7 +134,7 @@
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openDeleteConfirm(game.id, $event)"
-                class="btn btn-danger btn-compact inline-flex gap-1.5"
+                class="btn btn-danger btn-compact game-card-action inline-flex gap-1.5"
                 [attr.aria-label]="'home.deleteGame' | translate"
               >
                 <svg
@@ -147,8 +154,11 @@
                 {{ 'home.delete' | translate }}
               </button>
               <span
-                [class]="game.status === 'active' ? 'bg-green-500' : 'bg-slate-500'"
-                class="px-2 py-1.5 rounded text-xs text-white"
+                [class]="
+                  game.status === 'active'
+                    ? 'game-card-action-pill bg-green-500'
+                    : 'game-card-action-pill bg-slate-500'
+                "
               >
                 {{
                   game.status === 'active'

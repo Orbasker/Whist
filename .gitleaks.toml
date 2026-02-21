@@ -1,15 +1,17 @@
 # Gitleaks config for Whist
-# Extends default rules and allowlists frontend env files where Supabase URL/key are
-# injected at build time (scripts/replace-env.js); we do not commit real keys.
+# Extends default rules and allowlists files that look like secrets but are safe:
+# - Frontend env files: Supabase URL/key are injected at build time (replace-env.js); we do not commit real keys.
+# - replace-env.js: contains env var names (SUPABASE_URL, etc.) and default URLs only; reads real secrets from .env at build time.
 title = "Whist gitleaks config"
 
 [extend]
 useDefault = true
 
 [[allowlists]]
-description = "Frontend environment files use build-time injection; no secrets committed"
+description = "Frontend env files and replace-env script: build-time injection only, no secrets committed"
 paths = [
     '''angular-web/src/environments/environment\.ts''',
     '''angular-web/src/environments/environment\.prod\.ts''',
     '''angular-web/src/environments/environment\.staging\.ts''',
+    '''angular-web/scripts/replace-env\.js''',
 ]

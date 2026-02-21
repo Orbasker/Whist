@@ -39,6 +39,7 @@ export class WebSocketService implements RealtimeService {
       this.ws.onopen = () => {
         this.connectionStatus$.next(true);
         this.reconnectAttempts = 0;
+        console.info('[Whist] Realtime: using backend WebSocket', { gameId });
       };
 
       this.ws.onmessage = (event) => {

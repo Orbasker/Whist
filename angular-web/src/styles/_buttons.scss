@@ -85,3 +85,38 @@
   font-size: 0.8125rem;
   min-height: var(--btn-min-height);
 }
+
+/* Game card actions: same size for Invite, Delete, Active/Completed – color only differs */
+.game-card-action {
+  min-width: 7rem;
+}
+
+.game-card-action-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7rem;
+  min-height: var(--btn-min-height);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: var(--btn-font-weight);
+  line-height: 1.25;
+  border-radius: var(--btn-radius);
+  color: white;
+}
+
+/* Narrow screens: smaller min-width so three actions fit without squishing content */
+@media (max-width: 480px) {
+  .game-card-action,
+  .game-card-action-pill {
+    min-width: 5.25rem;
+  }
+  .game-card-action-pill {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  .game-card-action.btn-compact {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}

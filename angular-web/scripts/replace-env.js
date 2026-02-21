@@ -2,26 +2,50 @@
 
 /**
  * Script to replace environment variables in Angular environment files at build time.
+ * Reads API_URL, AUTH_URL, SUPABASE_URL, SUPABASE_ANON_KEY, etc. from process.env.
+ * - Local: optional .env file (angular-web/.env) is loaded into process.env if present.
+ * - Production: set env vars in your platform (Vercel, Netlify, CI, etc.); no .env file needed.
  * Usage: node scripts/replace-env.js [environment-file]
- * Example: node scripts/replace-env.js src/environments/environment.prod.ts
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const envFile = process.argv[2] || 'src/environments/environment.prod.ts';
-const filePath = path.join(__dirname, '..', envFile);
+// Optional: load .env from frontend repo (local dev). Production uses platform env vars.
+const frontendRoot = path.join(__dirname, '..');
+const envPath = path.join(frontendRoot, '.env');
+try {
+  const dotenv = require('dotenv');
+  if (fs.existsSync(envPath)) dotenv.config({ path: envPath });
+} catch (_) {
+  // dotenv not installed; process.env from shell/platform is used
+}
 
-if (!fs.existsSync(filePath)) {
-  console.error(`Environment file not found: ${filePath}`);
+const envFile = process.argv[2] || 'src/environments/environment.prod.ts';
+const basePath = path.join(__dirname, '..');
+// For dev, read from template so we never commit secrets; write to environment.ts (gitignored)
+const isDevEnv = envFile === 'src/environments/environment.ts';
+const readPath = isDevEnv
+  ? path.join(basePath, 'src/environments/environment.ts.example')
+  : path.join(basePath, envFile);
+const writePath = path.join(basePath, envFile);
+
+if (!fs.existsSync(readPath)) {
+  console.error(`Environment file not found: ${readPath}`);
   process.exit(1);
 }
 
-let content = fs.readFileSync(filePath, 'utf8');
+let content = fs.readFileSync(readPath, 'utf8');
 
-// Get environment variables with fallbacks
-const apiUrl = process.env.API_URL || 'https://whist.api.orbasker.com/api/v1';
-const authUrl = process.env.AUTH_URL || 'https://ep-xxx-prod.neonauth.region.aws.neon.tech/neondb/auth';
+// Dev defaults for environment.ts; prod/staging use production defaults
+const isDev = envFile.includes('environment.ts') && !envFile.includes('.prod') && !envFile.includes('.staging');
+const defaultApiUrl = isDev ? 'http://localhost:8000/api/v1' : 'https://whist.api.orbasker.com/api/v1';
+const defaultAuthUrl = isDev
+  ? 'https://ep-shiny-voice-agz9vcbc.neonauth.c-2.eu-central-1.aws.neon.tech/neondb/auth'
+  : 'https://ep-xxx-prod.neonauth.region.aws.neon.tech/neondb/auth';
+
+const apiUrl = process.env.API_URL || defaultApiUrl;
+const authUrl = process.env.AUTH_URL || defaultAuthUrl;
 const supabaseUrl = process.env.SUPABASE_URL || '';
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
 // Default to Supabase Realtime when URL/key are set; allow USE_SUPABASE_REALTIME=false to override
@@ -58,9 +82,9 @@ content = content.replace(
   `supabaseAnonKey: '${supabaseAnonKey}'`
 );
 
-fs.writeFileSync(filePath, content);
+fs.writeFileSync(writePath, content);
 
-console.log(`✅ Updated ${envFile}`);
+console.log(`✅ Updated ${envFile}${isDevEnv ? ' (from .example + .env)' : ''}`);
 console.log(`   API URL: ${apiUrl}`);
 console.log(`   Auth URL: ${authUrl}`);
 if (supabaseUrl) {

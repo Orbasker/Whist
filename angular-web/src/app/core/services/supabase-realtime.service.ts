@@ -43,8 +43,12 @@ export class SupabaseRealtimeService implements RealtimeService {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this.channel as any)
-      .on('broadcast', { event: 'message' }, (payload: { payload?: WebSocketMessage }) => {
-        const msg = payload?.payload;
+      .on('broadcast', { event: 'message' }, (payload: unknown) => {
+        // Supabase may pass { payload: msg } (server/broadcast API) or msg directly (client broadcast)
+        const raw = payload as Record<string, unknown> | null;
+        const msg = (
+          raw && typeof raw === 'object' && 'payload' in raw ? raw['payload'] : payload
+        ) as WebSocketMessage | undefined;
         if (msg && typeof msg === 'object' && 'type' in msg) {
           this.messageSubject.next(msg as WebSocketMessage);
         }
@@ -52,6 +56,7 @@ export class SupabaseRealtimeService implements RealtimeService {
       .subscribe((status: string) => {
         this.connectionStatus$.next(status === 'SUBSCRIBED');
         if (status === 'SUBSCRIBED') {
+          console.info('[Whist] Realtime: using Supabase', { gameId });
           this.sendInitialGameState(gameId);
         }
       });
