@@ -27,6 +27,32 @@ class AppStrings {
   static const afterCol = 'After';
   static const total = 'Total';
 
+  // Home
+  static const homeTitle = 'Whist';
+  static const homeSubtitle = 'Score your card game';
+  static const myGames = 'My games';
+  static const newGame = 'New game';
+  static const loadingGames = 'Loading games…';
+  static const noGames = 'No games yet';
+  static const createGameToStart = 'Create a game to get started';
+  static const openGame = 'Open game';
+  static const round = 'Round';
+  static const score = 'Score';
+  static const active = 'Active';
+  static const completed = 'Completed';
+  static const playerNames = 'Player names';
+  static const player = 'Player';
+  static const startGame = 'Start game';
+  static const gameNameOptional = 'Game name (optional)';
+  static const gameNamePlaceholder = 'e.g. Friday night';
+  static const newGameFormTitle = 'New game';
+  static const creatorSeatLabel = 'Creator';
+  static const gameNameDefault = 'Untitled game';
+  static const createGameFailed = 'Failed to create game';
+  static const mustBeLoggedIn = 'You must be logged in to create a game';
+  static const authTokenMissing = 'Session expired. Please log in again.';
+  static const retry = 'Retry';
+
   // Home / delete
   static const confirmDeleteGame = 'Are you sure you want to delete this game?';
 }

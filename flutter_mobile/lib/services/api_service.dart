@@ -33,6 +33,18 @@ class ApiService {
     return list.map((e) => GameState.fromJson(e as Map<String, dynamic>)).toList();
   }
 
+  Future<GameState> createGame(List<String> players, {String? name}) async {
+    final body = <String, dynamic>{'players': players};
+    if (name != null && name.trim().isNotEmpty) body['name'] = name.trim();
+    final r = await http.post(
+      Uri.parse('$baseUrl/games'),
+      headers: _headers,
+      body: jsonEncode(body),
+    );
+    _checkResponse(r);
+    return GameState.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
   Future<GameState> getGame(String gameId) async {
     final r = await http.get(
       Uri.parse('$baseUrl/games/$gameId'),

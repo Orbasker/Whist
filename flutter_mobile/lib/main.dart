@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/game_screen.dart';
+import 'screens/home_screen.dart';
 import 'services/api_service.dart';
 import 'services/game_service.dart';
 
@@ -32,7 +32,7 @@ class WhistApp extends StatelessWidget {
             update: (_, api, __) => GameService(api),
           ),
         ],
-        child: const GameScreen(),
+        child: const HomeScreen(),
       ),
     );
   }
