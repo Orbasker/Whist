@@ -5,16 +5,20 @@ import { GameService } from '../../../../core/services/game.service';
 import { GameState } from '../../../../core/models/game-state.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { TricksInputGridComponent } from '../../../../shared/components/tricks-input-grid/tricks-input-grid.component';
+import { ScoreboardIconComponent } from '../../../../shared/components/scoreboard-icon/scoreboard-icon.component';
 
 @Component({
   selector: 'app-tricks-phase',
   standalone: true,
-  imports: [CommonModule, TricksInputGridComponent, TranslateModule],
+  imports: [CommonModule, TricksInputGridComponent, ScoreboardIconComponent, TranslateModule],
   templateUrl: './tricks-phase.component.html',
+  styleUrl: './tricks-phase.component.scss',
 })
 export class TricksPhaseComponent implements OnInit, OnDestroy {
   @Input() players: string[] = [];
+  @Input() roundsPlayed = 0;
   @Output() tricksSubmit = new EventEmitter<number[]>();
+  @Output() openScoreTable = new EventEmitter<void>();
 
   tricks: number[] = [0, 0, 0, 0];
   liveTricks: { [playerIndex: number]: number } = {};

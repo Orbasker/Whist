@@ -1,16 +1,28 @@
 <div class="space-y-4 sm:space-y-6">
-  <div>
-    <p class="text-sm text-muted-foreground sm:text-base">
-      {{ 'game.tricksPhase.question' | translate }}
-    </p>
-  </div>
-
-  <div class="rounded-xl border border-success/30 bg-success/15 px-4 py-4 shadow-sm sm:p-5">
-    <div class="text-center">
-      <span class="text-base font-semibold text-foreground sm:text-lg"
-        >{{ 'game.tricksPhase.totalTricks' | translate }} {{ totalTricks }}</span
-      >
+  <div class="tricks-phase-sticky space-y-4">
+    <div>
+      <p class="text-sm text-muted-foreground sm:text-base">
+        {{ 'game.tricksPhase.question' | translate }}
+      </p>
     </div>
+
+    <div class="rounded-xl border border-success/30 bg-success/15 px-4 py-4 shadow-sm sm:p-5">
+      <div class="text-center">
+        <span class="text-base font-semibold text-foreground sm:text-lg"
+          >{{ 'game.tricksPhase.totalTricks' | translate }} {{ totalTricks }}</span
+        >
+      </div>
+    </div>
+
+    <button
+      type="button"
+      (click)="openScoreTable.emit()"
+      class="flex w-full min-h-touch items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 px-4 font-medium text-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary sm:py-2.5"
+      [attr.aria-label]="'game.scoreTable' | translate"
+    >
+      <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
+      <span>{{ 'game.roundsHistory' | translate: { count: roundsPlayed } }}</span>
+    </button>
   </div>
 
   <div class="space-y-4">
