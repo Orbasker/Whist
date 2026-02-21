@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../l10n/app_strings.dart';
-
-/// Simple confirm dialog (align with Angular confirm-modal).
+/// Simple confirm dialog (align with Angular confirm-modal). Pass localized strings from AppLocalizations.
 Future<bool> showConfirmDialog(
   BuildContext context, {
   required String title,
   required String message,
-  String confirmLabel = AppStrings.delete,
-  String cancelLabel = AppStrings.cancel,
+  required String confirmLabel,
+  required String cancelLabel,
   bool isDestructive = true,
 }) async {
   final result = await showDialog<bool>(

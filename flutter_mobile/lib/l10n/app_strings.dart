@@ -1,5 +1,27 @@
-/// Copy aligned with Angular i18n (game.scoreTable, game.roundHistory, common, home).
+/// Copy aligned with Angular i18n (game.scoreTable, game.roundHistory, common, home, auth).
 class AppStrings {
+  // Auth (auth.*)
+  static const signIn = 'Sign In';
+  static const signUp = 'Sign Up';
+  static const email = 'Email';
+  static const password = 'Password';
+  static const name = 'Name';
+  static const enterEmail = 'Enter your email';
+  static const enterPassword = 'Enter your password';
+  static const enterName = 'Enter your name';
+  static const emailRequired = 'Email is required';
+  static const invalidEmail = 'Please enter a valid email';
+  static const passwordRequired = 'Password is required';
+  static const passwordMinLength = 'Password must be at least 6 characters';
+  static const nameRequired = 'Name is required';
+  static const signingIn = 'Signing in…';
+  static const creatingAccount = 'Creating account…';
+  static const noAccount = "Don't have an account?";
+  static const haveAccount = 'Already have an account?';
+  static const loginFailed = 'Login failed';
+  static const signupFailed = 'Sign up failed';
+  static const logOut = 'Log out';
+
   // Common
   static const close = 'Close';
   static const cancel = 'Cancel';
