@@ -1,4 +1,4 @@
-/// Round from API; aligned with Angular Round and backend RoundResponse.
+/// Round from API; aligned with backend RoundResponse.
 class Round {
   final int id;
   final String gameId;
@@ -37,5 +37,41 @@ class Round {
       createdBy: json['created_by']?.toString(),
       createdAt: DateTime.parse(json['created_at'] as String),
     );
+  }
+}
+
+/// Request: submit bids (backend RoundCreate).
+class RoundCreate {
+  RoundCreate({required this.bids, this.trumpSuit});
+
+  final List<int> bids;
+  final String? trumpSuit;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{'bids': bids};
+    if (trumpSuit != null) map['trump_suit'] = trumpSuit;
+    return map;
+  }
+}
+
+/// Request: submit tricks (backend TricksSubmit).
+class TricksSubmit {
+  TricksSubmit({
+    required this.tricks,
+    required this.bids,
+    this.trumpSuit,
+  });
+
+  final List<int> tricks;
+  final List<int> bids;
+  final String? trumpSuit;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{
+      'tricks': tricks,
+      'bids': bids,
+    };
+    if (trumpSuit != null) map['trump_suit'] = trumpSuit;
+    return map;
   }
 }
