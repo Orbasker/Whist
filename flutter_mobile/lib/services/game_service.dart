@@ -5,43 +5,59 @@ import 'package:flutter/foundation.dart';
 import '../models/game_state.dart';
 import '../models/round.dart';
 import 'api_service.dart';
-import 'realtime_service.dart';
+import 'realtime_types.dart';
+
+/// Current game phase: bidding or tricks (matches Angular/backend).
+enum GamePhase {
+  bidding,
+  tricks,
+}
 
 /// Holds current game state and rounds; aligns with Angular GameService for score table / round history / delete.
-/// Supports realtime bidding: live bid/trump selections, locked bids, phase, submit bids.
+/// When [RealtimeService] is set, connects to the same backend WebSocket for game_update, phase_update,
+/// bid_selection, trick_selection, etc., and can send submit_bids, submit_tricks, bid_selection, etc.
 class GameService extends ChangeNotifier {
-  GameService(this._api);
+  GameService(this._api, [RealtimeService? realtime]) : _realtime = realtime;
 
   final ApiService _api;
-  final RealtimeService _realtime = RealtimeService();
-  StreamSubscription<Map<String, dynamic>>? _realtimeSubscription;
+  final RealtimeService? _realtime;
 
   GameState? _gameState;
   List<Round> _rounds = [];
   String? _currentUserId;
   String? _authToken;
-
-  /// Current phase from realtime (phase_update / bids_submitted / tricks_submitted).
-  String _phase = 'bidding';
-
-  /// Live bid selections from realtime (bid_selection / bet_change).
+  StreamSubscription<RealtimeMessage>? _realtimeSubscription;
+  String? _currentPhase; // 'bidding' | 'tricks' from realtime
+  GamePhase _phase = GamePhase.bidding; // local when using REST submitBids/submitTricks
+  List<int>? _currentBids;
+  String? _currentTrumpSuit;
   final Map<int, int> _liveBidSelections = {};
-
-  /// Live trump selection from realtime (trump_selection).
-  String? _liveTrumpSelection;
-
-  /// Locked bid indices from realtime (bet_locked).
+  final Map<int, int> _liveTrickSelections = {};
   final Set<int> _lockedBids = {};
+  String? _liveTrumpSelection;
+  String? _realtimeError;
 
   GameState? get gameState => _gameState;
   List<Round> get rounds => List.unmodifiable(_rounds);
   String? get currentUserId => _currentUserId;
-  String get phase => _phase;
+  String? get currentPhase => _currentPhase;
+  /// Resolves to realtime phase when set, otherwise local _phase (REST flow).
+  GamePhase get phase {
+    if (_currentPhase == 'tricks') return GamePhase.tricks;
+    if (_currentPhase == 'bidding') return GamePhase.bidding;
+    return _phase;
+  }
+  List<int>? get currentBids => _currentBids;
+  String? get currentTrumpSuit => _currentTrumpSuit;
   Map<int, int> get liveBidSelections => Map.unmodifiable(_liveBidSelections);
-  String? get liveTrumpSelection => _liveTrumpSelection;
+  Map<int, int> get liveTrickSelections =>
+      Map.unmodifiable(_liveTrickSelections);
   Set<int> get lockedBids => Set.unmodifiable(_lockedBids);
-
-  bool get isRealtimeConnected => _realtime.isConnected;
+  String? get liveTrumpSelection => _liveTrumpSelection;
+  String? get realtimeError => _realtimeError;
+  bool get isRealtimeConnected => _realtime?.isConnected ?? false;
+  Stream<bool> get realtimeConnectionStatus =>
+      _realtime?.connectionStatus ?? const Stream.empty();
 
   void setCurrentUserId(String? id) {
     _currentUserId = id;
@@ -50,7 +66,6 @@ class GameService extends ChangeNotifier {
 
   void setAuthToken(String? token) {
     _authToken = token;
-    notifyListeners();
   }
 
   bool get isGameOwner {
@@ -77,105 +92,201 @@ class GameService extends ChangeNotifier {
     return s.trim().toLowerCase().replaceAll('-', '');
   }
 
+  Future<List<GameState>> listGames() async {
+    return _api.listGames();
+  }
+
+  Future<GameState> createGame(List<String> players, {String? name}) async {
+    final game = await _api.createGame(players, name: name);
+    _gameState = game;
+    _rounds = await _api.getRounds(game.id);
+    return game;
+  }
+
   void _clearRoundState() {
     _liveBidSelections.clear();
+    _liveTrickSelections.clear();
     _liveTrumpSelection = null;
     _lockedBids.clear();
-    notifyListeners();
-  }
-
-  void _handleRealtimeMessage(Map<String, dynamic> message) {
-    final type = message['type'] as String?;
-    if (type == null) return;
-    switch (type) {
-      case 'game_update':
-        final game = message['game'];
-        if (game is Map<String, dynamic>) {
-          _gameState = GameState.fromJson(game);
-          notifyListeners();
-        }
-        break;
-      case 'phase_update':
-        final p = message['phase'];
-        if (p is String) {
-          _phase = p;
-          notifyListeners();
-        }
-        break;
-      case 'bid_selection':
-      case 'bet_change':
-        final data = message['data'];
-        if (data is Map<String, dynamic>) {
-          final playerIndex = _parsePlayerIndex(data['player_index']);
-          final bid = data['bid'];
-          if (playerIndex != null && bid != null) {
-            _liveBidSelections[playerIndex] = bid is int ? bid : int.tryParse('$bid') ?? 0;
-            notifyListeners();
-          }
-        }
-        break;
-      case 'bet_locked':
-        final data = message['data'];
-        if (data is Map<String, dynamic>) {
-          final playerIndex = _parsePlayerIndex(data['player_index']);
-          if (playerIndex != null) {
-            _lockedBids.add(playerIndex);
-            notifyListeners();
-          }
-        }
-        break;
-      case 'trump_selection':
-        final data = message['data'];
-        if (data is Map<String, dynamic>) {
-          final suit = data['trump_suit'];
-          _liveTrumpSelection = suit is String ? suit : suit?.toString();
-          notifyListeners();
-        }
-        break;
-      case 'bids_submitted':
-        final game = message['game'];
-        if (game is Map<String, dynamic>) {
-          _gameState = GameState.fromJson(game);
-        }
-        _phase = 'tricks';
-        _clearRoundState();
-        notifyListeners();
-        break;
-      case 'tricks_submitted':
-        final game = message['game'];
-        if (game is Map<String, dynamic>) {
-          _gameState = GameState.fromJson(game);
-        }
-        _phase = 'bidding';
-        _clearRoundState();
-        notifyListeners();
-        break;
-      case 'error':
-        // Could expose to UI; for now just notify so listeners can react
-        notifyListeners();
-        break;
-    }
-  }
-
-  int? _parsePlayerIndex(dynamic v) {
-    if (v is int) return v;
-    if (v is String) return int.tryParse(v);
-    return null;
+    _realtimeError = null;
   }
 
   Future<GameState> loadGame(String gameId) async {
     final game = await _api.getGame(gameId);
     _gameState = game;
     _rounds = await _api.getRounds(gameId);
-    _phase = 'bidding';
-    _clearRoundState();
-    await _realtimeSubscription?.cancel();
-    if (_authToken != null && _authToken!.isNotEmpty) {
-      _realtime.connect(_api.baseUrl, gameId, _authToken);
-      _realtimeSubscription = _realtime.messages.listen(_handleRealtimeMessage);
+    _realtimeError = null;
+
+    if (_realtime != null) {
+      _realtimeSubscription?.cancel();
+      _realtime!.disconnect();
+      final token = await _api.getToken?.call() ?? _authToken;
+      _realtimeSubscription = _realtime!
+          .connect(gameId, token: token)
+          .listen(_onRealtimeMessage);
     }
+
     notifyListeners();
     return game;
+  }
+
+  /// Submit bids for current round via REST; switches to tricks phase and stores bids/trump.
+  Future<GameState> submitBids(
+    String gameId,
+    List<int> bids, {
+    String? trumpSuit,
+  }) async {
+    final game = await _api.submitBids(gameId, bids, trumpSuit: trumpSuit);
+    if (_gameState?.id == gameId) {
+      _gameState = game;
+      _phase = GamePhase.tricks;
+      _currentBids = List<int>.from(bids);
+      _currentTrumpSuit = trumpSuit;
+      notifyListeners();
+    }
+    return game;
+  }
+
+  /// Submit tricks for current round via REST. Uses stored currentBids/currentTrumpSuit.
+  /// Returns the created round for showing round summary; updates game state and rounds.
+  Future<Round?> submitTricks(String gameId, List<int> tricks) async {
+    final bids = _currentBids;
+    if (bids == null || bids.length != 4) {
+      throw StateError('No bids for this round. Submit bids first.');
+    }
+    final result = await _api.submitTricks(
+      gameId,
+      tricks,
+      bids,
+      trumpSuit: _currentTrumpSuit,
+    );
+    if (_gameState?.id != gameId) return result.round;
+    _gameState = result.game;
+    _phase = GamePhase.bidding;
+    _currentBids = null;
+    _currentTrumpSuit = null;
+    _rounds = await _api.getRounds(gameId);
+    notifyListeners();
+    return result.round;
+  }
+
+  void _onRealtimeMessage(RealtimeMessage msg) {
+    switch (msg.type) {
+      case 'game_update':
+        if (msg.game != null) {
+          _gameState = GameState.fromJson(msg.game!);
+          _realtimeError = null;
+          notifyListeners();
+        }
+        break;
+      case 'phase_update':
+        if (msg.phase != null) {
+          _currentPhase = msg.phase;
+          notifyListeners();
+        }
+        break;
+      case 'bid_selection':
+        final d = msg.data;
+        if (d != null) {
+          final idx = _intKey(d['player_index']);
+          final bid = d['bid'] as int?;
+          if (idx != null && bid != null) {
+            _liveBidSelections[idx] = bid;
+            notifyListeners();
+          }
+        }
+        break;
+      case 'trick_selection':
+        final d = msg.data;
+        if (d != null) {
+          final idx = _intKey(d['player_index']);
+          final trick = d['trick'] as int?;
+          if (idx != null && trick != null) {
+            _liveTrickSelections[idx] = trick;
+            notifyListeners();
+          }
+        }
+        break;
+      case 'trump_selection':
+        _liveTrumpSelection = msg.data?['trump_suit'] as String?;
+        notifyListeners();
+        break;
+      case 'bet_change':
+        final d = msg.data;
+        if (d != null) {
+          final idx = _intKey(d['player_index']);
+          final bid = d['bid'] as int?;
+          if (idx != null && bid != null) {
+            _liveBidSelections[idx] = bid;
+            notifyListeners();
+          }
+        }
+        break;
+      case 'bet_locked':
+        final d = msg.data;
+        if (d != null) {
+          final idx = _intKey(d['player_index']);
+          if (idx != null) {
+            _lockedBids.add(idx);
+            notifyListeners();
+          }
+        }
+        break;
+      case 'round_score_locked':
+        break;
+      case 'round_result_changed':
+        final d = msg.data;
+        if (d != null) {
+          final idx = _intKey(d['player_index']);
+          final trick = d['trick'] as int?;
+          if (idx != null && trick != null) {
+            _liveTrickSelections[idx] = trick;
+            notifyListeners();
+          }
+        }
+        break;
+      case 'bids_submitted':
+        if (msg.game != null) {
+          _gameState = GameState.fromJson(msg.game!);
+          _currentPhase = 'tricks';
+          _clearRoundState();
+          notifyListeners();
+        }
+        break;
+      case 'tricks_submitted':
+        if (msg.game != null) {
+          _gameState = GameState.fromJson(msg.game!);
+          _currentPhase = 'bidding';
+          _clearRoundState();
+          _loadRoundsIfCurrentGame(_gameState!.id);
+          notifyListeners();
+        }
+        break;
+      case 'error':
+        _realtimeError = msg.message ?? 'Realtime error';
+        notifyListeners();
+        break;
+      default:
+        break;
+    }
+  }
+
+  int? _intKey(dynamic v) {
+    if (v == null) return null;
+    if (v is int) return v;
+    final n = int.tryParse(v.toString());
+    return n;
+  }
+
+  Future<void> _loadRoundsIfCurrentGame(String gameId) async {
+    if (_gameState?.id != gameId) return;
+    try {
+      final list = await _api.getRounds(gameId);
+      if (_gameState?.id == gameId) {
+        _rounds = list;
+        notifyListeners();
+      }
+    } catch (_) {}
   }
 
   Future<List<Round>> loadRounds(String gameId) async {
@@ -188,23 +299,34 @@ class GameService extends ChangeNotifier {
   Future<void> deleteGame(String gameId) async {
     await _api.deleteGame(gameId);
     if (_gameState?.id == gameId) {
-      _realtimeSubscription?.cancel();
-      _realtime.disconnect();
+      _disconnectRealtime();
       _gameState = null;
       _rounds = [];
       _clearRoundState();
-      _phase = 'bidding';
+      _currentPhase = null;
+      _phase = GamePhase.bidding;
+      _currentBids = null;
+      _currentTrumpSuit = null;
       notifyListeners();
     }
   }
 
-  void clearGame() {
+  void _disconnectRealtime() {
     _realtimeSubscription?.cancel();
-    _realtime.disconnect();
+    _realtimeSubscription = null;
+    _realtime?.disconnect();
+  }
+
+  void clearGame() {
+    _disconnectRealtime();
     _gameState = null;
     _rounds = [];
-    _phase = 'bidding';
     _clearRoundState();
+    _currentPhase = null;
+    _phase = GamePhase.bidding;
+    _currentBids = null;
+    _currentTrumpSuit = null;
+    _realtimeError = null;
     notifyListeners();
   }
 
@@ -223,59 +345,97 @@ class GameService extends ChangeNotifier {
     return _normalize(playerUserId) == _normalize(g.ownerId);
   }
 
-  void sendBidSelection(int playerIndex, int bid) {
-    if (!_realtime.isConnected) return;
-    if (currentPlayerIndex == null && !isGameOwner) return;
-    if (isBidLocked(playerIndex)) return;
-    final canSend = isGameOwner ||
-        (currentPlayerIndex != null && playerIndex == currentPlayerIndex);
-    if (!canSend) return;
-    try {
-      _realtime.send({
-        'type': 'bid_selection',
-        'data': {'player_index': playerIndex, 'bid': bid},
-      });
-      _realtime.send({
-        'type': 'bet_change',
-        'data': {'player_index': playerIndex, 'bid': bid},
-      });
-    } catch (_) {}
-  }
-
-  void sendTrumpSelection(String? trumpSuit) {
-    if (!_realtime.isConnected || currentPlayerIndex == null) return;
-    try {
-      _realtime.send({
-        'type': 'trump_selection',
-        'data': {'trump_suit': trumpSuit},
-      });
-    } catch (_) {}
-  }
-
+  /// Locks a player's bid over realtime (if allowed). Use after checking [canLockBid] in UI.
   Future<void> lockBid(int playerIndex) async {
-    if (!_realtime.isConnected) return;
+    if (!isRealtimeConnected) return;
     if (isBidLocked(playerIndex)) return;
     final isOwnBid = playerIndex == currentPlayerIndex;
     if ((isOwnBid && currentPlayerIndex != null) || isGameOwner) {
-      try {
-        _realtime.send({
-          'type': 'bet_locked',
-          'data': {'player_index': playerIndex},
-        });
-      } catch (_) {}
+      sendBetLocked(playerIndex);
     }
   }
 
-  Future<void> submitBids(List<int> bids, [String? trumpSuit]) async {
-    final g = _gameState;
-    if (g == null) throw StateError('No game loaded');
-    if (!_realtime.isConnected) throw StateError('WebSocket is not connected');
-    _realtime.send({
+  // --- Send over realtime (same contract as Angular) ---
+
+  void sendSubmitBids(List<int> bids, {String? trumpSuit}) {
+    _requireRealtime();
+    _realtime!.send({
       'type': 'submit_bids',
-      'data': {
-        'bids': bids,
-        'trump_suit': trumpSuit,
-      },
+      'data': {'bids': bids, 'trump_suit': trumpSuit},
     });
+  }
+
+  void sendSubmitTricks(
+    List<int> tricks, {
+    required List<int> bids,
+    String? trumpSuit,
+  }) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'submit_tricks',
+      'data': {'tricks': tricks, 'bids': bids, 'trump_suit': trumpSuit},
+    });
+  }
+
+  void sendBidSelection(int playerIndex, int bid) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'bid_selection',
+      'data': {'player_index': playerIndex, 'bid': bid},
+    });
+  }
+
+  void sendTrickSelection(int playerIndex, int trick) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'trick_selection',
+      'data': {'player_index': playerIndex, 'trick': trick},
+    });
+  }
+
+  void sendTrumpSelection(String? trumpSuit) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'trump_selection',
+      'data': {'trump_suit': trumpSuit},
+    });
+  }
+
+  void sendBetChange(int playerIndex, int bid) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'bet_change',
+      'data': {'player_index': playerIndex, 'bid': bid},
+    });
+  }
+
+  void sendBetLocked(int playerIndex) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'bet_locked',
+      'data': {'player_index': playerIndex},
+    });
+  }
+
+  void sendRoundResultChanged(int playerIndex, int trick) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'round_result_changed',
+      'data': {'player_index': playerIndex, 'trick': trick},
+    });
+  }
+
+  void sendRoundScoreLocked(int playerIndex) {
+    _requireRealtime();
+    _realtime!.send({
+      'type': 'round_score_locked',
+      'data': {'player_index': playerIndex},
+    });
+  }
+
+  void _requireRealtime() {
+    if (_realtime == null || !_realtime!.isConnected) {
+      throw StateError('Realtime is not connected');
+    }
   }
 }

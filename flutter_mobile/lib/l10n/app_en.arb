@@ -1,0 +1,52 @@
+{
+  "@@locale": "en",
+  "close": "Close",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "you": "you",
+  "confirmDelete": "Confirm delete",
+  "scoreTableTitle": "Score board",
+  "currentScore": "Current score",
+  "roundsPlayed": "Rounds played: {count}",
+  "@roundsPlayed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetGame": "Reset game",
+  "resetDescription": "Reset only happens when all players vote yes.",
+  "deleteGame": "Delete game",
+  "roundHistoryTitle": "Score board",
+  "roundsEmpty": "No rounds yet",
+  "roundCol": "Round",
+  "cardCol": "Card",
+  "bidCol": "Bid",
+  "tookCol": "Took",
+  "changeCol": "Change",
+  "beforeCol": "Before",
+  "afterCol": "After",
+  "total": "Total",
+  "confirmDeleteGame": "Are you sure you want to delete this game?",
+  "retry": "Retry",
+  "refresh": "Refresh",
+  "noGameLoaded": "No game loaded. Create or join a game on the web app.",
+  "roundHistoryTooltip": "Round history",
+  "scoreTableTooltip": "Score table",
+  "appBarTitleRounds": "Score board · {count} rounds",
+  "@appBarTitleRounds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameLabel": "Game",
+  "playersLabel": "Players",
+  "currentScoresLabel": "Current scores",
+  "language": "Language",
+  "hebrew": "Hebrew",
+  "english": "English",
+  "appTitle": "Whist"
+}

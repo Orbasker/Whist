@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../l10n/app_strings.dart';
+import '../l10n/app_localizations.dart';
 import '../models/game_state.dart';
 import 'confirm_dialog.dart';
 
@@ -22,6 +22,7 @@ class ScoreTableSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -47,10 +48,10 @@ class ScoreTableSheet extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _buildCurrentScore(theme),
+                    _buildCurrentScore(context, theme),
                     const SizedBox(height: 12),
                     Text(
-                      AppStrings.roundsPlayed.replaceFirst('%s', '${gameState.currentRound - 1}'),
+                      l10n.roundsPlayed(gameState.currentRound - 1),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
@@ -63,7 +64,7 @@ class ScoreTableSheet extends StatelessWidget {
                           FilledButton.tonalIcon(
                             onPressed: () => _onDeleteTapped(context),
                             icon: const Icon(Icons.delete_outline),
-                            label: const Text(AppStrings.deleteGame),
+                            label: Text(l10n.deleteGame),
                             style: FilledButton.styleFrom(
                               backgroundColor: theme.colorScheme.errorContainer,
                               foregroundColor: theme.colorScheme.onErrorContainer,
@@ -74,7 +75,7 @@ class ScoreTableSheet extends StatelessWidget {
                         Expanded(
                           child: OutlinedButton(
                             onPressed: onDismiss,
-                            child: const Text(AppStrings.close),
+                            child: Text(l10n.close),
                           ),
                         ),
                       ],
@@ -91,13 +92,14 @@ class ScoreTableSheet extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
       child: Row(
         children: [
           Expanded(
             child: Text(
-              AppStrings.scoreTableTitle,
+              l10n.scoreTableTitle,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -106,14 +108,14 @@ class ScoreTableSheet extends StatelessWidget {
           IconButton(
             onPressed: onDismiss,
             icon: const Icon(Icons.close),
-            tooltip: AppStrings.close,
+            tooltip: l10n.close,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCurrentScore(ThemeData theme) {
+  Widget _buildCurrentScore(BuildContext context, ThemeData theme) {
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
@@ -122,7 +124,7 @@ class ScoreTableSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppStrings.currentScore,
+              AppLocalizations.of(context)!.currentScore,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -179,12 +181,13 @@ class ScoreTableSheet extends StatelessWidget {
   }
 
   Future<void> _onDeleteTapped(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final ok = await showConfirmDialog(
       context,
-      title: AppStrings.confirmDelete,
-      message: AppStrings.confirmDeleteGame,
-      confirmLabel: AppStrings.delete,
-      cancelLabel: AppStrings.cancel,
+      title: l10n.confirmDelete,
+      message: l10n.confirmDeleteGame,
+      confirmLabel: l10n.delete,
+      cancelLabel: l10n.cancel,
       isDestructive: true,
     );
     if (context.mounted && ok) onDeleteRequested();

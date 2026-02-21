@@ -221,6 +221,7 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                       if (i < _bids.length) _bids[i] = bid;
                     });
                     gs.sendBidSelection(i, bid);
+                    gs.sendBetChange(i, bid);
                   },
                   onLockBid: () => gs.lockBid(i),
                 );
@@ -236,7 +237,12 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                           bids[i] = _getBidForPlayer(gs, i);
                         }
                         try {
-                          await gs.submitBids(bids, gs.liveTrumpSelection);
+                          if (gs.isRealtimeConnected) {
+                            gs.sendSubmitBids(bids, trumpSuit: gs.liveTrumpSelection);
+                          } else {
+                            await gs.submitBids(gs.gameState!.id, bids,
+                                trumpSuit: gs.liveTrumpSelection);
+                          }
                         } catch (_) {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
