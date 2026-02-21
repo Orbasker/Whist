@@ -1,0 +1,10 @@
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8000/api/v1',
+  // Neon Auth URL - get this from your Neon project dashboard
+  authUrl: 'https://ep-shiny-voice-agz9vcbc.neonauth.c-2.eu-central-1.aws.neon.tech/neondb/auth',
+  // Supabase: set in .env (SUPABASE_URL, SUPABASE_ANON_KEY). replace-env.js injects at build/serve; do not commit real keys.
+  useSupabaseRealtime: true,
+  supabaseUrl: '',
+  supabaseAnonKey: '',
+};
