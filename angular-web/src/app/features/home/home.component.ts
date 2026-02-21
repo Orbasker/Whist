@@ -177,7 +177,13 @@ export class HomeComponent implements OnInit {
 
   toggleNewGameForm() {
     this.showNewGameForm = !this.showNewGameForm;
-    if (!this.showNewGameForm) {
+    if (this.showNewGameForm) {
+      const creatorName =
+        this.userName || this.userEmail || this.translate.instant('home.creatorSeatLabel');
+      this.playerForm.patchValue({
+        player1: creatorName,
+      });
+    } else {
       this.playerForm.reset();
       this.newGameName = '';
     }
