@@ -7,14 +7,13 @@
       [disabled]="disabled"
       [attr.aria-pressed]="selectedBid === num"
       [attr.aria-label]="'הימור ' + num"
-      [class.bg-amber-500]="selectedBid === num"
-      [class.bg-slate-700]="selectedBid !== num"
-      [class.text-white]="selectedBid === num"
-      [class.text-slate-300]="selectedBid !== num"
+      [class.bg-primary]="selectedBid === num"
+      [class.text-primary-foreground]="selectedBid === num"
+      [class.bg-muted]="selectedBid !== num"
+      [class.text-muted-foreground]="selectedBid !== num"
       [class.opacity-50]="disabled"
       [class.cursor-not-allowed]="disabled"
-      class="min-h-touch min-w-[2.25rem] sm:min-w-0 px-2 sm:px-3 py-2.5 sm:py-2 rounded-lg font-medium text-sm sm:text-base transition-colors focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800"
-      [class.hover:bg-amber-600]="!disabled"
+      class="min-h-touch min-w-[2.25rem] rounded-lg px-2 py-2.5 font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:opacity-90 sm:min-w-0 sm:px-3 sm:py-2 sm:text-base"
     >
       {{ num }}
     </button>

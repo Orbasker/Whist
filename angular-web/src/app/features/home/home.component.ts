@@ -13,6 +13,16 @@ import { InvitationService } from '../../core/services/invitation.service';
 import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { UiBadgeComponent } from '../../shared/components/ui/badge/badge.component';
+import { UiButtonComponent } from '../../shared/components/ui/button/button.component';
+import {
+  UiCardComponent,
+  UiCardContentComponent,
+  UiCardHeaderComponent,
+  UiCardTitleComponent,
+} from '../../shared/components/ui/card/card.component';
+import { UiInputComponent } from '../../shared/components/ui/input/input.component';
+import { UiLabelComponent } from '../../shared/components/ui/label/label.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -27,6 +37,14 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     InvitationFormComponent,
     TranslateModule,
     ModalComponent,
+    UiBadgeComponent,
+    UiButtonComponent,
+    UiCardComponent,
+    UiCardHeaderComponent,
+    UiCardTitleComponent,
+    UiCardContentComponent,
+    UiInputComponent,
+    UiLabelComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

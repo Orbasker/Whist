@@ -1,29 +1,43 @@
 /**
- * shadcn-style design tokens (semantic layer).
- * Maps to Tailwind theme for consistent components.
- * Dark theme by default; keeps existing slate + amber identity.
+ * Whist – distinct dark theme (not generic slate+amber).
+ * Deep blue base + sky accent; softer radii and clear hierarchy.
  */
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --card: #1e293b;
-  --card-foreground: #f8fafc;
-  --popover: #1e293b;
-  --popover-foreground: #f8fafc;
-  --primary: #f59e0b;
-  --primary-foreground: #0f172a;
-  --secondary: #334155;
-  --secondary-foreground: #f8fafc;
-  --muted: #334155;
+  /* Core palette */
+  --background: #0c1929;
+  --foreground: #f1f5f9;
+  --card: #132238;
+  --card-foreground: #f1f5f9;
+  --popover: #132238;
+  --popover-foreground: #f1f5f9;
+  --primary: #0ea5e9;
+  --primary-foreground: #0c1929;
+  --secondary: #1e3a4a;
+  --secondary-foreground: #f1f5f9;
+  --muted: #1e3a4a;
   --muted-foreground: #94a3b8;
-  --accent: #475569;
-  --accent-foreground: #f8fafc;
-  --destructive: #dc2626;
+  --accent: #1e3a4a;
+  --accent-foreground: #f1f5f9;
+  --destructive: #ef4444;
   --destructive-foreground: #fef2f2;
-  --border: #475569;
-  --input: #475569;
-  --ring: #f59e0b;
-  --radius: 0.5rem; /* 8px - shadcn default */
-  --radius-lg: 0.75rem;
-  --radius-sm: 0.375rem;
+  --success: #22c55e;
+  --success-foreground: #052e16;
+  --border: #1e3a4a;
+  --input: #1e3a4a;
+  --ring: #0ea5e9;
+  /* Softer, more rounded */
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-sm: 0.5rem;
+  /* Legacy names for modal, score-table, etc. */
+  --bg-primary: var(--background);
+  --bg-secondary: var(--card);
+  --bg-tertiary: var(--muted);
+  --text-primary: var(--foreground);
+  --text-secondary: var(--muted-foreground);
+  --accent-primary: var(--primary);
+  --input-border: var(--border);
+  --input-border-focus: var(--primary);
+  --input-bg: var(--muted);
+  --modal-backdrop: rgba(0, 0, 0, 0.55);
 }

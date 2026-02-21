@@ -1,19 +1,19 @@
 <div
-  class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+  class="min-h-screen bg-gradient-to-br from-background via-card to-background"
   *ngIf="gameState"
 >
   <!-- Header -->
   <div
-    class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-lg border-b border-slate-700/50 safe-area-inset-top"
+    class="safe-area-inset-top sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-lg"
   >
     <div class="flex items-center justify-between p-3 sm:p-4">
       <button
         (click)="goBack()"
-        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-slate-400 hover:text-white transition-colors rounded-lg"
+        class="-m-1 flex min-h-touch min-w-touch items-center justify-center rounded-lg p-2 text-muted-foreground transition-colors hover:text-foreground"
         [attr.aria-label]="'game.back' | translate"
       >
         <svg
-          class="w-5 h-5 sm:w-6 sm:h-6"
+          class="h-5 w-5 sm:h-6 sm:w-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -27,11 +27,11 @@
           ></path>
         </svg>
       </button>
-      <div class="text-center flex-1 min-w-0">
-        <h1 class="text-base sm:text-lg font-semibold text-white">
+      <div class="min-w-0 flex-1 text-center">
+        <h1 class="text-base font-semibold text-foreground sm:text-lg">
           {{ 'game.scoreBoard' | translate }}
         </h1>
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-muted-foreground">
           {{ 'game.roundsPlayed' | translate: { count: gameState.current_round - 1 } }}
           ·
           {{ phase === 'bidding' ? ('game.bidding' | translate) : ('game.tricks' | translate) }}
@@ -39,7 +39,7 @@
       </div>
       <button
         (click)="showScoreTable = true"
-        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-amber-400 hover:text-amber-300 transition-colors rounded-lg"
+        class="-m-1 flex min-h-touch min-w-touch items-center justify-center rounded-lg p-2 text-primary transition-colors hover:text-primary/90"
         [attr.aria-label]="'game.scoreTable' | translate"
       >
         <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
@@ -62,13 +62,13 @@
     ></app-tricks-phase>
   </div>
 
-  <!-- Floating Score board button: above the fixed footer so both are always visible -->
+  <!-- Floating Score board button -->
   <div class="floating-scoreboard-wrap">
     <button
       (click)="showRoundHistory = true"
-      class="min-h-touch flex items-center gap-2 px-5 py-3 sm:py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold rounded-full shadow-lg shadow-amber-500/30 transition-colors text-sm sm:text-base"
+      class="flex min-h-touch items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-colors hover:bg-primary/90 sm:py-2.5 sm:text-base text-sm"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -109,8 +109,6 @@
   </app-round-history>
 </div>
 
-<div *ngIf="!gameState" class="min-h-screen bg-slate-900 flex items-center justify-center">
-  <div
-    class="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full"
-  ></div>
+<div *ngIf="!gameState" class="flex min-h-screen items-center justify-center bg-background">
+  <div class="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
 </div>
