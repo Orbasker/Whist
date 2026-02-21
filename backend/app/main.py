@@ -5,6 +5,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from app.api.v1.router import api_router
 from app.config import settings
@@ -51,7 +52,14 @@ app.add_exception_handler(InvalidTricksError, invalid_tricks_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def root():
-    """Root endpoint"""
-    return {"message": "Whist Game API", "version": "1.0.0", "docs": "/docs"}
+    """Redirect base route to Swagger UI."""
+    # Temporary redirect (302) so browsers/CDNs do not cache the redirect.
+    return RedirectResponse(url="/docs", status_code=302)
+
+
+@app.get("/health", include_in_schema=False)
+async def health():
+    """Liveness probe: use for load balancers and liveness checks (no DB). Use GET /api/v1/health for readiness (DB-aware)."""
+    return {"status": "ok"}
