@@ -78,7 +78,7 @@ git checkout ui/shadcn-tailwind-poc
 cd angular-web && npm install && npm run start
 ```
 
-- Open **/login** (or signup) to see the new Auth card and form.
+- Open **/login** (or sign up) to see the new Auth card and form.
 - Check the **footer** language switcher for the new button styling.
 - No backend or env changes required.
 

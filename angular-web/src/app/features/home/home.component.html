@@ -82,7 +82,7 @@
             (click)="continueGame(game.id)"
             (keydown.enter)="continueGame(game.id)"
             (keydown.space)="$event.preventDefault(); continueGame(game.id)"
-            [attr.aria-label]="'home.openGame' | translate"
+            [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
             class="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm transition-colors hover:border-primary hover:shadow-md sm:p-4"
           >
             <!-- Trophy: quick look only (score preview modal); rest of row opens game -->
@@ -269,9 +269,12 @@
     >
       <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-4">
         <div class="space-y-2">
-          <app-ui-label>{{ 'home.gameNameOptional' | translate }}</app-ui-label>
+          <app-ui-label [for]="'newGameNameInput'">{{
+            'home.gameNameOptional' | translate
+          }}</app-ui-label>
           <app-ui-input>
             <input
+              id="newGameNameInput"
               type="text"
               [(ngModel)]="newGameName"
               [ngModelOptions]="{ standalone: true }"
@@ -282,8 +285,12 @@
         <div class="space-y-2">
           <app-ui-label>{{ 'home.playerNames' | translate }}</app-ui-label>
           <div *ngFor="let i of [1, 2, 3, 4]" class="space-y-2">
+            <app-ui-label [for]="'player' + i + 'Input'"
+              >{{ 'home.player' | translate }} {{ i }}</app-ui-label
+            >
             <app-ui-input>
               <input
+                [id]="'player' + i + 'Input'"
                 type="text"
                 [formControlName]="'player' + i"
                 [placeholder]="('home.player' | translate) + ' ' + i"

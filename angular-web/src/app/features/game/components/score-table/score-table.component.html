@@ -70,11 +70,11 @@
             </div>
             <div
               class="text-xl font-bold sm:text-2xl"
-              [class.text-success]="gameState.scores[i] > 0"
-              [class.text-destructive]="gameState.scores[i] < 0"
-              [class.text-foreground]="gameState.scores[i] === 0"
+              [class.text-success]="(gameState.scores[i] ?? 0) > 0"
+              [class.text-destructive]="(gameState.scores[i] ?? 0) < 0"
+              [class.text-foreground]="(gameState.scores[i] ?? 0) === 0"
             >
-              {{ gameState.scores[i] }}
+              {{ gameState.scores[i] ?? 0 }}
             </div>
           </div>
         </div>
@@ -96,6 +96,7 @@
         </p>
         <div *ngIf="!resetRequestedAt" class="flex gap-2">
           <button
+            type="button"
             (click)="onRequestReset()"
             [disabled]="resetLoading"
             class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
@@ -111,6 +112,7 @@
             }}
           </p>
           <button
+            type="button"
             *ngIf="!hasVotedReset"
             (click)="onVoteReset()"
             [disabled]="resetLoading"
@@ -122,10 +124,11 @@
             'game.scoreTable.votedYes' | translate
           }}</span>
           <button
+            type="button"
             *ngIf="isGameOwner"
             (click)="onCancelResetRequest()"
             [disabled]="resetLoading"
-            class="mr-2 rounded-lg bg-muted px-4 py-2 text-sm text-foreground transition-colors hover:bg-muted/80 disabled:opacity-50"
+            class="rounded-lg bg-muted px-4 py-2 text-sm text-foreground transition-colors hover:bg-muted/80 disabled:opacity-50"
           >
             {{ 'game.scoreTable.cancelReset' | translate }}
           </button>
@@ -135,6 +138,7 @@
 
     <div class="mt-4 flex flex-wrap gap-2">
       <button
+        type="button"
         *ngIf="isGameOwner"
         (click)="onDeleteGameClick()"
         class="min-h-touch rounded-lg bg-destructive px-4 py-2.5 text-sm font-semibold text-destructive-foreground transition-colors hover:bg-destructive/90"
@@ -142,6 +146,7 @@
         {{ 'game.scoreTable.deleteGame' | translate }}
       </button>
       <button
+        type="button"
         (click)="onClose()"
         class="min-h-touch rounded-lg bg-muted px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/80"
       >

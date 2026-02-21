@@ -43,4 +43,11 @@ export class FooterComponent {
       this.expanded = false;
     }
   }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.expanded) {
+      this.expanded = false;
+    }
+  }
 }
