@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/locale_provider.dart';
 import '../services/api_service.dart';
+import '../services/auth_service.dart';
 import '../services/game_service.dart';
 import '../widgets/round_history_screen.dart';
 import '../widgets/score_table_sheet.dart';
@@ -24,6 +25,12 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     _loadGame();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _setCurrentUser());
+  }
+
+  void _setCurrentUser() {
+    final auth = context.read<AuthService>();
+    context.read<GameService>().setCurrentUserId(auth.user?.id);
   }
 
   Future<void> _loadGame() async {
@@ -103,12 +110,12 @@ class _GameScreenState extends State<GameScreen> {
                     Text(l10n.noGameLoaded, textAlign: TextAlign.center),
                     const SizedBox(height: 16),
                     FilledButton(
-                    onPressed: () {
-                      setState(() => _loading = true);
-                      _loadGame();
-                    },
-                    child: Text(l10n.refresh),
-                  ),
+                      onPressed: () {
+                        setState(() => _loading = true);
+                        _loadGame();
+                      },
+                      child: Text(l10n.refresh),
+                    ),
                   ],
                 ),
               ),
@@ -130,6 +137,19 @@ class _GameScreenState extends State<GameScreen> {
                 icon: const Icon(Icons.emoji_events_outlined),
                 tooltip: l10n.scoreTableTooltip,
                 onPressed: () => _openScoreTableSheet(context, gameService),
+              ),
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.account_circle_outlined),
+                tooltip: 'Log out',
+                onSelected: (value) {
+                  if (value == 'logout') _logout(context);
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'logout',
+                    child: Text('Log out'),
+                  ),
+                ],
               ),
               _buildLanguageMenu(context),
             ],
@@ -180,6 +200,12 @@ class _GameScreenState extends State<GameScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    context.read<GameService>().clearGame();
+    await context.read<AuthService>().signOut();
+    // AuthGate rebuilds and shows AuthScreen; no setState needed.
   }
 
   void _openRoundHistory(BuildContext context, GameService gameService) {
