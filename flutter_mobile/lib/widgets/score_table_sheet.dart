@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
 import 'confirm_dialog.dart';
 
-/// Score table view: totals, rounds played, delete game (owner). Aligned with Angular score-table.
+/// Score table view: totals, rounds played, invite (owner), delete game (owner). Aligned with Angular score-table.
 class ScoreTableSheet extends StatelessWidget {
   const ScoreTableSheet({
     super.key,
@@ -12,12 +13,15 @@ class ScoreTableSheet extends StatelessWidget {
     required this.isGameOwner,
     required this.onDismiss,
     required this.onDeleteRequested,
+    this.onInviteRequested,
   });
 
   final GameState gameState;
   final bool isGameOwner;
   final VoidCallback onDismiss;
   final VoidCallback onDeleteRequested;
+  /// When set and owner, show Invite button to open invitation form.
+  final VoidCallback? onInviteRequested;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +65,14 @@ class ScoreTableSheet extends StatelessWidget {
                     Row(
                       children: [
                         if (isGameOwner) ...[
+                          if (onInviteRequested != null) ...[
+                            FilledButton.tonalIcon(
+                              onPressed: onInviteRequested,
+                              icon: const Icon(Icons.mail_outline),
+                              label: const Text(AppStrings.invite),
+                            ),
+                            const SizedBox(width: 12),
+                          ],
                           FilledButton.tonalIcon(
                             onPressed: () => _onDeleteTapped(context),
                             icon: const Icon(Icons.delete_outline),

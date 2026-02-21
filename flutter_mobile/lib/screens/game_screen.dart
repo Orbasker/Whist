@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/app_strings.dart';
 import '../providers/locale_provider.dart';
+import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../services/game_service.dart';
 import '../widgets/bidding_phase_content.dart';
+import '../widgets/invitation_form.dart';
 import '../widgets/round_history_screen.dart';
 import '../widgets/score_table_sheet.dart';
 import '../widgets/tricks_phase_content.dart';
@@ -194,6 +196,12 @@ class _GameScreenState extends State<GameScreen> {
         gameState: gameState,
         isGameOwner: gameService.isGameOwner,
         onDismiss: () => Navigator.of(context).pop(),
+        onInviteRequested: gameService.isGameOwner
+            ? () {
+                Navigator.of(context).pop(); // close score sheet first
+                _openInviteModal(context, gameService);
+              }
+            : null,
         onDeleteRequested: () async {
           await gameService.deleteGame(gameState.id);
           if (!context.mounted) return;
@@ -202,6 +210,37 @@ class _GameScreenState extends State<GameScreen> {
           if (!context.mounted) return;
           Navigator.of(context).pop(); // back to Home
         },
+      ),
+    );
+  }
+
+  void _openInviteModal(BuildContext context, GameService gameService) {
+    final gameState = gameService.gameState!;
+    final api = context.read<ApiService>();
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text(AppStrings.sendInvitations),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: InvitationForm(
+            gameId: gameState.id,
+            gameName: gameState.name?.isNotEmpty == true
+                ? gameState.name!
+                : (gameState.players.isNotEmpty
+                    ? gameState.players.join(', ')
+                    : 'Unnamed game'),
+            players: gameState.players,
+            playerUserIds: gameState.playerUserIds,
+            api: api,
+            onSent: ({required int sent, required int total}) async {
+              if (sent > 0 && dialogContext.mounted) {
+                await gameService.loadGame(gameState.id);
+              }
+            },
+            onCancel: () => Navigator.of(dialogContext).pop(),
+          ),
+        ),
       ),
     );
   }
