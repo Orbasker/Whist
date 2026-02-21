@@ -34,6 +34,7 @@
     "deleteGame": "Delete game",
     "active": "Active",
     "completed": "Completed",
+    "statusLabel": "Status",
     "sendInvitations": "Send invitations",
     "close": "Close",
     "newGameFormTitle": "New game",

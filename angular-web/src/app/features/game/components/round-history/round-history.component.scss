@@ -12,8 +12,8 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--card); /* slate-800 - solid so sticky header doesn’t show content through */
-  box-shadow: 0 1px 0 0 var(--border);
+  background: hsl(var(--card)); /* solid so sticky header doesn’t show content through */
+  box-shadow: 0 1px 0 0 hsl(var(--border));
 }
 
 .round-history-tfoot td,
@@ -21,6 +21,6 @@
   position: sticky;
   bottom: 0;
   z-index: 20;
-  background: var(--card);
-  box-shadow: 0 -1px 0 0 var(--border);
+  background: hsl(var(--card));
+  box-shadow: 0 -1px 0 0 hsl(var(--border));
 }

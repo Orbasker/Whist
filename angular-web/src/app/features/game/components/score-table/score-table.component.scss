@@ -16,8 +16,8 @@
   z-index: 51;
   width: min(320px, calc(100vw - 1.5rem));
   max-height: calc(100vh - 6rem);
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: var(--radius-lg);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -30,14 +30,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid hsl(var(--border));
   flex-shrink: 0;
 }
 
 .score-table-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--foreground);
+  color: hsl(var(--foreground));
   margin: 0;
 }
 
@@ -45,7 +45,7 @@
   min-height: 44px;
   min-width: 44px;
   padding: 0.25rem;
-  color: var(--muted-foreground);
+  color: hsl(var(--muted-foreground));
   background: none;
   border: none;
   cursor: pointer;
@@ -56,8 +56,8 @@
 }
 
 .score-table-close:hover {
-  color: var(--foreground);
-  background: var(--muted);
+  color: hsl(var(--foreground));
+  background: hsl(var(--muted));
 }
 
 .score-table-body {

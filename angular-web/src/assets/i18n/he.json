@@ -34,6 +34,7 @@
     "deleteGame": "מחק משחק",
     "active": "פעיל",
     "completed": "הושלם",
+    "statusLabel": "סטטוס",
     "sendInvitations": "שלח הזמנות",
     "close": "סגור",
     "newGameFormTitle": "משחק חדש",
