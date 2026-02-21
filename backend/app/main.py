@@ -55,10 +55,11 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 @app.get("/", include_in_schema=False)
 async def root():
     """Redirect base route to Swagger UI."""
+    # Temporary redirect (302) so browsers/CDNs do not cache the redirect.
     return RedirectResponse(url="/docs", status_code=302)
 
 
 @app.get("/health", include_in_schema=False)
 async def health():
-    """Basic health check for load balancers and readiness probes."""
+    """Liveness probe: use for load balancers and liveness checks (no DB). Use GET /api/v1/health for readiness (DB-aware)."""
     return {"status": "ok"}
