@@ -43,7 +43,7 @@ This proposal introduces a **shadcn-inspired design system** on top of **Tailwin
 | **Tailwind-first layout and spacing** | All layout and spacing use Tailwind utilities; no custom SCSS for layout. Component SCSS only where necessary (e.g. modal layout). |
 | **Keep existing palette (slate + amber)** | `_shadcn-theme.scss` maps current slate/amber into semantic names so the app look stays consistent while gaining a clear design system. |
 | **Touch targets and a11y** | `min-h-touch` / `min-w-touch` (44px) and `focus-visible:ring-2` kept; RTL and existing focus behavior unchanged. |
-| **PoC scope: Auth + Footer** | Proof-of-concept limited to Auth and Footer to show the pattern; Home and Game can be migrated incrementally using the same tokens and UI components. |
+| **PoC scope** | Proof-of-concept extends to Auth, Footer, Home, Game (bidding phase, tricks phase, score table, round summary), and shared components (modal, trump selector). |
 
 ---
 
@@ -55,15 +55,18 @@ This proposal introduces a **shadcn-inspired design system** on top of **Tailwin
 | **UI components** | `src/app/shared/components/ui/button/`, `ui/card/`, `ui/input/`, `ui/label/`, `ui/badge/` (new) |
 | **Auth** | `auth.component.html` (rewritten with Card, Button, Input, Label), `auth.component.ts` (imports), `auth.component.scss` (can be removed or kept minimal) |
 | **Footer** | `footer.component.html` (Tailwind only), `footer.component.scss` (minimal) |
+| **Home** | `home.component.html`, `home.component.ts` (Card, Button, modals, game list styling) |
+| **Game** | `game.component` (layout, sticky sections), `bidding-phase/`, `tricks-phase/`, `score-table/`, `round-summary/` (Tailwind + tokens) |
+| **Shared** | `modal/`, `trump-selector/`, `confirm-modal/` |
 | **Docs** | `docs/DESIGN_PROPOSAL_SHADCN_TAILWIND.md` (this file) |
 
 ---
 
 ## 5. Migration Path (Full App)
 
-1. **Phase 1 (this PoC):** Auth + Footer on new tokens + UI components. ✅
-2. **Phase 2:** Replace Home screen ad hoc styles with `app-ui-card`, `app-ui-button`, `app-ui-badge` and semantic Tailwind classes.
-3. **Phase 3:** Game screen and shared components (modal, trump selector, bid/tricks grids) – use tokens for borders/backgrounds and UI components where they fit.
+1. **Phase 1 (this PoC):** Auth, Footer, Home, Game (bidding/tricks/score-table/round-summary), and shared modal/trump-selector on new tokens + UI components. ✅
+2. **Phase 2:** Any remaining ad hoc styles replaced with semantic Tailwind and UI components.
+3. **Phase 3:** Game screen and shared components – consolidate tokens for borders/backgrounds and UI components where they fit.
 4. **Phase 4:** Remove or slim down legacy `_variables.scss` and any duplicate Tailwind color definitions; rely on `_shadcn-theme.scss` + Tailwind theme for all UI colors.
 
 ---

@@ -14,7 +14,6 @@ import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
-import { UiBadgeComponent } from '../../shared/components/ui/badge/badge.component';
 import { UiButtonComponent } from '../../shared/components/ui/button/button.component';
 import {
   UiCardComponent,
@@ -39,7 +38,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     TranslateModule,
     ModalComponent,
     ConfirmModalComponent,
-    UiBadgeComponent,
     UiButtonComponent,
     UiCardComponent,
     UiCardHeaderComponent,

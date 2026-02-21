@@ -77,7 +77,12 @@
         <div *ngIf="!loading && games.length > 0" class="space-y-3">
           <div
             *ngFor="let game of games"
+            role="button"
+            tabindex="0"
             (click)="continueGame(game.id)"
+            (keydown.enter)="continueGame(game.id)"
+            (keydown.space)="$event.preventDefault(); continueGame(game.id)"
+            [attr.aria-label]="'home.openGame' | translate"
             class="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm transition-colors hover:border-primary hover:shadow-md sm:p-4"
           >
             <!-- Trophy: quick look only (score preview modal); rest of row opens game -->

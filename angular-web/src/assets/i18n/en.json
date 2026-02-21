@@ -113,6 +113,7 @@
     "tricks": "Tricks",
     "scoreTable": "Score table",
     "roundsHistory": "Score board ({{count}} rounds)",
+    "openRoundsList": "Open rounds list ({{count}} rounds)",
     "roundsEmpty": "No rounds yet",
     "roundSummary": "Round summary",
     "roundHistory": "Score board",

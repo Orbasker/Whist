@@ -19,7 +19,7 @@
         type="button"
         (click)="openScoreTable.emit()"
         class="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 px-4 font-medium text-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary sm:py-2.5"
-        [attr.aria-label]="'game.scoreTable' | translate"
+        [attr.aria-label]="'game.roundsHistory' | translate: { count: roundsPlayed }"
       >
         <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
         <span>{{ 'game.roundsHistory' | translate: { count: roundsPlayed } }}</span>
@@ -28,7 +28,7 @@
         type="button"
         (click)="openRoundHistory.emit()"
         class="flex min-h-touch min-w-touch shrink-0 items-center justify-center rounded-xl border border-border bg-card p-3 text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary hover:text-foreground sm:p-2.5"
-        [attr.aria-label]="'game.roundsHistory' | translate: { count: roundsPlayed }"
+        [attr.aria-label]="'game.openRoundsList' | translate: { count: roundsPlayed }"
       >
         <svg
           class="h-5 w-5 sm:h-6 sm:w-6"
@@ -58,7 +58,7 @@
           <span class="font-medium"
             >{{ getTrickForPlayer(i) }} {{ 'game.tricksPhase.tricks' | translate }}</span
           >
-          <span *ngIf="isTrickLocked(i)" class="mr-2 text-xs text-destructive"
+          <span *ngIf="isTrickLocked(i)" class="me-2 text-xs text-destructive"
             >🔒 {{ 'game.biddingPhase.locked' | translate }}</span
           >
         </div>
