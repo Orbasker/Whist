@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../services/api_service.dart';
+import '../l10n/app_strings.dart';
+import '../services/auth_service.dart';
 import '../services/game_service.dart';
 import '../widgets/round_history_screen.dart';
 import '../widgets/score_table_sheet.dart';
@@ -22,6 +23,12 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     _loadGame();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _setCurrentUser());
+  }
+
+  void _setCurrentUser() {
+    final auth = context.read<AuthService>();
+    context.read<GameService>().setCurrentUserId(auth.user?.id);
   }
 
   Future<void> _loadGame() async {
@@ -122,6 +129,19 @@ class _GameScreenState extends State<GameScreen> {
                 tooltip: 'Score table',
                 onPressed: () => _openScoreTableSheet(context, gameService),
               ),
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.account_circle_outlined),
+                tooltip: AppStrings.logOut,
+                onSelected: (value) {
+                  if (value == 'logout') _logout(context);
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 'logout',
+                    child: Text(AppStrings.logOut),
+                  ),
+                ],
+              ),
             ],
           ),
           body: Center(
@@ -161,6 +181,12 @@ class _GameScreenState extends State<GameScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    context.read<GameService>().clearGame();
+    await context.read<AuthService>().signOut();
+    // AuthGate rebuilds and shows AuthScreen; no setState needed.
   }
 
   void _openRoundHistory(BuildContext context, GameService gameService) {
