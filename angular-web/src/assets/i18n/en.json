@@ -3,7 +3,9 @@
     "cancel": "Cancel",
     "close": "Close",
     "saving": "Saving...",
-    "you": "you"
+    "you": "you",
+    "confirmDelete": "Confirm delete",
+    "delete": "Delete"
   },
   "footer": {
     "language": "Language",

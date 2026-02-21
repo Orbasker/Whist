@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GameState } from '../../../../core/models/game-state.model';
 import { GameService } from '../../../../core/services/game.service';
+import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-score-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, ConfirmModalComponent],
   templateUrl: './score-table.component.html',
   styleUrl: './score-table.component.scss',
 })
@@ -25,6 +26,7 @@ export class ScoreTableComponent {
   editingName = '';
   resetLoading = false;
   nameLoading = false;
+  showDeleteConfirm = false;
 
   constructor(
     private gameService: GameService,
@@ -130,9 +132,16 @@ export class ScoreTableComponent {
     }
   }
 
-  onDeleteGame() {
-    if (confirm(this.translate.instant('home.confirmDeleteGame'))) {
-      this.deleteRequested.emit();
-    }
+  onDeleteGameClick() {
+    this.showDeleteConfirm = true;
+  }
+
+  onDeleteConfirm() {
+    this.showDeleteConfirm = false;
+    this.deleteRequested.emit();
+  }
+
+  onDeleteCancel() {
+    this.showDeleteConfirm = false;
   }
 }

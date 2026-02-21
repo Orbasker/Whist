@@ -13,6 +13,7 @@ import { InvitationService } from '../../core/services/invitation.service';
 import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -27,6 +28,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     InvitationFormComponent,
     TranslateModule,
     ModalComponent,
+    ConfirmModalComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -47,6 +49,8 @@ export class HomeComponent implements OnInit {
   selectedGame: GameState | null = null;
   invitationError: string | null = null;
   invitationSuccess: string | null = null;
+  showDeleteConfirm = false;
+  deleteGameIdPending: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -257,9 +261,21 @@ export class HomeComponent implements OnInit {
     return String(game.owner_id).trim() === this.userId;
   }
 
-  async deleteGame(gameId: string, event: Event) {
+  openDeleteConfirm(gameId: string, event: Event) {
     event.stopPropagation();
-    if (!confirm(this.translate.instant('home.confirmDeleteGame'))) return;
+    this.deleteGameIdPending = gameId;
+    this.showDeleteConfirm = true;
+  }
+
+  closeDeleteConfirm() {
+    this.showDeleteConfirm = false;
+    this.deleteGameIdPending = null;
+  }
+
+  async doDeleteGame() {
+    const gameId = this.deleteGameIdPending;
+    this.closeDeleteConfirm();
+    if (!gameId) return;
     try {
       await this.gameService.deleteGameAsync(gameId);
       await this.loadGames();
