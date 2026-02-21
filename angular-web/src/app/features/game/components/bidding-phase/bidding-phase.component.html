@@ -38,15 +38,38 @@
         {{ getStatusMessage() }}
       </p>
     </div>
-    <button
-      type="button"
-      (click)="openScoreTable.emit()"
-      class="mt-3 flex w-full min-h-touch items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 px-4 font-medium text-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary sm:py-2.5"
-      [attr.aria-label]="'game.scoreTable' | translate"
-    >
-      <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
-      <span>{{ 'game.roundsHistory' | translate: { count: roundsPlayed } }}</span>
-    </button>
+    <div class="mt-3 flex gap-2">
+      <button
+        type="button"
+        (click)="openScoreTable.emit()"
+        class="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 px-4 font-medium text-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary sm:py-2.5"
+        [attr.aria-label]="'game.scoreTable' | translate"
+      >
+        <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
+        <span>{{ 'game.roundsHistory' | translate: { count: roundsPlayed } }}</span>
+      </button>
+      <button
+        type="button"
+        (click)="openRoundHistory.emit()"
+        class="flex min-h-touch min-w-touch shrink-0 items-center justify-center rounded-xl border border-border bg-card p-3 text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary hover:text-foreground sm:p-2.5"
+        [attr.aria-label]="'game.roundsHistory' | translate: { count: roundsPlayed }"
+      >
+        <svg
+          class="h-5 w-5 sm:h-6 sm:w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 10h16M4 14h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
 
   <div class="space-y-4">

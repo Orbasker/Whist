@@ -27,6 +27,7 @@ export class BiddingPhaseComponent implements OnInit, OnDestroy {
   @Input() roundsPlayed = 0;
   @Output() bidsSubmit = new EventEmitter<{ bids: number[]; trumpSuit?: string }>();
   @Output() openScoreTable = new EventEmitter<void>();
+  @Output() openRoundHistory = new EventEmitter<void>();
 
   selectedTrumpSuit: string | null = null;
   bids: number[] = [0, 0, 0, 0];

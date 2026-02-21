@@ -19,6 +19,7 @@ export class TricksPhaseComponent implements OnInit, OnDestroy {
   @Input() roundsPlayed = 0;
   @Output() tricksSubmit = new EventEmitter<number[]>();
   @Output() openScoreTable = new EventEmitter<void>();
+  @Output() openRoundHistory = new EventEmitter<void>();
 
   tricks: number[] = [0, 0, 0, 0];
   liveTricks: { [playerIndex: number]: number } = {};
