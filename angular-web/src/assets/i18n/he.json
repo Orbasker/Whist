@@ -155,6 +155,7 @@
     },
     "roundSummary": {
       "title": "סיכום סיבוב",
+      "playerTotals": "סיכום שחקנים",
       "bidTook": "הימר {{bid}}, לקח {{took}}",
       "total": "סה\"כ",
       "continueNext": "המשך לסיבוב הבא"
