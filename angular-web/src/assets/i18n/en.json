@@ -155,6 +155,7 @@
     },
     "roundSummary": {
       "title": "Round summary",
+      "playerTotals": "Player totals",
       "bidTook": "Bid {{bid}}, took {{took}}",
       "total": "Total",
       "continueNext": "Continue to next round"
