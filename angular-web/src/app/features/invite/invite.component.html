@@ -31,10 +31,7 @@
         <div class="text-red-400 text-5xl mb-4">⚠️</div>
         <h2 class="text-xl font-semibold text-white mb-2">{{ 'invite.error' | translate }}</h2>
         <p class="text-slate-300 mb-4">{{ error }}</p>
-        <button
-          (click)="goToHome()"
-          class="bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-        >
+        <button (click)="goToHome()" class="btn btn-primary">
           {{ 'invite.backToHome' | translate }}
         </button>
       </div>
@@ -67,10 +64,7 @@
       <div *ngIf="!isAuthenticated" class="space-y-4">
         <div class="bg-amber-900/30 border border-amber-500 rounded-lg p-4">
           <p class="text-amber-200 text-sm mb-3">{{ 'invite.mustLoginToAccept' | translate }}</p>
-          <button
-            (click)="goToLogin()"
-            class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-          >
+          <button (click)="goToLogin()" class="btn btn-primary w-full">
             {{ 'invite.loginOrSignup' | translate }}
           </button>
         </div>
@@ -78,19 +72,12 @@
 
       <!-- Authenticated -->
       <div *ngIf="isAuthenticated" class="space-y-4">
-        <button
-          (click)="acceptInvitation()"
-          [disabled]="accepting"
-          class="w-full bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-        >
+        <button (click)="acceptInvitation()" [disabled]="accepting" class="btn btn-primary w-full">
           <span *ngIf="!accepting">{{ 'invite.acceptAndJoin' | translate }}</span>
           <span *ngIf="accepting">{{ 'invite.joining' | translate }}</span>
         </button>
 
-        <button
-          (click)="goToHome()"
-          class="w-full bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-        >
+        <button (click)="goToHome()" class="btn btn-secondary w-full">
           {{ 'invite.cancel' | translate }}
         </button>
       </div>

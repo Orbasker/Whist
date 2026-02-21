@@ -4,11 +4,7 @@
     <p class="text-slate-300 mb-4 text-sm sm:text-base">
       {{ 'invitationForm.gameFull' | translate }}
     </p>
-    <button
-      type="button"
-      (click)="onCancel()"
-      class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
-    >
+    <button type="button" (click)="onCancel()" class="btn btn-secondary">
       {{ 'common.close' | translate }}
     </button>
   </div>
@@ -116,17 +112,12 @@
         <button
           type="submit"
           [disabled]="!hasValidEmails() || sending"
-          class="min-h-touch flex-1 min-w-[8rem] bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
+          class="btn btn-primary flex-1 min-w-[8rem]"
         >
           <span *ngIf="!sending">{{ 'invitationForm.sendInvitations' | translate }}</span>
           <span *ngIf="sending">{{ 'invitationForm.sending' | translate }}</span>
         </button>
-        <button
-          type="button"
-          (click)="onCancel()"
-          [disabled]="sending"
-          class="min-h-touch bg-slate-600 hover:bg-slate-500 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
-        >
+        <button type="button" (click)="onCancel()" [disabled]="sending" class="btn btn-secondary">
           {{ 'common.cancel' | translate }}
         </button>
       </div>

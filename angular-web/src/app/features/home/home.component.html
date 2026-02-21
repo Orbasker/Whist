@@ -39,10 +39,7 @@
             <span *ngIf="userName && userEmail" class="mx-1">•</span>
             <span *ngIf="userEmail" class="text-slate-400">{{ userEmail }}</span>
           </div>
-          <button
-            (click)="logout()"
-            class="min-h-touch inline-flex items-center justify-center px-3 text-amber-400 hover:text-amber-300 text-sm underline bg-transparent border-none cursor-pointer"
-          >
+          <button (click)="logout()" class="btn btn-ghost text-sm underline">
             {{ 'home.logout' | translate }}
           </button>
         </div>
@@ -55,10 +52,7 @@
         <h2 class="text-lg sm:text-xl font-semibold text-white">
           {{ 'home.myGames' | translate }}
         </h2>
-        <button
-          (click)="toggleNewGameForm()"
-          class="min-h-touch bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-        >
+        <button (click)="toggleNewGameForm()" class="btn btn-primary flex items-center gap-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
@@ -110,7 +104,7 @@
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openInvitationForm(game); $event.stopPropagation()"
-                class="min-h-touch min-w-touch inline-flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded transition-colors"
+                class="btn btn-compact bg-blue-600 hover:bg-blue-500 text-white inline-flex gap-1.5"
                 [attr.aria-label]="'home.sendInvites' | translate"
               >
                 <svg
@@ -133,7 +127,7 @@
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openDeleteConfirm(game.id, $event)"
-                class="min-h-touch min-w-touch inline-flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-2 rounded transition-colors"
+                class="btn btn-danger btn-compact inline-flex gap-1.5"
                 [attr.aria-label]="'home.deleteGame' | translate"
               >
                 <svg
@@ -209,22 +203,13 @@
       (cancelled)="closeDeleteConfirm()"
     ></app-confirm-modal>
 
-    <!-- New Game Form (shown when showNewGameForm is true) -->
-    <div *ngIf="showNewGameForm" class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl">
-      <div class="flex items-center gap-2 mb-4 sm:mb-6">
-        <h2 class="text-lg sm:text-xl font-semibold text-white">
-          {{ 'home.newGameFormTitle' | translate }}
-        </h2>
-        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-          ></path>
-        </svg>
-      </div>
-
+    <!-- New Game Modal (same pattern as invitation modal) -->
+    <app-modal
+      *ngIf="showNewGameForm"
+      [title]="'home.newGameFormTitle' | translate"
+      size="md"
+      (close)="closeNewGameForm()"
+    >
       <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-4">
         <!-- Game name (optional) -->
         <div>
@@ -240,12 +225,25 @@
           />
         </div>
 
-        <!-- Player inputs -->
+        <!-- Player inputs: first seat = creator (you), rest = other players -->
         <div class="space-y-2">
           <label class="block text-slate-300 text-sm mb-2">{{
             'home.playerNames' | translate
           }}</label>
-          <div *ngFor="let i of [1, 2, 3, 4]" class="space-y-2">
+          <!-- Player 1: You (creator) – read-only so the seat cannot be assigned to someone else -->
+          <div class="space-y-2">
+            <label class="block text-amber-400 text-xs font-medium">{{
+              'home.creatorSeatLabel' | translate
+            }}</label>
+            <input
+              type="text"
+              formControlName="player1"
+              [readonly]="true"
+              class="w-full px-4 py-3 bg-slate-600 text-slate-300 rounded-lg border border-slate-500 cursor-not-allowed"
+              [attr.aria-label]="'home.creatorSeatLabel' | translate"
+            />
+          </div>
+          <div *ngFor="let i of [2, 3, 4]" class="space-y-2">
             <input
               type="text"
               [formControlName]="'player' + i"
@@ -256,17 +254,13 @@
         </div>
 
         <div class="flex gap-3 mt-6">
-          <button
-            type="button"
-            (click)="toggleNewGameForm()"
-            class="min-h-touch flex-1 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-          >
+          <button type="button" (click)="closeNewGameForm()" class="btn btn-secondary flex-1">
             {{ 'common.cancel' | translate }}
           </button>
           <button
             type="submit"
             [disabled]="!playerForm.valid"
-            class="min-h-touch flex-1 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+            class="btn btn-primary flex-1 flex items-center justify-center gap-2"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -286,7 +280,7 @@
           </button>
         </div>
       </form>
-    </div>
+    </app-modal>
 
     <!-- Player Input Form (shown when not authenticated or when showNewGameForm is false and no games exist) -->
     <div
@@ -320,7 +314,7 @@
         <button
           type="submit"
           [disabled]="!playerForm.valid"
-          class="min-h-touch w-full mt-6 bg-amber-600 hover:bg-amber-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+          class="btn btn-primary w-full mt-6 flex items-center justify-center gap-2"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

@@ -12,7 +12,7 @@ router = APIRouter(tags=["health"])
 
 @router.get("/health", response_model=HealthResponse)
 async def health_check(db: Session = Depends(get_db)):
-    """Health check endpoint; verifies API and database connectivity."""
+    """Readiness probe: use for checks that require DB (e.g. k8s readiness, dashboards). Use GET /health for liveness only."""
     db_status: str | None = None
     try:
         db.execute(text("SELECT 1"))
