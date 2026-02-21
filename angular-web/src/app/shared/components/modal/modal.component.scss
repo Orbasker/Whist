@@ -15,18 +15,24 @@
 }
 
 .modal-panel {
-  background: var(--bg-secondary);
+  background: hsl(var(--card));
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--bg-tertiary);
-  border-radius: 1rem 1rem 0 0;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 
   @media (min-width: 640px) {
-    border-radius: 0.75rem;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Full-size modals (e.g. round history table) get fixed height so content scrolls inside */
+  &.modal-panel--full {
+    height: 85vh;
+    max-height: 85vh;
   }
 }
 
@@ -35,14 +41,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--bg-tertiary);
+  border-bottom: 1px solid hsl(var(--border));
   flex-shrink: 0;
 }
 
 .modal-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: hsl(var(--foreground));
   margin: 0;
 }
 
@@ -50,19 +56,19 @@
   min-height: 44px;
   min-width: 44px;
   padding: 0.25rem;
-  color: var(--text-secondary);
+  color: hsl(var(--muted-foreground));
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .modal-close:hover {
-  color: var(--text-primary);
-  background: var(--bg-tertiary);
+  color: hsl(var(--foreground));
+  background: hsl(var(--muted));
 }
 
 .modal-body {

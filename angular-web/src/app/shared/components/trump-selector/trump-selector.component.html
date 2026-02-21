@@ -1,16 +1,18 @@
-<div class="flex gap-2 flex-wrap">
+<div class="flex flex-wrap gap-2">
   <button
     *ngFor="let option of trumpOptions"
     type="button"
     (click)="selectTrump(option.value)"
     [attr.aria-pressed]="selectedTrump === option.value"
     [attr.aria-label]="('game.biddingPhase.trump' | translate) + ': ' + (option.label | translate)"
-    [class.bg-amber-500]="selectedTrump === option.value"
-    [class.bg-slate-700]="selectedTrump !== option.value"
-    [class.text-white]="selectedTrump === option.value"
-    [class.text-slate-300]="selectedTrump !== option.value"
+    [class.rounded-full]="selectedTrump === option.value"
+    [class.rounded-xl]="selectedTrump !== option.value"
+    [class.bg-primary]="selectedTrump === option.value"
+    [class.text-primary-foreground]="selectedTrump === option.value"
+    [class.bg-muted]="selectedTrump !== option.value"
+    [class.text-muted-foreground]="selectedTrump !== option.value"
     [class]="option.color"
-    class="min-h-touch px-4 py-2.5 sm:py-2 rounded-lg font-medium text-sm sm:text-base transition-colors hover:bg-amber-600 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800"
+    class="min-h-touch px-4 py-2.5 font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:bg-primary/90 sm:py-2 sm:text-base"
   >
     <span *ngIf="option.icon" class="mr-2" aria-hidden="true">{{ option.icon }}</span>
     {{ option.label | translate }}

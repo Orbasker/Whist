@@ -1,14 +1,14 @@
 <div
-  class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 sm:p-6 md:p-8"
+  class="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-card to-background p-4 sm:p-6 md:p-8"
 >
   <div class="w-full max-w-md md:max-w-lg lg:max-w-xl">
     <!-- Header -->
-    <div class="text-center mb-6 sm:mb-8">
+    <div class="mb-6 text-center sm:mb-8">
       <div
-        class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-amber-500 rounded-lg mb-3 sm:mb-4"
+        class="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-primary sm:mb-4 sm:h-16 sm:w-16"
       >
         <svg
-          class="w-8 h-8 sm:w-10 sm:h-10 text-white"
+          class="h-8 w-8 text-primary-foreground sm:h-10 sm:w-10"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -21,83 +21,89 @@
           ></path>
         </svg>
       </div>
-      <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">{{ 'home.title' | translate }}</h1>
-      <p class="text-slate-400 text-sm sm:text-base">{{ 'home.subtitle' | translate }}</p>
+      <h1 class="mb-2 text-3xl font-bold text-foreground sm:text-4xl">
+        {{ 'home.title' | translate }}
+      </h1>
+      <p class="text-sm text-muted-foreground sm:text-base">{{ 'home.subtitle' | translate }}</p>
       <div class="mt-4">
-        <!-- Show login link if not authenticated -->
         <a
           *ngIf="!isAuthenticated"
           routerLink="/login"
-          class="inline-flex items-center justify-center min-h-touch min-w-touch text-amber-400 hover:text-amber-300 text-sm underline"
+          class="inline-flex min-h-touch min-w-touch items-center justify-center text-sm text-primary underline hover:text-primary/90"
         >
           {{ 'home.loginOrSignup' | translate }}
         </a>
-        <!-- Show user info and logout if authenticated -->
         <div *ngIf="isAuthenticated" class="flex flex-col items-center gap-2">
-          <div class="text-slate-300 text-sm">
+          <div class="text-sm text-foreground/90">
             <span *ngIf="userName">{{ userName }}</span>
             <span *ngIf="userName && userEmail" class="mx-1">•</span>
-            <span *ngIf="userEmail" class="text-slate-400">{{ userEmail }}</span>
+            <span *ngIf="userEmail" class="text-muted-foreground">{{ userEmail }}</span>
           </div>
-          <button (click)="logout()" class="btn btn-ghost text-sm underline">
+          <app-ui-button variant="link" type="button" (click)="logout()">
             {{ 'home.logout' | translate }}
-          </button>
+          </app-ui-button>
         </div>
       </div>
     </div>
 
-    <!-- Games List (only shown when authenticated) -->
-    <div *ngIf="isAuthenticated" class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl mb-4">
-      <div
-        class="flex flex-col gap-3 mb-4 sm:mb-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
-      >
-        <h2 class="text-lg sm:text-xl font-semibold text-white order-1 sm:order-none">
-          {{ 'home.myGames' | translate }}
-        </h2>
-        <button
-          (click)="toggleNewGameForm()"
-          class="btn btn-primary flex items-center justify-center gap-2 w-full sm:w-auto order-2 sm:order-none"
-        >
-          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            ></path>
-          </svg>
-          {{ 'home.newGame' | translate }}
-        </button>
-      </div>
-
-      <!-- Loading state -->
-      <div *ngIf="loading" class="text-center py-8">
-        <div class="text-slate-400">{{ 'home.loadingGames' | translate }}</div>
-      </div>
-
-      <!-- Empty state -->
-      <div *ngIf="!loading && games.length === 0" class="text-center py-8">
-        <p class="text-slate-400 mb-4">{{ 'home.noGames' | translate }}</p>
-        <p class="text-slate-500 text-sm">{{ 'home.createGameToStart' | translate }}</p>
-      </div>
-
-      <!-- Games list -->
-      <div *ngIf="!loading && games.length > 0" class="space-y-3">
-        <div
-          *ngFor="let game of games"
-          (click)="continueGame(game.id)"
-          class="bg-slate-700 hover:bg-slate-600 rounded-lg p-3 sm:p-4 cursor-pointer transition-colors border border-slate-600 hover:border-amber-500"
-        >
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
-            <div class="flex-1 min-w-0">
-              <h3 class="text-white font-semibold mb-1 text-sm sm:text-base truncate">
+    <!-- Games List (only shown when authenticated) - shadcn Card -->
+    <app-ui-card *ngIf="isAuthenticated" class="mb-4 shadow-xl">
+      <app-ui-card-header>
+        <div class="flex flex-row flex-wrap items-center justify-between gap-3">
+          <app-ui-card-title class="text-lg sm:text-xl">
+            {{ 'home.myGames' | translate }}
+          </app-ui-card-title>
+          <app-ui-button (click)="toggleNewGameForm()">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              ></path>
+            </svg>
+            {{ 'home.newGame' | translate }}
+          </app-ui-button>
+        </div>
+      </app-ui-card-header>
+      <app-ui-card-content class="space-y-3 pt-0">
+        <div *ngIf="loading" class="py-8 text-center text-muted-foreground">
+          {{ 'home.loadingGames' | translate }}
+        </div>
+        <div *ngIf="!loading && games.length === 0" class="py-8 text-center">
+          <p class="mb-4 text-muted-foreground">{{ 'home.noGames' | translate }}</p>
+          <p class="text-sm text-muted-foreground/80">{{ 'home.createGameToStart' | translate }}</p>
+        </div>
+        <div *ngIf="!loading && games.length > 0" class="space-y-3">
+          <div
+            *ngFor="let game of games"
+            role="button"
+            tabindex="0"
+            (click)="continueGame(game.id)"
+            (keydown.enter)="continueGame(game.id)"
+            (keydown.space)="$event.preventDefault(); continueGame(game.id)"
+            [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
+            class="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm transition-colors hover:border-primary hover:shadow-md sm:p-4"
+          >
+            <!-- Trophy: quick look only (score preview modal); rest of row opens game -->
+            <button
+              type="button"
+              (click)="openQuickLook(game, $event)"
+              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/15 transition-colors hover:bg-primary/25"
+              [attr.aria-label]="'game.scoreBoard' | translate"
+            >
+              <img src="assets/icons/trophy-icon.svg" alt="" class="h-6 w-6" />
+            </button>
+            <!-- Game info (tap row = open game) -->
+            <div class="min-w-0 flex-1">
+              <h3 class="mb-1 truncate text-sm font-semibold text-card-foreground sm:text-base">
                 {{ getGameDisplayName(game) }}
               </h3>
-              <p class="text-slate-400 text-xs sm:text-sm mb-2 truncate">
+              <p class="mb-2 truncate text-xs text-muted-foreground sm:text-sm">
                 {{ game.players.join(', ') }}
               </p>
               <div
-                class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 min-w-0"
+                class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground"
               >
                 <span>{{ 'home.round' | translate }} {{ game.current_round }}</span>
                 <span class="text-slate-600" aria-hidden="true">•</span>
@@ -106,21 +112,16 @@
                 <span class="truncate">{{ formatDate(game.updated_at) }}</span>
               </div>
             </div>
-            <div class="flex items-center gap-1.5 shrink-0 flex-wrap">
+            <!-- Actions: same-size icon buttons -->
+            <div class="flex shrink-0 items-center gap-1">
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openInvitationForm(game); $event.stopPropagation()"
-                class="btn btn-compact game-card-action bg-blue-600 hover:bg-blue-500 text-white inline-flex gap-1.5"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/80 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                 [attr.aria-label]="'home.sendInvites' | translate"
               >
-                <svg
-                  class="w-3.5 h-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -128,22 +129,15 @@
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                {{ 'home.invite' | translate }}
               </button>
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
                 (click)="openDeleteConfirm(game.id, $event)"
-                class="btn btn-danger btn-compact game-card-action inline-flex gap-1.5"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/80 text-destructive transition-colors hover:bg-destructive/20"
                 [attr.aria-label]="'home.deleteGame' | translate"
               >
-                <svg
-                  class="w-3.5 h-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -151,14 +145,16 @@
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-                {{ 'home.delete' | translate }}
               </button>
+              <!-- Round status pill (not a button) -->
               <span
-                [class]="
+                class="flex h-10 shrink-0 items-center justify-center rounded-full px-3 text-xs font-medium"
+                [ngClass]="
                   game.status === 'active'
-                    ? 'game-card-action-pill bg-green-500'
-                    : 'game-card-action-pill bg-slate-500'
+                    ? 'bg-primary/20 text-primary'
+                    : 'bg-muted text-muted-foreground'
                 "
+                [attr.aria-label]="'home.statusLabel' | translate"
               >
                 {{
                   game.status === 'active'
@@ -166,21 +162,72 @@
                     : ('home.completed' | translate)
                 }}
               </span>
-              <span class="text-slate-400" aria-hidden="true">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span
+                class="flex h-10 w-6 shrink-0 items-center justify-end text-muted-foreground"
+                aria-hidden="true"
+              >
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
                     d="M9 5l7 7-7 7"
-                  ></path>
+                  />
                 </svg>
               </span>
             </div>
           </div>
         </div>
+      </app-ui-card-content>
+    </app-ui-card>
+
+    <!-- Quick look: score preview (trophy only); "Open game" enters the game -->
+    <app-modal
+      *ngIf="quickLookGame"
+      [title]="getGameDisplayName(quickLookGame)"
+      size="md"
+      (close)="closeQuickLook()"
+    >
+      <div class="space-y-4">
+        <div class="rounded-xl border border-border bg-muted/50 p-4">
+          <h3 class="mb-3 text-sm font-semibold text-muted-foreground">
+            {{ 'game.scoreTable.currentScore' | translate }}
+          </h3>
+          <div class="grid grid-cols-2 gap-3">
+            <div
+              *ngFor="let player of quickLookGame.players; let i = index"
+              class="text-center rounded-lg border border-border bg-card p-2"
+            >
+              <p class="truncate text-sm text-foreground">{{ player }}</p>
+              <p
+                class="text-lg font-bold"
+                [class.text-success]="quickLookGame.scores[i] > 0"
+                [class.text-destructive]="quickLookGame.scores[i] < 0"
+                [class.text-foreground]="quickLookGame.scores[i] === 0"
+              >
+                {{ quickLookGame.scores[i] }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-muted-foreground">
+          {{ 'home.round' | translate }} {{ quickLookGame.current_round }}
+          ·
+          {{
+            quickLookGame.status === 'active'
+              ? ('home.active' | translate)
+              : ('home.completed' | translate)
+          }}
+        </p>
+        <app-ui-button
+          type="button"
+          class="w-full"
+          (click)="quickLookGame && continueGame(quickLookGame.id)"
+        >
+          {{ 'home.openGame' | translate }}
+        </app-ui-button>
       </div>
-    </div>
+    </app-modal>
 
     <!-- Invitation Modal (shown when showInvitationForm is true) -->
     <app-modal
@@ -213,7 +260,7 @@
       (cancelled)="closeDeleteConfirm()"
     ></app-confirm-modal>
 
-    <!-- New Game Modal (same pattern as invitation modal) -->
+    <!-- New Game Form (modal, same pattern as invitation) -->
     <app-modal
       *ngIf="showNewGameForm"
       [title]="'home.newGameFormTitle' | translate"
@@ -221,128 +268,106 @@
       (close)="closeNewGameForm()"
     >
       <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-4">
-        <!-- Game name (optional) -->
-        <div>
-          <label class="block text-slate-300 text-sm mb-2">{{
-            'home.gameNameOptional' | translate
-          }}</label>
-          <input
-            type="text"
-            [(ngModel)]="newGameName"
-            [ngModelOptions]="{ standalone: true }"
-            [placeholder]="'home.gameNamePlaceholder' | translate"
-            class="w-full px-4 py-3 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent placeholder-slate-400"
-          />
-        </div>
-
-        <!-- Player inputs: first seat = creator (you), rest = other players -->
         <div class="space-y-2">
-          <label class="block text-slate-300 text-sm mb-2">{{
-            'home.playerNames' | translate
-          }}</label>
-          <!-- Player 1: You (creator) – read-only so the seat cannot be assigned to someone else -->
-          <div class="space-y-2">
-            <label class="block text-amber-400 text-xs font-medium">{{
-              'home.creatorSeatLabel' | translate
-            }}</label>
+          <app-ui-label [for]="'newGameNameInput'">{{
+            'home.gameNameOptional' | translate
+          }}</app-ui-label>
+          <app-ui-input>
             <input
+              id="newGameNameInput"
               type="text"
-              formControlName="player1"
-              [readonly]="true"
-              class="w-full px-4 py-3 bg-slate-600 text-slate-300 rounded-lg border border-slate-500 cursor-not-allowed"
-              [attr.aria-label]="'home.creatorSeatLabel' | translate"
+              [(ngModel)]="newGameName"
+              [ngModelOptions]="{ standalone: true }"
+              [placeholder]="'home.gameNamePlaceholder' | translate"
             />
-          </div>
-          <div *ngFor="let i of [2, 3, 4]" class="space-y-2">
-            <input
-              type="text"
-              [formControlName]="'player' + i"
-              [placeholder]="('home.player' | translate) + ' ' + i"
-              class="w-full px-4 py-3 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent placeholder-slate-400"
-            />
+          </app-ui-input>
+        </div>
+        <div class="space-y-2">
+          <app-ui-label>{{ 'home.playerNames' | translate }}</app-ui-label>
+          <div *ngFor="let i of [1, 2, 3, 4]" class="space-y-2">
+            <app-ui-label [for]="'player' + i + 'Input'"
+              >{{ 'home.player' | translate }} {{ i }}</app-ui-label
+            >
+            <app-ui-input>
+              <input
+                [id]="'player' + i + 'Input'"
+                type="text"
+                [formControlName]="'player' + i"
+                [placeholder]="('home.player' | translate) + ' ' + i"
+              />
+            </app-ui-input>
           </div>
         </div>
-
-        <div class="flex gap-3 mt-6">
-          <button type="button" (click)="closeNewGameForm()" class="btn btn-secondary flex-1">
-            {{ 'common.cancel' | translate }}
-          </button>
-          <button
-            type="submit"
-            [disabled]="!playerForm.valid"
-            class="btn btn-primary flex-1 flex items-center justify-center gap-2"
+        <div class="flex gap-3 pt-2">
+          <app-ui-button
+            variant="secondary"
+            type="button"
+            (click)="closeNewGameForm()"
+            class="flex-1"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {{ 'common.cancel' | translate }}
+          </app-ui-button>
+          <app-ui-button type="submit" [disabled]="!playerForm.valid" class="flex-1">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-              ></path>
+              />
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
+              />
             </svg>
             {{ 'home.startGame' | translate }}
-          </button>
+          </app-ui-button>
         </div>
       </form>
     </app-modal>
 
     <!-- Player Input Form (shown when not authenticated or when showNewGameForm is false and no games exist) -->
-    <div
+    <app-ui-card
       *ngIf="!isAuthenticated || (!showNewGameForm && games.length === 0 && !loading)"
-      class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl"
+      class="shadow-xl"
     >
-      <div class="flex items-center gap-2 mb-4 sm:mb-6">
-        <h2 class="text-lg sm:text-xl font-semibold text-white">
+      <app-ui-card-header>
+        <app-ui-card-title class="text-lg sm:text-xl">
           {{ 'home.playerNames' | translate }}
-        </h2>
-        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-          ></path>
-        </svg>
-      </div>
-
-      <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-4">
-        <div *ngFor="let i of [1, 2, 3, 4]" class="space-y-2">
-          <input
-            type="text"
-            [formControlName]="'player' + i"
-            [placeholder]="('home.player' | translate) + ' ' + i"
-            class="w-full px-4 py-3 bg-slate-700 text-white rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent placeholder-slate-400"
-          />
-        </div>
-
-        <button
-          type="submit"
-          [disabled]="!playerForm.valid"
-          class="btn btn-primary w-full mt-6 flex items-center justify-center gap-2"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-            ></path>
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
-          {{ 'home.startGame' | translate }}
-        </button>
-      </form>
-    </div>
+        </app-ui-card-title>
+      </app-ui-card-header>
+      <app-ui-card-content>
+        <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-4">
+          <div *ngFor="let i of [1, 2, 3, 4]" class="space-y-2">
+            <app-ui-input>
+              <input
+                type="text"
+                [formControlName]="'player' + i"
+                [placeholder]="('home.player' | translate) + ' ' + i"
+              />
+            </app-ui-input>
+          </div>
+          <app-ui-button type="submit" [disabled]="!playerForm.valid" class="mt-4 w-full">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {{ 'home.startGame' | translate }}
+          </app-ui-button>
+        </form>
+      </app-ui-card-content>
+    </app-ui-card>
   </div>
 </div>

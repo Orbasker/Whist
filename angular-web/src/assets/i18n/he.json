@@ -34,6 +34,7 @@
     "deleteGame": "מחק משחק",
     "active": "פעיל",
     "completed": "הושלם",
+    "statusLabel": "סטטוס",
     "sendInvitations": "שלח הזמנות",
     "close": "סגור",
     "newGameFormTitle": "משחק חדש",
@@ -50,7 +51,8 @@
     "deleteGameFailed": "לא ניתן למחוק את המשחק.",
     "mustBeLoggedIn": "עליך להתחבר כדי ליצור משחק. התחבר ונסה שוב.",
     "authTokenMissing": "חסר טוקן אימות. התחבר שוב.",
-    "createGameFailed": "יצירת המשחק נכשלה. נסה שוב."
+    "createGameFailed": "יצירת המשחק נכשלה. נסה שוב.",
+    "openGame": "פתח משחק"
   },
   "auth": {
     "signIn": "התחברות",
@@ -112,6 +114,7 @@
     "tricks": "לקיחות",
     "scoreTable": "טבלת ניקוד",
     "roundsHistory": "לוח ניקוד ({{count}} סיבובים)",
+    "openRoundsList": "פתח רשימת סיבובים ({{count}} סיבובים)",
     "roundsEmpty": "אין סיבובים עדיין",
     "roundSummary": "סיכום סיבוב",
     "roundHistory": "לוח ניקוד",

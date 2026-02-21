@@ -2,35 +2,38 @@
   <div
     class="modal-panel"
     [class]="sizeClass"
+    [class.modal-panel--full]="size === 'full'"
     (click)="onPanelClick($event)"
     role="dialog"
     [attr.aria-modal]="true"
     [attr.aria-labelledby]="title ? titleId : null"
   >
-    <div class="modal-header" *ngIf="title">
-      <h2 [id]="titleId" class="modal-title">{{ title }}</h2>
-      <button
-        type="button"
-        (click)="onClose()"
-        [attr.aria-label]="closeLabel"
-        class="btn btn-icon modal-close"
-      >
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
+    @if (title) {
+      <div class="modal-header">
+        <h2 [id]="titleId" class="modal-title">{{ title }}</h2>
+        <button
+          type="button"
+          (click)="onClose()"
+          [attr.aria-label]="closeLabel"
+          class="btn btn-icon modal-close"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-    </div>
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    }
     <div class="modal-body">
       <ng-content></ng-content>
     </div>

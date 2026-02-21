@@ -1,0 +1,43 @@
+/**
+ * Whist – distinct dark theme (not generic slate+amber).
+ * Deep blue base + sky accent; softer radii and clear hierarchy.
+ */
+:root {
+  /* Core palette (space-separated HSL for Tailwind opacity modifiers) */
+  --background: 212 39% 10%;
+  --foreground: 210 40% 96%;
+  --card: 214 35% 16%;
+  --card-foreground: 210 40% 96%;
+  --popover: 214 35% 16%;
+  --popover-foreground: 210 40% 96%;
+  --primary: 199 89% 46%;
+  --primary-foreground: 212 39% 10%;
+  --secondary: 203 40% 21%;
+  --secondary-foreground: 210 40% 96%;
+  --muted: 203 40% 21%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 203 40% 21%;
+  --accent-foreground: 210 40% 96%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 86% 97%;
+  --success: 142 71% 45%;
+  --success-foreground: 142 71% 11%;
+  --border: 203 40% 21%;
+  --input: 203 40% 21%;
+  --ring: 199 89% 46%;
+  /* Softer, more rounded */
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-sm: 0.5rem;
+  /* Legacy names for modal, score-table, etc. (use hsl() where full color needed) */
+  --bg-primary: hsl(var(--background));
+  --bg-secondary: hsl(var(--card));
+  --bg-tertiary: hsl(var(--muted));
+  --text-primary: hsl(var(--foreground));
+  --text-secondary: hsl(var(--muted-foreground));
+  --accent-primary: hsl(var(--primary));
+  --input-border: hsl(var(--border));
+  --input-border-focus: hsl(var(--primary));
+  --input-bg: hsl(var(--muted));
+  --modal-backdrop: rgba(0, 0, 0, 0.55);
+}

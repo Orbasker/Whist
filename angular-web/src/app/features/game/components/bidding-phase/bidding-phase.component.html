@@ -1,18 +1,15 @@
 <div class="space-y-4 sm:space-y-6">
-  <!-- Sticky bids summary: title, trump, total bids bar -->
   <div class="bidding-phase-sticky">
     <div>
-      <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
+      <h2 class="mb-2 text-xl font-bold text-foreground sm:text-2xl">
         {{ 'game.biddingPhase.title' | translate }}
       </h2>
-      <p class="text-slate-400 text-sm sm:text-base">
+      <p class="text-sm text-muted-foreground sm:text-base">
         {{ 'game.biddingPhase.subtitle' | translate }}
       </p>
     </div>
-
-    <!-- Trump Selector -->
     <div>
-      <h3 class="text-base sm:text-lg font-semibold text-white mb-3">
+      <h3 class="mb-3 text-base font-semibold text-foreground sm:text-lg">
         {{ 'game.biddingPhase.trump' | translate }}
       </h3>
       <app-trump-selector
@@ -20,62 +17,97 @@
         (trumpSelect)="onTrumpSelect($event)"
       ></app-trump-selector>
     </div>
-
-    <!-- Total Bids Display -->
-    <div class="bg-slate-800 rounded-lg p-3 sm:p-4">
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-slate-400 text-sm sm:text-base">{{
+    <div class="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
+      <div class="mb-2 flex items-center justify-between">
+        <span class="text-sm text-muted-foreground sm:text-base">{{
           'game.biddingPhase.totalBids' | translate
         }}</span>
-        <span class="text-xl sm:text-2xl font-bold text-white">{{ totalBids }}</span>
+        <span class="text-xl font-bold text-foreground sm:text-2xl">{{ totalBids }}</span>
       </div>
-      <div class="w-full bg-slate-700 rounded-full h-2 mb-2">
+      <div class="mb-2 h-2.5 w-full overflow-hidden rounded-full bg-muted">
         <div
-          class="bg-amber-500 h-2 rounded-full transition-all"
-          [style.width.%]="(totalBids / 13) * 100"
+          class="h-2.5 rounded-full bg-primary transition-all"
+          [style.width.%]="totalBids > 13 ? 100 : (totalBids / 13) * 100"
         ></div>
       </div>
       <p
         class="text-sm"
-        [class.text-red-400]="totalBids === 13"
-        [class.text-slate-300]="totalBids !== 13"
+        [class.text-destructive]="totalBids === 13"
+        [class.text-muted-foreground]="totalBids !== 13"
       >
         {{ getStatusMessage() }}
       </p>
     </div>
+    <div class="mt-3 flex gap-2">
+      <button
+        type="button"
+        (click)="openScoreTable.emit()"
+        class="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 px-4 font-medium text-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary sm:py-2.5"
+        [attr.aria-label]="'game.roundsHistory' | translate: { count: roundsPlayed }"
+      >
+        <app-scoreboard-icon [size]="20"></app-scoreboard-icon>
+        <span>{{ 'game.roundsHistory' | translate: { count: roundsPlayed } }}</span>
+      </button>
+      <button
+        type="button"
+        (click)="openRoundHistory.emit()"
+        class="flex min-h-touch min-w-touch shrink-0 items-center justify-center rounded-xl border border-border bg-card p-3 text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary hover:text-foreground sm:p-2.5"
+        [attr.aria-label]="'game.openRoundsList' | translate: { count: roundsPlayed }"
+      >
+        <svg
+          class="h-5 w-5 sm:h-6 sm:w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 10h16M4 14h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
 
-  <!-- Bid Input for Each Player -->
   <div class="space-y-4">
-    <div *ngFor="let player of players; let i = index" class="bg-slate-800 rounded-lg p-3 sm:p-4">
-      <div class="flex items-center justify-between mb-3">
-        <div class="flex items-center gap-2">
-          <span class="text-white font-medium">{{ player }}</span>
+    <div
+      *ngFor="let player of players; let i = index"
+      class="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5"
+    >
+      <div class="mb-3 flex items-center justify-between">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="font-medium text-foreground">{{ player }}</span>
           <span
-            class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded font-semibold"
+            *ngIf="currentPlayerIndex === i"
+            class="rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-medium text-primary"
+            aria-label="Current player"
+            >{{ 'game.biddingPhase.you' | translate }}</span
+          >
+          <span
             *ngIf="isPlayerOwner(i)"
+            class="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
             [title]="'game.biddingPhase.manager' | translate"
             >{{ 'game.biddingPhase.manager' | translate }}</span
           >
-          <span class="text-xs text-green-400" *ngIf="currentPlayerIndex === i"
-            >({{ 'game.biddingPhase.you' | translate }})</span
-          >
-          <span class="text-xs text-red-400" *ngIf="isBidLocked(i)"
+          <span *ngIf="isBidLocked(i)" class="text-xs text-destructive"
             >🔒 {{ 'game.biddingPhase.locked' | translate }}</span
           >
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-amber-400 font-bold"
+          <span class="font-bold text-primary"
             >{{ getBidForPlayer(i) }} {{ 'game.biddingPhase.tricks' | translate }}</span
           >
           <span
             *ngIf="i !== currentPlayerIndex && liveBids[i] !== undefined"
-            class="text-xs text-green-400"
+            class="text-xs text-success"
             >({{ 'game.biddingPhase.choice' | translate }})</span
           >
         </div>
       </div>
-      <div *ngIf="currentPlayerIndex === null && i === 0" class="mb-2 text-xs text-yellow-400">
+      <div *ngIf="currentPlayerIndex === null && i === 0" class="mb-2 text-xs text-primary">
         ⚠️ {{ 'game.biddingPhase.cannotEdit' | translate }}
       </div>
       <app-bid-input-grid
@@ -83,7 +115,11 @@
         [disabled]="!canEditBid(i)"
         (bidSelect)="onBidChange(i, $event)"
       ></app-bid-input-grid>
-      <button *ngIf="canLockBid(i)" (click)="onLockBid(i)" class="btn btn-success mt-2 w-full">
+      <button
+        *ngIf="canLockBid(i)"
+        (click)="onLockBid(i)"
+        class="mt-3 w-full min-h-touch rounded-xl bg-success py-3 px-4 text-sm font-semibold text-success-foreground shadow-sm transition-colors hover:bg-success/90"
+      >
         {{
           currentPlayerIndex === i
             ? ('game.biddingPhase.lockChoice' | translate)
@@ -93,13 +129,14 @@
     </div>
   </div>
 
-  <!-- Submit Button -->
   <button
     (click)="onSubmit()"
     [disabled]="!canSubmit()"
-    class="btn w-full"
-    [class.btn-primary]="canSubmit()"
-    [class.btn-secondary]="!canSubmit()"
+    [ngClass]="
+      canSubmit()
+        ? 'w-full min-h-touch rounded-xl bg-primary py-3.5 px-6 font-semibold text-primary-foreground shadow-md transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50'
+        : 'w-full min-h-touch rounded-xl bg-muted py-3.5 px-6 font-semibold text-muted-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50'
+    "
   >
     {{ 'game.biddingPhase.continue' | translate }}
   </button>

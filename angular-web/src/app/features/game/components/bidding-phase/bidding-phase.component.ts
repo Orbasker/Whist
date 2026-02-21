@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { TrumpSelectorComponent } from '../../../../shared/components/trump-selector/trump-selector.component';
 import { BidInputGridComponent } from '../../../../shared/components/bid-input-grid/bid-input-grid.component';
+import { ScoreboardIconComponent } from '../../../../shared/components/scoreboard-icon/scoreboard-icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { GameService } from '../../../../core/services/game.service';
 import { GameState } from '../../../../core/models/game-state.model';
@@ -11,13 +12,22 @@ import { GameState } from '../../../../core/models/game-state.model';
 @Component({
   selector: 'app-bidding-phase',
   standalone: true,
-  imports: [CommonModule, TrumpSelectorComponent, BidInputGridComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    TrumpSelectorComponent,
+    BidInputGridComponent,
+    ScoreboardIconComponent,
+    TranslateModule,
+  ],
   templateUrl: './bidding-phase.component.html',
   styleUrl: './bidding-phase.component.scss',
 })
 export class BiddingPhaseComponent implements OnInit, OnDestroy {
   @Input() players: string[] = [];
+  @Input() roundsPlayed = 0;
   @Output() bidsSubmit = new EventEmitter<{ bids: number[]; trumpSuit?: string }>();
+  @Output() openScoreTable = new EventEmitter<void>();
+  @Output() openRoundHistory = new EventEmitter<void>();
 
   selectedTrumpSuit: string | null = null;
   bids: number[] = [0, 0, 0, 0];

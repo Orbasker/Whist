@@ -14,6 +14,15 @@ import { GameState } from '../../core/models/game-state.model';
 import { InvitationFormComponent } from '../../shared/components/invitation-form/invitation-form.component';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { ConfirmModalComponent } from '../../shared/components/confirm-modal/confirm-modal.component';
+import { UiButtonComponent } from '../../shared/components/ui/button/button.component';
+import {
+  UiCardComponent,
+  UiCardContentComponent,
+  UiCardHeaderComponent,
+  UiCardTitleComponent,
+} from '../../shared/components/ui/card/card.component';
+import { UiInputComponent } from '../../shared/components/ui/input/input.component';
+import { UiLabelComponent } from '../../shared/components/ui/label/label.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -29,6 +38,13 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     TranslateModule,
     ModalComponent,
     ConfirmModalComponent,
+    UiButtonComponent,
+    UiCardComponent,
+    UiCardHeaderComponent,
+    UiCardTitleComponent,
+    UiCardContentComponent,
+    UiInputComponent,
+    UiLabelComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -49,6 +65,8 @@ export class HomeComponent implements OnInit {
   selectedGame: GameState | null = null;
   invitationError: string | null = null;
   invitationSuccess: string | null = null;
+  /** Game shown in the trophy quick-look modal (score preview only). */
+  quickLookGame: GameState | null = null;
   showDeleteConfirm = false;
   deleteGameIdPending: string | null = null;
 
@@ -169,7 +187,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async continueGame(gameId: string) {
+  async continueGame(gameId: string | undefined) {
+    if (!gameId) return;
+    this.closeQuickLook();
     try {
       await this.gameService.loadGame(gameId);
       localStorage.setItem('whist_game_id', gameId);
@@ -177,6 +197,16 @@ export class HomeComponent implements OnInit {
     } catch (error) {
       console.error('Failed to load game:', error);
     }
+  }
+
+  /** Open quick-look modal (score preview). Trophy only; does not open the game. */
+  openQuickLook(game: GameState, event: Event) {
+    event.stopPropagation();
+    this.quickLookGame = game;
+  }
+
+  closeQuickLook() {
+    this.quickLookGame = null;
   }
 
   toggleNewGameForm() {
