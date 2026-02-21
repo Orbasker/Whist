@@ -132,7 +132,7 @@
     <div class="flex flex-wrap gap-2 mt-4">
       <button
         *ngIf="isGameOwner"
-        (click)="onDeleteGame()"
+        (click)="onDeleteGameClick()"
         class="min-h-touch bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm"
       >
         {{ 'game.scoreTable.deleteGame' | translate }}
@@ -146,3 +146,14 @@
     </div>
   </div>
 </div>
+
+<!-- Delete game confirmation -->
+<app-confirm-modal
+  *ngIf="showDeleteConfirm"
+  [title]="'common.confirmDelete' | translate"
+  [message]="'home.confirmDeleteGame' | translate"
+  [confirmLabel]="'common.delete' | translate"
+  [cancelLabel]="'common.cancel' | translate"
+  (confirmed)="onDeleteConfirm()"
+  (cancelled)="onDeleteCancel()"
+></app-confirm-modal>

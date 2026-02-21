@@ -132,7 +132,7 @@
               <button
                 *ngIf="isGameOwner(game)"
                 type="button"
-                (click)="deleteGame(game.id, $event)"
+                (click)="openDeleteConfirm(game.id, $event)"
                 class="min-h-touch min-w-touch inline-flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-2 rounded transition-colors"
                 [attr.aria-label]="'home.deleteGame' | translate"
               >
@@ -197,6 +197,17 @@
         (playerNameUpdated)="onPlayerNameUpdated($event)"
       ></app-invitation-form>
     </app-modal>
+
+    <!-- Delete game confirmation -->
+    <app-confirm-modal
+      *ngIf="showDeleteConfirm"
+      [title]="'common.confirmDelete' | translate"
+      [message]="'home.confirmDeleteGame' | translate"
+      [confirmLabel]="'common.delete' | translate"
+      [cancelLabel]="'common.cancel' | translate"
+      (confirmed)="doDeleteGame()"
+      (cancelled)="closeDeleteConfirm()"
+    ></app-confirm-modal>
 
     <!-- New Game Form (shown when showNewGameForm is true) -->
     <div *ngIf="showNewGameForm" class="bg-slate-800 rounded-lg p-4 sm:p-6 shadow-xl">

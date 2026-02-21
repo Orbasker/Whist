@@ -126,9 +126,18 @@ export class ScoreboardPanelComponent {
     }
   }
 
-  onDeleteGame() {
-    if (confirm(this.translate.instant('home.confirmDeleteGame'))) {
-      this.deleteRequested.emit();
-    }
+  showDeleteConfirm = false;
+
+  onDeleteGameClick() {
+    this.showDeleteConfirm = true;
+  }
+
+  onDeleteConfirm() {
+    this.showDeleteConfirm = false;
+    this.deleteRequested.emit();
+  }
+
+  onDeleteCancel() {
+    this.showDeleteConfirm = false;
   }
 }

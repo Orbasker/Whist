@@ -3,7 +3,9 @@
     "cancel": "ביטול",
     "close": "סגור",
     "saving": "שומר...",
-    "you": "אתה"
+    "you": "אתה",
+    "confirmDelete": "אישור מחיקה",
+    "delete": "מחק"
   },
   "footer": {
     "language": "שפה",
