@@ -187,7 +187,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async continueGame(gameId: string) {
+  async continueGame(gameId: string | undefined) {
+    if (!gameId) return;
     this.closeQuickLook();
     try {
       await this.gameService.loadGame(gameId);

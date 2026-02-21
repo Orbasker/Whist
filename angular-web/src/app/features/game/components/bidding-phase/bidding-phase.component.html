@@ -45,7 +45,7 @@
         class="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 px-4 font-medium text-foreground shadow-sm transition-colors hover:bg-muted hover:border-primary sm:py-2.5"
         [attr.aria-label]="'game.roundsHistory' | translate: { count: roundsPlayed }"
       >
-        <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
+        <app-scoreboard-icon [size]="20"></app-scoreboard-icon>
         <span>{{ 'game.roundsHistory' | translate: { count: roundsPlayed } }}</span>
       </button>
       <button

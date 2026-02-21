@@ -219,7 +219,11 @@
               : ('home.completed' | translate)
           }}
         </p>
-        <app-ui-button type="button" class="w-full" (click)="continueGame(quickLookGame!.id)">
+        <app-ui-button
+          type="button"
+          class="w-full"
+          (click)="quickLookGame && continueGame(quickLookGame.id)"
+        >
           {{ 'home.openGame' | translate }}
         </app-ui-button>
       </div>

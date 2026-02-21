@@ -44,6 +44,7 @@
                   type="button"
                   (click)="startEditName(i)"
                   class="-m-1 inline-flex min-h-touch min-w-touch items-center justify-center p-1 text-primary hover:text-primary/90"
+                  [attr.aria-label]="'game.scoreTable.editNameTitle' | translate"
                   [title]="'game.scoreTable.editNameTitle' | translate"
                 >
                   <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
