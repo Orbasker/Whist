@@ -120,6 +120,7 @@ class _GameScreenState extends State<GameScreen> {
           appBar: AppBar(
             title: Text(l10n.appBarTitleRounds(gameState.currentRound - 1)),
             actions: [
+              _RealtimeIndicator(isConnected: gameService.isRealtimeConnected),
               IconButton(
                 icon: const Icon(Icons.history),
                 tooltip: l10n.roundHistoryTooltip,
@@ -137,6 +138,15 @@ class _GameScreenState extends State<GameScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                if (gameService.realtimeError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      gameService.realtimeError!,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 Text('${l10n.gameLabel}: ${gameState.name ?? gameState.id}'),
                 Text('${l10n.playersLabel}: ${gameState.players.join(", ")}'),
                 const SizedBox(height: 16),
@@ -217,6 +227,31 @@ class _GameScreenState extends State<GameScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _RealtimeIndicator extends StatelessWidget {
+  const _RealtimeIndicator({required this.isConnected});
+
+  final bool isConnected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Tooltip(
+          message: isConnected ? 'Live updates connected' : 'Realtime disconnected',
+          child: Icon(
+            isConnected ? Icons.circle : Icons.circle_outlined,
+            size: 10,
+            color: isConnected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline,
+          ),
+        ),
+      ),
     );
   }
 }

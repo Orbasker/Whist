@@ -12,7 +12,8 @@
         "http",
         "intl",
         "provider",
-        "shared_preferences"
+        "shared_preferences",
+        "web_socket_channel"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -45,6 +46,17 @@
       ]
     },
     {
+      "name": "web_socket_channel",
+      "version": "3.0.3",
+      "dependencies": [
+        "async",
+        "crypto",
+        "stream_channel",
+        "web",
+        "web_socket"
+      ]
+    },
+    {
       "name": "provider",
       "version": "6.1.5+1",
       "dependencies": [
@@ -64,20 +76,20 @@
       ]
     },
     {
-      "name": "intl",
-      "version": "0.20.2",
-      "dependencies": [
-        "clock",
-        "meta",
-        "path"
-      ]
-    },
-    {
       "name": "flutter_localizations",
       "version": "0.0.0",
       "dependencies": [
         "flutter",
         "intl",
+        "path"
+      ]
+    },
+    {
+      "name": "intl",
+      "version": "0.20.2",
+      "dependencies": [
+        "clock",
+        "meta",
         "path"
       ]
     },
@@ -183,10 +195,10 @@
       ]
     },
     {
-      "name": "nested",
-      "version": "1.0.0",
+      "name": "web_socket",
+      "version": "1.0.1",
       "dependencies": [
-        "flutter"
+        "web"
       ]
     },
     {
@@ -195,12 +207,9 @@
       "dependencies": []
     },
     {
-      "name": "http_parser",
-      "version": "4.1.2",
+      "name": "crypto",
+      "version": "3.0.7",
       "dependencies": [
-        "collection",
-        "source_span",
-        "string_scanner",
         "typed_data"
       ]
     },
@@ -210,6 +219,23 @@
       "dependencies": [
         "collection",
         "meta"
+      ]
+    },
+    {
+      "name": "nested",
+      "version": "1.0.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "http_parser",
+      "version": "4.1.2",
+      "dependencies": [
+        "collection",
+        "source_span",
+        "string_scanner",
+        "typed_data"
       ]
     },
     {

@@ -6,6 +6,13 @@ import 'providers/locale_provider.dart';
 import 'screens/game_screen.dart';
 import 'services/api_service.dart';
 import 'services/game_service.dart';
+import 'services/realtime_types.dart';
+import 'services/websocket_realtime_service.dart';
+
+const _apiBaseUrl = String.fromEnvironment(
+  'API_BASE_URL',
+  defaultValue: 'http://localhost:8000/api/v1',
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,15 +32,15 @@ class WhistApp extends StatelessWidget {
         ChangeNotifierProvider<LocaleProvider>.value(value: localeProvider),
         Provider<ApiService>(
           create: (_) => ApiService(
-            baseUrl: const String.fromEnvironment(
-              'API_BASE_URL',
-              defaultValue: 'http://localhost:8000/api/v1',
-            ),
+            baseUrl: _apiBaseUrl,
             authToken: null,
           ),
         ),
-        ProxyProvider<ApiService, GameService>(
-          update: (_, api, __) => GameService(api),
+        Provider<RealtimeService>(
+          create: (_) => WebSocketRealtimeService(apiBaseUrl: _apiBaseUrl),
+        ),
+        ProxyProvider2<ApiService, RealtimeService, GameService>(
+          update: (_, api, realtime, __) => GameService(api, realtime),
         ),
       ],
       child: Consumer<LocaleProvider>(
