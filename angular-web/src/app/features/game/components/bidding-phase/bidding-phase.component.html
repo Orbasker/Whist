@@ -83,11 +83,7 @@
         [disabled]="!canEditBid(i)"
         (bidSelect)="onBidChange(i, $event)"
       ></app-bid-input-grid>
-      <button
-        *ngIf="canLockBid(i)"
-        (click)="onLockBid(i)"
-        class="min-h-touch mt-2 w-full bg-green-600 hover:bg-green-500 text-white text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors"
-      >
+      <button *ngIf="canLockBid(i)" (click)="onLockBid(i)" class="btn btn-success mt-2 w-full">
         {{
           currentPlayerIndex === i
             ? ('game.biddingPhase.lockChoice' | translate)
@@ -101,12 +97,9 @@
   <button
     (click)="onSubmit()"
     [disabled]="!canSubmit()"
-    [class.bg-amber-600]="canSubmit()"
-    [class.hover:bg-amber-500]="canSubmit()"
-    [class.bg-slate-600]="!canSubmit()"
-    [class.cursor-not-allowed]="!canSubmit()"
-    [class.opacity-50]="!canSubmit()"
-    class="min-h-touch w-full text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+    class="btn w-full"
+    [class.btn-primary]="canSubmit()"
+    [class.btn-secondary]="!canSubmit()"
   >
     {{ 'game.biddingPhase.continue' | translate }}
   </button>

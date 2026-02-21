@@ -9,7 +9,7 @@
     <div class="flex items-center justify-between p-3 sm:p-4">
       <button
         (click)="goBack()"
-        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-slate-400 hover:text-white transition-colors rounded-lg"
+        class="btn btn-icon bg-transparent text-slate-400 hover:text-white rounded-lg"
         [attr.aria-label]="'game.back' | translate"
       >
         <svg
@@ -39,7 +39,7 @@
       </div>
       <button
         (click)="showScoreTable = true"
-        class="min-h-touch min-w-touch flex items-center justify-center p-2 -m-1 text-amber-400 hover:text-amber-300 transition-colors rounded-lg"
+        class="btn btn-icon bg-transparent text-amber-400 hover:text-amber-300 rounded-lg"
         [attr.aria-label]="'game.scoreTable' | translate"
       >
         <app-scoreboard-icon [size]="20" color="currentColor"></app-scoreboard-icon>
@@ -66,7 +66,7 @@
   <div class="floating-scoreboard-wrap">
     <button
       (click)="showRoundHistory = true"
-      class="min-h-touch flex items-center gap-2 px-5 py-3 sm:py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold rounded-full shadow-lg shadow-amber-500/30 transition-colors text-sm sm:text-base"
+      class="btn btn-primary flex items-center gap-2 rounded-full shadow-lg shadow-amber-500/30 text-slate-900 bg-amber-500 hover:bg-amber-400"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path

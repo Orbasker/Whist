@@ -9,7 +9,12 @@
   >
     <div class="modal-header" *ngIf="title">
       <h2 [id]="titleId" class="modal-title">{{ title }}</h2>
-      <button type="button" (click)="onClose()" [attr.aria-label]="closeLabel" class="modal-close">
+      <button
+        type="button"
+        (click)="onClose()"
+        [attr.aria-label]="closeLabel"
+        class="btn btn-icon modal-close"
+      >
         <svg
           class="w-6 h-6"
           fill="none"
