@@ -58,3 +58,23 @@ repos:
         pass_filenames: false
         files: ^angular-web/src/.*\.(ts|html|scss|css)$
         stages: [pre-commit]
+
+  # ── Flutter (flutter_mobile) ─────────────────────────────────────────────
+
+  - repo: local
+    hooks:
+      - id: dart-format
+        name: dart format (Flutter)
+        language: system
+        entry: bash -c 'cd flutter_mobile && dart format --set-exit-if-changed lib/ test/'
+        pass_filenames: false
+        files: ^flutter_mobile/.*\.dart$
+        stages: [pre-commit]
+
+      - id: dart-analyze
+        name: dart analyze (Flutter)
+        language: system
+        entry: bash -c 'cd flutter_mobile && flutter pub get && dart analyze lib/ --fatal-warnings'
+        pass_filenames: false
+        files: ^flutter_mobile/
+        stages: [pre-commit]

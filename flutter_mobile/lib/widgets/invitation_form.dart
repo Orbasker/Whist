@@ -218,11 +218,12 @@ class _InvitationFormState extends State<InvitationForm> {
                       autocorrect: false,
                       decoration: InputDecoration(
                         labelText: AppStrings.invitationFormSlotPlaceholder(n),
-                        errorText: _emailControllers[slotIndex].text.isNotEmpty &&
-                                !_isValidEmail(
-                                    _emailControllers[slotIndex].text)
-                            ? AppStrings.invitationFormInvalidEmail
-                            : null,
+                        errorText:
+                            _emailControllers[slotIndex].text.isNotEmpty &&
+                                    !_isValidEmail(
+                                        _emailControllers[slotIndex].text)
+                                ? AppStrings.invitationFormInvalidEmail
+                                : null,
                         border: const OutlineInputBorder(),
                       ),
                       onChanged: (_) => setState(() {}),
@@ -268,8 +269,7 @@ class _InvitationFormState extends State<InvitationForm> {
               children: [
                 Expanded(
                   child: FilledButton(
-                    onPressed:
-                        _sending || !_hasValidEmails() ? null : _onSend,
+                    onPressed: _sending || !_hasValidEmails() ? null : _onSend,
                     child: _sending
                         ? const Text(AppStrings.invitationFormSending)
                         : const Text(
@@ -320,7 +320,8 @@ class _PlayersInGame extends StatelessWidget {
             (i) => Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
-                AppStrings.invitationFormPlayerLabel(i + 1, players[i].isEmpty ? '—' : players[i]),
+                AppStrings.invitationFormPlayerLabel(
+                    i + 1, players[i].isEmpty ? '—' : players[i]),
                 style: theme.textTheme.bodySmall,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

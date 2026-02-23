@@ -26,12 +26,16 @@ class BidInputGrid extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _row1.map((n) => _buildChip(context, n, colorScheme, theme)).toList(),
+          children: _row1
+              .map((n) => _buildChip(context, n, colorScheme, theme))
+              .toList(),
         ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _row2.map((n) => _buildChip(context, n, colorScheme, theme)).toList(),
+          children: _row2
+              .map((n) => _buildChip(context, n, colorScheme, theme))
+              .toList(),
         ),
       ],
     );
@@ -47,12 +51,12 @@ class BidInputGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Material(
-        color: isSelected ? colorScheme.primary : colorScheme.surfaceContainerHighest,
+        color: isSelected
+            ? colorScheme.primary
+            : colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
-          onTap: enabled
-              ? () => onBidSelect(value)
-              : null,
+          onTap: enabled ? () => onBidSelect(value) : null,
           borderRadius: BorderRadius.circular(12),
           child: Opacity(
             opacity: enabled ? 1 : 0.5,
@@ -63,7 +67,9 @@ class BidInputGrid extends StatelessWidget {
                 child: Text(
                   '$value',
                   style: theme.textTheme.titleSmall?.copyWith(
-                    color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+                    color: isSelected
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

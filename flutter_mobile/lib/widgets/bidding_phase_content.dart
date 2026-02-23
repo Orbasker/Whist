@@ -64,13 +64,15 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
   bool _canEditBid(GameService gs, int playerIndex) {
     if (gs.isGameOwner) return !gs.lockedBids.contains(playerIndex);
     if (gs.currentPlayerIndex == null) return false;
-    return playerIndex == gs.currentPlayerIndex && !gs.lockedBids.contains(playerIndex);
+    return playerIndex == gs.currentPlayerIndex &&
+        !gs.lockedBids.contains(playerIndex);
   }
 
   bool _canLockBid(GameService gs, int playerIndex) {
     if (gs.lockedBids.contains(playerIndex)) return false;
     if (gs.isGameOwner) return true;
-    return playerIndex == gs.currentPlayerIndex && gs.currentPlayerIndex != null;
+    return playerIndex == gs.currentPlayerIndex &&
+        gs.currentPlayerIndex != null;
   }
 
   bool _canSubmit(GameService gs) {
@@ -144,13 +146,21 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                         children: [
                           Text(
                             AppStrings.biddingPhaseTotalBids,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                                 ),
                           ),
                           Text(
                             '$totalBids',
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
@@ -170,7 +180,9 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: totalBids == 13
                                   ? Theme.of(context).colorScheme.error
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                             ),
                       ),
                     ],
@@ -211,7 +223,8 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                   isPlayerOwner: gs.isPlayerOwner(i),
                   isBidLocked: gs.isBidLocked(i),
                   displayBid: _getBidForPlayer(gs, i),
-                  hasLiveChoice: gs.liveBidSelections.containsKey(i) && i != gs.currentPlayerIndex,
+                  hasLiveChoice: gs.liveBidSelections.containsKey(i) &&
+                      i != gs.currentPlayerIndex,
                   canEditBid: _canEditBid(gs, i),
                   canLockBid: _canLockBid(gs, i),
                   showCannotEdit: gs.currentPlayerIndex == null && i == 0,
@@ -232,13 +245,17 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
               FilledButton(
                 onPressed: canSubmit
                     ? () async {
-                        final bids = List<int>.filled(widget.gameState.players.length, 0);
-                        for (var i = 0; i < bids.length && i < _bids.length; i++) {
+                        final bids = List<int>.filled(
+                            widget.gameState.players.length, 0);
+                        for (var i = 0;
+                            i < bids.length && i < _bids.length;
+                            i++) {
                           bids[i] = _getBidForPlayer(gs, i);
                         }
                         try {
                           if (gs.isRealtimeConnected) {
-                            gs.sendSubmitBids(bids, trumpSuit: gs.liveTrumpSelection);
+                            gs.sendSubmitBids(bids,
+                                trumpSuit: gs.liveTrumpSelection);
                           } else {
                             await gs.submitBids(gs.gameState!.id, bids,
                                 trumpSuit: gs.liveTrumpSelection);
@@ -246,7 +263,8 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                         } catch (_) {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Failed to submit bids')),
+                              const SnackBar(
+                                  content: Text('Failed to submit bids')),
                             );
                           }
                         }
@@ -350,12 +368,13 @@ class _PlayerBidCard extends StatelessWidget {
                       Text(
                         playerName,
                         style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       if (currentPlayerIndex == playerIndex)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
                             color: colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(20),
@@ -363,14 +382,15 @@ class _PlayerBidCard extends StatelessWidget {
                           child: Text(
                             AppStrings.biddingPhaseYou,
                             style: theme.textTheme.labelSmall?.copyWith(
-                                  color: colorScheme.onPrimaryContainer,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              color: colorScheme.onPrimaryContainer,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       if (isPlayerOwner)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
                             color: colorScheme.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(20),
@@ -378,16 +398,16 @@ class _PlayerBidCard extends StatelessWidget {
                           child: Text(
                             AppStrings.biddingPhaseManager,
                             style: theme.textTheme.labelSmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
+                              color: colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ),
                       if (isBidLocked)
                         Text(
                           '🔒 ${AppStrings.biddingPhaseLocked}',
                           style: theme.textTheme.labelSmall?.copyWith(
-                                color: colorScheme.error,
-                              ),
+                            color: colorScheme.error,
+                          ),
                         ),
                     ],
                   ),
@@ -398,9 +418,9 @@ class _PlayerBidCard extends StatelessWidget {
                     Text(
                       '$displayBid ${AppStrings.biddingPhaseTricks}',
                       style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                      ),
                     ),
                     if (hasLiveChoice)
                       Padding(
@@ -408,8 +428,8 @@ class _PlayerBidCard extends StatelessWidget {
                         child: Text(
                           '(${AppStrings.biddingPhaseChoice})',
                           style: theme.textTheme.labelSmall?.copyWith(
-                                color: colorScheme.primary,
-                              ),
+                            color: colorScheme.primary,
+                          ),
                         ),
                       ),
                   ],
@@ -421,7 +441,8 @@ class _PlayerBidCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   '⚠️ ${AppStrings.biddingPhaseCannotEdit}',
-                  style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.primary),
+                  style: theme.textTheme.labelSmall
+                      ?.copyWith(color: colorScheme.primary),
                 ),
               ),
             const SizedBox(height: 12),

@@ -20,6 +20,7 @@ class ScoreTableSheet extends StatelessWidget {
   final bool isGameOwner;
   final VoidCallback onDismiss;
   final VoidCallback onDeleteRequested;
+
   /// When set and owner, show Invite button to open invitation form.
   final VoidCallback? onInviteRequested;
 
@@ -79,7 +80,8 @@ class ScoreTableSheet extends StatelessWidget {
                             label: Text(l10n.deleteGame),
                             style: FilledButton.styleFrom(
                               backgroundColor: theme.colorScheme.errorContainer,
-                              foregroundColor: theme.colorScheme.onErrorContainer,
+                              foregroundColor:
+                                  theme.colorScheme.onErrorContainer,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -170,7 +172,11 @@ class ScoreTableSheet extends StatelessWidget {
                             '${gameState.scores.length > i ? gameState.scores[i] : 0}',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: _scoreColor(theme, gameState.scores.length > i ? gameState.scores[i] : 0),
+                              color: _scoreColor(
+                                  theme,
+                                  gameState.scores.length > i
+                                      ? gameState.scores[i]
+                                      : 0),
                             ),
                           ),
                         ],

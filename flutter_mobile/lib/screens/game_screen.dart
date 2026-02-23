@@ -77,7 +77,9 @@ class _GameScreenState extends State<GameScreen> {
         final l10n = AppLocalizations.of(context)!;
         if (_error != null) {
           return Scaffold(
-            appBar: AppBar(title: Text(l10n.appTitle), actions: [_buildLanguageMenu(context)]),
+            appBar: AppBar(
+                title: Text(l10n.appTitle),
+                actions: [_buildLanguageMenu(context)]),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -142,7 +144,8 @@ class _GameScreenState extends State<GameScreen> {
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title: Text('${l10n.appBarTitleRounds(roundsPlayed)} · $phaseLabel'),
+            title:
+                Text('${l10n.appBarTitleRounds(roundsPlayed)} · $phaseLabel'),
             actions: [
               _RealtimeIndicator(isConnected: gameService.isRealtimeConnected),
               IconButton(
@@ -174,8 +177,10 @@ class _GameScreenState extends State<GameScreen> {
           body: gameService.phase == GamePhase.tricks
               ? TricksPhaseContent(
                   gameState: gameState,
-                  onOpenScoreTable: () => _openScoreTableSheet(context, gameService),
-                  onOpenRoundHistory: () => _openRoundHistory(context, gameService),
+                  onOpenScoreTable: () =>
+                      _openScoreTableSheet(context, gameService),
+                  onOpenRoundHistory: () =>
+                      _openRoundHistory(context, gameService),
                   onRoundComplete: () => setState(() {}),
                 )
               : BiddingPhaseContent(
@@ -279,7 +284,8 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               if (localeProvider.appLocale == AppLocale.he)
                 const Icon(Icons.check, size: 20),
-              if (localeProvider.appLocale == AppLocale.he) const SizedBox(width: 8),
+              if (localeProvider.appLocale == AppLocale.he)
+                const SizedBox(width: 8),
               Text(l10n.hebrew),
             ],
           ),
@@ -290,7 +296,8 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               if (localeProvider.appLocale == AppLocale.en)
                 const Icon(Icons.check, size: 20),
-              if (localeProvider.appLocale == AppLocale.en) const SizedBox(width: 8),
+              if (localeProvider.appLocale == AppLocale.en)
+                const SizedBox(width: 8),
               Text(l10n.english),
             ],
           ),
@@ -311,7 +318,8 @@ class _RealtimeIndicator extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Tooltip(
-          message: isConnected ? 'Live updates connected' : 'Realtime disconnected',
+          message:
+              isConnected ? 'Live updates connected' : 'Realtime disconnected',
           child: Icon(
             isConnected ? Icons.circle : Icons.circle_outlined,
             size: 10,
@@ -324,4 +332,3 @@ class _RealtimeIndicator extends StatelessWidget {
     );
   }
 }
-

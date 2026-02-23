@@ -20,14 +20,16 @@ enum AppLocale {
 
 /// Holds current [Locale], persists to SharedPreferences (key: whist_lang).
 class LocaleProvider extends ChangeNotifier {
-  LocaleProvider(this._prefs) : _locale = _localeFromCode(_prefs.getString(_storageKey) ?? 'he');
+  LocaleProvider(this._prefs)
+      : _locale = _localeFromCode(_prefs.getString(_storageKey) ?? 'he');
 
   final SharedPreferences _prefs;
   Locale _locale;
 
   Locale get locale => _locale;
 
-  AppLocale get appLocale => _locale.languageCode == 'en' ? AppLocale.en : AppLocale.he;
+  AppLocale get appLocale =>
+      _locale.languageCode == 'en' ? AppLocale.en : AppLocale.he;
 
   bool get isRtl => _locale.languageCode == 'he';
 

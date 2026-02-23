@@ -21,7 +21,8 @@ class RealtimeService {
   String? get currentGameId => _currentGameId;
 
   /// Build WebSocket URL from API base URL (e.g. http://localhost:8000/api/v1 -> ws://localhost:8000/api/v1/ws/games/{gameId}).
-  static String getWebSocketUrl(String apiBaseUrl, String gameId, [String? token]) {
+  static String getWebSocketUrl(String apiBaseUrl, String gameId,
+      [String? token]) {
     final base = apiBaseUrl.replaceAll(RegExp(r'/api/v1$'), '');
     final wsScheme = base.startsWith('https') ? 'wss' : 'ws';
     final host = base.replaceFirst(RegExp(r'^https?://'), '');
@@ -61,7 +62,8 @@ class RealtimeService {
   }
 
   void _onError(dynamic error) {
-    _messageController.add({'type': 'error', 'message': error?.toString() ?? 'WebSocket error'});
+    _messageController.add(
+        {'type': 'error', 'message': error?.toString() ?? 'WebSocket error'});
   }
 
   void _onDone() {
