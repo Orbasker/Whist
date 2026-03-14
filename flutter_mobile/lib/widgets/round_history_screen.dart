@@ -120,8 +120,9 @@ class RoundHistoryScreen extends StatelessWidget {
                 cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final pi = c ~/ colsPerPlayer;
-              if (c % colsPerPlayer != 0 || pi >= players.length)
+              if (c % colsPerPlayer != 0 || pi >= players.length) {
                 return _pad(const SizedBox(), cellPad);
+              }
               return _pad(
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -176,8 +177,9 @@ class RoundHistoryScreen extends StatelessWidget {
                   cellPad),
               ...List.generate(numPlayers * colsPerPlayer, (c) {
                 final pi = c ~/ colsPerPlayer;
-                if (pi >= players.length)
+                if (pi >= players.length) {
                   return _pad(const SizedBox(), cellPad);
+                }
                 final bid = round.bids.length > pi ? round.bids[pi] : 0;
                 final took = round.tricks.length > pi ? round.tricks[pi] : 0;
                 final score = round.scores.length > pi ? round.scores[pi] : 0;
