@@ -26,8 +26,9 @@ class NeonAuthResponseParser {
     return null;
   }
 
-  /// Extracts JWT from auth response body. Path order matches Angular getToken():
-  /// data.session.token, data.session.accessToken, data.token, session.token, token, then deep search.
+  /// Extracts JWT from auth response body. Path order matches Angular getToken() and Neon Auth:
+  /// data.session.token, data.session.accessToken, data.session.access_token (Neon), data.token,
+  /// session.token, session.accessToken, session.access_token, token, then deep search.
   static String? extractToken(String body) {
     try {
       final data = jsonDecode(body);
@@ -37,7 +38,9 @@ class NeonAuthResponseParser {
       if (dataSession is Map<String, dynamic>) {
         final session = dataSession['session'];
         if (session is Map<String, dynamic>) {
-          final t = session['token'] ?? session['accessToken'];
+          final t = session['token'] ??
+              session['accessToken'] ??
+              session['access_token'];
           if (t is String && _isJwt(t)) return t;
         }
         final t = dataSession['token'];
@@ -46,7 +49,9 @@ class NeonAuthResponseParser {
 
       final session = data['session'];
       if (session is Map<String, dynamic>) {
-        final t = session['token'] ?? session['accessToken'];
+        final t = session['token'] ??
+            session['accessToken'] ??
+            session['access_token'];
         if (t is String && _isJwt(t)) return t;
       }
 

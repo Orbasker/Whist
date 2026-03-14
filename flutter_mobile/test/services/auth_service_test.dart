@@ -30,6 +30,17 @@ void main() {
       expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
     });
 
+    test('extracts token from data.session.access_token (Neon Auth snake_case)',
+        () {
+      final body = jsonEncode({
+        'data': {
+          'session': {'access_token': _sampleJwt},
+          'user': {'id': 'u1', 'email': 'a@b.c'},
+        },
+      });
+      expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
+    });
+
     test(
         'prefers data.session.token over data.session.accessToken when both present',
         () {
