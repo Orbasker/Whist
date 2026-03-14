@@ -78,8 +78,9 @@ class _GameScreenState extends State<GameScreen> {
         if (_error != null) {
           return Scaffold(
             appBar: AppBar(
-                title: Text(l10n.appTitle),
-                actions: [_buildLanguageMenu(context)]),
+              title: Text(l10n.appTitle),
+              actions: [_buildLanguageMenu(context)],
+            ),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -144,8 +145,9 @@ class _GameScreenState extends State<GameScreen> {
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title:
-                Text('${l10n.appBarTitleRounds(roundsPlayed)} · $phaseLabel'),
+            title: Text(
+              '${l10n.appBarTitleRounds(roundsPlayed)} · $phaseLabel',
+            ),
             actions: [
               _RealtimeIndicator(isConnected: gameService.isRealtimeConnected),
               IconButton(
@@ -165,10 +167,7 @@ class _GameScreenState extends State<GameScreen> {
                   if (value == 'logout') _logout(context);
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'logout',
-                    child: Text('Log out'),
-                  ),
+                  const PopupMenuItem(value: 'logout', child: Text('Log out')),
                 ],
               ),
               _buildLanguageMenu(context),

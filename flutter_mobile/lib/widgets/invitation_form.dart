@@ -30,8 +30,10 @@ class InvitationForm extends StatefulWidget {
 }
 
 class _InvitationFormState extends State<InvitationForm> {
-  final List<TextEditingController> _emailControllers =
-      List.generate(4, (_) => TextEditingController());
+  final List<TextEditingController> _emailControllers = List.generate(
+    4,
+    (_) => TextEditingController(),
+  );
   final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
 
   bool _sending = false;
@@ -53,9 +55,7 @@ class _InvitationFormState extends State<InvitationForm> {
 
   bool get _isGameFull => _availableSlotIndices.isEmpty;
 
-  static final RegExp _emailRegex = RegExp(
-    r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
-  );
+  static final RegExp _emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 
   static bool _isValidEmail(String s) {
     return s.trim().isNotEmpty && _emailRegex.hasMatch(s.trim());
@@ -129,8 +129,10 @@ class _InvitationFormState extends State<InvitationForm> {
       if (!mounted) return;
       if (result.sent > 0) {
         setState(() {
-          _successMessage =
-              AppStrings.invitationsSentSuccess(result.sent, result.total);
+          _successMessage = AppStrings.invitationsSentSuccess(
+            result.sent,
+            result.total,
+          );
           _sending = false;
         });
         widget.onSent(sent: result.sent, total: result.total);
@@ -227,7 +229,8 @@ class _InvitationFormState extends State<InvitationForm> {
                         errorText:
                             _emailControllers[slotIndex].text.isNotEmpty &&
                                     !_isValidEmail(
-                                        _emailControllers[slotIndex].text)
+                                      _emailControllers[slotIndex].text,
+                                    )
                                 ? AppStrings.invitationFormInvalidEmail
                                 : null,
                         border: const OutlineInputBorder(),
@@ -278,9 +281,7 @@ class _InvitationFormState extends State<InvitationForm> {
                     onPressed: _sending || !_hasValidEmails() ? null : _onSend,
                     child: _sending
                         ? const Text(AppStrings.invitationFormSending)
-                        : const Text(
-                            AppStrings.invitationFormSendInvitations,
-                          ),
+                        : const Text(AppStrings.invitationFormSendInvitations),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -327,7 +328,9 @@ class _PlayersInGame extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 AppStrings.invitationFormPlayerLabel(
-                    i + 1, players[i].isEmpty ? '—' : players[i]),
+                  i + 1,
+                  players[i].isEmpty ? '—' : players[i],
+                ),
                 style: theme.textTheme.bodySmall,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

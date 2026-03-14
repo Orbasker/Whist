@@ -46,9 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _openGame(String gameId) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) => GameScreen(gameId: gameId),
-      ),
+      MaterialPageRoute<void>(builder: (context) => GameScreen(gameId: gameId)),
     );
   }
 
@@ -96,18 +94,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           AppStrings.homeSubtitle,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                         ),
                         const SizedBox(height: 16),
@@ -116,9 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Not signed in',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                         ),
                       ],
@@ -152,21 +148,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (_loading)
                               const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 24),
-                                child:
-                                    Center(child: CircularProgressIndicator()),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                               )
                             else if (_error != null)
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
                                 child: Column(
                                   children: [
                                     Text(
                                       _error!,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color:
-                                            Theme.of(context).colorScheme.error,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
                                       ),
                                     ),
                                     const SizedBox(height: 12),
@@ -179,8 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                             else if (_games.isEmpty)
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 24),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 24,
+                                ),
                                 child: Column(
                                   children: [
                                     Text(
@@ -189,9 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .textTheme
                                           .bodyLarge
                                           ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurfaceVariant,
                                           ),
                                     ),
                                     const SizedBox(height: 4),
@@ -201,9 +201,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .textTheme
                                           .bodySmall
                                           ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurfaceVariant,
                                           ),
                                     ),
                                   ],
@@ -252,10 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 /// Full-screen overlay for new game form (aligns with Angular modal).
 class _NewGameModal extends StatefulWidget {
-  const _NewGameModal({
-    required this.onClose,
-    required this.onCreate,
-  });
+  const _NewGameModal({required this.onClose, required this.onCreate});
 
   final VoidCallback onClose;
   final void Function(GameState game) onCreate;
@@ -291,8 +288,10 @@ class _NewGameModalState extends State<_NewGameModal> {
     try {
       final gameService = context.read<GameService>();
       final name = _nameController.text.trim();
-      final game = await gameService.createGame(players,
-          name: name.isEmpty ? null : name);
+      final game = await gameService.createGame(
+        players,
+        name: name.isEmpty ? null : name,
+      );
       if (!mounted) return;
       widget.onCreate(game);
     } catch (e) {
@@ -315,10 +314,7 @@ class _NewGameModalState extends State<_NewGameModal> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ModalBarrier(
-          color: Colors.black54,
-          onDismiss: widget.onClose,
-        ),
+        ModalBarrier(color: Colors.black54, onDismiss: widget.onClose),
         Center(
           child: SingleChildScrollView(
             child: Padding(
@@ -378,7 +374,8 @@ class _NewGameModalState extends State<_NewGameModal> {
                           Text(
                             _submitError!,
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.error),
+                              color: Theme.of(context).colorScheme.error,
+                            ),
                           ),
                         ],
                         const SizedBox(height: 24),
@@ -399,7 +396,8 @@ class _NewGameModalState extends State<_NewGameModal> {
                                         height: 20,
                                         width: 20,
                                         child: CircularProgressIndicator(
-                                            strokeWidth: 2),
+                                          strokeWidth: 2,
+                                        ),
                                       )
                                     : const Text(AppStrings.startGame),
                               ),
@@ -484,8 +482,10 @@ class _GameListTile extends StatelessWidget {
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: isActive
                       ? Theme.of(context).colorScheme.primaryContainer

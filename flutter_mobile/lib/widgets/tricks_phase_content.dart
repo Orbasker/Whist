@@ -81,9 +81,9 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to submit tricks: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to submit tricks: $e')));
     }
   }
 
@@ -184,11 +184,13 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
   String _validationMessage() {
     if (_totalTricks < _totalRequired) {
       return AppStrings.tricksPhaseValidationMissing(
-          _totalRequired - _totalTricks);
+        _totalRequired - _totalTricks,
+      );
     }
     if (_totalTricks > _totalRequired) {
       return AppStrings.tricksPhaseValidationExtra(
-          _totalTricks - _totalRequired);
+        _totalTricks - _totalRequired,
+      );
     }
     return AppStrings.tricksPhaseFinishRound;
   }
@@ -243,7 +245,9 @@ class _PlayerTrickCard extends StatelessWidget {
                     if (isCurrentPlayer)
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(12),
@@ -258,7 +262,9 @@ class _PlayerTrickCard extends StatelessWidget {
                     if (isOwner)
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(12),

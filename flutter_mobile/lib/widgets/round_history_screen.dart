@@ -108,16 +108,18 @@ class RoundHistoryScreen extends StatelessWidget {
       children: [
         // Header row 1: Round | Card | then 5 cols per player (player name in first of 5)
         TableRow(
-          decoration:
-              BoxDecoration(color: theme.colorScheme.surfaceContainerHighest),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest,
+          ),
           children: [
             _pad(
-                Text(AppLocalizations.of(context)!.roundCol,
-                    style: headerStyle),
-                cellPad),
+              Text(AppLocalizations.of(context)!.roundCol, style: headerStyle),
+              cellPad,
+            ),
             _pad(
-                Text(AppLocalizations.of(context)!.cardCol, style: headerStyle),
-                cellPad),
+              Text(AppLocalizations.of(context)!.cardCol, style: headerStyle),
+              cellPad,
+            ),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final pi = c ~/ colsPerPlayer;
               if (c % colsPerPlayer != 0 || pi >= players.length) {
@@ -131,10 +133,13 @@ class RoundHistoryScreen extends StatelessWidget {
                     if (isCurrentPlayer(pi))
                       Padding(
                         padding: const EdgeInsets.only(left: 4),
-                        child: Text('(${AppLocalizations.of(context)!.you})',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: theme.colorScheme.primary)),
+                        child: Text(
+                          '(${AppLocalizations.of(context)!.you})',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
                       ),
                   ],
                 ),
@@ -146,8 +151,8 @@ class RoundHistoryScreen extends StatelessWidget {
         // Header row 2: empty | empty | Bid Took Change Before After (x4 players = 20 cells)
         TableRow(
           decoration: BoxDecoration(
-              color:
-                  theme.colorScheme.surfaceContainerHighest.withOpacity(0.7)),
+            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.7),
+          ),
           children: [
             _pad(const SizedBox(), cellPad),
             _pad(const SizedBox(), cellPad),
@@ -158,10 +163,12 @@ class RoundHistoryScreen extends StatelessWidget {
                 l10n.tookCol,
                 l10n.changeCol,
                 l10n.beforeCol,
-                l10n.afterCol
+                l10n.afterCol,
               ];
-              return _pad(Text(labels[c % colsPerPlayer], style: headerStyle),
-                  const EdgeInsets.symmetric(horizontal: 4, vertical: 4));
+              return _pad(
+                Text(labels[c % colsPerPlayer], style: headerStyle),
+                const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              );
             }),
           ],
         ),
@@ -172,9 +179,12 @@ class RoundHistoryScreen extends StatelessWidget {
             children: [
               _pad(Text('${round.roundNumber}', style: cellStyle), cellPad),
               _pad(
-                  Text(trumpSymbol(round.trumpSuit),
-                      style: cellStyle.copyWith(fontSize: 16)),
-                  cellPad),
+                Text(
+                  trumpSymbol(round.trumpSuit),
+                  style: cellStyle.copyWith(fontSize: 16),
+                ),
+                cellPad,
+              ),
               ...List.generate(numPlayers * colsPerPlayer, (c) {
                 final pi = c ~/ colsPerPlayer;
                 if (pi >= players.length) {
@@ -220,12 +230,15 @@ class RoundHistoryScreen extends StatelessWidget {
         TableRow(
           decoration: BoxDecoration(
             color: theme.colorScheme.primaryContainer.withOpacity(0.3),
-            border:
-                Border(top: BorderSide(color: theme.dividerColor, width: 2)),
+            border: Border(
+              top: BorderSide(color: theme.dividerColor, width: 2),
+            ),
           ),
           children: [
-            _pad(Text(AppLocalizations.of(context)!.total, style: totalStyle),
-                cellPad),
+            _pad(
+              Text(AppLocalizations.of(context)!.total, style: totalStyle),
+              cellPad,
+            ),
             _pad(const SizedBox(), cellPad),
             ...List.generate(numPlayers * colsPerPlayer, (c) {
               final pi = c ~/ colsPerPlayer;
