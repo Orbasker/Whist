@@ -368,7 +368,7 @@ class _NewGameModalState extends State<_NewGameModal> {
               padding: const EdgeInsets.all(24),
               child: Card(
                 elevation: 8,
-                shadowColor: Colors.black.withValues(alpha: 0.3),
+                shadowColor: Colors.black.withOpacity(0.3),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Form(
@@ -500,7 +500,7 @@ class _GameListTile extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
+                  color: AppColors.primary.withOpacity(0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -550,7 +550,7 @@ class _GameListTile extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? AppColors.primary.withValues(alpha: 0.2)
+                      ? AppColors.primary.withOpacity(0.2)
                       : AppColors.secondary,
                   borderRadius: BorderRadius.circular(20),
                 ),

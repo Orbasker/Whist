@@ -154,7 +154,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 constraints: const BoxConstraints(maxWidth: 400),
                 child: Card(
                   elevation: 8,
-                  shadowColor: Colors.black.withValues(alpha: 0.3),
+                  shadowColor: Colors.black.withOpacity(0.3),
                   child: Padding(
                     padding: const EdgeInsets.all(24),
                     child: Column(
@@ -177,12 +177,10 @@ class _AuthScreenState extends State<AuthScreen> {
                               vertical: 10,
                             ),
                             decoration: BoxDecoration(
-                              color:
-                                  AppColors.destructive.withValues(alpha: 0.1),
+                              color: AppColors.destructive.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: AppColors.destructive
-                                    .withValues(alpha: 0.5),
+                                color: AppColors.destructive.withOpacity(0.5),
                               ),
                             ),
                             child: Text(
