@@ -9,25 +9,25 @@ ThemeData buildAppTheme() {
     brightness: Brightness.dark,
     primary: AppColors.primary,
     onPrimary: AppColors.primaryForeground,
-    primaryContainer: AppColors.primary.withOpacity(0.2),
+    primaryContainer: AppColors.primary.withValues(alpha: 0.2),
     onPrimaryContainer: AppColors.primary,
     secondary: AppColors.secondary,
     onSecondary: AppColors.foreground,
-    secondaryContainer: AppColors.secondary.withOpacity(0.5),
+    secondaryContainer: AppColors.secondary.withValues(alpha: 0.5),
     onSecondaryContainer: AppColors.foreground,
     tertiary: AppColors.buttonPrimary,
     onTertiary: Colors.white,
-    tertiaryContainer: AppColors.buttonPrimaryHover.withOpacity(0.2),
+    tertiaryContainer: AppColors.buttonPrimaryHover.withValues(alpha: 0.2),
     onTertiaryContainer: AppColors.buttonPrimaryHover,
     error: AppColors.destructive,
     onError: Colors.white,
-    errorContainer: AppColors.destructive.withOpacity(0.15),
+    errorContainer: AppColors.destructive.withValues(alpha: 0.15),
     onErrorContainer: AppColors.destructive,
     surface: AppColors.background,
     onSurface: AppColors.foreground,
     onSurfaceVariant: AppColors.mutedForeground,
     outline: AppColors.border,
-    outlineVariant: AppColors.border.withOpacity(0.5),
+    outlineVariant: AppColors.border.withValues(alpha: 0.5),
     inverseSurface: AppColors.foreground,
     onInverseSurface: AppColors.background,
     inversePrimary: AppColors.primary,
@@ -63,7 +63,7 @@ ThemeData buildAppTheme() {
     ),
 
     // Card: 16px radius, card bg, 1px border, no elevation
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.card,
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -149,7 +149,7 @@ ThemeData buildAppTheme() {
         fontSize: 14,
       ),
       hintStyle: GoogleFonts.outfit(
-        color: AppColors.mutedForeground.withOpacity(0.7),
+        color: AppColors.mutedForeground.withValues(alpha: 0.7),
       ),
       errorStyle: GoogleFonts.outfit(
         color: AppColors.destructive,
@@ -158,7 +158,7 @@ ThemeData buildAppTheme() {
     ),
 
     // Dialog: card bg, 16px radius, border
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: AppColors.card,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
