@@ -173,10 +173,11 @@ class ScoreTableSheet extends StatelessWidget {
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: _scoreColor(
-                                  theme,
-                                  gameState.scores.length > i
-                                      ? gameState.scores[i]
-                                      : 0),
+                                theme,
+                                gameState.scores.length > i
+                                    ? gameState.scores[i]
+                                    : 0,
+                              ),
                             ),
                           ),
                         ],

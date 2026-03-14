@@ -1,8 +1,10 @@
-# Authentication Architecture: better-auth + Neon PostgreSQL
+# Authentication Architecture: Neon Auth + Neon PostgreSQL
+
+> **Current state (2026-03):** Authentication is now handled entirely by **Neon Auth** (managed Better Auth). The backend no longer exposes any `/api/auth/*` proxy routes — frontend and Flutter clients communicate directly with Neon Auth endpoints. FastAPI validates JWTs using Neon Auth's JWKS. See `backend/app/core/auth.py` for the implementation.
 
 ## Overview
 
-This document defines the complete authentication architecture for the Wist game application using **better-auth** (TypeScript/Node) and **Neon PostgreSQL**. The Wist backend is FastAPI (Python); better-auth runs as a separate auth service that shares the same Neon database and issues session/JWT tokens that FastAPI validates for protected API calls.
+This document defines the complete authentication architecture for the Wist game application using **Neon Auth** (managed Better Auth) and **Neon PostgreSQL**. The Wist backend is FastAPI (Python); Neon Auth handles user authentication and issues JWTs that FastAPI validates for protected API calls.
 
 ### Objectives
 
@@ -23,6 +25,8 @@ This document defines the complete authentication architecture for the Wist game
 ---
 
 ## Architecture Summary
+
+> **Legacy note:** The diagram and sections 1–5, 7.1, and 9 below describe the **original Better Auth proxy design** (separate Node auth service, shared secret, `/api/auth/*` proxy routes). This has been **superseded by Neon Auth** — a managed service where clients call Neon Auth directly and FastAPI validates JWTs via JWKS. See `backend/app/core/auth.py` for the current implementation.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -55,7 +59,7 @@ This document defines the complete authentication architecture for the Wist game
 
 ---
 
-## 1. better-auth Integration with FastAPI
+## 1. better-auth Integration with FastAPI *(Legacy — see Neon Auth note above)*
 
 ### 1.1 Why better-auth is separate from FastAPI
 
@@ -246,7 +250,7 @@ session: {
 
 ---
 
-## 5. JWT / Token Handling for FastAPI
+## 5. JWT / Token Handling for FastAPI *(Legacy — now uses Neon Auth JWKS; see `backend/app/core/auth.py`)*
 
 ### 5.1 Where the token comes from
 
@@ -303,7 +307,7 @@ No schema change beyond adding the FK on `owner_id`; keep `player_user_ids` as J
 
 ## 7. API Endpoint Design
 
-### 7.1 better-auth (auth service)
+### 7.1 better-auth (auth service) *(Legacy — replaced by Neon Auth; no `/api/auth/*` routes on backend)*
 
 All under `/api/auth/*` (or configured base path). Handled by better-auth; no custom FastAPI routes.
 
@@ -368,7 +372,7 @@ Use dependency `get_current_user_id` for routes that must be authenticated; use 
 
 ---
 
-## 9. Migration Plan: SQLite → Neon PostgreSQL
+## 9. Migration Plan: SQLite → Neon PostgreSQL *(Legacy — migration completed)*
 
 ### 9.1 Phases
 

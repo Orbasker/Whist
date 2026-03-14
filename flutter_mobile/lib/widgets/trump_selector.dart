@@ -23,7 +23,7 @@ class TrumpSelector extends StatelessWidget {
       value: 'diamonds',
       label: AppStrings.trumpDiamonds,
       icon: '♦',
-      isRed: true
+      isRed: true,
     ),
     (value: 'hearts', label: AppStrings.trumpHearts, icon: '♥', isRed: true),
   ];

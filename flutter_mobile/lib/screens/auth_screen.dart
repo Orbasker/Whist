@@ -9,11 +9,7 @@ import 'oauth_webview_screen.dart';
 class _GoogleIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Icon(
-      Icons.g_mobiledata,
-      size: 22,
-      color: Color(0xFF4285F4),
-    );
+    return const Icon(Icons.g_mobiledata, size: 22, color: Color(0xFF4285F4));
   }
 }
 
@@ -172,10 +168,9 @@ class _AuthScreenState extends State<AuthScreen> {
                             vertical: 10,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .errorContainer
-                                .withOpacity(0.3),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.errorContainer.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(

@@ -8,10 +8,7 @@ import 'api_service.dart';
 import 'realtime_types.dart';
 
 /// Current game phase: bidding or tricks (matches Angular/backend).
-enum GamePhase {
-  bidding,
-  tricks,
-}
+enum GamePhase { bidding, tricks }
 
 /// Holds current game state and rounds; aligns with Angular GameService for score table / round history / delete.
 /// When [RealtimeService] is set, connects to the same backend WebSocket for game_update, phase_update,
@@ -105,8 +102,9 @@ class GameService extends ChangeNotifier {
   }
 
   Future<GameState> createGame(List<String> players, {String? name}) async {
-    final game =
-        await _api.createGame(GameCreate(players: players, name: name));
+    final game = await _api.createGame(
+      GameCreate(players: players, name: name),
+    );
     _gameState = game;
     _rounds = await _api.getRounds(game.id);
     return game;
@@ -168,11 +166,7 @@ class GameService extends ChangeNotifier {
     }
     final result = await _api.submitTricks(
       gameId,
-      TricksSubmit(
-        tricks: tricks,
-        bids: bids,
-        trumpSuit: _currentTrumpSuit,
-      ),
+      TricksSubmit(tricks: tricks, bids: bids, trumpSuit: _currentTrumpSuit),
     );
     if (_gameState?.id != gameId) return result.round;
     _gameState = result.game;

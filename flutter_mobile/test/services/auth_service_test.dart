@@ -9,16 +9,18 @@ const _sampleJwt =
 
 void main() {
   group('NeonAuthResponseParser.extractToken', () {
-    test('extracts token from data.session.token (Neon get-session / sign-in)',
-        () {
-      final body = jsonEncode({
-        'data': {
-          'session': {'token': _sampleJwt},
-          'user': {'id': 'u1', 'email': 'a@b.c', 'name': 'A'},
-        },
-      });
-      expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
-    });
+    test(
+      'extracts token from data.session.token (Neon get-session / sign-in)',
+      () {
+        final body = jsonEncode({
+          'data': {
+            'session': {'token': _sampleJwt},
+            'user': {'id': 'u1', 'email': 'a@b.c', 'name': 'A'},
+          },
+        });
+        expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
+      },
+    );
 
     test('extracts token from data.session.accessToken', () {
       final body = jsonEncode({
@@ -30,34 +32,37 @@ void main() {
       expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
     });
 
-    test('extracts token from data.session.access_token (Neon Auth snake_case)',
-        () {
-      final body = jsonEncode({
-        'data': {
-          'session': {'access_token': _sampleJwt},
-          'user': {'id': 'u1', 'email': 'a@b.c'},
-        },
-      });
-      expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
-    });
+    test(
+      'extracts token from data.session.access_token (Neon Auth snake_case)',
+      () {
+        final body = jsonEncode({
+          'data': {
+            'session': {'access_token': _sampleJwt},
+            'user': {'id': 'u1', 'email': 'a@b.c'},
+          },
+        });
+        expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
+      },
+    );
 
     test(
-        'prefers data.session.token over data.session.accessToken when both present',
-        () {
-      final body = jsonEncode({
-        'data': {
-          'session': {'token': _sampleJwt, 'accessToken': 'other'},
-          'user': {},
-        },
-      });
-      expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
-    });
+      'prefers data.session.token over data.session.accessToken when both present',
+      () {
+        final body = jsonEncode({
+          'data': {
+            'session': {'token': _sampleJwt, 'accessToken': 'other'},
+            'user': {},
+          },
+        });
+        expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
+      },
+    );
 
     test('extracts token from data.token', () {
       final body = jsonEncode({
         'data': {
           'token': _sampleJwt,
-          'user': {'id': 'u1', 'email': 'a@b.c'}
+          'user': {'id': 'u1', 'email': 'a@b.c'},
         },
       });
       expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
@@ -86,8 +91,8 @@ void main() {
     test('returns null for non-JWT string in token field', () {
       final body = jsonEncode({
         'data': {
-          'session': {'token': 'not-a-jwt'}
-        }
+          'session': {'token': 'not-a-jwt'},
+        },
       });
       expect(NeonAuthResponseParser.extractToken(body), isNull);
     });
@@ -102,8 +107,8 @@ void main() {
       final body = jsonEncode({
         'data': {
           'nested': {
-            'session': {'token': _sampleJwt}
-          }
+            'session': {'token': _sampleJwt},
+          },
         },
       });
       expect(NeonAuthResponseParser.extractToken(body), _sampleJwt);
@@ -139,7 +144,7 @@ void main() {
     test('prefers data.user over top-level user', () {
       final data = {
         'data': {
-          'user': {'id': 'from-data', 'email': 'd@e.f'}
+          'user': {'id': 'from-data', 'email': 'd@e.f'},
         },
         'user': {'id': 'top-level', 'email': 't@l.e'},
       };
@@ -152,7 +157,7 @@ void main() {
     test('handles user with null name', () {
       final data = {
         'data': {
-          'user': {'id': 'u3', 'email': 'c@d.e'}
+          'user': {'id': 'u3', 'email': 'c@d.e'},
         },
       };
       final user = NeonAuthResponseParser.parseUser(data);
@@ -169,8 +174,8 @@ void main() {
     test('returns null when no user object present', () {
       final data = {
         'data': {
-          'session': {'token': _sampleJwt}
-        }
+          'session': {'token': _sampleJwt},
+        },
       };
       expect(NeonAuthResponseParser.parseUser(data), isNull);
     });

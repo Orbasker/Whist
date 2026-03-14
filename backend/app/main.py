@@ -16,7 +16,6 @@ from app.core.middleware import (
     invalid_tricks_handler,
     validation_exception_handler,
 )
-from app.views.auth import router as auth_router
 
 # Configure logging
 logging.basicConfig(
@@ -37,10 +36,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Auth router: Note - With Neon Auth, frontend communicates directly with Neon.
-# This router is kept for backward compatibility but returns 501.
-app.include_router(auth_router, prefix="/api/auth")
 
 # Include API router
 app.include_router(api_router, prefix=settings.api_v1_prefix)

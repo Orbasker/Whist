@@ -41,10 +41,8 @@ class WhistApp extends StatelessWidget {
           },
         ),
         ProxyProvider<AuthService, ApiService>(
-          update: (_, auth, __) => ApiService(
-            baseUrl: _apiBaseUrl,
-            getToken: auth.getToken,
-          ),
+          update: (_, auth, __) =>
+              ApiService(baseUrl: _apiBaseUrl, getToken: auth.getToken),
         ),
         Provider<RealtimeService>(
           create: (_) => WebSocketRealtimeService(apiBaseUrl: _apiBaseUrl),

@@ -9,12 +9,11 @@ import '../models/round.dart';
 /// HTTP client for Whist backend (games, rounds, invitations).
 /// Uses same API base URL and auth; use [getToken] to supply Bearer token when set.
 class ApiService {
-  ApiService({
-    required this.baseUrl,
-    this.authToken,
-    this.getToken,
-  }) : assert(authToken == null || getToken == null,
-            'Use either authToken or getToken');
+  ApiService({required this.baseUrl, this.authToken, this.getToken})
+      : assert(
+          authToken == null || getToken == null,
+          'Use either authToken or getToken',
+        );
 
   final String baseUrl;
   final String? authToken;
@@ -133,7 +132,9 @@ class ApiService {
 
   /// Submit bids for current round. Returns { game, round_mode, total_bids }.
   Future<Map<String, dynamic>> submitBids(
-      String gameId, RoundCreate body) async {
+    String gameId,
+    RoundCreate body,
+  ) async {
     final r = await http.post(
       Uri.parse('$baseUrl/games/$gameId/rounds/bids'),
       headers: await _headers,
@@ -149,7 +150,9 @@ class ApiService {
 
   /// Submit tricks and create round. Returns typed result with game and round.
   Future<SubmitTricksResult> submitTricks(
-      String gameId, TricksSubmit body) async {
+    String gameId,
+    TricksSubmit body,
+  ) async {
     final r = await http.post(
       Uri.parse('$baseUrl/games/$gameId/rounds/tricks'),
       headers: await _headers,
@@ -189,7 +192,8 @@ class ApiService {
     );
     _checkResponse(r);
     return InvitationResponse.fromJson(
-        jsonDecode(r.body) as Map<String, dynamic>);
+      jsonDecode(r.body) as Map<String, dynamic>,
+    );
   }
 
   /// Convenience: send invitations by emails and optional slot indices.
@@ -223,7 +227,8 @@ class ApiService {
     );
     _checkResponse(r);
     return InvitationAcceptResponse.fromJson(
-        jsonDecode(r.body) as Map<String, dynamic>);
+      jsonDecode(r.body) as Map<String, dynamic>,
+    );
   }
 
   void _checkResponse(http.Response r) {

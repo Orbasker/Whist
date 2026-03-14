@@ -74,11 +74,7 @@ class NeonAuthResponseParser {
 
 /// Neon Auth (Better Auth) session user.
 class AuthUser {
-  const AuthUser({
-    required this.id,
-    required this.email,
-    this.name,
-  });
+  const AuthUser({required this.id, required this.email, this.name});
 
   final String id;
   final String email;
@@ -96,10 +92,8 @@ class AuthUser {
 /// Neon Auth (Better Auth) client: sign-in, sign-up, sign-out, token storage.
 /// Uses same API as Angular: authUrl/sign-in/email, sign-up/email, get-session, sign-out.
 class AuthService extends ChangeNotifier {
-  AuthService({
-    required this.authBaseUrl,
-    FlutterSecureStorage? secureStorage,
-  }) : _storage = secureStorage ?? const FlutterSecureStorage();
+  AuthService({required this.authBaseUrl, FlutterSecureStorage? secureStorage})
+      : _storage = secureStorage ?? const FlutterSecureStorage();
 
   final String authBaseUrl;
   final FlutterSecureStorage _storage;
@@ -153,11 +147,7 @@ class AuthService extends ChangeNotifier {
     final res = await http.post(
       Uri.parse('$authBaseUrl/sign-up/email'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        'name': name,
-      }),
+      body: jsonEncode({'email': email, 'password': password, 'name': name}),
     );
     _checkAuthResponse(res);
     await _persistSessionFromResponse(res.body);
