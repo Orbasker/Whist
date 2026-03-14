@@ -127,16 +127,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               return Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    user?.name ?? user?.email ?? '',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.copyWith(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.onSurfaceVariant,
-                                        ),
+                                  Flexible(
+                                    child: Text(
+                                      user?.name ?? user?.email ?? '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurfaceVariant,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                   const SizedBox(width: 8),
                                   TextButton.icon(
@@ -149,9 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 8,
                                       ),
-                                      minimumSize: Size.zero,
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
                                     ),
                                   ),
                                 ],
@@ -483,16 +484,15 @@ class _GameListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isActive = game.status == 'active';
     return Material(
-      color: Colors.transparent,
+      color: AppColors.card,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: AppColors.border),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.card,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.border),
-          ),
+        child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
           child: Row(
             children: [

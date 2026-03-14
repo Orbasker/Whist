@@ -43,13 +43,13 @@ abstract final class AppColors {
   /// btn-primary hover: amber-500
   static const Color buttonPrimaryHover = Color(0xFFF59E0B);
 
-  // --- Input system (from _variables.scss) ---
+  // --- Input system (shadcn overrides _variables.scss) ---
 
-  /// --input-bg: slate-700
-  static const Color inputBackground = Color(0xFF334155);
+  /// --input-bg: hsl(var(--muted)) = 203 40% 21%
+  static const Color inputBackground = Color(0xFF203349);
 
-  /// --input-border: slate-600
-  static const Color inputBorder = Color(0xFF475569);
+  /// --input-border: hsl(var(--border)) = 203 40% 21%
+  static const Color inputBorder = Color(0xFF203349);
 
   // --- Gradient (matches web's bg-gradient-to-br) ---
   static const Color gradientFrom = background;
