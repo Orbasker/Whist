@@ -7,8 +7,30 @@ on:
     branches: [main]
 
 jobs:
+  # ── Path filters (PR: run only jobs whose paths changed; push: run all) ───────
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      flutter: ${{ steps.filter.outputs.flutter }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'angular-web/**'
+            flutter:
+              - 'flutter_mobile/**'
+
   # ── Backend ──────────────────────────────────────────────────────────────────
   backend:
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.backend == 'true'
     name: Backend (Python)
     runs-on: ubuntu-latest
     defaults:
@@ -77,6 +99,8 @@ jobs:
 
   # ── Frontend ─────────────────────────────────────────────────────────────────
   frontend:
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.frontend == 'true'
     name: Frontend (Angular)
     runs-on: ubuntu-latest
     defaults:
@@ -110,6 +134,8 @@ jobs:
 
   # ── Flutter ──────────────────────────────────────────────────────────────────
   flutter:
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.flutter == 'true'
     name: Flutter (Mobile)
     runs-on: ubuntu-latest
     defaults:
