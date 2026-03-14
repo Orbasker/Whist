@@ -196,12 +196,16 @@ fetch("$sessionUrl", {
         final body = _unescapeJs(raw.toString());
         if (body.isEmpty) continue;
 
-        debugPrint(
-          '[OAuth] result: ${body.substring(0, body.length.clamp(0, 200))}',
-        );
+        final isError = body.startsWith('ERROR:');
+        if (isError) {
+          debugPrint('[OAuth] error result: $body');
+          _finish(null);
+          return;
+        }
 
-        if (body.startsWith('ERROR:') || body == 'null' || body.length < 10) {
-          debugPrint('[OAuth] fetch failed or empty: $body');
+        debugPrint('[OAuth] result received (length: ${body.length})');
+        if (body == 'null' || body.length < 10) {
+          debugPrint('[OAuth] fetch failed or empty (length: ${body.length})');
           _finish(null);
           return;
         }
