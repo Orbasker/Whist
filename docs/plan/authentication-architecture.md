@@ -1,8 +1,10 @@
-# Authentication Architecture: better-auth + Neon PostgreSQL
+# Authentication Architecture: Neon Auth + Neon PostgreSQL
+
+> **Current state (2026-03):** Authentication is now handled entirely by **Neon Auth** (managed Better Auth). The backend no longer exposes any `/api/auth/*` proxy routes — frontend and Flutter clients communicate directly with Neon Auth endpoints. FastAPI validates JWTs using Neon Auth's JWKS. See `backend/app/core/auth.py` for the implementation.
 
 ## Overview
 
-This document defines the complete authentication architecture for the Wist game application using **better-auth** (TypeScript/Node) and **Neon PostgreSQL**. The Wist backend is FastAPI (Python); better-auth runs as a separate auth service that shares the same Neon database and issues session/JWT tokens that FastAPI validates for protected API calls.
+This document defines the complete authentication architecture for the Wist game application using **Neon Auth** (managed Better Auth) and **Neon PostgreSQL**. The Wist backend is FastAPI (Python); Neon Auth handles user authentication and issues JWTs that FastAPI validates for protected API calls.
 
 ### Objectives
 

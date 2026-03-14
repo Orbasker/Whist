@@ -99,17 +99,16 @@ uv add --dev package-name
 uv sync --upgrade
 ```
 
-## Authentication (better-auth)
+## Authentication (Neon Auth)
 
-Authentication is integrated with [better-auth](https://www.better-auth.com/) (Node service). FastAPI:
+Authentication is handled by [Neon Auth](https://neon.tech/docs/auth). Frontend and Flutter clients communicate directly with Neon Auth endpoints for sign-up, sign-in, and session management. FastAPI:
 
-- **Proxies** `/api/auth/*` to the Better Auth service when `BETTER_AUTH_URL` is set (e.g. `http://localhost:3000/api/auth`).
-- **Verifies JWTs** on protected routes using `AUTH_JWT_SECRET` (same value as `BETTER_AUTH_SECRET` in the auth service).
+- **Verifies JWTs** issued by Neon Auth on protected routes using Neon's JWKS endpoint.
+- **Does not proxy** auth requests — there are no `/api/auth/*` routes.
 
 **Environment variables** (see `env.example`):
 
-- `BETTER_AUTH_URL` – Base URL of the Better Auth API. When set, requests to `/api/auth/*` are proxied here.
-- `AUTH_JWT_SECRET` – Shared secret (min 32 chars) used to verify JWTs; must match the auth service.
+- `NEON_AUTH_JWKS_URL` – JWKS URL from Neon Auth (get from Neon dashboard → Configuration).
 
 Use `get_current_user_id` from `app.core.auth` as a dependency on routes that require authentication. See `docs/plan/authentication-architecture.md` for the full design.
 

@@ -27,7 +27,7 @@ The codebase consists of:
    - Comments in SCSS files that just state the obvious
 
 3. **Dead Code**:
-   - `backend/app/views/auth.py`: Lines 58-98 are unreachable (after return statement)
+   - ~~`backend/app/views/auth.py`: Lines 58-98 are unreachable (after return statement)~~ — **Resolved: entire file removed (auth proxy routes removed with Neon Auth migration)**
    - Unused imports potentially present
 
 4. **Large Files**:
@@ -53,17 +53,7 @@ The codebase consists of:
 ## Incremental Plan
 
 ### Step 1: Remove Dead Code
-**Deliverable**: Remove unreachable code in `backend/app/views/auth.py`
-
-**Tasks**:
-- Remove lines 58-98 in `auth.py` (unreachable after return statement)
-- Remove unused imports if any (`httpx`, `Request`, `Response` if not used elsewhere)
-- Remove unused constants (`FORWARD_REQUEST_HEADERS`, `FORWARD_RESPONSE_HEADERS`)
-
-**Files**:
-- `backend/app/views/auth.py`
-
-**Estimated Impact**: ~40 lines removed
+**Deliverable**: ~~Remove unreachable code in `backend/app/views/auth.py`~~ **DONE** — entire auth proxy file removed (Neon Auth migration).
 
 ---
 
