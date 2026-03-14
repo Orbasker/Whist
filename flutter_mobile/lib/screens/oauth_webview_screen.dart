@@ -228,7 +228,7 @@ fetch("$sessionUrl", {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.continueWithGoogle),
+        title: const Text(AppStrings.continueWithGoogle),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(null),
