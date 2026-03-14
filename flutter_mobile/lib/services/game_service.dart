@@ -19,8 +19,13 @@ enum GamePhase {
 class GameService extends ChangeNotifier {
   GameService(this._api, [RealtimeService? realtime]) : _realtime = realtime;
 
-  final ApiService _api;
-  final RealtimeService? _realtime;
+  ApiService _api;
+  RealtimeService? _realtime;
+
+  void updateDependencies(ApiService api, RealtimeService? realtime) {
+    _api = api;
+    _realtime = realtime;
+  }
 
   GameState? _gameState;
   List<Round> _rounds = [];

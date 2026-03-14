@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
+import '../services/auth_service.dart';
 import '../services/game_service.dart';
 import 'game_screen.dart';
 
@@ -111,15 +112,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                         ),
                         const SizedBox(height: 16),
-                        // User info placeholder (no auth in Flutter yet)
-                        Text(
-                          'Not signed in',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                        Consumer<AuthService>(
+                          builder: (context, auth, _) {
+                            final user = auth.user;
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  user?.name ?? user?.email ?? '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                                const SizedBox(width: 8),
+                                TextButton.icon(
+                                  onPressed: () async {
+                                    await auth.signOut();
+                                  },
+                                  icon: const Icon(Icons.logout, size: 16),
+                                  label: const Text(AppStrings.logOut),
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    minimumSize: Size.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),
