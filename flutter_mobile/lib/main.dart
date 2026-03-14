@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'config/auth_config.dart';
 import 'l10n/app_localizations.dart';
+import 'theme/app_theme.dart';
 import 'providers/locale_provider.dart';
 import 'screens/auth_screen.dart';
 import 'screens/home_screen.dart';
@@ -62,13 +63,7 @@ class WhistApp extends StatelessWidget {
         builder: (context, localeProvider, _) {
           return MaterialApp(
             title: 'Whist',
-            theme: ThemeData.from(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.amber,
-                brightness: Brightness.dark,
-              ),
-              useMaterial3: true,
-            ),
+            theme: buildAppTheme(),
             locale: localeProvider.locale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

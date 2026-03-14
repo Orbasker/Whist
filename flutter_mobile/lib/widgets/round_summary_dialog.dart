@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_strings.dart';
 import '../models/round_summary_results.dart';
+import '../theme/app_colors.dart';
 
 /// Modal showing round results (bid, took, round score, new total) and continue to next round.
 /// Matches Angular round-summary component.
@@ -69,14 +70,15 @@ class _PlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scoreColor = roundScore > 0
-        ? theme.colorScheme.primary
+        ? AppColors.success
         : roundScore < 0
-            ? theme.colorScheme.error
+            ? AppColors.destructive
             : theme.colorScheme.onSurface;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.3)),
+        border:
+            Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

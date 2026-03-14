@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_strings.dart';
 import '../services/auth_service.dart';
+import '../theme/app_colors.dart';
+import '../theme/gradient_background.dart';
 import 'oauth_webview_screen.dart';
 
 /// Google-style icon (blue "g").
@@ -143,60 +145,73 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        _isLoginMode ? AppStrings.signIn : AppStrings.signUp,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 20),
-                      if (_errorMessage != null) ...[
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.errorContainer.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            _errorMessage!,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                              fontSize: 14,
+      body: GradientBackground(
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Card(
+                  elevation: 8,
+                  shadowColor: Colors.black.withValues(alpha: 0.3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          _isLoginMode ? AppStrings.signIn : AppStrings.signUp,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        if (_errorMessage != null) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  AppColors.destructive.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: AppColors.destructive
+                                    .withValues(alpha: 0.5),
+                              ),
+                            ),
+                            child: Text(
+                              _errorMessage!,
+                              style: const TextStyle(
+                                color: AppColors.destructive,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(height: 16),
+                        ],
+                        if (_isLoginMode) _loginForm() else _signupForm(),
                         const SizedBox(height: 16),
-                      ],
-                      if (_isLoginMode) _loginForm() else _signupForm(),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: _isLoading
-                            ? null
-                            : () {
-                                _clearError();
-                                setState(() => _isLoginMode = !_isLoginMode);
-                              },
-                        child: Text(
-                          _isLoginMode ? AppStrings.signUp : AppStrings.signIn,
+                        TextButton(
+                          onPressed: _isLoading
+                              ? null
+                              : () {
+                                  _clearError();
+                                  setState(() => _isLoginMode = !_isLoginMode);
+                                },
+                          child: Text(
+                            _isLoginMode
+                                ? AppStrings.signUp
+                                : AppStrings.signIn,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

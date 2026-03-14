@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
+import '../theme/app_colors.dart';
 import 'confirm_dialog.dart';
 
 /// Score table view: totals, rounds played, invite (owner), delete game (owner). Aligned with Angular score-table.
@@ -29,16 +30,21 @@ class ScoreTableSheet extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        boxShadow: const [
+      decoration: const BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        boxShadow: [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 12,
             offset: Offset(0, -4),
           ),
         ],
+        border: Border(
+          top: BorderSide(color: AppColors.border),
+          left: BorderSide(color: AppColors.border),
+          right: BorderSide(color: AppColors.border),
+        ),
       ),
       child: SafeArea(
         top: false,
@@ -194,8 +200,8 @@ class ScoreTableSheet extends StatelessWidget {
   }
 
   Color _scoreColor(ThemeData theme, int score) {
-    if (score > 0) return theme.colorScheme.primary;
-    if (score < 0) return theme.colorScheme.error;
+    if (score > 0) return AppColors.success;
+    if (score < 0) return AppColors.destructive;
     return theme.colorScheme.onSurface;
   }
 
