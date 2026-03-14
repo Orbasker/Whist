@@ -18,12 +18,31 @@ class AppStrings {
   static const creatingAccount = 'Creating account…';
   static const noAccount = "Don't have an account?";
   static const haveAccount = 'Already have an account?';
+
+  /// Generic fallback when no message from server (aligned with auth.loginFailed).
   static const loginFailed = 'Login failed';
-  static const signupFailed = 'Sign up failed';
+
+  /// Same as Angular auth.loginFailed – wrong password / invalid credentials.
+  static const loginFailedCheckCredentials =
+      'Login failed. Please check your credentials.';
+
+  /// Aligned with Angular auth.signupFailed.
+  static const signupFailed = 'Signup failed. Please try again.';
   static const logOut = 'Log out';
   static const continueWithGoogle = 'Continue with Google';
   static const connecting = 'Connecting…';
   static const googleSignInFailed = 'Google sign-in failed';
+
+  /// OAuth / generic auth failure (aligned with auth.authFailed).
+  static const authFailed = 'Authentication failed. Please try again.';
+
+  /// Invalid request (aligned with auth.invalidRequest).
+  static const invalidRequest =
+      'Invalid request. Please check your configuration.';
+
+  /// Email not verified (consistent with web).
+  static const emailNotVerified =
+      'Email not verified. Please check your inbox.';
   static const or = 'Or';
 
   // Common
