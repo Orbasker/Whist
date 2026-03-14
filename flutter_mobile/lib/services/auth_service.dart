@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
+import '../l10n/app_strings.dart';
+
 /// Parses Neon Auth API response shapes (token + user). Matches Angular AuthService paths.
 /// Exposed for unit tests; used by [AuthService].
 class NeonAuthResponseParser {
@@ -236,13 +238,75 @@ class AuthService extends ChangeNotifier {
     return false;
   }
 
+  /// Parses Neon Auth / Better Auth error body. Prefers message, then error,
+  /// then code (as string). Returns empty string if body is not valid JSON.
+  static String parseAuthErrorBody(String body) {
+    try {
+      final m = jsonDecode(body);
+      if (m is! Map<String, dynamic>) return '';
+      final message = m['message'];
+      final error = m['error'];
+      final code = m['code'];
+      if (message is String && message.isNotEmpty) return message;
+      if (error is String && error.isNotEmpty) return error;
+      if (code is String && code.isNotEmpty) return code;
+      return '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  /// Same cleanup as Angular: strip leading dots and trim. Used so Flutter
+  /// shows the same user-visible message as the web app.
+  static String cleanAuthMessage(String raw) {
+    if (raw.isEmpty) return raw;
+    return raw.replaceAll(RegExp(r'^\.+\s*'), '').trim();
+  }
+
+  /// Maps status code and optional body code/message to a user-facing string
+  /// aligned with Angular (auth.loginFailed, auth.authFailed, etc.).
+  static String _mapAuthErrorMessage(
+    int statusCode,
+    String bodyMessage,
+    String? bodyCode,
+  ) {
+    final cleaned = cleanAuthMessage(bodyMessage);
+    if (cleaned.isNotEmpty) {
+      final codeLower = (bodyCode ?? '').toLowerCase();
+      final msgLower = cleaned.toLowerCase();
+      if (codeLower == 'invalid_password' ||
+          msgLower.contains('invalid password') ||
+          msgLower.contains('wrong password')) {
+        return AppStrings.loginFailedCheckCredentials;
+      }
+      if (codeLower.contains('email') && codeLower.contains('verif') ||
+          msgLower.contains('email') && msgLower.contains('verif')) {
+        return AppStrings.emailNotVerified;
+      }
+      return cleaned;
+    }
+    switch (statusCode) {
+      case 401:
+        return AppStrings.loginFailedCheckCredentials;
+      case 403:
+        return AppStrings.authFailed;
+      case 400:
+        return AppStrings.invalidRequest;
+      default:
+        return AppStrings.loginFailed;
+    }
+  }
+
   void _checkAuthResponse(http.Response res) {
     if (res.statusCode >= 400) {
-      String msg = res.body;
+      final bodyMsg = parseAuthErrorBody(res.body);
+      String? bodyCode;
       try {
         final m = jsonDecode(res.body) as Map<String, dynamic>;
-        msg = (m['message'] ?? m['error'] ?? res.body) as String? ?? res.body;
+        bodyCode = m['code'] as String?;
       } catch (_) {}
+      final raw = bodyMsg.isEmpty ? res.body : bodyMsg;
+      final msg = _mapAuthErrorMessage(res.statusCode, raw, bodyCode);
       throw AuthException(res.statusCode, msg);
     }
   }

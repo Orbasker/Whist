@@ -65,8 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
     } on AuthException catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = e.message.replaceAll(RegExp(r'^\.+\s*'), '').trim();
-        if (_errorMessage!.isEmpty) _errorMessage = AppStrings.loginFailed;
+        _errorMessage = e.message.isEmpty ? AppStrings.loginFailed : e.message;
         _isLoading = false;
       });
     } catch (e) {
@@ -96,8 +95,7 @@ class _AuthScreenState extends State<AuthScreen> {
     } on AuthException catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = e.message.replaceAll(RegExp(r'^\.+\s*'), '').trim();
-        if (_errorMessage!.isEmpty) _errorMessage = AppStrings.signupFailed;
+        _errorMessage = e.message.isEmpty ? AppStrings.signupFailed : e.message;
         _isLoading = false;
       });
     } catch (e) {
@@ -123,10 +121,8 @@ class _AuthScreenState extends State<AuthScreen> {
     } on AuthException catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = e.message.replaceAll(RegExp(r'^\.+\s*'), '').trim();
-        if (_errorMessage!.isEmpty) {
-          _errorMessage = AppStrings.googleSignInFailed;
-        }
+        _errorMessage =
+            e.message.isEmpty ? AppStrings.googleSignInFailed : e.message;
         _isLoading = false;
       });
     } catch (e) {
