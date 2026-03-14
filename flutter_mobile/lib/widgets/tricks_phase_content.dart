@@ -83,9 +83,7 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(
-        const SnackBar(content: Text('Failed to submit tricks')),
-      );
+      ).showSnackBar(const SnackBar(content: Text('Failed to submit tricks')));
       debugPrint('submitTricks failed: $e');
     }
   }

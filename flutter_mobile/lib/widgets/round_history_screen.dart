@@ -152,8 +152,9 @@ class RoundHistoryScreen extends StatelessWidget {
         // Header row 2: empty | empty | Bid Took Change Before After (x4 players = 20 cells)
         TableRow(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest
-                .withValues(alpha: 0.7),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.7,
+            ),
           ),
           children: [
             _pad(const SizedBox(), cellPad),

@@ -80,9 +80,7 @@ ThemeData buildAppTheme() {
         foregroundColor: Colors.white,
         minimumSize: const Size(0, 44),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: GoogleFonts.outfit(
           fontSize: 15,
           fontWeight: FontWeight.w600,
@@ -96,9 +94,7 @@ ThemeData buildAppTheme() {
         foregroundColor: AppColors.foreground,
         minimumSize: const Size(0, 44),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         side: const BorderSide(color: AppColors.inputBorder),
         textStyle: GoogleFonts.outfit(
           fontSize: 15,
@@ -113,9 +109,7 @@ ThemeData buildAppTheme() {
         foregroundColor: AppColors.primary,
         minimumSize: const Size(0, 44),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: GoogleFonts.outfit(
           fontSize: 15,
           fontWeight: FontWeight.w600,

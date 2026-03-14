@@ -106,9 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -117,9 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                           ),
                           const SizedBox(height: 16),
@@ -135,9 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .textTheme
                                         .bodySmall
                                         ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
                                         ),
                                   ),
                                   const SizedBox(width: 8),
@@ -149,7 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     label: const Text(AppStrings.logOut),
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
+                                        horizontal: 8,
+                                      ),
                                       minimumSize: Size.zero,
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
@@ -178,8 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Text(
                                     AppStrings.myGames,
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
                                   ),
                                   FilledButton.icon(
                                     onPressed: _openNewGameForm,
@@ -193,21 +193,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 24),
                                   child: Center(
-                                      child: CircularProgressIndicator()),
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 )
                               else if (_error != null)
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                   child: Column(
                                     children: [
                                       Text(
                                         _error!,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .error,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.error,
                                         ),
                                       ),
                                       const SizedBox(height: 12),
@@ -220,8 +222,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )
                               else if (_games.isEmpty)
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 24),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 24,
+                                  ),
                                   child: Column(
                                     children: [
                                       Text(
@@ -230,9 +233,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             .textTheme
                                             .bodyLarge
                                             ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurfaceVariant,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurfaceVariant,
                                             ),
                                       ),
                                       const SizedBox(height: 4),
@@ -242,9 +245,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             .textTheme
                                             .bodySmall
                                             ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurfaceVariant,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurfaceVariant,
                                             ),
                                       ),
                                     ],
@@ -262,8 +265,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return _GameListTile(
                                       game: game,
                                       displayName: _getGameDisplayName(game),
-                                      formattedDate:
-                                          _formatDate(game.updatedAt),
+                                      formattedDate: _formatDate(
+                                        game.updatedAt,
+                                      ),
                                       onTap: () => _openGame(game.id),
                                     );
                                   },

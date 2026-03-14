@@ -146,8 +146,9 @@ class _GameScreenState extends State<GameScreen> {
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title:
-                Text('${l10n.appBarTitleRounds(roundsPlayed)} · $phaseLabel'),
+            title: Text(
+              '${l10n.appBarTitleRounds(roundsPlayed)} · $phaseLabel',
+            ),
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(1),
               child: Container(height: 1, color: AppColors.border),

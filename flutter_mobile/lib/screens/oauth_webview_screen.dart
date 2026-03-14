@@ -45,76 +45,82 @@ class _OAuthWebViewScreenState extends State<OAuthWebViewScreen> {
         'AppleWebKit/605.1.15 (KHTML, like Gecko) '
         'Version/18.0 Mobile/15E148 Safari/604.1',
       )
-      ..setNavigationDelegate(NavigationDelegate(
-        onNavigationRequest: (request) {
-          // Force Google to show the account picker.
-          if (request.url.contains('accounts.google.com') &&
-              request.url.contains('/o/oauth2/') &&
-              !request.url.contains('prompt=')) {
-            final newUrl = '${request.url}&prompt=select_account';
-            debugPrint('[OAuth] forcing account picker');
-            Future.microtask(() => _controller.loadRequest(Uri.parse(newUrl)));
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
-        onPageStarted: (url) {
-          if (mounted) setState(() => _isLoading = true);
-          // Only show the WebView when on Google's sign-in page.
-          if (url.contains('google.com')) {
-            if (mounted && !_showWebView) setState(() => _showWebView = true);
-          } else if (_showWebView) {
-            if (mounted) setState(() => _showWebView = false);
-          }
-        },
-        onPageFinished: (url) {
-          if (mounted) setState(() => _isLoading = false);
-          debugPrint('[OAuth] page finished: $url');
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (request) {
+            // Force Google to show the account picker.
+            if (request.url.contains('accounts.google.com') &&
+                request.url.contains('/o/oauth2/') &&
+                !request.url.contains('prompt=')) {
+              final newUrl = '${request.url}&prompt=select_account';
+              debugPrint('[OAuth] forcing account picker');
+              Future.microtask(
+                () => _controller.loadRequest(Uri.parse(newUrl)),
+              );
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+          onPageStarted: (url) {
+            if (mounted) setState(() => _isLoading = true);
+            // Only show the WebView when on Google's sign-in page.
+            if (url.contains('google.com')) {
+              if (mounted && !_showWebView) setState(() => _showWebView = true);
+            } else if (_showWebView) {
+              if (mounted) setState(() => _showWebView = false);
+            }
+          },
+          onPageFinished: (url) {
+            if (mounted) setState(() => _isLoading = false);
+            debugPrint('[OAuth] page finished: $url');
 
-          // Step 2: First time auth domain loads → inject OAuth fetch.
-          if (!_fetchInjected && url.startsWith(_authBaseUrl)) {
-            _fetchInjected = true;
-            _injectOAuthFetch();
-            return;
-          }
+            // Step 2: First time auth domain loads → inject OAuth fetch.
+            if (!_fetchInjected && url.startsWith(_authBaseUrl)) {
+              _fetchInjected = true;
+              _injectOAuthFetch();
+              return;
+            }
 
-          // Callback URL loaded — extract the verifier, then navigate to
-          // the auth domain so the fetch is same-origin (cookies included).
-          if (!_done && url.startsWith(_callbackUrl)) {
-            _done = true;
-            final uri = Uri.parse(url);
-            _pendingVerifier =
-                uri.queryParameters['neon_auth_session_verifier'];
-            debugPrint(
-                '[OAuth] callback reached, verifier=${_pendingVerifier != null}');
-            // Navigate to auth domain — onPageFinished will trigger the fetch.
-            _controller.loadRequest(Uri.parse('$_authBaseUrl/get-session'));
-            return;
-          }
+            // Callback URL loaded — extract the verifier, then navigate to
+            // the auth domain so the fetch is same-origin (cookies included).
+            if (!_done && url.startsWith(_callbackUrl)) {
+              _done = true;
+              final uri = Uri.parse(url);
+              _pendingVerifier =
+                  uri.queryParameters['neon_auth_session_verifier'];
+              debugPrint(
+                '[OAuth] callback reached, verifier=${_pendingVerifier != null}',
+              );
+              // Navigate to auth domain — onPageFinished will trigger the fetch.
+              _controller.loadRequest(Uri.parse('$_authBaseUrl/get-session'));
+              return;
+            }
 
-          // Auth domain loaded after callback — now do the verifier exchange
-          // same-origin so challenge cookie is included.
-          if (_done && _fetchInjected && url.startsWith(_authBaseUrl)) {
-            debugPrint('[OAuth] on auth domain, exchanging verifier...');
-            _exchangeVerifierViaFetch(_pendingVerifier);
-          }
-        },
-        onWebResourceError: (error) {
-          // On real device, localhost callback is unreachable.
-          // Extract the verifier and navigate to auth domain.
-          if (!_done &&
-              error.url != null &&
-              error.url!.startsWith(_callbackUrl)) {
-            _done = true;
-            final uri = Uri.parse(error.url!);
-            _pendingVerifier =
-                uri.queryParameters['neon_auth_session_verifier'];
-            debugPrint(
-                '[OAuth] callback unreachable, navigating to auth domain...');
-            _controller.loadRequest(Uri.parse('$_authBaseUrl/get-session'));
-          }
-        },
-      ))
+            // Auth domain loaded after callback — now do the verifier exchange
+            // same-origin so challenge cookie is included.
+            if (_done && _fetchInjected && url.startsWith(_authBaseUrl)) {
+              debugPrint('[OAuth] on auth domain, exchanging verifier...');
+              _exchangeVerifierViaFetch(_pendingVerifier);
+            }
+          },
+          onWebResourceError: (error) {
+            // On real device, localhost callback is unreachable.
+            // Extract the verifier and navigate to auth domain.
+            if (!_done &&
+                error.url != null &&
+                error.url!.startsWith(_callbackUrl)) {
+              _done = true;
+              final uri = Uri.parse(error.url!);
+              _pendingVerifier =
+                  uri.queryParameters['neon_auth_session_verifier'];
+              debugPrint(
+                '[OAuth] callback unreachable, navigating to auth domain...',
+              );
+              _controller.loadRequest(Uri.parse('$_authBaseUrl/get-session'));
+            }
+          },
+        ),
+      )
       // Step 1: Navigate to auth domain to establish origin.
       ..loadRequest(Uri.parse('$_authBaseUrl/get-session'));
   }
@@ -191,7 +197,8 @@ fetch("$sessionUrl", {
         if (body.isEmpty) continue;
 
         debugPrint(
-            '[OAuth] result: ${body.substring(0, body.length.clamp(0, 200))}');
+          '[OAuth] result: ${body.substring(0, body.length.clamp(0, 200))}',
+        );
 
         if (body.startsWith('ERROR:') || body == 'null' || body.length < 10) {
           debugPrint('[OAuth] fetch failed or empty: $body');
