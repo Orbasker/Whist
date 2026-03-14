@@ -122,14 +122,12 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       if (!mounted) return;
       if (result == null) {
-        // User cancelled (closed the WebView).
         setState(() => _isLoading = false);
         return;
       }
       final auth = context.read<AuthService>();
       await auth.completeOAuthSignIn(result);
       if (!mounted) return;
-      // AuthService.notifyListeners() will cause AuthGate to rebuild.
     } on AuthException catch (e) {
       if (!mounted) return;
       setState(() {

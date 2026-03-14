@@ -164,9 +164,6 @@ class AuthService extends ChangeNotifier {
   }
 
   /// Complete social sign-in using the session JSON returned by the OAuth WebView.
-  ///
-  /// The WebView handles the full OAuth redirect flow via Neon Auth and ends
-  /// on `get-session`, which returns the session JSON (including the JWT).
   Future<void> completeOAuthSignIn(String sessionResponseBody) async {
     await _persistSessionFromResponse(sessionResponseBody);
   }
