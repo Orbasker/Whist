@@ -177,14 +177,12 @@ class _AuthScreenState extends State<AuthScreen> {
                               vertical: 10,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.destructive.withValues(
-                                alpha: 0.1,
-                              ),
+                              color:
+                                  AppColors.destructive.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: AppColors.destructive.withValues(
-                                  alpha: 0.5,
-                                ),
+                                color: AppColors.destructive
+                                    .withValues(alpha: 0.5),
                               ),
                             ),
                             child: Text(
