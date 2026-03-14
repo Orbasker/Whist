@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 import '../l10n/app_strings.dart';
@@ -164,34 +163,12 @@ class AuthService extends ChangeNotifier {
     await _persistSessionFromResponse(res.body);
   }
 
-  /// Sign in with Google (Neon Auth / Better Auth sign-in/social with idToken).
-  /// Uses native Google Sign-In, then exchanges idToken for session.
-  Future<void> signInWithGoogle() async {
-    final googleSignIn = GoogleSignIn(
-      scopes: ['email', 'profile'],
-    );
-    final account = await googleSignIn.signIn();
-    if (account == null) return; // User cancelled
-    final auth = await account.authentication;
-    final idToken = auth.idToken;
-    final accessToken = auth.accessToken;
-    if (idToken == null || idToken.isEmpty) {
-      throw AuthException(0, 'Google sign-in did not return an ID token');
-    }
-    final res = await http.post(
-      Uri.parse('$authBaseUrl/sign-in/social'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'provider': 'google',
-        'idToken': {
-          'token': idToken,
-          if (accessToken != null && accessToken.isNotEmpty)
-            'accessToken': accessToken,
-        },
-      }),
-    );
-    _checkAuthResponse(res);
-    await _persistSessionFromResponse(res.body);
+  /// Complete social sign-in using the session JSON returned by the OAuth WebView.
+  ///
+  /// The WebView handles the full OAuth redirect flow via Neon Auth and ends
+  /// on `get-session`, which returns the session JSON (including the JWT).
+  Future<void> completeOAuthSignIn(String sessionResponseBody) async {
+    await _persistSessionFromResponse(sessionResponseBody);
   }
 
   /// Sign out: clear server session and local token.
