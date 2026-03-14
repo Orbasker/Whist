@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'config/auth_config.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/locale_provider.dart';
 import 'screens/auth_screen.dart';
@@ -34,13 +35,7 @@ class WhistApp extends StatelessWidget {
         ChangeNotifierProvider<LocaleProvider>.value(value: localeProvider),
         ChangeNotifierProvider<AuthService>(
           create: (_) {
-            final auth = AuthService(
-              authBaseUrl: const String.fromEnvironment(
-                'AUTH_BASE_URL',
-                defaultValue:
-                    'https://ep-shiny-voice-agz9vcbc.neonauth.c-2.eu-central-1.aws.neon.tech/neondb/auth',
-              ),
-            );
+            final auth = AuthService(authBaseUrl: AuthConfig.authBaseUrl);
             auth.loadSession();
             return auth;
           },
