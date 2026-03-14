@@ -245,6 +245,7 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
               FilledButton(
                 onPressed: canSubmit
                     ? () async {
+                        final messenger = ScaffoldMessenger.of(context);
                         final bids = List<int>.filled(
                             widget.gameState.players.length, 0);
                         for (var i = 0;
@@ -261,17 +262,17 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                                 trumpSuit: gs.liveTrumpSelection);
                           }
                         } catch (_) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Failed to submit bids')),
-                            );
-                          }
+                          if (!mounted) return;
+                          messenger.showSnackBar(
+                            const SnackBar(
+                              content: Text('Failed to submit bids'),
+                            ),
+                          );
                         }
                       }
                     : null,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text(AppStrings.biddingPhaseContinue),
                 ),
               ),

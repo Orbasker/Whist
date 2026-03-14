@@ -63,8 +63,12 @@ class _InvitationFormState extends State<InvitationForm> {
 
   @override
   void dispose() {
-    for (final c in _emailControllers) c.dispose();
-    for (final f in _focusNodes) f.dispose();
+    for (final c in _emailControllers) {
+      c.dispose();
+    }
+    for (final f in _focusNodes) {
+      f.dispose();
+    }
     super.dispose();
   }
 
@@ -130,7 +134,9 @@ class _InvitationFormState extends State<InvitationForm> {
           _sending = false;
         });
         widget.onSent(sent: result.sent, total: result.total);
-        for (final c in _emailControllers) c.clear();
+        for (final c in _emailControllers) {
+          c.clear();
+        }
         Future.delayed(const Duration(milliseconds: 2000), () {
           if (mounted) widget.onCancel();
         });

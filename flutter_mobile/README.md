@@ -2,6 +2,15 @@
 
 Whist game scoring – Flutter app (same auth and API as the Angular web app).
 
+## Auth configuration
+
+Auth base URL is defined in **`lib/config/auth_config.dart`** (`AuthConfig.authBaseUrl`). It defaults to the same Neon Auth URL as the Angular app. **This value must match** Angular’s `environment.authUrl` (in `angular-web/src/environments/`) so both clients talk to the same Neon Auth backend.
+
+To override at run/build time:
+
+- `flutter run --dart-define=AUTH_BASE_URL=https://...`
+- `flutter build apk --dart-define=AUTH_BASE_URL=...`
+
 ## Getting Started
 
 ### Google Sign-In (optional)

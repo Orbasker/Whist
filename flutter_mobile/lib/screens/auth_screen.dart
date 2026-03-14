@@ -124,8 +124,9 @@ class _AuthScreenState extends State<AuthScreen> {
       if (!mounted) return;
       setState(() {
         _errorMessage = e.message.replaceAll(RegExp(r'^\.+\s*'), '').trim();
-        if (_errorMessage!.isEmpty)
+        if (_errorMessage!.isEmpty) {
           _errorMessage = AppStrings.googleSignInFailed;
+        }
         _isLoading = false;
       });
     } catch (e) {
@@ -220,8 +221,9 @@ class _AuthScreenState extends State<AuthScreen> {
               hintText: AppStrings.enterEmail,
             ),
             validator: (v) {
-              if (v == null || v.trim().isEmpty)
+              if (v == null || v.trim().isEmpty) {
                 return AppStrings.emailRequired;
+              }
               if (!RegExp(r'^[\w.-]+@[\w.-]+\.\w+$').hasMatch(v.trim())) {
                 return AppStrings.invalidEmail;
               }
@@ -309,8 +311,9 @@ class _AuthScreenState extends State<AuthScreen> {
               hintText: AppStrings.enterEmail,
             ),
             validator: (v) {
-              if (v == null || v.trim().isEmpty)
+              if (v == null || v.trim().isEmpty) {
                 return AppStrings.emailRequired;
+              }
               if (!RegExp(r'^[\w.-]+@[\w.-]+\.\w+$').hasMatch(v.trim())) {
                 return AppStrings.invalidEmail;
               }

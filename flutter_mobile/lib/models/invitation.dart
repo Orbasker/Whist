@@ -1,4 +1,5 @@
 /// Invitation DTOs aligned with backend schemas (invitation.py).
+library;
 
 /// Request: create and send invitations for a game.
 class InvitationCreate {

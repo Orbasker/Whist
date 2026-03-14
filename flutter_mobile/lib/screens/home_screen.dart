@@ -274,7 +274,9 @@ class _NewGameModalState extends State<_NewGameModal> {
   @override
   void dispose() {
     _nameController.dispose();
-    for (final c in _playerControllers) c.dispose();
+    for (final c in _playerControllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 
