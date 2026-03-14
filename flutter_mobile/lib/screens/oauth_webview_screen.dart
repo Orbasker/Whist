@@ -46,6 +46,18 @@ class _OAuthWebViewScreenState extends State<OAuthWebViewScreen> {
         'Version/18.0 Mobile/15E148 Safari/604.1',
       )
       ..setNavigationDelegate(NavigationDelegate(
+        onNavigationRequest: (request) {
+          // Force Google to show the account picker.
+          if (request.url.contains('accounts.google.com') &&
+              request.url.contains('/o/oauth2/') &&
+              !request.url.contains('prompt=')) {
+            final newUrl = '${request.url}&prompt=select_account';
+            debugPrint('[OAuth] forcing account picker');
+            Future.microtask(() => _controller.loadRequest(Uri.parse(newUrl)));
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        },
         onPageStarted: (url) {
           if (mounted) setState(() => _isLoading = true);
           // Only show the WebView when on Google's sign-in page.
