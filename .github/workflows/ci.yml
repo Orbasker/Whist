@@ -7,17 +7,28 @@ on:
     branches: [main]
 
 jobs:
-  # ── Path filters (PR: run only jobs whose paths changed; push: run all) ───────
+  # ── PR: path-based filter; push to main: run all (no change detection) ────────
   changes:
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      frontend: ${{ steps.filter.outputs.frontend }}
-      flutter: ${{ steps.filter.outputs.flutter }}
+      backend: ${{ steps.filter.outputs.backend || steps.push_all.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend || steps.push_all.outputs.frontend }}
+      flutter: ${{ steps.filter.outputs.flutter || steps.push_all.outputs.flutter }}
     steps:
+      # On push to main: skip path detection and mark all pipelines to run
+      - name: Set all pipelines (push to main)
+        id: push_all
+        if: github.event_name == 'push'
+        run: |
+          echo "backend=true" >> "$GITHUB_OUTPUT"
+          echo "frontend=true" >> "$GITHUB_OUTPUT"
+          echo "flutter=true" >> "$GITHUB_OUTPUT"
+
+      # On PR: detect which paths changed and set filter outputs
       - uses: dorny/paths-filter@v3
         id: filter
+        if: github.event_name == 'pull_request'
         with:
           filters: |
             backend:
