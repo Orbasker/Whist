@@ -60,7 +60,7 @@ repos:
         stages: [pre-commit]
 
   # ── Flutter (flutter_mobile) ─────────────────────────────────────────────
-
+  # Requires Flutter SDK on PATH (e.g. from FVM or system install).
   - repo: local
     hooks:
       - id: dart-format
