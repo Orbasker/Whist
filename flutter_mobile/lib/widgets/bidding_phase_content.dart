@@ -123,9 +123,9 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
               // Trump
               Text(
                 AppStrings.biddingPhaseTrump,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
               TrumpSelector(
@@ -150,9 +150,9 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                           ),
                           Text(
@@ -160,9 +160,7 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -247,7 +245,9 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                     ? () async {
                         final messenger = ScaffoldMessenger.of(context);
                         final bids = List<int>.filled(
-                            widget.gameState.players.length, 0);
+                          widget.gameState.players.length,
+                          0,
+                        );
                         for (var i = 0;
                             i < bids.length && i < _bids.length;
                             i++) {
@@ -255,11 +255,16 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                         }
                         try {
                           if (gs.isRealtimeConnected) {
-                            gs.sendSubmitBids(bids,
-                                trumpSuit: gs.liveTrumpSelection);
+                            gs.sendSubmitBids(
+                              bids,
+                              trumpSuit: gs.liveTrumpSelection,
+                            );
                           } else {
-                            await gs.submitBids(gs.gameState!.id, bids,
-                                trumpSuit: gs.liveTrumpSelection);
+                            await gs.submitBids(
+                              gs.gameState!.id,
+                              bids,
+                              trumpSuit: gs.liveTrumpSelection,
+                            );
                           }
                         } catch (_) {
                           if (!mounted) return;
@@ -375,7 +380,9 @@ class _PlayerBidCard extends StatelessWidget {
                       if (currentPlayerIndex == playerIndex)
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(20),
@@ -391,7 +398,9 @@ class _PlayerBidCard extends StatelessWidget {
                       if (isPlayerOwner)
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: colorScheme.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(20),
@@ -442,8 +451,9 @@ class _PlayerBidCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   '⚠️ ${AppStrings.biddingPhaseCannotEdit}',
-                  style: theme.textTheme.labelSmall
-                      ?.copyWith(color: colorScheme.primary),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: colorScheme.primary,
+                  ),
                 ),
               ),
             const SizedBox(height: 12),
