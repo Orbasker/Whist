@@ -5,6 +5,67 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
+/// Parses Neon Auth API response shapes (token + user). Matches Angular AuthService paths.
+/// Exposed for unit tests; used by [AuthService].
+class NeonAuthResponseParser {
+  NeonAuthResponseParser._();
+
+  static bool _isJwt(String s) =>
+      s.length > 50 && s.startsWith('eyJ') && s.contains('.');
+
+  static String? _findJwtInMap(Map<String, dynamic> m) {
+    for (final value in m.values) {
+      if (value is String && _isJwt(value)) return value;
+      if (value is Map<String, dynamic>) {
+        final found = _findJwtInMap(value);
+        if (found != null) return found;
+      }
+    }
+    return null;
+  }
+
+  /// Extracts JWT from auth response body. Path order matches Angular getToken():
+  /// data.session.token, data.session.accessToken, data.token, session.token, token, then deep search.
+  static String? extractToken(String body) {
+    try {
+      final data = jsonDecode(body);
+      if (data is! Map<String, dynamic>) return null;
+
+      final dataSession = data['data'];
+      if (dataSession is Map<String, dynamic>) {
+        final session = dataSession['session'];
+        if (session is Map<String, dynamic>) {
+          final t = session['token'] ?? session['accessToken'];
+          if (t is String && _isJwt(t)) return t;
+        }
+        final t = dataSession['token'];
+        if (t is String && _isJwt(t)) return t;
+      }
+
+      final session = data['session'];
+      if (session is Map<String, dynamic>) {
+        final t = session['token'] ?? session['accessToken'];
+        if (t is String && _isJwt(t)) return t;
+      }
+
+      final t = data['token'];
+      if (t is String && _isJwt(t)) return t;
+
+      return _findJwtInMap(data);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Parses user from get-session/sign-in response. Matches Angular: session.data.user (data.user).
+  static AuthUser? parseUser(dynamic data) {
+    if (data is! Map<String, dynamic>) return null;
+    final user = data['data']?['user'] ?? data['user'];
+    if (user is Map<String, dynamic>) return AuthUser.fromJson(user);
+    return null;
+  }
+}
+
 /// Neon Auth (Better Auth) session user.
 class AuthUser {
   const AuthUser({
@@ -214,41 +275,10 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  AuthUser? _parseUser(dynamic data) {
-    if (data is! Map<String, dynamic>) return null;
-    final user = data['user'] ?? data['data']?['user'];
-    if (user is Map<String, dynamic>) return AuthUser.fromJson(user);
-    return null;
-  }
+  AuthUser? _parseUser(dynamic data) => NeonAuthResponseParser.parseUser(data);
 
-  String? _extractTokenFromBody(String body) {
-    try {
-      final data = jsonDecode(body);
-      if (data is! Map<String, dynamic>) return null;
-      // data.session.token, data.data.session.token, etc.
-      final session = data['session'] ?? data['data']?['session'];
-      if (session is Map<String, dynamic>) {
-        final t = session['token'] ?? session['accessToken'];
-        if (t is String && _isJwt(t)) return t;
-      }
-      final t = data['token'];
-      if (t is String && _isJwt(t)) return t;
-      return _findJwtInMap(data);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  String? _findJwtInMap(Map<String, dynamic> m) {
-    for (final value in m.values) {
-      if (value is String && _isJwt(value)) return value;
-      if (value is Map<String, dynamic>) {
-        final found = _findJwtInMap(value);
-        if (found != null) return found;
-      }
-    }
-    return null;
-  }
+  String? _extractTokenFromBody(String body) =>
+      NeonAuthResponseParser.extractToken(body);
 
   bool _isJwt(String s) =>
       s.length > 50 && s.startsWith('eyJ') && s.contains('.');
