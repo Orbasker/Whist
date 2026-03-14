@@ -13,7 +13,7 @@ class AuthConfig {
   AuthConfig._();
 
   /// Neon Auth base URL (e.g. https://ep-xxx.neonauth.../neondb/auth).
-  /// Must match Angular's [environment.authUrl].
+  /// Must match Angular's `environment.authUrl`.
   static const String authBaseUrl = String.fromEnvironment(
     'AUTH_BASE_URL',
     defaultValue:

@@ -271,8 +271,8 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                         }
                       }
                     : null,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text(AppStrings.biddingPhaseContinue),
                 ),
               ),
