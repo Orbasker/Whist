@@ -15,11 +15,15 @@ To override at run/build time:
 
 ### Google Sign-In (optional)
 
-Login with Google uses the same Neon Auth backend as the web app. To enable it:
+Login with Google uses the **same Neon Auth backend** as the web app. The Flutter app uses **native Google Sign-In** and sends the Google idToken to Neon Auth’s `sign-in/social` endpoint (no redirect OAuth). The web app uses redirect-based OAuth; both produce the same session/JWT from the same backend.
+
+**Setup:**
 
 1. **Google Cloud Console**: In the same project used for Neon Auth (or your web app), create an **iOS** OAuth 2.0 Client ID (Credentials → Create credentials → OAuth client ID → iOS). Note the **iOS client ID** (e.g. `123-xxx.apps.googleusercontent.com`).
 2. **iOS**: In `ios/Runner/Info.plist`, replace `com.googleusercontent.apps.YOUR-IOS-CLIENT-ID-REVERSED` in `CFBundleURLSchemes` with your **reversed** iOS client ID (e.g. if the client ID is `123-abc.apps.googleusercontent.com`, use `com.googleusercontent.apps.123-abc`).
-3. Neon Auth must have Google OAuth configured (same as for the web app). The app sends the Google ID token to Neon Auth’s `sign-in/social` endpoint.
+3. **Neon Auth**: Google OAuth must be configured in the Neon Auth dashboard (same as for the web app).
+
+**Full details** (Android when added, auth_config, optional deep links): see **[docs/flutter-google-signin-neon-auth.md](../docs/flutter-google-signin-neon-auth.md)**.
 
 ## Getting Started (Flutter)
 
