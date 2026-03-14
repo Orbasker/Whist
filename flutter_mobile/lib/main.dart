@@ -47,8 +47,15 @@ class WhistApp extends StatelessWidget {
         Provider<RealtimeService>(
           create: (_) => WebSocketRealtimeService(apiBaseUrl: _apiBaseUrl),
         ),
-        ProxyProvider2<ApiService, RealtimeService, GameService>(
-          update: (_, api, realtime, __) => GameService(api, realtime),
+        ChangeNotifierProxyProvider2<ApiService, RealtimeService, GameService>(
+          create: (_) => GameService(
+            ApiService(baseUrl: _apiBaseUrl, getToken: () async => null),
+            WebSocketRealtimeService(apiBaseUrl: _apiBaseUrl),
+          ),
+          update: (_, api, realtime, prev) {
+            if (prev != null) return prev..updateDependencies(api, realtime);
+            return GameService(api, realtime);
+          },
         ),
       ],
       child: Consumer<LocaleProvider>(

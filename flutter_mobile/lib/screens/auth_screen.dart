@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_strings.dart';
 import '../services/auth_service.dart';
+import 'oauth_webview_screen.dart';
 
 /// Google-style icon (blue "g").
 class _GoogleIcon extends StatelessWidget {
@@ -110,10 +111,19 @@ class _AuthScreenState extends State<AuthScreen> {
       _errorMessage = null;
     });
     try {
-      final auth = context.read<AuthService>();
-      await auth.signInWithGoogle();
+      final result = await Navigator.of(context).push<String>(
+        MaterialPageRoute(
+          builder: (_) => const OAuthWebViewScreen(provider: 'google'),
+        ),
+      );
       if (!mounted) return;
-      // AuthService.notifyListeners() will cause AuthGate to rebuild.
+      if (result == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
+      final auth = context.read<AuthService>();
+      await auth.completeOAuthSignIn(result);
+      if (!mounted) return;
     } on AuthException catch (e) {
       if (!mounted) return;
       setState(() {

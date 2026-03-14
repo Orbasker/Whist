@@ -19,4 +19,12 @@ class AuthConfig {
     defaultValue:
         'https://ep-shiny-voice-agz9vcbc.neonauth.c-2.eu-central-1.aws.neon.tech/neondb/auth',
   );
+
+  /// Web app origin used as the OAuth callbackURL. Must be a trusted origin
+  /// registered in Neon Auth. Override with:
+  ///   flutter run --dart-define=WEB_APP_ORIGIN=https://your-app.com
+  static const String webAppOrigin = String.fromEnvironment(
+    'WEB_APP_ORIGIN',
+    defaultValue: 'http://localhost:4200',
+  );
 }
