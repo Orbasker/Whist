@@ -16,8 +16,8 @@ Before committing, run from repo root: **`pre-commit run --all-files`**. Hooks r
 5. **pytest (backend unit tests)** – Backend tests. Fix failing tests in `backend/tests/`.
 6. **eslint (frontend)** – Lint `angular-web/src/**/*.ts` (uses local `./node_modules/.bin/eslint`, max 99 warnings). Fix: `cd angular-web && ./node_modules/.bin/eslint "src/**/*.ts" --fix`. If **CI** runs `npm run lint` with `--max-warnings=0`, that can fail on `@typescript-eslint/no-explicit-any`; fix types or align max-warnings.
 7. **prettier format check (frontend)** – Prettier on `angular-web/src` (ts, html, scss, css). Fix: `cd angular-web && npx prettier --write "src/**/*.{ts,html,scss,css}"`
-8. **dart format (Flutter)** – Format `flutter_mobile/` Dart files. Runs in Docker (Flutter image); **Docker must be running**. Fix: `cd flutter_mobile && dart format lib/ test/`
-9. **dart analyze (Flutter)** – Analyze `flutter_mobile/lib/` (fatal on warnings). Runs in Docker (Flutter image); **Docker must be running**. Fix: resolve analysis issues in `flutter_mobile/`.
+8. **dart format (Flutter)** – Format `flutter_mobile/` Dart files. **Flutter SDK must be on PATH.** Fix: `cd flutter_mobile && dart format lib/ test/`
+9. **dart analyze (Flutter)** – Analyze `flutter_mobile/lib/` (fatal on warnings). **Flutter SDK must be on PATH.** Fix: resolve analysis issues in `flutter_mobile/`.
 
 ## Quick fix command
 

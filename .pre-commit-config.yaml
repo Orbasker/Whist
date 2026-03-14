@@ -60,22 +60,21 @@ repos:
         stages: [pre-commit]
 
   # ── Flutter (flutter_mobile) ─────────────────────────────────────────────
-  # Flutter SDK is provided via Docker image so the hook works without a host install.
-  # Requires Docker to be running. Repo is mounted at /src; workdir is /src.
+  # Requires Flutter SDK on PATH (e.g. from FVM or system install).
   - repo: local
     hooks:
       - id: dart-format
         name: dart format (Flutter)
-        language: docker_image
-        entry: ghcr.io/cirruslabs/flutter:stable bash -c "cd flutter_mobile && dart format --set-exit-if-changed lib/ test/"
+        language: system
+        entry: bash -c 'cd flutter_mobile && dart format --set-exit-if-changed lib/ test/'
         pass_filenames: false
         files: ^flutter_mobile/.*\.dart$
         stages: [pre-commit]
 
       - id: dart-analyze
         name: dart analyze (Flutter)
-        language: docker_image
-        entry: ghcr.io/cirruslabs/flutter:stable bash -c "cd flutter_mobile && flutter pub get && dart analyze lib/ --fatal-warnings"
+        language: system
+        entry: bash -c 'cd flutter_mobile && flutter pub get && dart analyze lib/ --fatal-warnings'
         pass_filenames: false
         files: ^flutter_mobile/
         stages: [pre-commit]
