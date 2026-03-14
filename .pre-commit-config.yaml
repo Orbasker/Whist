@@ -74,7 +74,7 @@ repos:
       - id: dart-analyze
         name: dart analyze (Flutter)
         language: system
-        entry: bash -c 'cd flutter_mobile && flutter pub get && dart analyze lib/ --fatal-warnings'
+        entry: bash -lc 'cd flutter_mobile && flutter analyze --fatal-warnings'
         pass_filenames: false
         files: ^flutter_mobile/
         stages: [pre-commit]

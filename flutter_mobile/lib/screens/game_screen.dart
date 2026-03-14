@@ -7,6 +7,7 @@ import '../providers/locale_provider.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../services/game_service.dart';
+import '../theme/app_colors.dart';
 import '../widgets/bidding_phase_content.dart';
 import '../widgets/invitation_form.dart';
 import '../widgets/round_history_screen.dart';
@@ -147,6 +148,10 @@ class _GameScreenState extends State<GameScreen> {
             ),
             title: Text(
               '${l10n.appBarTitleRounds(roundsPlayed)} · $phaseLabel',
+            ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Container(height: 1, color: AppColors.border),
             ),
             actions: [
               _RealtimeIndicator(isConnected: gameService.isRealtimeConnected),
@@ -323,7 +328,7 @@ class _RealtimeIndicator extends StatelessWidget {
             isConnected ? Icons.circle : Icons.circle_outlined,
             size: 10,
             color: isConnected
-                ? Theme.of(context).colorScheme.primary
+                ? AppColors.success
                 : Theme.of(context).colorScheme.outline,
           ),
         ),

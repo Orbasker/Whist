@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_strings.dart';
 import '../models/game_state.dart';
 import '../services/game_service.dart';
+import '../theme/app_colors.dart';
 import 'bid_input_grid.dart';
 import 'round_history_screen.dart';
 import 'score_table_sheet.dart';
@@ -384,13 +385,13 @@ class _PlayerBidCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: colorScheme.primaryContainer,
+                            color: AppColors.primary.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             AppStrings.biddingPhaseYou,
                             style: theme.textTheme.labelSmall?.copyWith(
-                              color: colorScheme.onPrimaryContainer,
+                              color: AppColors.primary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

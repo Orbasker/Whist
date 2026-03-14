@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/round.dart';
+import '../theme/app_colors.dart';
 
 /// Round history: table with round, trump, bid/took/change/before/after per player, total row. Aligned with Angular round-history.
 class RoundHistoryScreen extends StatelessWidget {
@@ -213,9 +214,9 @@ class RoundHistoryScreen extends StatelessWidget {
                     style: cellStyle.copyWith(
                       fontWeight: isChange ? FontWeight.w600 : null,
                       color: isChange && score > 0
-                          ? theme.colorScheme.primary
+                          ? AppColors.success
                           : isChange && score < 0
-                              ? theme.colorScheme.error
+                              ? AppColors.destructive
                               : col == 3
                                   ? theme.colorScheme.onSurfaceVariant
                                   : null,
@@ -230,7 +231,7 @@ class RoundHistoryScreen extends StatelessWidget {
         // Footer: Total row (one total per player in last column of each block)
         TableRow(
           decoration: BoxDecoration(
-            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+            color: AppColors.primary.withValues(alpha: 0.1),
             border: Border(
               top: BorderSide(color: theme.dividerColor, width: 2),
             ),
