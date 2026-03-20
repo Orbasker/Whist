@@ -53,7 +53,7 @@ export class GameComponent implements OnInit, OnDestroy {
     if (this.gameId) {
       this.loadGame(this.gameId);
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard']);
     }
 
     this.subscriptions.add(
@@ -104,7 +104,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.rounds = await this.gameService.getRounds(gameId);
     } catch (error) {
       console.error('Failed to load game:', error);
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -115,7 +115,7 @@ export class GameComponent implements OnInit, OnDestroy {
         this.gameService.loadGame(this.gameState.id);
       }
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -147,7 +147,7 @@ export class GameComponent implements OnInit, OnDestroy {
       await this.gameService.deleteGameAsync(this.gameState.id);
       localStorage.removeItem('whist_game_id');
       this.gameService.resetGame();
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard']);
     }
   }
 }

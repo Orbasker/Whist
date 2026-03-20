@@ -1,0 +1,224 @@
+<app-landing-header></app-landing-header>
+
+<main class="landing-page">
+  <!-- Hero Section -->
+  <section class="hero-section" aria-labelledby="hero-heading">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-gradient"></div>
+    </div>
+
+    <div class="hero-content">
+      <h1 id="hero-heading" class="hero-heading">
+        <span class="hero-heading-line">{{ 'landing.hero.titleLine1' | translate }}</span>
+        <span class="hero-heading-accent">
+          <span>{{ 'landing.hero.titleLine2' | translate }}</span>
+          <span>{{ 'landing.hero.titleLine3' | translate }}</span>
+        </span>
+      </h1>
+
+      <p class="hero-description">
+        {{ 'landing.hero.description' | translate }}
+      </p>
+
+      <div class="hero-actions">
+        <a routerLink="/login" class="btn-primary-gold">
+          {{ 'landing.hero.cta' | translate }}
+        </a>
+        <a
+          href="#the-table"
+          class="btn-text-link"
+          (click)="scrollTo('the-table'); $event.preventDefault()"
+        >
+          <span class="text-link-divider" aria-hidden="true"></span>
+          <span>{{ 'landing.hero.secondaryCta' | translate }}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Floating card visual -->
+    <div class="hero-card-visual" aria-hidden="true">
+      <div class="floating-card">
+        <div class="card-inner">
+          <span class="card-letter card-letter-top">A</span>
+          <span class="card-suit">&#9824;</span>
+          <span class="card-letter card-letter-bottom">A</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Table Section -->
+  <section id="the-table" class="table-section" aria-labelledby="table-heading">
+    <div class="section-header">
+      <h2 id="table-heading" class="section-title">{{ 'landing.table.title' | translate }}</h2>
+      <div class="section-accent-bar" aria-hidden="true"></div>
+      <p class="section-subtitle">{{ 'landing.table.subtitle' | translate }}</p>
+    </div>
+
+    <div class="table-grid">
+      <!-- Main gameplay card -->
+      <div class="gameplay-card">
+        <div class="gameplay-card-inner">
+          <div class="gameplay-card-header">
+            <div class="dealer-hand-badge">
+              <span class="dealer-hand-title">{{ 'landing.table.dealerHand' | translate }}</span>
+              <span class="dealer-hand-text">{{ 'landing.table.dealerDesc' | translate }}</span>
+            </div>
+            <div class="gameplay-dots" aria-hidden="true">
+              <span class="dot dot-active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+
+          <!-- Visual card overlap -->
+          <div class="cards-overlap">
+            <div class="playing-card card-left">
+              <span class="pc-rank red">K</span>
+              <span class="pc-suit red">&#9829;</span>
+              <span class="pc-rank-bottom red">K</span>
+            </div>
+            <div class="playing-card card-center">
+              <span class="pc-rank">J</span>
+              <span class="pc-suit">&#9824;</span>
+              <span class="pc-rank-bottom">J</span>
+            </div>
+            <div class="playing-card card-right">
+              <span class="pc-rank">10</span>
+              <span class="pc-suit">&#9827;</span>
+              <span class="pc-rank-bottom">10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info cards -->
+      <div class="info-cards">
+        <div class="info-card info-card-amber">
+          <span class="info-card-icon" aria-hidden="true">&#9824;&#9829;</span>
+          <h3 class="info-card-title">{{ 'landing.table.fourPlayers' | translate }}</h3>
+          <p class="info-card-text">{{ 'landing.table.fourPlayersDesc' | translate }}</p>
+        </div>
+        <div class="info-card info-card-green">
+          <span class="info-card-icon" aria-hidden="true">&#9827;&#9830;</span>
+          <h3 class="info-card-title">{{ 'landing.table.trickTaking' | translate }}</h3>
+          <p class="info-card-text">{{ 'landing.table.trickTakingDesc' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Ledger Section -->
+  <section id="the-ledger" class="ledger-section" aria-labelledby="ledger-heading">
+    <div class="ledger-grid">
+      <div class="ledger-content">
+        <h2 id="ledger-heading" class="section-title">
+          {{ 'landing.ledger.title' | translate }}<br />
+          <span class="section-title-italic">{{ 'landing.ledger.subtitle' | translate }}</span>
+        </h2>
+        <p class="ledger-description">{{ 'landing.ledger.description' | translate }}</p>
+
+        <!-- Leaderboard preview -->
+        <div class="leaderboard-preview">
+          <div class="leaderboard-row leaderboard-row-1">
+            <div class="leaderboard-rank">
+              <span class="rank-icon" aria-hidden="true">&#127942;</span>
+              <span class="rank-name">{{ 'landing.ledger.player1' | translate }}</span>
+            </div>
+            <span class="rank-score rank-score-top">2,480 PTS</span>
+          </div>
+          <div class="leaderboard-row leaderboard-row-2">
+            <div class="leaderboard-rank">
+              <span class="rank-icon" aria-hidden="true">&#129352;</span>
+              <span class="rank-name">{{ 'landing.ledger.player2' | translate }}</span>
+            </div>
+            <span class="rank-score">2,150 PTS</span>
+          </div>
+          <div class="leaderboard-row leaderboard-row-3">
+            <div class="leaderboard-rank">
+              <span class="rank-icon" aria-hidden="true">&#129353;</span>
+              <span class="rank-name">{{ 'landing.ledger.player3' | translate }}</span>
+            </div>
+            <span class="rank-score">1,990 PTS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats visualization card -->
+      <div class="stats-card">
+        <div class="stats-card-inner">
+          <div class="stats-overlay">
+            <div class="stats-content">
+              <span class="stats-label">{{ 'landing.ledger.seasonalYield' | translate }}</span>
+              <span class="stats-value">74.2%</span>
+            </div>
+            <div class="stats-progress">
+              <div class="stats-progress-bar" style="width: 74.2%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Rules Section -->
+  <section id="the-rules" class="rules-section" aria-labelledby="rules-heading">
+    <h2 id="rules-heading" class="sr-only">{{ 'landing.rules.sectionTitle' | translate }}</h2>
+    <div class="rules-grid">
+      <article class="rule-item">
+        <span class="rule-number">01.</span>
+        <h3 class="rule-title">{{ 'landing.rules.dealTitle' | translate }}</h3>
+        <div class="rule-divider"></div>
+        <p class="rule-text">{{ 'landing.rules.dealText' | translate }}</p>
+      </article>
+      <article class="rule-item">
+        <span class="rule-number">02.</span>
+        <h3 class="rule-title">{{ 'landing.rules.playTitle' | translate }}</h3>
+        <div class="rule-divider"></div>
+        <p class="rule-text">{{ 'landing.rules.playText' | translate }}</p>
+      </article>
+      <article class="rule-item">
+        <span class="rule-number">03.</span>
+        <h3 class="rule-title">{{ 'landing.rules.scoreTitle' | translate }}</h3>
+        <div class="rule-divider"></div>
+        <p class="rule-text">{{ 'landing.rules.scoreText' | translate }}</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section" aria-labelledby="cta-heading">
+    <div class="cta-content">
+      <h2 id="cta-heading" class="cta-title">{{ 'landing.cta.title' | translate }}</h2>
+      <p class="cta-description">{{ 'landing.cta.description' | translate }}</p>
+      <div class="cta-buttons">
+        <a routerLink="/login" class="btn-primary-gold">
+          {{ 'landing.cta.primaryBtn' | translate }}
+        </a>
+        <a routerLink="/login" class="btn-glass">
+          {{ 'landing.cta.secondaryBtn' | translate }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">{{ 'landing.brandName' | translate }}</span>
+        <span class="footer-copyright"
+          >&copy; 2024 {{ 'landing.brandName' | translate }}.
+          {{ 'landing.footer.rights' | translate }}</span
+        >
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#the-rules" (click)="scrollTo('the-rules'); $event.preventDefault()">{{
+          'landing.nav.theRules' | translate
+        }}</a>
+        <a routerLink="/login">{{ 'landing.footer.membership' | translate }}</a>
+        <a href="mailto:contact&#64;orbasker.com">{{ 'landing.footer.contact' | translate }}</a>
+      </nav>
+    </div>
+  </footer>
+</main>

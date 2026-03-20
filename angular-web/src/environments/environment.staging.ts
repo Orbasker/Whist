@@ -9,4 +9,6 @@ export const environment = {
   useSupabaseRealtime: true,
   supabaseUrl: '',
   supabaseAnonKey: '',
+  gaMeasurementId: '',
+  googleAdsId: '',
 };

@@ -55,3 +55,8 @@ invalid-method-override = "ignore"
 [tool.ty.src]
 # Exclude tests so `ty check .` does not require resolving pytest in CI
 exclude = ["tests"]
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8.20",
+]
