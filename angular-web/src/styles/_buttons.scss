@@ -1,4 +1,4 @@
-/* Shared button styles: same size/height and visual weight across the app */
+/* Neon Conservatory button system */
 
 .btn {
   display: inline-flex;
@@ -13,11 +13,7 @@
   border-radius: var(--btn-radius);
   border: none;
   cursor: pointer;
-  transition:
-    background-color 0.2s,
-    color 0.2s,
-    border-color 0.2s,
-    opacity 0.2s;
+  transition: all 0.2s;
 
   &:disabled {
     opacity: 0.6;
@@ -28,6 +24,10 @@
     outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
   }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
 }
 
 /* Icon-only button: square touch target */
@@ -37,56 +37,70 @@
 }
 
 .btn-primary {
-  background: #d97706; /* amber-600 */
-  color: white;
+  background: linear-gradient(135deg, #14b8ff, #8ad0ff);
+  color: #004564;
+  box-shadow: 0 4px 16px rgba(20, 184, 255, 0.2);
+
   &:hover:not(:disabled) {
-    background: #f59e0b; /* amber-500 */
+    filter: brightness(1.1);
+    box-shadow: 0 6px 24px rgba(20, 184, 255, 0.3);
   }
+
   &:disabled {
-    background: var(--bg-tertiary);
+    background: #2a3548;
+    box-shadow: none;
+    color: #87929b;
   }
 }
 
 .btn-secondary {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  background: rgba(42, 53, 72, 0.5);
+  color: #d8e3fb;
+  border: 1px solid rgba(62, 72, 80, 0.2);
+
   &:hover:not(:disabled) {
-    background: #475569;
+    background: rgba(42, 53, 72, 0.8);
   }
 }
 
 .btn-danger {
-  background: #dc2626;
-  color: white;
+  background: rgba(147, 0, 10, 0.2);
+  color: #ffb4ab;
+  border: 1px solid rgba(255, 180, 171, 0.1);
+
   &:hover:not(:disabled) {
-    background: #ef4444;
+    background: rgba(147, 0, 10, 0.3);
   }
 }
 
 .btn-success {
-  background: #16a34a;
-  color: white;
+  background: rgba(0, 185, 84, 0.2);
+  color: #4ae176;
+  border: 1px solid rgba(74, 225, 118, 0.1);
+
   &:hover:not(:disabled) {
-    background: #22c55e;
+    background: rgba(0, 185, 84, 0.3);
   }
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--accent-secondary);
+  color: #8ad0ff;
+
   &:hover:not(:disabled) {
-    color: var(--accent-primary);
+    background: rgba(20, 184, 255, 0.08);
+    color: #14b8ff;
   }
 }
 
-/* Compact action buttons in lists (invite, delete) – same height, slightly smaller padding */
+/* Compact action buttons in lists */
 .btn-compact {
   padding: 0.5rem 0.75rem;
   font-size: 0.8125rem;
   min-height: var(--btn-min-height);
 }
 
-/* Game card actions: same size for Invite, Delete, Active/Completed – color only differs */
+/* Game card actions */
 .game-card-action {
   min-width: 7rem;
 }
@@ -105,7 +119,6 @@
   color: white;
 }
 
-/* Narrow screens: smaller min-width so three actions fit without squishing content */
 @media (max-width: 480px) {
   .game-card-action,
   .game-card-action-pill {

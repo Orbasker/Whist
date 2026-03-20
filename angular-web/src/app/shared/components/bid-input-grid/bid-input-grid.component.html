@@ -7,13 +7,13 @@
       [disabled]="disabled"
       [attr.aria-pressed]="selectedBid === num"
       [attr.aria-label]="'הימור ' + num"
-      [class.bg-primary]="selectedBid === num"
-      [class.text-primary-foreground]="selectedBid === num"
-      [class.bg-muted]="selectedBid !== num"
-      [class.text-muted-foreground]="selectedBid !== num"
-      [class.opacity-50]="disabled"
-      [class.cursor-not-allowed]="disabled"
-      class="min-h-touch min-w-[2.25rem] rounded-xl px-2 py-2.5 font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:opacity-90 sm:min-w-0 sm:px-3 sm:py-2 sm:text-base"
+      class="h-10 w-10 sm:h-11 sm:w-11 rounded-full font-bold text-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background flex items-center justify-center"
+      [ngClass]="{
+        'bg-tertiary text-on-tertiary shadow-[0_0_12px_rgba(241,196,0,0.25)]': selectedBid === num,
+        'bg-surface-container-highest text-on-surface-variant hover:bg-surface-bright':
+          selectedBid !== num && !disabled,
+        'bg-surface-container-highest/50 text-on-surface-variant/40 cursor-not-allowed': disabled,
+      }"
     >
       {{ num }}
     </button>

@@ -4,31 +4,10 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
-import { UiButtonComponent } from '../../shared/components/ui/button/button.component';
-import {
-  UiCardComponent,
-  UiCardContentComponent,
-  UiCardHeaderComponent,
-  UiCardTitleComponent,
-} from '../../shared/components/ui/card/card.component';
-import { UiInputComponent } from '../../shared/components/ui/input/input.component';
-import { UiLabelComponent } from '../../shared/components/ui/label/label.component';
-
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    UiButtonComponent,
-    UiCardComponent,
-    UiCardHeaderComponent,
-    UiCardTitleComponent,
-    UiCardContentComponent,
-    UiInputComponent,
-    UiLabelComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })

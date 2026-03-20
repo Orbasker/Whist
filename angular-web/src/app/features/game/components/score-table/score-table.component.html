@@ -16,27 +16,22 @@
       type="button"
       (click)="onClose()"
       [attr.aria-label]="'common.close' | translate"
-      class="btn btn-icon score-table-close"
+      class="score-table-close"
     >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
+      <span class="material-symbols-outlined text-xl">close</span>
     </button>
   </div>
   <div class="score-table-body">
     <div *ngIf="gameState" class="space-y-4">
-      <div class="rounded-lg border border-border bg-muted/50 p-3 sm:p-4">
-        <h3 class="mb-3 text-base font-semibold text-foreground sm:text-lg">
+      <div class="bg-surface-container-low rounded-2xl p-3 sm:p-4">
+        <h3 class="mb-3 text-base font-semibold text-on-surface sm:text-lg">
           {{ 'game.scoreTable.currentScore' | translate }}
         </h3>
         <div class="grid grid-cols-2 gap-3">
           <div *ngFor="let player of gameState.players; let i = index" class="text-center">
-            <div class="mb-1 flex items-center justify-center gap-1 text-sm text-muted-foreground">
+            <div
+              class="mb-1 flex items-center justify-center gap-1 text-sm text-on-surface-variant"
+            >
               <ng-container *ngIf="editingPlayerIndex !== i">
                 <span>{{ player }}</span>
                 <button
@@ -47,14 +42,7 @@
                   [attr.aria-label]="'game.scoreTable.editNameTitle' | translate"
                   [title]="'game.scoreTable.editNameTitle' | translate"
                 >
-                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    />
-                  </svg>
+                  <span class="material-symbols-outlined text-sm">edit</span>
                 </button>
               </ng-container>
               <ng-container *ngIf="editingPlayerIndex === i">
@@ -64,15 +52,15 @@
                   (keydown.enter)="savePlayerName()"
                   (keydown.escape)="cancelEditName()"
                   (blur)="savePlayerName()"
-                  class="w-24 rounded border border-border bg-muted px-2 py-0.5 text-sm text-foreground"
+                  class="w-24 rounded-full bg-surface-container-low px-3 py-0.5 text-sm text-on-surface ring-1 ring-outline-variant/20 focus:ring-2 focus:ring-primary/50"
                 />
               </ng-container>
             </div>
             <div
               class="text-xl font-bold sm:text-2xl"
-              [class.text-success]="gameState.scores[i] > 0"
+              [class.text-secondary]="gameState.scores[i] > 0"
               [class.text-destructive]="gameState.scores[i] < 0"
-              [class.text-foreground]="gameState.scores[i] === 0"
+              [class.text-on-surface]="gameState.scores[i] === 0"
             >
               {{ gameState.scores[i] }}
             </div>
@@ -80,18 +68,15 @@
         </div>
       </div>
 
-      <div class="text-center text-sm text-muted-foreground">
+      <div class="text-center text-sm text-on-surface-variant">
         {{ 'game.scoreTable.roundsPlayed' | translate: { current: gameState.current_round - 1 } }}
       </div>
 
-      <div
-        *ngIf="canProposeOrVoteReset"
-        class="rounded-lg border border-border bg-muted/50 p-4 space-y-2"
-      >
-        <h3 class="text-sm font-semibold text-foreground">
+      <div *ngIf="canProposeOrVoteReset" class="bg-surface-container-low rounded-2xl p-4 space-y-2">
+        <h3 class="text-sm font-semibold text-on-surface">
           {{ 'game.scoreTable.resetGame' | translate }}
         </h3>
-        <p class="text-xs text-muted-foreground">
+        <p class="text-xs text-on-surface-variant">
           {{ 'game.scoreTable.resetDescription' | translate }}
         </p>
         <div *ngIf="!resetRequestedAt" class="flex gap-2">
@@ -99,13 +84,13 @@
             type="button"
             (click)="onRequestReset()"
             [disabled]="resetLoading"
-            class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+            class="rounded-full btn-gradient px-4 py-2 text-sm font-bold transition-all active:scale-[0.98] disabled:opacity-50"
           >
             {{ 'game.scoreTable.proposeReset' | translate }}
           </button>
         </div>
         <div *ngIf="resetRequestedAt" class="space-y-2">
-          <p class="text-xs text-muted-foreground">
+          <p class="text-xs text-on-surface-variant">
             {{
               'game.scoreTable.voteOpen'
                 | translate: { count: gameState.reset_vote_user_ids?.length ?? 0 }
@@ -116,11 +101,11 @@
             *ngIf="!hasVotedReset"
             (click)="onVoteReset()"
             [disabled]="resetLoading"
-            class="rounded-lg bg-success px-4 py-2 text-sm font-semibold text-success-foreground transition-colors hover:bg-success/90 disabled:opacity-50"
+            class="rounded-full bg-secondary/15 px-4 py-2 text-sm font-bold text-secondary transition-colors hover:bg-secondary/25 disabled:opacity-50"
           >
             {{ 'game.scoreTable.voteYes' | translate }}
           </button>
-          <span *ngIf="hasVotedReset" class="text-sm text-success">{{
+          <span *ngIf="hasVotedReset" class="text-sm text-secondary">{{
             'game.scoreTable.votedYes' | translate
           }}</span>
           <button
@@ -128,7 +113,7 @@
             *ngIf="isGameOwner"
             (click)="onCancelResetRequest()"
             [disabled]="resetLoading"
-            class="rounded-lg bg-muted px-4 py-2 text-sm text-foreground transition-colors hover:bg-muted/80 disabled:opacity-50"
+            class="rounded-full bg-surface-container-highest/50 px-4 py-2 text-sm text-on-surface transition-colors hover:bg-surface-container-highest disabled:opacity-50"
           >
             {{ 'game.scoreTable.cancelReset' | translate }}
           </button>
@@ -141,14 +126,14 @@
         type="button"
         *ngIf="isGameOwner"
         (click)="onDeleteGameClick()"
-        class="min-h-touch rounded-lg bg-destructive px-4 py-2.5 text-sm font-semibold text-destructive-foreground transition-colors hover:bg-destructive/90"
+        class="min-h-touch rounded-full bg-error-container/20 px-4 py-2.5 text-sm font-bold text-destructive transition-colors hover:bg-error-container/30 border border-destructive/10"
       >
         {{ 'game.scoreTable.deleteGame' | translate }}
       </button>
       <button
         type="button"
         (click)="onClose()"
-        class="min-h-touch rounded-lg bg-muted px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/80"
+        class="min-h-touch rounded-full bg-surface-container-highest/50 px-4 py-2.5 text-sm font-semibold text-on-surface transition-colors hover:bg-surface-container-highest"
       >
         {{ 'common.close' | translate }}
       </button>

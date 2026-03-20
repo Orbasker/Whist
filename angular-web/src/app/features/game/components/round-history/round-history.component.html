@@ -1,6 +1,6 @@
 <app-modal [title]="'game.roundHistory' | translate" size="full" (close)="onClose()">
   <div class="round-history-root flex min-h-0 flex-1 flex-col overflow-hidden">
-    <div *ngIf="rounds.length === 0" class="py-12 px-6 text-center text-muted-foreground">
+    <div *ngIf="rounds.length === 0" class="py-12 px-6 text-center text-on-surface-variant">
       {{ 'game.roundsEmpty' | translate }}
     </div>
 
@@ -13,61 +13,63 @@
           class="round-history-table min-w-[640px] w-full border-collapse text-right text-xs sm:text-sm"
         >
           <thead class="round-history-thead">
-            <tr class="border-b-2 border-border text-muted-foreground">
-              <th class="sticky left-0 z-10 w-16 bg-card py-3 pl-2 pr-4 font-semibold">
+            <tr class="text-on-surface-variant">
+              <th
+                class="sticky left-0 z-10 w-16 bg-surface-container-lowest py-3 pl-2 pr-4 font-semibold"
+              >
                 {{ 'game.roundHistoryTable.round' | translate }}
               </th>
-              <th class="w-12 bg-card py-3 px-2 text-center font-semibold">
+              <th class="w-12 bg-surface-container-lowest py-3 px-2 text-center font-semibold">
                 {{ 'game.roundHistoryTable.card' | translate }}
               </th>
               <ng-container *ngFor="let player of players; let pi = index">
                 <th
                   colspan="5"
-                  class="border-r border-border bg-card py-2 px-1 text-center font-semibold"
+                  class="bg-surface-container-lowest py-2 px-1 text-center font-semibold"
                   [ngClass]="{
-                    'bg-primary/15 text-primary-foreground border-primary/40': isCurrentPlayer(pi),
+                    'bg-primary/10 text-primary': isCurrentPlayer(pi),
                   }"
                 >
                   <span>{{ player }}</span>
                   <span
                     *ngIf="isCurrentPlayer(pi)"
-                    class="mr-1 ml-1 inline-block rounded-full bg-primary/30 px-2 py-0.5 text-xs font-medium"
+                    class="mr-1 ml-1 inline-block rounded-full bg-primary/20 px-2 py-0.5 text-xs font-medium"
                     >{{ 'common.you' | translate }}</span
                   >
                 </th>
               </ng-container>
             </tr>
-            <tr class="border-b border-border text-muted-foreground">
-              <th class="sticky left-0 z-10 bg-card py-2 pl-2 pr-4"></th>
-              <th class="bg-card py-2 px-2"></th>
+            <tr class="text-on-surface-variant/60">
+              <th class="sticky left-0 z-10 bg-surface-container-lowest py-2 pl-2 pr-4"></th>
+              <th class="bg-surface-container-lowest py-2 px-2"></th>
               <ng-container *ngFor="let player of players; let pi = index">
                 <th
-                  class="border-r border-border/80 bg-card py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-muted/30': isCurrentPlayer(pi) }"
+                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ 'game.roundHistoryTable.bid' | translate }}
                 </th>
                 <th
-                  class="border-r border-border/80 bg-card py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-muted/30': isCurrentPlayer(pi) }"
+                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ 'game.roundHistoryTable.took' | translate }}
                 </th>
                 <th
-                  class="border-r border-border/80 bg-card py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-muted/30': isCurrentPlayer(pi) }"
+                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ 'game.roundHistoryTable.change' | translate }}
                 </th>
                 <th
-                  class="border-r border-border/80 bg-card py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-muted/30': isCurrentPlayer(pi) }"
+                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ 'game.roundHistoryTable.before' | translate }}
                 </th>
                 <th
-                  class="border-r border-border/80 bg-card py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-muted/30': isCurrentPlayer(pi) }"
+                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ 'game.roundHistoryTable.after' | translate }}
                 </th>
@@ -77,9 +79,11 @@
           <tbody>
             <tr
               *ngFor="let round of rounds; let ri = index"
-              class="border-b border-border transition-colors hover:bg-muted/40"
+              class="transition-colors hover:bg-surface-container-low/50"
             >
-              <td class="sticky left-0 z-10 bg-card py-2.5 pl-2 pr-4 font-medium text-foreground">
+              <td
+                class="sticky left-0 z-10 bg-surface-container-lowest py-2.5 pl-2 pr-4 font-medium text-on-surface"
+              >
                 {{ round.round_number }}
               </td>
               <td class="py-2.5 px-2 text-center text-lg">
@@ -87,37 +91,37 @@
               </td>
               <ng-container *ngFor="let player of players; let pi = index">
                 <td
-                  class="border-r border-border/80 py-2.5 px-1.5 text-center text-foreground/90"
-                  [ngClass]="{ 'bg-primary/10': isCurrentPlayer(pi) }"
+                  class="py-2.5 px-1.5 text-center text-on-surface/90"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ round.bids[pi] }}
                 </td>
                 <td
-                  class="border-r border-border/80 py-2.5 px-1.5 text-center text-foreground/90"
-                  [ngClass]="{ 'bg-primary/10': isCurrentPlayer(pi) }"
+                  class="py-2.5 px-1.5 text-center text-on-surface/90"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ round.tricks[pi] }}
                 </td>
                 <td
-                  class="border-r border-border/80 py-2.5 px-1.5 text-center font-semibold tabular-nums"
+                  class="py-2.5 px-1.5 text-center font-semibold tabular-nums"
                   [ngClass]="{
-                    'bg-primary/10': isCurrentPlayer(pi),
-                    'text-success': round.scores[pi] > 0,
+                    'bg-primary/5': isCurrentPlayer(pi),
+                    'text-secondary': round.scores[pi] > 0,
                     'text-destructive': round.scores[pi] < 0,
-                    'text-muted-foreground': round.scores[pi] === 0,
+                    'text-on-surface-variant': round.scores[pi] === 0,
                   }"
                 >
                   {{ formatGainLoss(round.scores[pi]) }}
                 </td>
                 <td
-                  class="border-r border-border/80 py-2.5 px-1.5 text-center tabular-nums text-muted-foreground"
-                  [ngClass]="{ 'bg-primary/10': isCurrentPlayer(pi) }"
+                  class="py-2.5 px-1.5 text-center tabular-nums text-on-surface-variant"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ getScoreBefore(ri, pi) }}
                 </td>
                 <td
-                  class="border-r border-border/80 py-2.5 px-1.5 text-center font-medium tabular-nums text-foreground/90"
-                  [ngClass]="{ 'bg-primary/10': isCurrentPlayer(pi) }"
+                  class="py-2.5 px-1.5 text-center font-medium tabular-nums text-on-surface/90"
+                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
                 >
                   {{ getScoreAfter(ri, pi) }}
                 </td>
@@ -125,17 +129,18 @@
             </tr>
           </tbody>
           <tfoot class="round-history-tfoot">
-            <tr class="border-t-2 border-primary/50 bg-card font-semibold text-foreground">
-              <td class="sticky left-0 z-10 bg-card py-3 pl-2 pr-4">
+            <tr class="bg-surface-container-low font-semibold text-on-surface">
+              <td class="sticky left-0 z-10 bg-surface-container-low py-3 pl-2 pr-4">
                 {{ 'game.roundSummary.total' | translate }}
               </td>
-              <td class="bg-card py-3 px-2"></td>
+              <td class="bg-surface-container-low py-3 px-2"></td>
               <ng-container *ngFor="let player of players; let pi = index">
                 <td
                   colspan="5"
-                  class="border-r border-border py-3 px-2 text-center tabular-nums"
+                  class="py-3 px-2 text-center tabular-nums"
                   [ngClass]="{
-                    'bg-primary/15 text-primary-foreground': isCurrentPlayer(pi),
+                    'bg-primary/10 text-primary': isCurrentPlayer(pi),
+                    'bg-surface-container-low': !isCurrentPlayer(pi),
                   }"
                 >
                   {{ rounds.length > 0 ? getScoreAfter(rounds.length - 1, pi) : '—' }}

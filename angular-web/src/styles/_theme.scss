@@ -1,9 +1,86 @@
+/* Neon Conservatory — atmospheric depth background */
 body {
-  background: linear-gradient(
-    to bottom right,
-    var(--bg-primary),
-    var(--bg-secondary),
-    var(--bg-primary)
-  );
+  background: #081425;
   min-height: 100vh;
+  position: relative;
+}
+
+/* Ambient light orbs for atmospheric depth */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  top: -10%;
+  left: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(20, 184, 255, 0.06) 0%, transparent 70%);
+  filter: blur(80px);
+}
+
+body::after {
+  bottom: -10%;
+  right: -10%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, rgba(74, 225, 118, 0.03) 0%, transparent 70%);
+  filter: blur(60px);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(42, 53, 72, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* Neon glow for headings */
+.neon-glow {
+  text-shadow:
+    0 0 10px rgba(20, 184, 255, 0.5),
+    0 0 20px rgba(20, 184, 255, 0.3);
+}
+
+/* Gradient CTA button */
+.btn-gradient {
+  background: linear-gradient(135deg, #14b8ff, #8ad0ff);
+  color: #004564;
+  font-weight: 700;
+  border: none;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Ghost border for accessibility (15% opacity outline-variant) */
+.ghost-border {
+  border: 1px solid rgba(62, 72, 80, 0.15);
+}
+
+/* Material Symbols baseline */
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  vertical-align: middle;
 }

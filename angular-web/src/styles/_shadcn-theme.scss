@@ -1,35 +1,41 @@
 /**
- * Whist – distinct dark theme (not generic slate+amber).
- * Deep blue base + sky accent; softer radii and clear hierarchy.
+ * Whist – "Neon Conservatory" design system from Stitch.
+ * Deep navy base + electric teal primary + gold tertiary + green secondary.
  */
 :root {
   /* Core palette (space-separated HSL for Tailwind opacity modifiers) */
-  --background: 212 39% 10%;
-  --foreground: 210 40% 96%;
-  --card: 214 35% 16%;
-  --card-foreground: 210 40% 96%;
-  --popover: 214 35% 16%;
-  --popover-foreground: 210 40% 96%;
-  --primary: 199 89% 46%;
-  --primary-foreground: 212 39% 10%;
-  --secondary: 203 40% 21%;
-  --secondary-foreground: 210 40% 96%;
-  --muted: 203 40% 21%;
-  --muted-foreground: 215 20% 65%;
-  --accent: 203 40% 21%;
-  --accent-foreground: 210 40% 96%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 86% 97%;
-  --success: 142 71% 45%;
-  --success-foreground: 142 71% 11%;
-  --border: 203 40% 21%;
-  --input: 203 40% 21%;
-  --ring: 199 89% 46%;
-  /* Softer, more rounded */
+  --background: 214 72% 8%; /* #081425 */
+  --foreground: 220 74% 91%; /* #d8e3fb */
+  --card: 214 31% 17%; /* #1f2a3c */
+  --card-foreground: 220 74% 91%;
+  --popover: 214 31% 17%;
+  --popover-foreground: 220 74% 91%;
+  --primary: 199 100% 54%; /* #14b8ff (container) */
+  --primary-foreground: 200 100% 15%; /* #004564 */
+  --secondary: 140 71% 59%; /* #4ae176 */
+  --secondary-foreground: 146 100% 11%; /* #003915 */
+  --muted: 214 40% 13%; /* #152031 */
+  --muted-foreground: 207 13% 77%; /* #bdc8d2 */
+  --accent: 214 40% 13%;
+  --accent-foreground: 220 74% 91%;
+  --destructive: 0 84% 60%; /* #ffb4ab */
+  --destructive-foreground: 0 100% 29%;
+  --success: 140 71% 59%; /* #4ae176 */
+  --success-foreground: 146 100% 11%;
+  --tertiary: 49 100% 47%; /* #f1c400 */
+  --tertiary-foreground: 42 100% 12%;
+  --border: 207 13% 27%; /* #3e4850 */
+  --input: 214 40% 13%;
+  --ring: 199 100% 54%;
+
+  /* Radius — more rounded for Neon Conservatory */
   --radius: 0.75rem;
   --radius-lg: 1rem;
   --radius-sm: 0.5rem;
-  /* Legacy names for modal, score-table, etc. (use hsl() where full color needed) */
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Legacy aliases */
   --bg-primary: hsl(var(--background));
   --bg-secondary: hsl(var(--card));
   --bg-tertiary: hsl(var(--muted));
@@ -39,5 +45,5 @@
   --input-border: hsl(var(--border));
   --input-border-focus: hsl(var(--primary));
   --input-bg: hsl(var(--muted));
-  --modal-backdrop: rgba(0, 0, 0, 0.55);
+  --modal-backdrop: rgba(0, 0, 0, 0.6);
 }
