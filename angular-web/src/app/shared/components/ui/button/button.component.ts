@@ -27,7 +27,7 @@ export class UiButtonComponent {
     const v = this.variant();
     const map: Record<ButtonVariant, string> = {
       default:
-        'bg-gradient-to-br from-primary-container to-primary text-on-primary-container shadow-lg shadow-primary-container/20',
+        'bg-secondary-container text-on-secondary-container shadow-lg shadow-secondary-container/20 hover:bg-secondary',
       destructive:
         'bg-error-container/20 text-destructive border border-destructive/10 hover:bg-error-container/30',
       outline:

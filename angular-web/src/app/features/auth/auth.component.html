@@ -1,31 +1,19 @@
-<!-- Background layers -->
-<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-  <div
-    class="absolute inset-0 bg-gradient-to-br from-surface-container-lowest via-background to-surface-container-low"
-  ></div>
-  <div
-    class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px]"
-  ></div>
-  <div
-    class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[100px]"
-  ></div>
-</div>
+<!-- Felt-gradient background -->
+<div class="fixed inset-0 z-0 felt-gradient pointer-events-none"></div>
 
 <main class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 py-12">
   <!-- Brand header -->
   <div class="mb-12 text-center">
     <div
-      class="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-surface-container-highest/50 backdrop-blur-md ring-1 ring-outline-variant/20 shadow-2xl"
+      class="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-surface-container-highest/50 ghost-border shadow-2xl"
     >
       <span
-        class="material-symbols-outlined text-4xl text-primary"
+        class="material-symbols-outlined text-4xl text-secondary"
         style="font-variation-settings: 'FILL' 1"
         >playing_cards</span
       >
     </div>
-    <h1
-      class="text-5xl md:text-6xl font-black tracking-tighter uppercase neon-glow text-primary-container"
-    >
+    <h1 class="text-5xl md:text-6xl font-headline font-bold tracking-tight italic text-primary">
       WHIST
     </h1>
     <p class="mt-4 text-on-surface-variant font-medium tracking-widest uppercase text-xs">
@@ -33,27 +21,22 @@
     </p>
   </div>
 
-  <!-- Login container (Glassmorphism) -->
+  <!-- Login container -->
   <div
-    class="w-full max-w-md bg-surface-variant/40 backdrop-blur-2xl rounded-[2rem] p-8 md:p-10 shadow-[0px_24px_48px_rgba(0,0,0,0.4)] ring-1 ring-white/5 relative overflow-hidden"
+    class="w-full max-w-md glass-panel ghost-border rounded-2xl p-8 md:p-10 shadow-[0px_24px_48px_rgba(0,0,0,0.4)] relative overflow-hidden"
   >
-    <!-- Subtle accent highlight -->
-    <div
-      class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"
-    ></div>
-
     <div class="space-y-8">
       <!-- Error message -->
       <div
         *ngIf="errorMessage"
         role="alert"
-        class="rounded-2xl bg-error-container/20 px-4 py-3 text-sm text-on-error-container border border-error-container/10"
+        class="rounded-xl bg-error-container/20 px-4 py-3 text-sm text-on-error-container border border-error-container/10"
       >
         {{ errorMessage }}
       </div>
 
       <div class="text-center">
-        <h2 class="text-2xl font-bold tracking-tight text-on-surface">
+        <h2 class="text-2xl font-headline font-bold tracking-tight text-secondary">
           {{ (isLoginMode ? 'auth.signIn' : 'auth.signUp') | translate }}
         </h2>
         <p class="text-on-surface-variant text-sm mt-2">{{ 'auth.welcomeBack' | translate }}</p>
@@ -66,7 +49,7 @@
             type="button"
             (click)="onGoogleSignIn()"
             [disabled]="isLoading"
-            class="w-full h-14 bg-white text-surface-container-lowest rounded-full font-bold flex items-center justify-center gap-3 active:scale-95 transition-all duration-200 shadow-xl disabled:opacity-50"
+            class="w-full h-14 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface rounded-xl font-bold flex items-center justify-center gap-3 active:scale-[0.98] transition-all duration-200 ghost-border disabled:opacity-50"
           >
             <svg class="h-6 w-6 shrink-0" viewBox="0 0 24 24">
               <path
@@ -94,7 +77,7 @@
             type="button"
             (click)="onGitHubSignIn()"
             [disabled]="isLoading"
-            class="w-full h-14 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface rounded-full font-bold flex items-center justify-center gap-3 active:scale-95 transition-all duration-200 ring-1 ring-outline-variant/20 disabled:opacity-50"
+            class="w-full h-14 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface rounded-xl font-bold flex items-center justify-center gap-3 active:scale-[0.98] transition-all duration-200 ghost-border disabled:opacity-50"
           >
             <svg class="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -108,19 +91,19 @@
 
         <!-- Divider -->
         <div class="flex items-center gap-4">
-          <div class="flex-1 h-[1px] bg-outline-variant/20"></div>
+          <div class="flex-1 h-[1px] bg-outline-variant/30"></div>
           <span
             class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60"
             >{{ 'auth.or' | translate }}</span
           >
-          <div class="flex-1 h-[1px] bg-outline-variant/20"></div>
+          <div class="flex-1 h-[1px] bg-outline-variant/30"></div>
         </div>
       </ng-container>
 
       <!-- Login Form -->
       <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-4">
         <div class="relative group">
-          <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <span
               class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
               >alternate_email</span
@@ -131,7 +114,7 @@
             type="email"
             formControlName="email"
             [placeholder]="'auth.enterEmail' | translate"
-            class="w-full h-14 bg-surface-container-low/50 border-none rounded-full pl-14 pr-6 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
             [class.ring-2]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
             [class.ring-red-400]="
               loginForm.get('email')?.invalid && loginForm.get('email')?.touched
@@ -140,7 +123,7 @@
         </div>
         <p
           *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-          class="text-sm text-destructive px-6"
+          class="text-sm text-destructive px-4"
         >
           <span *ngIf="loginForm.get('email')?.errors?.['required']">{{
             'auth.emailRequired' | translate
@@ -151,7 +134,7 @@
         </p>
 
         <div class="relative group">
-          <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <span
               class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
               >lock</span
@@ -162,7 +145,7 @@
             type="password"
             formControlName="password"
             [placeholder]="'auth.enterPassword' | translate"
-            class="w-full h-14 bg-surface-container-low/50 border-none rounded-full pl-14 pr-6 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
             [class.ring-2]="
               loginForm.get('password')?.invalid && loginForm.get('password')?.touched
             "
@@ -173,7 +156,7 @@
         </div>
         <p
           *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-          class="text-sm text-destructive px-6"
+          class="text-sm text-destructive px-4"
         >
           <span *ngIf="loginForm.get('password')?.errors?.['required']">{{
             'auth.passwordRequired' | translate
@@ -186,7 +169,7 @@
         <button
           type="submit"
           [disabled]="loginForm.invalid || isLoading"
-          class="w-full h-14 btn-gradient rounded-full font-extrabold text-sm uppercase tracking-widest shadow-lg shadow-primary-container/20 active:scale-95 transition-all duration-200 disabled:opacity-50"
+          class="w-full h-14 btn-gradient rounded-xl font-extrabold text-sm uppercase tracking-widest active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
         >
           <span *ngIf="!isLoading">{{ 'auth.signIn' | translate }}</span>
           <span *ngIf="isLoading">{{ 'auth.signingIn' | translate }}</span>
@@ -196,7 +179,7 @@
       <!-- Signup Form -->
       <form *ngIf="!isLoginMode" [formGroup]="signupForm" (ngSubmit)="onSignup()" class="space-y-4">
         <div class="relative group">
-          <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <span
               class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
               >person</span
@@ -207,18 +190,18 @@
             type="text"
             formControlName="name"
             [placeholder]="'auth.enterName' | translate"
-            class="w-full h-14 bg-surface-container-low/50 border-none rounded-full pl-14 pr-6 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
           />
         </div>
         <p
           *ngIf="signupForm.get('name')?.invalid && signupForm.get('name')?.touched"
-          class="text-sm text-destructive px-6"
+          class="text-sm text-destructive px-4"
         >
           {{ 'auth.nameRequired' | translate }}
         </p>
 
         <div class="relative group">
-          <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <span
               class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
               >alternate_email</span
@@ -229,12 +212,12 @@
             type="email"
             formControlName="email"
             [placeholder]="'auth.enterEmail' | translate"
-            class="w-full h-14 bg-surface-container-low/50 border-none rounded-full pl-14 pr-6 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
           />
         </div>
         <p
           *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched"
-          class="text-sm text-destructive px-6"
+          class="text-sm text-destructive px-4"
         >
           <span *ngIf="signupForm.get('email')?.errors?.['required']">{{
             'auth.emailRequired' | translate
@@ -245,7 +228,7 @@
         </p>
 
         <div class="relative group">
-          <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <span
               class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
               >lock</span
@@ -256,12 +239,12 @@
             type="password"
             formControlName="password"
             [placeholder]="'auth.enterPasswordMin' | translate"
-            class="w-full h-14 bg-surface-container-low/50 border-none rounded-full pl-14 pr-6 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
           />
         </div>
         <p
           *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"
-          class="text-sm text-destructive px-6"
+          class="text-sm text-destructive px-4"
         >
           <span *ngIf="signupForm.get('password')?.errors?.['required']">{{
             'auth.passwordRequired' | translate
@@ -274,7 +257,7 @@
         <button
           type="submit"
           [disabled]="signupForm.invalid || isLoading"
-          class="w-full h-14 btn-gradient rounded-full font-extrabold text-sm uppercase tracking-widest shadow-lg shadow-primary-container/20 active:scale-95 transition-all duration-200 disabled:opacity-50"
+          class="w-full h-14 btn-gradient rounded-xl font-extrabold text-sm uppercase tracking-widest active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
         >
           <span *ngIf="!isLoading">{{ 'auth.signUp' | translate }}</span>
           <span *ngIf="isLoading">{{ 'auth.creatingAccount' | translate }}</span>
@@ -288,7 +271,7 @@
           <button
             type="button"
             (click)="toggleMode()"
-            class="text-primary font-bold hover:underline decoration-2 underline-offset-4 transition-all bg-transparent border-none cursor-pointer"
+            class="text-secondary font-bold hover:underline decoration-2 underline-offset-4 transition-all bg-transparent border-none cursor-pointer"
           >
             {{ (isLoginMode ? 'auth.signUp' : 'auth.signIn') | translate }}
           </button>

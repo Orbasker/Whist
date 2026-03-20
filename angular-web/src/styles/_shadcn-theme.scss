@@ -1,34 +1,34 @@
 /**
- * Whist – "Neon Conservatory" design system from Stitch.
- * Deep navy base + electric teal primary + gold tertiary + green secondary.
+ * Whist – Stitch design system tokens.
+ * Emerald primary + gold secondary on deep navy.
  */
 :root {
   /* Core palette (space-separated HSL for Tailwind opacity modifiers) */
-  --background: 214 72% 8%; /* #081425 */
-  --foreground: 220 74% 91%; /* #d8e3fb */
-  --card: 214 31% 17%; /* #1f2a3c */
-  --card-foreground: 220 74% 91%;
-  --popover: 214 31% 17%;
-  --popover-foreground: 220 74% 91%;
-  --primary: 199 100% 54%; /* #14b8ff (container) */
-  --primary-foreground: 200 100% 15%; /* #004564 */
-  --secondary: 140 71% 59%; /* #4ae176 */
-  --secondary-foreground: 146 100% 11%; /* #003915 */
-  --muted: 214 40% 13%; /* #152031 */
-  --muted-foreground: 207 13% 77%; /* #bdc8d2 */
-  --accent: 214 40% 13%;
-  --accent-foreground: 220 74% 91%;
-  --destructive: 0 84% 60%; /* #ffb4ab */
-  --destructive-foreground: 0 100% 29%;
-  --success: 140 71% 59%; /* #4ae176 */
-  --success-foreground: 146 100% 11%;
-  --tertiary: 49 100% 47%; /* #f1c400 */
-  --tertiary-foreground: 42 100% 12%;
-  --border: 207 13% 27%; /* #3e4850 */
-  --input: 214 40% 13%;
-  --ring: 199 100% 54%;
+  --background: 222 55% 10%; /* #0b1326 */
+  --foreground: 226 85% 92%; /* #dae2fd */
+  --card: 222 28% 19%; /* #222a3d (surface-container-high) */
+  --card-foreground: 226 85% 92%;
+  --popover: 222 28% 19%;
+  --popover-foreground: 226 85% 92%;
+  --primary: 156 38% 71%; /* #95d3ba */
+  --primary-foreground: 162 100% 11%; /* #003829 */
+  --secondary: 34 100% 69%; /* #ffb95f */
+  --secondary-foreground: 30 100% 14%; /* #472a00 */
+  --muted: 223 38% 15%; /* #171f33 */
+  --muted-foreground: 148 9% 77%; /* #bfc9c3 */
+  --accent: 223 38% 15%;
+  --accent-foreground: 226 85% 92%;
+  --destructive: 6 100% 84%; /* #ffb4ab */
+  --destructive-foreground: 356 100% 29%;
+  --success: 156 38% 71%; /* #95d3ba (same as primary) */
+  --success-foreground: 162 100% 11%;
+  --tertiary: 207 15% 78%; /* #bdc8d3 */
+  --tertiary-foreground: 210 15% 19%;
+  --border: 147 7% 27%; /* #404944 */
+  --input: 223 38% 15%;
+  --ring: 156 38% 71%;
 
-  /* Radius — more rounded for Neon Conservatory */
+  /* Radius */
   --radius: 0.75rem;
   --radius-lg: 1rem;
   --radius-sm: 0.5rem;

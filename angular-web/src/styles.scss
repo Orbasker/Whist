@@ -24,7 +24,7 @@ html {
 
 body {
   font-family:
-    'Plus Jakarta Sans',
+    'Inter',
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
@@ -58,7 +58,7 @@ body {
   .ui-input textarea,
   input.ui-input,
   textarea.ui-input {
-    @apply flex h-12 w-full rounded-full border-none bg-surface-container-low px-6 py-3 text-sm ring-offset-background;
+    @apply flex h-12 w-full rounded-lg border border-outline-variant bg-surface-container-low px-4 py-3 text-sm ring-offset-background;
     @apply placeholder:text-muted-foreground/40;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0;
     @apply disabled:cursor-not-allowed disabled:opacity-50;

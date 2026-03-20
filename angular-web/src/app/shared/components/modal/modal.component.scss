@@ -17,9 +17,9 @@
 }
 
 .modal-panel {
-  background: rgba(42, 53, 72, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(23, 31, 51, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
@@ -50,7 +50,7 @@
 .modal-title {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #d8e3fb;
+  color: #dae2fd;
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -71,7 +71,7 @@
 }
 
 .modal-close:hover {
-  color: #d8e3fb;
+  color: #dae2fd;
   background: rgba(42, 53, 72, 0.8);
 }
 

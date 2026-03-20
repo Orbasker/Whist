@@ -7,11 +7,8 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div
-      class="rounded-2xl bg-surface-variant/40 backdrop-blur-xl text-card-foreground ring-1 ring-white/5 shadow-xl relative overflow-hidden"
+      class="rounded-xl bg-surface-container-high/70 backdrop-blur-md text-card-foreground ghost-border shadow-xl relative overflow-hidden"
     >
-      <div
-        class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"
-      ></div>
       <ng-content></ng-content>
     </div>
   `,

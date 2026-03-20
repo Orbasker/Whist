@@ -1,16 +1,16 @@
-<div class="min-h-screen relative z-10">
+<div class="min-h-screen felt-gradient relative z-10">
   <!-- Header -->
   <header class="px-6 pt-8 pb-6">
     <div class="flex items-center gap-4 mb-2">
-      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-tertiary/15">
+      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary/15">
         <span
-          class="material-symbols-outlined text-tertiary text-2xl"
+          class="material-symbols-outlined text-secondary text-2xl"
           style="font-variation-settings: 'FILL' 1"
           >emoji_events</span
         >
       </div>
       <div>
-        <h1 class="text-2xl font-extrabold tracking-tight text-on-surface">
+        <h1 class="text-2xl font-headline font-bold tracking-tight text-on-surface">
           {{ 'home.title' | translate }}
         </h1>
         <p class="text-sm text-on-surface-variant">{{ 'home.subtitle' | translate }}</p>
@@ -47,7 +47,7 @@
   <!-- Games List -->
   <section *ngIf="isAuthenticated" class="px-6 pb-6">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-lg font-bold text-primary tracking-wide uppercase text-xs">
+      <h2 class="text-lg font-bold text-secondary tracking-wide uppercase text-xs">
         {{ 'home.myGames' | translate }}
       </h2>
       <button
@@ -103,11 +103,11 @@
           <button
             type="button"
             (click)="openQuickLook(game, $event)"
-            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-tertiary/10 transition-colors hover:bg-tertiary/20"
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-secondary/10 transition-colors hover:bg-secondary/20"
             [attr.aria-label]="'game.scoreBoard' | translate"
           >
             <span
-              class="material-symbols-outlined text-tertiary"
+              class="material-symbols-outlined text-secondary"
               style="font-variation-settings: 'FILL' 1"
               >emoji_events</span
             >
@@ -185,14 +185,14 @@
         >
           <div
             class="absolute top-0 left-0 w-1 h-full"
-            [class.bg-secondary]="quickLookGame.scores[i] > 0"
+            [class.bg-primary]="quickLookGame.scores[i] > 0"
             [class.bg-destructive]="quickLookGame.scores[i] < 0"
             [class.bg-outline-variant]="quickLookGame.scores[i] === 0"
           ></div>
           <p class="text-sm text-on-surface-variant font-medium mb-2">{{ player }}</p>
           <p
             class="text-3xl font-black font-headline tracking-tighter"
-            [class.text-secondary]="quickLookGame.scores[i] > 0"
+            [class.text-primary]="quickLookGame.scores[i] > 0"
             [class.text-destructive]="quickLookGame.scores[i] < 0"
             [class.text-on-surface-variant]="quickLookGame.scores[i] === 0"
           >
@@ -268,7 +268,7 @@
           [(ngModel)]="newGameName"
           [ngModelOptions]="{ standalone: true }"
           [placeholder]="'home.gameNamePlaceholder' | translate"
-          class="w-full h-12 bg-surface-container-low/50 border-none rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+          class="w-full h-12 bg-surface-container-low border border-outline-variant rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
         />
       </div>
       <div class="space-y-3">
@@ -283,7 +283,7 @@
             type="text"
             [formControlName]="'player' + i"
             [placeholder]="('home.player' | translate) + ' ' + i"
-            class="w-full h-12 bg-surface-container-low/50 border-none rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+            class="w-full h-12 bg-surface-container-low border border-outline-variant rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
           />
         </div>
       </div>
@@ -312,9 +312,7 @@
     *ngIf="!isAuthenticated || (!showNewGameForm && games.length === 0 && !loading)"
     class="px-6 pb-6"
   >
-    <div
-      class="bg-surface-variant/40 backdrop-blur-xl rounded-[2rem] p-6 ring-1 ring-white/5 relative overflow-hidden"
-    >
+    <div class="glass-panel ghost-border rounded-2xl p-6 relative overflow-hidden">
       <div
         class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"
       ></div>
@@ -325,7 +323,7 @@
             type="text"
             [formControlName]="'player' + i"
             [placeholder]="('home.player' | translate) + ' ' + i"
-            class="w-full h-12 bg-surface-container-low/50 border-none rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
+            class="w-full h-12 bg-surface-container-low border border-outline-variant rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
           />
         </div>
         <button

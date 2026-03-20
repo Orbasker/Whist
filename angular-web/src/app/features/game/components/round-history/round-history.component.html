@@ -106,7 +106,7 @@
                   class="py-2.5 px-1.5 text-center font-semibold tabular-nums"
                   [ngClass]="{
                     'bg-primary/5': isCurrentPlayer(pi),
-                    'text-secondary': round.scores[pi] > 0,
+                    'text-primary': round.scores[pi] > 0,
                     'text-destructive': round.scores[pi] < 0,
                     'text-on-surface-variant': round.scores[pi] === 0,
                   }"

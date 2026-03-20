@@ -1,62 +1,42 @@
-/* Neon Conservatory — atmospheric depth background */
+/* Stitch "Whist" — felt-table atmospheric background */
 body {
-  background: #081425;
+  background: #0b1326;
   min-height: 100vh;
   position: relative;
 }
 
-/* Ambient light orbs for atmospheric depth */
-body::before,
-body::after {
-  content: '';
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
+/* Felt-table gradient: subtle emerald center glow */
+.felt-gradient {
+  background: radial-gradient(circle at center, #064e3b 0%, #0b1326 100%);
 }
 
-body::before {
-  top: -10%;
-  left: -10%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(circle, rgba(20, 184, 255, 0.06) 0%, transparent 70%);
-  filter: blur(80px);
+/* Glass panel — the main card surface treatment */
+.glass-panel {
+  background: rgba(23, 31, 51, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-body::after {
-  bottom: -10%;
-  right: -10%;
-  width: 40%;
-  height: 40%;
-  background: radial-gradient(circle, rgba(74, 225, 118, 0.03) 0%, transparent 70%);
-  filter: blur(60px);
+/* Ghost border for subtle card edges */
+.ghost-border {
+  border: 1px solid rgba(64, 73, 68, 0.15);
 }
 
-/* Glassmorphism utility */
-.glass {
-  background: rgba(42, 53, 72, 0.4);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+/* Inner glow for elevated cards */
+.inner-glow {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Neon glow for headings */
-.neon-glow {
-  text-shadow:
-    0 0 10px rgba(20, 184, 255, 0.5),
-    0 0 20px rgba(20, 184, 255, 0.3);
-}
-
-/* Gradient CTA button */
+/* Gold CTA button */
 .btn-gradient {
-  background: linear-gradient(135deg, #14b8ff, #8ad0ff);
-  color: #004564;
+  background: #ee9800;
+  color: #2a1700;
   font-weight: 700;
   border: none;
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    filter: brightness(1.1);
+    background: #ffb95f;
     transform: translateY(-1px);
   }
 
@@ -68,11 +48,6 @@ body::after {
     opacity: 0.6;
     cursor: not-allowed;
   }
-}
-
-/* Ghost border for accessibility (15% opacity outline-variant) */
-.ghost-border {
-  border: 1px solid rgba(62, 72, 80, 0.15);
 }
 
 /* Material Symbols baseline */
