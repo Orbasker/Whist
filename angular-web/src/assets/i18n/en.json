@@ -183,6 +183,64 @@
     "diamonds": "Diamonds",
     "hearts": "Hearts"
   },
+  "landing": {
+    "pageTitle": "Israeli Whist - Card Game Score Tracker | Play Online",
+    "metaDescription": "Track your Israeli Whist card game scores online. Free digital scorekeeper for the popular 4-player trick-taking game with trump bidding and contracts. Real-time scoring and game history.",
+    "brandName": "Whist Club",
+    "hero": {
+      "titleLine1": "Israeli Whist:",
+      "titleLine2": "Bid. Bluff.",
+      "titleLine3": "Win.",
+      "description": "The iconic Israeli card game where every player fights for themselves. Bid your contract, choose the trump, and prove your strategy at the table.",
+      "cta": "Get Started Free",
+      "secondaryCta": "Learn the Game"
+    },
+    "nav": {
+      "theTable": "The Table",
+      "theLedger": "The Ledger",
+      "theRules": "The Rules",
+      "joinClub": "Join the Club"
+    },
+    "table": {
+      "title": "The Table",
+      "subtitle": "Where Strategy Meets Nerve",
+      "dealerHand": "Trump Auction",
+      "dealerDesc": "Players bid to set the trump suit. The highest bidder commits to a minimum number of tricks.",
+      "fourPlayers": "Four Players",
+      "fourPlayersDesc": "Every player for themselves. 13 cards each. Read your opponents, protect your contract, and play every card with purpose.",
+      "trickTaking": "Contracts",
+      "trickTakingDesc": "Each player declares how many tricks they'll take. Hit your number exactly — no more, no less."
+    },
+    "ledger": {
+      "title": "The Ledger",
+      "subtitle": "A Record of Eminence",
+      "description": "Every round is tracked in the Ledger. Watch the scores shift as contracts are made and broken across rounds.",
+      "player1": "Archibald Vane",
+      "player2": "Lady Beatrice",
+      "player3": "Julian Thorne",
+      "seasonalYield": "Seasonal Yield"
+    },
+    "rules": {
+      "sectionTitle": "The Rules of Israeli Whist",
+      "dealTitle": "The Deal & Trump Auction",
+      "dealText": "All 52 cards are dealt to four players (13 each). The player left of the dealer opens a trump auction — bid a number of tricks (minimum 5) with a suit, or pass. Highest bid sets the trump. If no one bids, a Frisch round begins: players exchange 3 cards and bid again with a higher minimum.",
+      "playTitle": "Contracts & Play",
+      "playText": "After trump is set, each player declares how many tricks they will take. The total cannot equal 13 — the last bidder must push the game Over or Under. Players then lead tricks, must follow suit, and may cut with trump when void. The trick winner leads next.",
+      "scoreTitle": "The Score",
+      "scoreText": "Hit your contract exactly and score your tricks squared plus ten (e.g. bid 3, take 3 = 19 points). Miss your contract and lose points for every trick you're off. Bidding zero is high-risk: succeed for a 50-point bonus in Under, but fail and face a steep 50-point penalty."
+    },
+    "cta": {
+      "title": "Ready to take your seat?",
+      "description": "The table is set. Four players, one deck, and the sharpest card game to come out of Israel.",
+      "primaryBtn": "Start Playing",
+      "secondaryBtn": "View Games"
+    },
+    "footer": {
+      "rights": "All rights reserved.",
+      "membership": "Membership",
+      "contact": "Contact"
+    }
+  },
   "invitationForm": {
     "gameFull": "Game is full. No slots available for invitation.",
     "title": "Send game invitations",

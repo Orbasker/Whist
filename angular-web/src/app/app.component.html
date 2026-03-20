@@ -1,6 +1,6 @@
 <div class="app-layout">
-  <main class="app-main">
+  <main class="app-main" [class.has-footer]="showGlobalFooter">
     <router-outlet></router-outlet>
   </main>
-  <app-footer></app-footer>
+  <app-footer *ngIf="showGlobalFooter"></app-footer>
 </div>

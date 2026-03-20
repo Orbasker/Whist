@@ -1,0 +1,892 @@
+// ============================================================
+// Landing page styles — adapted from Figma node 4:1601
+// ============================================================
+
+// --- Color tokens (landing-specific) ---
+$bg-deep: #0b1326;
+$bg-darker: #060e20;
+$bg-card: #131b2e;
+$bg-card-alt: #171f33;
+$bg-card-alt2: #222a3d;
+$bg-green: #022c22;
+$bg-green-dark: #064e3b;
+$text-light: #dae2fd;
+$text-muted: #bfc9c3;
+$text-slate: #64748b;
+$gold: #ffb95f;
+$gold-dark: #5b3800;
+$green-muted: #80bea6;
+$green-light: #95d3ba;
+
+// --- Typography ---
+$font-serif: 'Libre Baskerville', Georgia, serif;
+$font-sans: Inter, sans-serif;
+$font-mono: 'Nimbus Sans', Inter, sans-serif;
+
+:host {
+  display: block;
+  background: $bg-deep;
+  color: $text-light;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+}
+
+.landing-page {
+  padding-top: 64px; // header height
+}
+
+// ============================================================
+// Hero Section
+// ============================================================
+.hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  padding: 150px 96px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+
+  .hero-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, $bg-deep, rgba($bg-deep, 0.8) 50%, transparent);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 896px;
+}
+
+.hero-heading {
+  margin: 0 0 17px;
+}
+
+.hero-heading-line {
+  display: block;
+  font-family: $font-serif;
+  font-size: clamp(48px, 8vw, 128px);
+  line-height: 1;
+  color: $text-light;
+  letter-spacing: -0.025em;
+}
+
+.hero-heading-accent {
+  display: block;
+  font-family: $font-serif;
+  font-style: italic;
+  font-size: clamp(48px, 8vw, 128px);
+  line-height: 1;
+  color: $gold;
+  letter-spacing: -0.025em;
+  text-shadow: 0 0 12px rgba($gold, 0.2);
+
+  span {
+    display: block;
+  }
+}
+
+.hero-description {
+  font-family: $font-sans;
+  font-size: clamp(16px, 2vw, 24px);
+  line-height: 1.33;
+  color: $text-muted;
+  max-width: 672px;
+  margin: 0 0 31px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.btn-primary-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: $gold;
+  color: $gold-dark;
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+  padding: 20px 40px;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow:
+    0 20px 25px -5px rgba($gold, 0.1),
+    0 8px 10px -6px rgba($gold, 0.1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 25px 50px -12px rgba($gold, 0.2);
+  }
+}
+
+.btn-text-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+
+  .text-link-divider {
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: #404944;
+  }
+
+  span:last-child {
+    font-family: $font-mono;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: $text-muted;
+    transition: color 0.2s ease;
+  }
+
+  &:hover span:last-child,
+  &:focus-visible span:last-child {
+    color: $gold;
+  }
+}
+
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: $text-light;
+  font-family: $font-sans;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+  padding: 21px 49px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Floating card visual
+.hero-card-visual {
+  position: absolute;
+  right: -4%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.floating-card {
+  width: 320px;
+  height: 480px;
+  transform: rotate(12deg);
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  background: #31394d;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 33px;
+}
+
+.card-letter {
+  font-family: $font-serif;
+  font-style: italic;
+  font-size: 48px;
+  color: #022c22;
+  opacity: 0.8;
+  align-self: flex-start;
+}
+
+.card-letter-bottom {
+  align-self: flex-end;
+  transform: rotate(180deg);
+}
+
+.card-suit {
+  font-size: 48px;
+  color: #022c22;
+  opacity: 0.6;
+}
+
+// ============================================================
+// The Table Section
+// ============================================================
+.table-section {
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: 128px 32px;
+}
+
+.section-header {
+  margin-bottom: 80px;
+}
+
+.section-title {
+  font-family: $font-serif;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1;
+  color: $text-light;
+  margin: 0;
+}
+
+.section-title-italic {
+  font-style: italic;
+  color: $text-muted;
+}
+
+.section-accent-bar {
+  width: 96px;
+  height: 4px;
+  background: $gold;
+  margin-top: 16px;
+}
+
+.section-subtitle {
+  font-family: $font-sans;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2.8px;
+  color: $text-muted;
+  margin-top: 8px;
+}
+
+.table-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+// Gameplay card
+.gameplay-card {
+  background: radial-gradient(circle at center, #064e3b, #0b513d);
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: 500px;
+  position: relative;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+.gameplay-card-inner {
+  padding: 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.gameplay-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dealer-hand-badge {
+  backdrop-filter: blur(10px);
+  background: rgba(23, 31, 51, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 25px;
+  max-width: 320px;
+}
+
+.dealer-hand-title {
+  display: block;
+  font-family: $font-serif;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 28px;
+  color: $gold;
+  margin-bottom: 8px;
+}
+
+.dealer-hand-text {
+  display: block;
+  font-family: $font-sans;
+  font-size: 12px;
+  line-height: 19.5px;
+  color: $text-muted;
+}
+
+.gameplay-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #bdc8d3;
+}
+
+.dot-active {
+  background: $gold;
+  box-shadow: 0 0 10px $gold;
+}
+
+// Playing cards overlap
+.cards-overlap {
+  position: relative;
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 48px;
+}
+
+.playing-card {
+  width: 176px;
+  height: 256px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px;
+  position: absolute;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.card-left {
+  transform: rotate(-12deg);
+  z-index: 1;
+  left: calc(50% - 145px);
+}
+
+.card-center {
+  z-index: 3;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.card-right {
+  transform: rotate(12deg);
+  z-index: 2;
+  left: calc(50% + -30px);
+}
+
+.pc-rank {
+  font-family: $font-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #0f172a;
+  align-self: flex-start;
+
+  &.red {
+    color: #dc2626;
+  }
+}
+
+.pc-suit {
+  font-size: 40px;
+  color: #0f172a;
+
+  &.red {
+    color: #dc2626;
+  }
+}
+
+.pc-rank-bottom {
+  font-family: $font-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #0f172a;
+  align-self: flex-end;
+  transform: rotate(180deg);
+
+  &.red {
+    color: #dc2626;
+  }
+}
+
+// Info cards
+.info-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.info-card {
+  background: $bg-card;
+  border-radius: 24px;
+  padding: 52px 32px 32px;
+  border-left: 4px solid;
+  flex: 1;
+}
+
+.info-card-amber {
+  border-color: rgba($gold, 0.3);
+}
+
+.info-card-green {
+  border-color: rgba($green-light, 0.3);
+}
+
+.info-card-icon {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.info-card-title {
+  font-family: $font-serif;
+  font-size: 24px;
+  line-height: 32px;
+  color: $text-light;
+  margin: 0 0 16px;
+}
+
+.info-card-text {
+  font-family: $font-sans;
+  font-size: 14px;
+  line-height: 22.75px;
+  color: $text-muted;
+  margin: 0;
+}
+
+// ============================================================
+// The Ledger Section
+// ============================================================
+.ledger-section {
+  background: $bg-darker;
+  padding: 128px 0;
+}
+
+.ledger-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 96px;
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: 0 32px;
+  align-items: center;
+}
+
+.ledger-description {
+  font-family: $font-sans;
+  font-size: 18px;
+  line-height: 29.25px;
+  color: $text-muted;
+  max-width: 512px;
+  margin: 32px 0;
+}
+
+// Leaderboard
+.leaderboard-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+}
+
+.leaderboard-row-1 {
+  background: $bg-card;
+  border-radius: 12px 12px 0 0;
+}
+
+.leaderboard-row-2 {
+  background: $bg-card-alt;
+}
+
+.leaderboard-row-3 {
+  background: $bg-card-alt2;
+  border-radius: 0 0 12px 12px;
+}
+
+.leaderboard-rank {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rank-icon {
+  font-size: 14px;
+}
+
+.rank-name {
+  font-family: $font-sans;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: $text-light;
+}
+
+.rank-score {
+  font-family: $font-mono;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  color: $text-muted;
+}
+
+.rank-score-top {
+  color: $green-light;
+}
+
+// Stats card
+.stats-card {
+  background: $bg-card-alt;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  min-height: 500px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.stats-card-inner {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  background: linear-gradient(to top, $bg-darker, transparent 50%);
+}
+
+.stats-overlay {
+  backdrop-filter: blur(10px);
+  background: rgba(23, 31, 51, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 33px;
+  margin: 48px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.stats-content {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.stats-label {
+  font-family: $font-sans;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $gold;
+  display: block;
+  margin-bottom: 3.5px;
+}
+
+.stats-value {
+  font-family: $font-serif;
+  font-size: 30px;
+  line-height: 36px;
+  color: $text-light;
+}
+
+.stats-progress {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.stats-progress-bar {
+  height: 100%;
+  background: $gold;
+  border-radius: 9999px;
+  box-shadow: 0 0 8px $gold;
+}
+
+// ============================================================
+// The Rules Section
+// ============================================================
+.rules-section {
+  max-width: 1216px;
+  margin: 0 auto;
+  padding: 128px 32px;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 64px;
+}
+
+.rule-item {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rule-number {
+  font-family: $font-serif;
+  font-style: italic;
+  font-size: 36px;
+  line-height: 40px;
+  color: $gold;
+}
+
+.rule-title {
+  font-family: $font-serif;
+  font-size: 24px;
+  line-height: 32px;
+  color: $text-light;
+  margin: 0;
+}
+
+.rule-divider {
+  border-top: 1px solid rgba(64, 73, 68, 0.2);
+}
+
+.rule-text {
+  font-family: $font-sans;
+  font-size: 14px;
+  line-height: 22.75px;
+  color: $text-muted;
+  margin: 0;
+}
+
+// ============================================================
+// CTA Section
+// ============================================================
+.cta-section {
+  background: $bg-green;
+  padding: 128px 192px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-content {
+  max-width: 896px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-title {
+  font-family: $font-serif;
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: 1;
+  color: $text-light;
+  margin: 0 0 32px;
+}
+
+.cta-description {
+  font-family: $font-sans;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 28px;
+  color: $green-muted;
+  max-width: 672px;
+  margin: 0 auto 48px;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+// ============================================================
+// Footer
+// ============================================================
+.landing-footer {
+  background: #020617;
+  border-top: 1px solid rgba(6, 78, 59, 0.2);
+  padding: 48px 0;
+}
+
+.footer-inner {
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-logo {
+  font-family: $font-serif;
+  font-size: 20px;
+  line-height: 28px;
+  color: #065f46;
+}
+
+.footer-copyright {
+  font-family: $font-mono;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  color: $text-slate;
+}
+
+.footer-links {
+  display: flex;
+  gap: 32px;
+
+  a {
+    font-family: $font-mono;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.1px;
+    color: $text-slate;
+    text-decoration: none;
+    opacity: 0.8;
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: $text-muted;
+      opacity: 1;
+    }
+  }
+}
+
+// ============================================================
+// Responsive
+// ============================================================
+@media (max-width: 1024px) {
+  .hero-section {
+    padding: 100px 48px;
+  }
+
+  .hero-card-visual {
+    display: none;
+  }
+
+  .table-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-cards {
+    flex-direction: row;
+  }
+
+  .ledger-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-card {
+    min-height: 300px;
+  }
+
+  .cta-section {
+    padding: 96px 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-page {
+    padding-top: 56px;
+  }
+
+  .hero-section {
+    padding: 64px 24px;
+    min-height: 80vh;
+  }
+
+  .rules-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .info-cards {
+    flex-direction: column;
+  }
+
+  .cta-section {
+    padding: 64px 24px;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+    padding: 0 24px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .gameplay-card {
+    min-height: 400px;
+  }
+
+  .cards-overlap {
+    transform: scale(0.7);
+    margin-top: 24px;
+  }
+
+  .stats-overlay {
+    margin: 24px;
+  }
+}

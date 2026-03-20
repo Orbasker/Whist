@@ -98,6 +98,6 @@ export class InviteComponent implements OnInit {
   }
 
   goToHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/dashboard']);
   }
 }

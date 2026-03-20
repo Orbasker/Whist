@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /game
+
+Sitemap: https://whist.orbasker.com/sitemap.xml
