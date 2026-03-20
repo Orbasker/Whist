@@ -35,7 +35,9 @@
         >
           <span class="material-symbols-outlined text-3xl text-destructive">warning</span>
         </div>
-        <h2 class="text-xl font-bold text-on-surface mb-2">{{ 'invite.error' | translate }}</h2>
+        <h2 class="text-xl font-headline font-bold text-on-surface mb-2">
+          {{ 'invite.error' | translate }}
+        </h2>
         <p class="text-on-surface-variant mb-6">{{ error }}</p>
         <button
           (click)="goToHome()"
@@ -56,7 +58,7 @@
       ></div>
 
       <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-on-surface mb-2">
+        <h2 class="text-2xl font-headline font-bold text-on-surface mb-2">
           {{ invitationInfo.game_name || ('invite.defaultGameName' | translate) }}
         </h2>
         <p class="text-on-surface-variant">{{ 'invite.invitationToJoin' | translate }}</p>
