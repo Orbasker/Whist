@@ -61,7 +61,7 @@ export class AuthComponent implements OnInit {
   async ngOnInit() {
     const isAuthenticated = await this.authService.isAuthenticated();
     if (isAuthenticated) {
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
       this.router.navigate([returnUrl]);
     }
   }
@@ -83,7 +83,7 @@ export class AuthComponent implements OnInit {
         );
 
         if (result) {
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
           this.router.navigate([returnUrl]);
         }
       } catch (error: unknown) {
@@ -113,7 +113,7 @@ export class AuthComponent implements OnInit {
         );
 
         if (result) {
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
           this.router.navigate([returnUrl]);
         }
       } catch (error: unknown) {
@@ -137,7 +137,7 @@ export class AuthComponent implements OnInit {
     this.errorMessage = null;
 
     try {
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
       const result = await this.authService.signInWithGoogle();
 
       if (result) {
@@ -179,7 +179,7 @@ export class AuthComponent implements OnInit {
     this.errorMessage = null;
 
     try {
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
       const result = await this.authService.signInWithGitHub();
 
       if (result) {

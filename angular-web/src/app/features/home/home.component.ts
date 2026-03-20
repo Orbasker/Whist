@@ -311,7 +311,7 @@ export class HomeComponent implements OnInit {
       await this.loadGames();
       if (localStorage.getItem('whist_game_id') === gameId) {
         localStorage.removeItem('whist_game_id');
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       }
     } catch (err: unknown) {
       console.error('Failed to delete game:', err);

@@ -11,4 +11,6 @@ export const environment = {
   useSupabaseRealtime: true,
   supabaseUrl: '',
   supabaseAnonKey: '',
+  gaMeasurementId: '', // Google Analytics 4 measurement ID (e.g. 'G-XXXXXXXXXX')
+  googleAdsId: '', // Google Ads conversion ID (e.g. 'AW-XXXXXXXXX')
 };

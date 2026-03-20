@@ -42,7 +42,8 @@
       "env": { "PYTHONPATH": "${workspaceFolder}/backend" },
       "envFile": "${workspaceFolder}/backend/.env.prod",
       "console": "integratedTerminal",
-      "python": "${workspaceFolder}/backend/.venv/bin/python3"
+      "python": "${workspaceFolder}/backend/.venv/bin/python3",
+      "subProcess": true
     },
     {
       "name": "Frontend: Serve (Dev → localhost:8000)",

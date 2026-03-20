@@ -11,6 +11,9 @@
 
 .app-main {
   flex: 1;
-  /* Space for fixed footer (collapsed language trigger at bottom) */
-  padding-bottom: 52px;
+
+  &.has-footer {
+    /* Space for fixed footer (collapsed language trigger at bottom) */
+    padding-bottom: 52px;
+  }
 }
