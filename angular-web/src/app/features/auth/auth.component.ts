@@ -4,10 +4,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, LoaderComponent],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })
@@ -17,6 +18,7 @@ export class AuthComponent implements OnInit {
   isLoginMode = true;
   errorMessage: string | null = null;
   isLoading = false;
+  loadingMessageKey = 'auth.signingIn';
 
   constructor(
     private fb: FormBuilder,
@@ -53,6 +55,7 @@ export class AuthComponent implements OnInit {
   async onLogin() {
     if (this.loginForm.valid && !this.isLoading) {
       this.isLoading = true;
+      this.loadingMessageKey = 'auth.signingIn';
       this.errorMessage = null;
 
       try {
@@ -82,6 +85,7 @@ export class AuthComponent implements OnInit {
   async onSignup() {
     if (this.signupForm.valid && !this.isLoading) {
       this.isLoading = true;
+      this.loadingMessageKey = 'auth.creatingAccount';
       this.errorMessage = null;
 
       try {
@@ -113,6 +117,7 @@ export class AuthComponent implements OnInit {
     if (this.isLoading) return;
 
     this.isLoading = true;
+    this.loadingMessageKey = 'auth.connecting';
     this.errorMessage = null;
 
     try {
@@ -155,6 +160,7 @@ export class AuthComponent implements OnInit {
     if (this.isLoading) return;
 
     this.isLoading = true;
+    this.loadingMessageKey = 'auth.connecting';
     this.errorMessage = null;
 
     try {

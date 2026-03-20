@@ -1,3 +1,20 @@
 :host {
   display: contents;
 }
+
+// Shake the title for destructive confirmations
+:host ::ng-deep .modal-title {
+  animation: lockShake 0.4s ease-in-out 0.2s;
+}
+
+// Buttons staggered entrance
+:host ::ng-deep .flex.gap-3 > button {
+  animation: staggerFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  &:nth-child(1) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+}

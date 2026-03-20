@@ -20,3 +20,23 @@
   bottom: 0;
   z-index: 20;
 }
+
+// Table rows staggered entrance
+:host ::ng-deep tbody tr {
+  animation: staggerFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @for $i from 1 through 30 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 40}ms;
+    }
+  }
+}
+
+// Score change cells - highlight positive/negative
+:host ::ng-deep .text-primary.font-semibold {
+  animation: countUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+:host ::ng-deep .text-destructive.font-semibold {
+  animation: countUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}

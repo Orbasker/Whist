@@ -237,8 +237,8 @@ class _GameScreenState extends State<GameScreen> {
             gameName: gameState.name?.isNotEmpty == true
                 ? gameState.name!
                 : (gameState.players.isNotEmpty
-                    ? gameState.players.join(', ')
-                    : 'Unnamed game'),
+                      ? gameState.players.join(', ')
+                      : 'Unnamed game'),
             players: gameState.players,
             playerUserIds: gameState.playerUserIds,
             api: api,
@@ -322,8 +322,9 @@ class _RealtimeIndicator extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Tooltip(
-          message:
-              isConnected ? 'Live updates connected' : 'Realtime disconnected',
+          message: isConnected
+              ? 'Live updates connected'
+              : 'Realtime disconnected',
           child: Icon(
             isConnected ? Icons.circle : Icons.circle_outlined,
             size: 10,

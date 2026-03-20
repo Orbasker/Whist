@@ -6,11 +6,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InvitationService } from '../../../core/services/invitation.service';
 import { GameService } from '../../../core/services/game.service';
 import { GameState } from '../../../core/models/game-state.model';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-invitation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslateModule, LoaderComponent],
   templateUrl: './invitation-form.component.html',
 })
 export class InvitationFormComponent {
@@ -104,6 +105,10 @@ export class InvitationFormComponent {
   sending = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
+
+  get busyMessageKey(): string {
+    return this.sending ? 'invitationForm.sending' : 'common.saving';
+  }
 
   constructor(
     private fb: FormBuilder,

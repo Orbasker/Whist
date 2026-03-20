@@ -1,4 +1,17 @@
-<div class="bg-slate-800 rounded-lg">
+<div class="relative rounded-lg bg-slate-800">
+  <div
+    *ngIf="sending || nameLoading"
+    class="absolute inset-0 z-20 flex items-center justify-center rounded-lg bg-slate-950/70 backdrop-blur-sm"
+    aria-live="polite"
+  >
+    <div class="flex flex-col items-center text-center">
+      <app-loader></app-loader>
+      <p class="-mt-2 text-sm font-semibold text-slate-200">
+        {{ busyMessageKey | translate }}
+      </p>
+    </div>
+  </div>
+
   <!-- Game full: no slots available -->
   <div *ngIf="isGameFull" class="text-center py-4">
     <p class="text-slate-300 mb-4 text-sm sm:text-base">

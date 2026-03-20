@@ -1,4 +1,12 @@
 <div class="min-h-screen relative z-10" *ngIf="gameState">
+  <div
+    *ngIf="serviceLoading"
+    class="fixed inset-0 z-[90] flex items-center justify-center bg-background/55 backdrop-blur-sm"
+    aria-live="polite"
+  >
+    <app-loader></app-loader>
+  </div>
+
   <!-- Header -->
   <header class="bg-surface-container-lowest/60 backdrop-blur-xl sticky top-0 z-40">
     <div class="flex items-center justify-between px-6 py-4 max-w-screen-xl mx-auto">
@@ -81,5 +89,5 @@
 </div>
 
 <div *ngIf="!gameState" class="flex min-h-screen items-center justify-center bg-background">
-  <div class="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+  <app-loader></app-loader>
 </div>

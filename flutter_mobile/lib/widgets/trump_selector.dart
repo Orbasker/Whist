@@ -15,7 +15,7 @@ class TrumpSelector extends StatelessWidget {
   final ValueChanged<String?> onTrumpSelect;
 
   static const List<({String? value, String label, String icon, bool isRed})>
-      _options = [
+  _options = [
     (value: null, label: AppStrings.trumpNoTrump, icon: '✕', isRed: false),
     (value: 'spades', label: AppStrings.trumpSpades, icon: '♠', isRed: false),
     (value: 'clubs', label: AppStrings.trumpClubs, icon: '♣', isRed: false),
@@ -59,8 +59,8 @@ class TrumpSelector extends StatelessWidget {
                           color: isSelected
                               ? colorScheme.onPrimary
                               : (opt.isRed
-                                  ? Colors.red.shade700
-                                  : colorScheme.onSurfaceVariant),
+                                    ? Colors.red.shade700
+                                    : colorScheme.onSurfaceVariant),
                         ),
                       ),
                     ),

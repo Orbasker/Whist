@@ -1,0 +1,50 @@
+<div class="loader-wrapper">
+  <!-- Loader 1: Tapping Hand -->
+  <div *ngIf="loaderType === 'hand'" class="loader-hand">
+    <div class="hand">
+      <div class="finger"></div>
+      <div class="finger"></div>
+      <div class="finger"></div>
+      <div class="finger"></div>
+      <div class="palm"></div>
+      <div class="thumb"></div>
+    </div>
+  </div>
+
+  <!-- Loader 2: Bouncing Ball -->
+  <div *ngIf="loaderType === 'ball'" class="loader-ball">
+    <div class="ball">
+      <div class="ball-inner">
+        <div class="ball-line"></div>
+        <div class="ball-line ball-line--two"></div>
+        <div class="ball-oval"></div>
+        <div class="ball-oval ball-oval--two"></div>
+      </div>
+    </div>
+    <div class="ball-shadow"></div>
+  </div>
+
+  <!-- Loader 3: Floating Astronaut -->
+  <div *ngIf="loaderType === 'astronaut'" class="loader-astronaut">
+    <div class="astro-stars">
+      <span class="astro-star" style="top: 10%; left: 15%"></span>
+      <span class="astro-star" style="top: 30%; left: 80%"></span>
+      <span class="astro-star" style="top: 60%; left: 25%"></span>
+      <span class="astro-star" style="top: 80%; left: 70%"></span>
+      <span class="astro-star" style="top: 45%; left: 50%"></span>
+      <span class="astro-star" style="top: 15%; left: 60%"></span>
+      <span class="astro-star" style="top: 70%; left: 40%"></span>
+    </div>
+    <div class="astro" data-js="astro">
+      <div class="astro-head"></div>
+      <div class="astro-arm astro-arm-left"></div>
+      <div class="astro-arm astro-arm-right"></div>
+      <div class="astro-body">
+        <div class="astro-panel"></div>
+      </div>
+      <div class="astro-leg astro-leg-left"></div>
+      <div class="astro-leg astro-leg-right"></div>
+      <div class="astro-schoolbag"></div>
+    </div>
+  </div>
+</div>
