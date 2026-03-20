@@ -109,15 +109,15 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
               Text(
                 AppStrings.biddingPhaseTitle,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 AppStrings.biddingPhaseSubtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -147,9 +147,7 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                         children: [
                           Text(
                             AppStrings.biddingPhaseTotalBids,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
+                            style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: Theme.of(
                                     context,
@@ -158,9 +156,7 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                           ),
                           Text(
                             '$totalBids',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
+                            style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -177,12 +173,10 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                       Text(
                         _statusMessage(gs),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: totalBids == 13
-                                  ? Theme.of(context).colorScheme.error
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                            ),
+                          color: totalBids == 13
+                              ? Theme.of(context).colorScheme.error
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -222,7 +216,8 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                   isPlayerOwner: gs.isPlayerOwner(i),
                   isBidLocked: gs.isBidLocked(i),
                   displayBid: _getBidForPlayer(gs, i),
-                  hasLiveChoice: gs.liveBidSelections.containsKey(i) &&
+                  hasLiveChoice:
+                      gs.liveBidSelections.containsKey(i) &&
                       i != gs.currentPlayerIndex,
                   canEditBid: _canEditBid(gs, i),
                   canLockBid: _canLockBid(gs, i),
@@ -249,9 +244,11 @@ class _BiddingPhaseContentState extends State<BiddingPhaseContent> {
                           widget.gameState.players.length,
                           0,
                         );
-                        for (var i = 0;
-                            i < bids.length && i < _bids.length;
-                            i++) {
+                        for (
+                          var i = 0;
+                          i < bids.length && i < _bids.length;
+                          i++
+                        ) {
                           bids[i] = _getBidForPlayer(gs, i);
                         }
                         try {

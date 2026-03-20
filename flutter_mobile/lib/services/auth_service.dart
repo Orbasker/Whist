@@ -37,7 +37,8 @@ class NeonAuthResponseParser {
       if (dataSession is Map<String, dynamic>) {
         final session = dataSession['session'];
         if (session is Map<String, dynamic>) {
-          final t = session['token'] ??
+          final t =
+              session['token'] ??
               session['accessToken'] ??
               session['access_token'];
           if (t is String && _isJwt(t)) return t;
@@ -48,7 +49,8 @@ class NeonAuthResponseParser {
 
       final session = data['session'];
       if (session is Map<String, dynamic>) {
-        final t = session['token'] ??
+        final t =
+            session['token'] ??
             session['accessToken'] ??
             session['access_token'];
         if (t is String && _isJwt(t)) return t;
@@ -93,7 +95,7 @@ class AuthUser {
 /// Uses same API as Angular: authUrl/sign-in/email, sign-up/email, get-session, sign-out.
 class AuthService extends ChangeNotifier {
   AuthService({required this.authBaseUrl, FlutterSecureStorage? secureStorage})
-      : _storage = secureStorage ?? const FlutterSecureStorage();
+    : _storage = secureStorage ?? const FlutterSecureStorage();
 
   final String authBaseUrl;
   final FlutterSecureStorage _storage;

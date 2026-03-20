@@ -49,8 +49,8 @@ class GameState {
       playerUserIds: json['player_user_ids'] == null
           ? null
           : (json['player_user_ids'] as List)
-              .map((e) => e?.toString())
-              .toList(),
+                .map((e) => e?.toString())
+                .toList(),
       isShared: json['is_shared'] as bool? ?? false,
       shareCode: json['share_code'] as String?,
       resetRequestedAt: json['reset_requested_at'] == null

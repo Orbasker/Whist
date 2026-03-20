@@ -152,8 +152,9 @@ class RoundHistoryScreen extends StatelessWidget {
         // Header row 2: empty | empty | Bid Took Change Before After (x4 players = 20 cells)
         TableRow(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest
-                .withValues(alpha: 0.7),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.7,
+            ),
           ),
           children: [
             _pad(const SizedBox(), cellPad),
@@ -201,12 +202,12 @@ class RoundHistoryScreen extends StatelessWidget {
                 final value = col == 0
                     ? '$bid'
                     : col == 1
-                        ? '$took'
-                        : col == 2
-                            ? formatGainLoss(score)
-                            : col == 3
-                                ? '$before'
-                                : '$after';
+                    ? '$took'
+                    : col == 2
+                    ? formatGainLoss(score)
+                    : col == 3
+                    ? '$before'
+                    : '$after';
                 final isChange = col == 2;
                 return _pad(
                   Text(
@@ -216,10 +217,10 @@ class RoundHistoryScreen extends StatelessWidget {
                       color: isChange && score > 0
                           ? AppColors.success
                           : isChange && score < 0
-                              ? AppColors.destructive
-                              : col == 3
-                                  ? theme.colorScheme.onSurfaceVariant
-                                  : null,
+                          ? AppColors.destructive
+                          : col == 3
+                          ? theme.colorScheme.onSurfaceVariant
+                          : null,
                     ),
                   ),
                   const EdgeInsets.symmetric(horizontal: 4),
@@ -246,8 +247,9 @@ class RoundHistoryScreen extends StatelessWidget {
               final pi = c ~/ colsPerPlayer;
               final col = c % colsPerPlayer;
               if (col == colsPerPlayer - 1 && pi < players.length) {
-                final total =
-                    rounds.isNotEmpty ? scoreAfter(rounds.length - 1, pi) : 0;
+                final total = rounds.isNotEmpty
+                    ? scoreAfter(rounds.length - 1, pi)
+                    : 0;
                 return _pad(Text('$total', style: totalStyle), cellPad);
               }
               return _pad(const SizedBox(), cellPad);

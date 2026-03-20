@@ -129,8 +129,9 @@ class _AuthScreenState extends State<AuthScreen> {
     } on AuthException catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage =
-            e.message.isEmpty ? AppStrings.googleSignInFailed : e.message;
+        _errorMessage = e.message.isEmpty
+            ? AppStrings.googleSignInFailed
+            : e.message;
         _isLoading = false;
       });
     } catch (e) {
@@ -163,9 +164,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       children: [
                         Text(
                           _isLoginMode ? AppStrings.signIn : AppStrings.signUp,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
+                          style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.w700),
                           textAlign: TextAlign.center,
                         ),
@@ -177,12 +176,14 @@ class _AuthScreenState extends State<AuthScreen> {
                               vertical: 10,
                             ),
                             decoration: BoxDecoration(
-                              color:
-                                  AppColors.destructive.withValues(alpha: 0.1),
+                              color: AppColors.destructive.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: AppColors.destructive
-                                    .withValues(alpha: 0.5),
+                                color: AppColors.destructive.withValues(
+                                  alpha: 0.5,
+                                ),
                               ),
                             ),
                             child: Text(
@@ -276,8 +277,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: Text(
                   AppStrings.or,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
               const Expanded(child: Divider()),

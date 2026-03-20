@@ -103,17 +103,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 12),
                           Text(
                             AppStrings.homeTitle,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
+                            style: Theme.of(context).textTheme.headlineMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             AppStrings.homeSubtitle,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
+                            style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: Theme.of(
                                     context,
@@ -523,9 +519,8 @@ class _GameListTile extends StatelessWidget {
                     Text(
                       game.players.join(', '),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -534,9 +529,8 @@ class _GameListTile extends StatelessWidget {
                       '${AppStrings.round} ${game.currentRound} · '
                       '${AppStrings.score}: ${game.scores.join(' - ')} · $formattedDate',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -557,11 +551,11 @@ class _GameListTile extends StatelessWidget {
                 child: Text(
                   isActive ? AppStrings.active : AppStrings.completed,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: isActive
-                            ? AppColors.primary
-                            : AppColors.mutedForeground,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    color: isActive
+                        ? AppColors.primary
+                        : AppColors.mutedForeground,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
