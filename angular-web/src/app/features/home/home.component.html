@@ -86,8 +86,10 @@
         role="button"
         tabindex="0"
         (click)="continueGame(game.id)"
-        (keydown.enter)="continueGame(game.id)"
-        (keydown.space)="$event.preventDefault(); continueGame(game.id)"
+        (keydown.enter)="$event.target === $event.currentTarget ? continueGame(game.id) : null"
+        (keydown.space)="
+          $event.target === $event.currentTarget ? onCardSpace($event, game.id) : null
+        "
         [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
         class="bg-surface-container-low rounded-2xl p-4 cursor-pointer transition-all hover:bg-surface-container-high active:scale-[0.99] relative overflow-hidden group"
       >
@@ -260,10 +262,13 @@
   >
     <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-5">
       <div>
-        <label class="block text-sm font-semibold text-on-surface-variant mb-2">{{
-          'home.gameNameOptional' | translate
-        }}</label>
+        <label
+          for="new-game-name"
+          class="block text-sm font-semibold text-on-surface-variant mb-2"
+          >{{ 'home.gameNameOptional' | translate }}</label
+        >
         <input
+          id="new-game-name"
           type="text"
           [(ngModel)]="newGameName"
           [ngModelOptions]="{ standalone: true }"
@@ -276,10 +281,13 @@
           'home.playerNames' | translate
         }}</label>
         <div *ngFor="let i of [1, 2, 3, 4]">
-          <label class="block text-xs font-medium text-on-surface-variant/60 mb-1"
+          <label
+            [attr.for]="'new-game-player-' + i"
+            class="block text-xs font-medium text-on-surface-variant/60 mb-1"
             >{{ 'home.player' | translate }} {{ i }}</label
           >
           <input
+            [id]="'new-game-player-' + i"
             type="text"
             [formControlName]="'player' + i"
             [placeholder]="('home.player' | translate) + ' ' + i"
@@ -319,7 +327,11 @@
       <h2 class="text-lg font-bold text-on-surface mb-4">{{ 'home.playerNames' | translate }}</h2>
       <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-3">
         <div *ngFor="let i of [1, 2, 3, 4]">
+          <label [attr.for]="'landing-player-' + i" class="sr-only"
+            >{{ 'home.player' | translate }} {{ i }}</label
+          >
           <input
+            [id]="'landing-player-' + i"
             type="text"
             [formControlName]="'player' + i"
             [placeholder]="('home.player' | translate) + ' ' + i"

@@ -187,6 +187,11 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  onCardSpace(event: Event, gameId: string | undefined) {
+    event.preventDefault();
+    this.continueGame(gameId);
+  }
+
   async continueGame(gameId: string | undefined) {
     if (!gameId) return;
     this.closeQuickLook();
