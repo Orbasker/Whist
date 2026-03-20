@@ -5,8 +5,9 @@
   left: 0;
   right: 0;
   bottom: 52px;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 50;
+  backdrop-filter: blur(4px);
 }
 
 .score-table-panel {
@@ -16,10 +17,12 @@
   z-index: 51;
   width: min(320px, calc(100vw - 1.5rem));
   max-height: calc(100vh - 6rem);
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius-lg);
+  background: rgba(23, 31, 51, 0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 1.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  outline: 1px solid rgba(255, 255, 255, 0.05);
+  outline-offset: -1px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -29,15 +32,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  border-bottom: 1px solid hsl(var(--border));
+  padding: 1rem 1.25rem;
   flex-shrink: 0;
 }
 
 .score-table-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: hsl(var(--foreground));
+  color: hsl(var(--on-surface, var(--foreground)));
   margin: 0;
 }
 
@@ -45,23 +47,24 @@
   min-height: 44px;
   min-width: 44px;
   padding: 0.25rem;
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--on-surface-variant, var(--muted-foreground)));
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: var(--radius);
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s;
 }
 
 .score-table-close:hover {
-  color: hsl(var(--foreground));
-  background: hsl(var(--muted));
+  color: hsl(var(--on-surface, var(--foreground)));
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .score-table-body {
-  padding: 1rem;
+  padding: 0 1.25rem 1.25rem;
   overflow-y: auto;
   flex: 1;
   min-height: 0;

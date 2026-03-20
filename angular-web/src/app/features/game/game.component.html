@@ -1,50 +1,37 @@
-<div class="min-h-screen bg-gradient-to-b from-background to-card/30" *ngIf="gameState">
-  <!-- Header: card-style bar so it clearly looks different -->
-  <header
-    class="safe-area-inset-top sticky top-0 z-40 mx-4 mt-3 rounded-t-2xl border border-border bg-card/95 shadow-lg backdrop-blur sm:mx-6"
-  >
-    <div class="flex items-center justify-between p-3 sm:p-4">
-      <button
-        (click)="goBack()"
-        class="-m-1 flex min-h-touch min-w-touch items-center justify-center rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        [attr.aria-label]="'game.back' | translate"
-      >
-        <svg
-          class="h-5 w-5 sm:h-6 sm:w-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
+<div class="min-h-screen relative z-10" *ngIf="gameState">
+  <!-- Header -->
+  <header class="bg-surface-container-lowest/60 backdrop-blur-xl sticky top-0 z-40">
+    <div class="flex items-center justify-between px-6 py-4 max-w-screen-xl mx-auto">
+      <div class="flex items-center gap-4">
+        <button
+          (click)="goBack()"
+          class="text-primary hover:bg-surface-container-highest/50 transition-colors p-2 rounded-full active:scale-95 duration-200"
+          [attr.aria-label]="'game.back' | translate"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-      </button>
-      <div class="min-w-0 flex-1 text-center">
-        <h1 class="text-lg font-bold tracking-tight text-foreground sm:text-xl">
-          {{ 'game.scoreBoard' | translate }}
-        </h1>
-        <p class="text-xs text-muted-foreground">
-          {{ 'game.roundsPlayed' | translate: { count: gameState.current_round - 1 } }}
-          ·
-          {{ phase === 'bidding' ? ('game.bidding' | translate) : ('game.tricks' | translate) }}
-        </p>
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <div>
+          <h1 class="font-headline font-bold tracking-tight text-on-surface text-lg">
+            {{ 'game.scoreBoard' | translate }}
+          </h1>
+          <p class="text-xs text-on-surface-variant">
+            {{ 'game.roundsPlayed' | translate: { count: gameState.current_round - 1 } }}
+            ·
+            {{ phase === 'bidding' ? ('game.bidding' | translate) : ('game.tricks' | translate) }}
+          </p>
+        </div>
       </div>
       <button
         (click)="showScoreTable = true"
-        class="-m-1 flex min-h-touch min-w-touch items-center justify-center rounded-xl p-2 text-primary transition-colors hover:bg-primary/15 hover:text-primary"
+        class="text-primary hover:bg-surface-container-highest/50 transition-colors p-2 rounded-full active:scale-95 duration-200"
         [attr.aria-label]="'game.scoreTable' | translate"
       >
-        <app-scoreboard-icon [size]="22" color="currentColor"></app-scoreboard-icon>
+        <span class="material-symbols-outlined">table_chart</span>
       </button>
     </div>
   </header>
 
-  <!-- Main Content: contained so layout looks intentional -->
+  <!-- Main Content -->
   <div class="mx-auto max-w-2xl p-4 pb-28 sm:p-6 sm:pb-24">
     <app-bidding-phase
       *ngIf="phase === 'bidding'"
@@ -90,8 +77,7 @@
     [players]="gameState.players"
     [currentPlayerIndex]="currentPlayerIndex"
     (close)="showRoundHistory = false"
-  >
-  </app-round-history>
+  ></app-round-history>
 </div>
 
 <div *ngIf="!gameState" class="flex min-h-screen items-center justify-center bg-background">

@@ -84,7 +84,9 @@
     "googleNotConfigured": "התחברות Google אינה מוגדרת. פנה לתמיכה או הגדר ב-Neon Auth.",
     "githubNotConfigured": "התחברות GitHub אינה מוגדרת. פנה לתמיכה או הגדר ב-Neon Auth.",
     "authFailed": "האימות נכשל. נסה שוב.",
-    "invalidRequest": "בקשה לא תקינה. בדוק את ההגדרות."
+    "invalidRequest": "בקשה לא תקינה. בדוק את ההגדרות.",
+    "welcomeBack": "ברוכים השבים לשולחן",
+    "subtitle": "משחק הקלפים הישראלי האייקוני"
   },
   "invite": {
     "title": "הזמנה למשחק",

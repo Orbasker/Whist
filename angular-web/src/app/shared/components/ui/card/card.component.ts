@@ -6,7 +6,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+    <div
+      class="rounded-xl bg-surface-container-high/70 backdrop-blur-md text-card-foreground ghost-border shadow-xl relative overflow-hidden"
+    >
       <ng-content></ng-content>
     </div>
   `,

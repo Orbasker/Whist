@@ -1,20 +1,18 @@
-<div class="flex flex-wrap gap-2">
+<div class="flex flex-wrap gap-2 justify-center">
   <button
     *ngFor="let option of trumpOptions"
     type="button"
     (click)="selectTrump(option.value)"
     [attr.aria-pressed]="selectedTrump === option.value"
     [attr.aria-label]="('game.biddingPhase.trump' | translate) + ': ' + (option.label | translate)"
-    [class.rounded-full]="selectedTrump === option.value"
-    [class.rounded-xl]="selectedTrump !== option.value"
-    [class.bg-primary]="selectedTrump === option.value"
-    [class.text-primary-foreground]="selectedTrump === option.value"
-    [class.bg-muted]="selectedTrump !== option.value"
-    [class.text-muted-foreground]="selectedTrump !== option.value"
-    [class]="option.color"
-    class="min-h-touch px-4 py-2.5 font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:bg-primary/90 sm:py-2 sm:text-base"
+    class="min-h-touch h-12 w-12 sm:h-14 sm:w-14 rounded-full font-bold text-lg transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background flex items-center justify-center"
+    [ngClass]="
+      selectedTrump === option.value
+        ? 'bg-secondary-container text-on-secondary-container shadow-[0_0_16px_rgba(238,152,0,0.3)] scale-110'
+        : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-bright'
+    "
   >
-    <span *ngIf="option.icon" class="mr-2" aria-hidden="true">{{ option.icon }}</span>
-    {{ option.label | translate }}
+    <span *ngIf="option.icon" [class]="option.color" aria-hidden="true">{{ option.icon }}</span>
+    <span *ngIf="!option.icon">{{ option.label | translate }}</span>
   </button>
 </div>

@@ -1,91 +1,124 @@
-<div
-  class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4"
->
+<!-- Felt-gradient background -->
+<div class="fixed inset-0 z-0 felt-gradient pointer-events-none"></div>
+
+<div class="relative z-10 min-h-screen flex items-center justify-center p-6">
   <div class="w-full max-w-md">
     <!-- Header -->
     <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-amber-500 rounded-lg mb-4">
-        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          ></path>
-        </svg>
-      </div>
-      <h1 class="text-3xl font-bold text-white mb-2">{{ 'invite.title' | translate }}</h1>
-    </div>
-
-    <!-- Loading State -->
-    <div *ngIf="loading" class="bg-slate-800 rounded-lg p-6 shadow-xl text-center">
       <div
-        class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"
-      ></div>
-      <p class="text-slate-300">{{ 'invite.loadingInvitation' | translate }}</p>
+        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/15 mb-4"
+      >
+        <span
+          class="material-symbols-outlined text-3xl text-secondary"
+          style="font-variation-settings: 'FILL' 1"
+          >mail</span
+        >
+      </div>
+      <h1 class="text-3xl font-headline font-bold text-on-surface mb-2">
+        {{ 'invite.title' | translate }}
+      </h1>
     </div>
 
-    <!-- Error State -->
-    <div *ngIf="error && !loading" class="bg-slate-800 rounded-lg p-6 shadow-xl">
+    <!-- Loading -->
+    <div *ngIf="loading" class="glass-panel ghost-border rounded-2xl p-8 text-center">
+      <div
+        class="h-12 w-12 mx-auto mb-4 animate-spin rounded-full border-4 border-primary border-t-transparent"
+      ></div>
+      <p class="text-on-surface-variant">{{ 'invite.loadingInvitation' | translate }}</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error && !loading" class="glass-panel ghost-border rounded-2xl p-8">
       <div class="text-center">
-        <div class="text-red-400 text-5xl mb-4">⚠️</div>
-        <h2 class="text-xl font-semibold text-white mb-2">{{ 'invite.error' | translate }}</h2>
-        <p class="text-slate-300 mb-4">{{ error }}</p>
-        <button (click)="goToHome()" class="btn btn-primary">
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-error-container/20 mb-4"
+        >
+          <span class="material-symbols-outlined text-3xl text-destructive">warning</span>
+        </div>
+        <h2 class="text-xl font-headline font-bold text-on-surface mb-2">
+          {{ 'invite.error' | translate }}
+        </h2>
+        <p class="text-on-surface-variant mb-6">{{ error }}</p>
+        <button
+          (click)="goToHome()"
+          class="w-full h-12 btn-gradient rounded-xl font-bold active:scale-[0.98] transition-all"
+        >
           {{ 'invite.backToHome' | translate }}
         </button>
       </div>
     </div>
 
     <!-- Invitation Info -->
-    <div *ngIf="invitationInfo && !loading && !error" class="bg-slate-800 rounded-lg p-6 shadow-xl">
+    <div
+      *ngIf="invitationInfo && !loading"
+      class="glass-panel ghost-border rounded-2xl p-8 relative overflow-hidden"
+    >
+      <div
+        class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"
+      ></div>
+
       <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-white mb-2">
+        <h2 class="text-2xl font-headline font-bold text-on-surface mb-2">
           {{ invitationInfo.game_name || ('invite.defaultGameName' | translate) }}
         </h2>
-        <p class="text-slate-400">{{ 'invite.invitationToJoin' | translate }}</p>
+        <p class="text-on-surface-variant">{{ 'invite.invitationToJoin' | translate }}</p>
       </div>
 
-      <div class="space-y-4 mb-6">
-        <div class="bg-slate-700 rounded-lg p-4">
-          <p class="text-slate-400 text-sm mb-1">{{ 'invite.positionInGame' | translate }}</p>
-          <p class="text-white font-semibold text-lg">
+      <div class="space-y-3 mb-6">
+        <div class="bg-surface-container-low rounded-xl p-4">
+          <p class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest mb-1">
+            {{ 'invite.positionInGame' | translate }}
+          </p>
+          <p class="text-on-surface font-bold text-lg">
             {{ 'invite.playerIndex' | translate }} {{ invitationInfo.player_index + 1 }}
           </p>
         </div>
 
-        <div class="bg-slate-700 rounded-lg p-4">
-          <p class="text-slate-400 text-sm mb-1">{{ 'invite.expiryDate' | translate }}</p>
-          <p class="text-white">{{ formatDate(invitationInfo.expires_at) }}</p>
+        <div class="bg-surface-container-low rounded-xl p-4">
+          <p class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest mb-1">
+            {{ 'invite.expiryDate' | translate }}
+          </p>
+          <p class="text-on-surface">{{ formatDate(invitationInfo.expires_at) }}</p>
         </div>
       </div>
 
       <!-- Not Authenticated -->
       <div *ngIf="!isAuthenticated" class="space-y-4">
-        <div class="bg-amber-900/30 border border-amber-500 rounded-lg p-4">
-          <p class="text-amber-200 text-sm mb-3">{{ 'invite.mustLoginToAccept' | translate }}</p>
-          <button (click)="goToLogin()" class="btn btn-primary w-full">
+        <div class="bg-tertiary-container/10 rounded-xl p-4 border border-tertiary/20">
+          <p class="text-on-surface text-sm mb-3">{{ 'invite.mustLoginToAccept' | translate }}</p>
+          <button
+            (click)="goToLogin()"
+            class="w-full h-12 btn-gradient rounded-xl font-bold active:scale-[0.98] transition-all"
+          >
             {{ 'invite.loginOrSignup' | translate }}
           </button>
         </div>
       </div>
 
       <!-- Authenticated -->
-      <div *ngIf="isAuthenticated" class="space-y-4">
-        <button (click)="acceptInvitation()" [disabled]="accepting" class="btn btn-primary w-full">
+      <div *ngIf="isAuthenticated" class="space-y-3">
+        <button
+          (click)="acceptInvitation()"
+          [disabled]="accepting"
+          class="w-full h-14 btn-gradient rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-lg shadow-primary-container/20 active:scale-[0.98] transition-all disabled:opacity-50"
+        >
+          <span class="material-symbols-outlined">check_circle</span>
           <span *ngIf="!accepting">{{ 'invite.acceptAndJoin' | translate }}</span>
           <span *ngIf="accepting">{{ 'invite.joining' | translate }}</span>
         </button>
 
-        <button (click)="goToHome()" class="btn btn-secondary w-full">
+        <button
+          (click)="goToHome()"
+          class="w-full h-12 rounded-xl bg-surface-container-highest/50 text-on-surface font-semibold hover:bg-surface-container-highest transition-colors"
+        >
           {{ 'invite.cancel' | translate }}
         </button>
       </div>
 
-      <!-- Error Message -->
+      <!-- Error -->
       <div
         *ngIf="error"
-        class="mt-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-200 text-sm"
+        class="mt-4 p-3 bg-error-container/20 rounded-xl text-on-error-container text-sm border border-error-container/10"
       >
         {{ error }}
       </div>

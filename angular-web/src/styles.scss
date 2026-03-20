@@ -24,7 +24,7 @@ html {
 
 body {
   font-family:
-    Outfit,
+    Inter,
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
@@ -32,7 +32,6 @@ body {
     sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
-  direction: rtl;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -52,22 +51,23 @@ body {
   }
 }
 
-/* shadcn-style input (used by app-ui-input and by class "ui-input" on raw inputs) */
+/* shadcn-style input */
 @layer components {
   .ui-input input,
   .ui-input textarea,
   input.ui-input,
   textarea.ui-input {
-    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background;
-    @apply placeholder:text-muted-foreground;
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    @apply flex h-12 w-full rounded-lg border border-outline-variant bg-surface-container-low px-4 py-3 text-sm ring-offset-background;
+    @apply placeholder:text-muted-foreground/40;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-0;
     @apply disabled:cursor-not-allowed disabled:opacity-50;
 
     min-height: 44px;
+    color: hsl(var(--foreground));
   }
 }
 
-/* Focus visible for keyboard accessibility (in base layer so @layer components can override for .ui-input) */
+/* Focus visible for keyboard accessibility */
 @layer base {
   :focus {
     outline: none;

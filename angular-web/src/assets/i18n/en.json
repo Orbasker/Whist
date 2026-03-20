@@ -84,7 +84,9 @@
     "googleNotConfigured": "Google sign-in is not configured. Please contact support or configure Google OAuth in Neon Auth dashboard.",
     "githubNotConfigured": "GitHub sign-in is not configured. Please contact support or configure GitHub OAuth in Neon Auth dashboard.",
     "authFailed": "Authentication failed. Please try again.",
-    "invalidRequest": "Invalid request. Please check your configuration."
+    "invalidRequest": "Invalid request. Please check your configuration.",
+    "welcomeBack": "Welcome back to the table",
+    "subtitle": "The iconic Israeli card game"
   },
   "invite": {
     "title": "Game invitation",

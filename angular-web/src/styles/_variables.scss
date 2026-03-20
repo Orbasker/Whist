@@ -1,39 +1,59 @@
-$slate-900: #0f172a;
-$slate-800: #1e293b;
-$slate-700: #334155;
-$slate-600: #475569;
-$slate-500: #64748b;
-$slate-400: #94a3b8;
-$slate-300: #cbd5e1;
-$slate-200: #e2e8f0;
-$slate-100: #f1f5f9;
+/* Stitch "Whist" palette — emerald & gold on deep navy */
 
-$amber-500: #f59e0b;
-$amber-400: #fbbf24;
-$amber-300: #fcd34d;
-$amber-600: #d97706;
+$background: #0b1326;
+$surface-container-lowest: #060e20;
+$surface-container-low: #131b2e;
+$surface-container: #171f33;
+$surface-container-high: #222a3d;
+$surface-container-highest: #2d3449;
+$surface-bright: #31394d;
+$surface-variant: #2d3449;
+
+$primary: #95d3ba;
+$primary-container: #064e3b;
+$on-primary: #003829;
+$on-primary-container: #80bea6;
+
+$secondary: #ffb95f;
+$secondary-container: #ee9800;
+$on-secondary: #472a00;
+$on-secondary-container: #5b3800;
+
+$tertiary: #bdc8d3;
+$tertiary-container: #3b454f;
+$on-tertiary: #28313b;
+
+$error: #ffb4ab;
+$error-container: #93000a;
+
+$on-surface: #dae2fd;
+$on-surface-variant: #bfc9c3;
+$on-background: #dae2fd;
+
+$outline: #89938d;
+$outline-variant: #404944;
 
 :root {
-  --bg-primary: #{$slate-900};
-  --bg-secondary: #{$slate-800};
-  --bg-tertiary: #{$slate-700};
-  --text-primary: #ffffff;
-  --text-secondary: #{$slate-400};
-  --accent-primary: #{$amber-500};
-  --accent-secondary: #{$amber-400};
-  --focus-ring: 0 0 0 2px #{$slate-900}, 0 0 0 4px #{$amber-500};
-  --input-border: #{$slate-600};
-  --input-border-focus: #{$amber-500};
-  --input-bg: #{$slate-700};
-  --error-border: #dc2626;
-  --error-bg: rgba(220, 38, 38, 0.15);
-  --success-border: #16a34a;
-  --modal-backdrop: rgba(0, 0, 0, 0.5);
+  --bg-primary: #{$background};
+  --bg-secondary: #{$surface-container-high};
+  --bg-tertiary: #{$surface-container-highest};
+  --text-primary: #{$on-surface};
+  --text-secondary: #{$on-surface-variant};
+  --accent-primary: #{$primary};
+  --accent-secondary: #{$secondary};
+  --focus-ring: 0 0 0 2px #{$background}, 0 0 0 4px #{$primary};
+  --input-border: #{$outline-variant};
+  --input-border-focus: #{$primary};
+  --input-bg: #{$surface-container-low};
+  --error-border: #{$error};
+  --error-bg: rgba(147, 0, 10, 0.25);
+  --success-border: #{$primary};
+  --modal-backdrop: rgba(0, 0, 0, 0.6);
 
-  /* Button design system: consistent size and weight */
+  /* Button design system */
   --btn-min-height: 44px;
   --btn-padding-y: 0.625rem;
   --btn-padding-x: 1.25rem;
-  --btn-font-weight: 600;
-  --btn-radius: 0.5rem;
+  --btn-font-weight: 700;
+  --btn-radius: 9999px;
 }

@@ -1,10 +1,10 @@
 <app-modal [title]="title" size="sm" (close)="onClose()">
-  <p class="text-[var(--text-secondary)] mb-6">{{ message }}</p>
+  <p class="text-on-surface-variant mb-6">{{ message }}</p>
   <div class="flex flex-wrap gap-3 justify-end">
     <button
       type="button"
       (click)="onCancel()"
-      class="min-h-touch bg-slate-600 hover:bg-slate-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm"
+      class="min-h-touch bg-surface-container-highest/50 hover:bg-surface-container-highest text-on-surface font-semibold py-2.5 px-5 rounded-full transition-colors text-sm"
     >
       {{ cancelLabel }}
     </button>
@@ -13,8 +13,8 @@
       (click)="onConfirm()"
       [class]="
         danger
-          ? 'min-h-touch bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm'
-          : 'min-h-touch bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm'
+          ? 'min-h-touch bg-error-container/20 hover:bg-error-container/30 text-destructive font-semibold py-2.5 px-5 rounded-full transition-colors text-sm border border-destructive/10'
+          : 'min-h-touch btn-gradient font-semibold py-2.5 px-5 rounded-full transition-all text-sm active:scale-[0.98]'
       "
     >
       {{ confirmLabel }}
