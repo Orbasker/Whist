@@ -74,7 +74,7 @@ repos:
       - id: dart-analyze
         name: dart analyze (Flutter)
         language: system
-        entry: bash -lc 'cd flutter_mobile && flutter analyze --no-pub --fatal-warnings'
+        entry: bash -lc 'cd flutter_mobile && if [ ! -f pubspec.lock ] || [ pubspec.yaml -nt pubspec.lock ]; then flutter pub get; fi && flutter analyze --no-pub --fatal-warnings'
         pass_filenames: false
         files: ^flutter_mobile/
         stages: [pre-commit]

@@ -24,7 +24,11 @@
       *ngIf="loading"
       class="glass-panel ghost-border rounded-2xl p-8 flex flex-col items-center gap-4"
     >
-      <app-loader variant="orbit" size="lg"></app-loader>
+      <app-loader
+        variant="orbit"
+        size="lg"
+        [label]="'invite.loadingInvitation' | translate"
+      ></app-loader>
       <p class="text-on-surface-variant">{{ 'invite.loadingInvitation' | translate }}</p>
     </div>
 

@@ -4,6 +4,7 @@
       <p
         class="text-sm text-on-surface-variant sm:text-base cursor-help"
         [appTooltip]="'tooltips.tricksCount' | translate"
+        tabindex="0"
       >
         {{ 'game.tricksPhase.question' | translate }}
       </p>
@@ -61,17 +62,20 @@
               class="rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-medium text-primary cursor-help"
               aria-label="Current player"
               [appTooltip]="'tooltips.youBadge' | translate"
+              tabindex="0"
               >{{ 'game.biddingPhase.you' | translate }}</span
             >
             <span
               *ngIf="isPlayerOwner(i)"
               class="rounded-full bg-surface-container-highest/50 px-2.5 py-0.5 text-xs font-medium text-on-surface-variant cursor-help"
               [appTooltip]="'tooltips.managerBadge' | translate"
+              tabindex="0"
               >{{ 'game.biddingPhase.manager' | translate }}</span
             >
             <span
               class="text-sm text-on-surface-variant cursor-help"
               [appTooltip]="'tooltips.scoreExplain' | translate"
+              tabindex="0"
               >{{ 'game.tricksPhase.bid' | translate }}: {{ bids[i] }}</span
             >
           </div>

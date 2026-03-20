@@ -302,6 +302,18 @@ abstract class AppLocalizations {
   /// **'English'**
   String get english;
 
+  /// No description provided for @liveUpdatesConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Live updates connected'**
+  String get liveUpdatesConnected;
+
+  /// No description provided for @realtimeDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Realtime disconnected'**
+  String get realtimeDisconnected;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:

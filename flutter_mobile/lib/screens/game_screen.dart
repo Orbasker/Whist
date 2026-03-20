@@ -318,13 +318,14 @@ class _RealtimeIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Tooltip(
           message: isConnected
-              ? 'Live updates connected'
-              : 'Realtime disconnected',
+              ? l10n.liveUpdatesConnected
+              : l10n.realtimeDisconnected,
           child: Icon(
             isConnected ? Icons.circle : Icons.circle_outlined,
             size: 10,

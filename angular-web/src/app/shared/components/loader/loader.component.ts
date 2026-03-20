@@ -16,7 +16,7 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
       [class.whist-loader--sm]="size === 'sm'"
       [class.whist-loader--lg]="size === 'lg'"
       role="status"
-      [attr.aria-label]="label"
+      [attr.aria-label]="label || null"
     >
       <div class="whist-card whist-card--1">
         <span class="whist-card-suit">♠</span>
@@ -39,7 +39,7 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
       [class.whist-loader--sm]="size === 'sm'"
       [class.whist-loader--lg]="size === 'lg'"
       role="status"
-      [attr.aria-label]="label"
+      [attr.aria-label]="label || null"
     >
       <div class="whist-orbit-ring"></div>
       <div class="whist-orbit-dot whist-orbit-dot--1"></div>
@@ -55,7 +55,7 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
       [class.whist-loader--sm]="size === 'sm'"
       [class.whist-loader--lg]="size === 'lg'"
       role="status"
-      [attr.aria-label]="label"
+      [attr.aria-label]="label || null"
     >
       <span class="whist-suit whist-suit--1">♠</span>
       <span class="whist-suit whist-suit--2 whist-suit--red">♥</span>
@@ -67,5 +67,5 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
 export class LoaderComponent {
   @Input() variant: LoaderVariant = 'cards';
   @Input() size: LoaderSize = 'md';
-  @Input() label = 'Loading...';
+  @Input() label = '';
 }

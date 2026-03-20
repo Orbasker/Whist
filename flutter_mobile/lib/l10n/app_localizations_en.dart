@@ -117,5 +117,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get english => 'English';
 
   @override
+  String get liveUpdatesConnected => 'Live updates connected';
+
+  @override
+  String get realtimeDisconnected => 'Realtime disconnected';
+
+  @override
   String get appTitle => 'Whist';
 }

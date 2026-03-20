@@ -28,6 +28,7 @@
           class="mb-3 text-base font-semibold text-on-surface sm:text-lg inline-flex items-center gap-1.5 cursor-help"
           [appTooltip]="'tooltips.scoreExplain' | translate"
           tooltipPosition="bottom"
+          tabindex="0"
         >
           {{ 'game.scoreTable.currentScore' | translate }}
           <span class="material-symbols-outlined text-sm text-primary/60">info</span>
@@ -63,6 +64,7 @@
             </div>
             <div
               class="text-xl font-bold sm:text-2xl cursor-help"
+              tabindex="0"
               [class.text-primary]="gameState.scores[i] > 0"
               [class.text-destructive]="gameState.scores[i] < 0"
               [class.text-on-surface]="gameState.scores[i] === 0"
@@ -89,6 +91,7 @@
           class="text-sm font-semibold text-on-surface inline-flex items-center gap-1 cursor-help"
           [appTooltip]="'tooltips.resetVote' | translate"
           tooltipPosition="bottom"
+          tabindex="0"
         >
           {{ 'game.scoreTable.resetGame' | translate }}
           <span class="material-symbols-outlined text-xs text-primary/60">info</span>

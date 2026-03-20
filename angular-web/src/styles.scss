@@ -1,16 +1,15 @@
 @import './styles/variables';
 @import './styles/shadcn-theme';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import './styles/theme';
 @import './styles/buttons';
 @import './styles/tooltips';
 @import './styles/loaders';
 @import './styles/rtl';
 @import './styles/breakpoints';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Global styles */
 * {

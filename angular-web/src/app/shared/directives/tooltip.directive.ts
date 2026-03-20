@@ -24,7 +24,9 @@ export class TooltipDirective implements OnDestroy, OnChanges {
   private tooltipEl: HTMLElement | null = null;
   private showTimeout: ReturnType<typeof setTimeout> | null = null;
   private hideTimeout: ReturnType<typeof setTimeout> | null = null;
+  private removeTimeout: ReturnType<typeof setTimeout> | null = null;
   private listeners: (() => void)[] = [];
+  private windowListeners: (() => void)[] = [];
 
   constructor(
     private el: ElementRef<HTMLElement>,
@@ -47,7 +49,18 @@ export class TooltipDirective implements OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['text'] && this.tooltipEl) {
       const inner = this.tooltipEl.querySelector('.whist-tooltip-text');
-      if (inner) inner.textContent = this.text;
+      if (inner) {
+        inner.textContent = this.text;
+        this.ngZone.runOutsideAngular(() => {
+          if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(() => {
+              if (this.tooltipEl) this.position();
+            });
+          } else if (this.tooltipEl) {
+            this.position();
+          }
+        });
+      }
     }
   }
 
@@ -68,18 +81,37 @@ export class TooltipDirective implements OnDestroy, OnChanges {
     this.hide();
   }
 
-  private onTouch(_e: TouchEvent) {
+  private onTouch(e: TouchEvent) {
     if (!this.text) return;
     if (this.tooltipEl) {
       this.hide();
     } else {
       this.show();
+      e.preventDefault();
+      e.stopPropagation();
+      if (this.hideTimeout) {
+        clearTimeout(this.hideTimeout);
+      }
       this.hideTimeout = setTimeout(() => this.hide(), 2500);
     }
   }
 
   private show() {
-    if (this.tooltipEl) return;
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+    if (this.removeTimeout) {
+      clearTimeout(this.removeTimeout);
+      this.removeTimeout = null;
+    }
+    if (this.tooltipEl) {
+      this.renderer.removeClass(this.tooltipEl, 'whist-tooltip--hiding');
+      this.renderer.addClass(this.tooltipEl, 'whist-tooltip--visible');
+      this.position();
+      this.attachWindowListeners();
+      return;
+    }
     this.tooltipEl = this.renderer.createElement('div');
     this.renderer.addClass(this.tooltipEl, 'whist-tooltip');
     this.renderer.addClass(this.tooltipEl, `whist-tooltip--${this.tooltipPosition}`);
@@ -99,6 +131,7 @@ export class TooltipDirective implements OnDestroy, OnChanges {
 
     this.renderer.appendChild(document.body, this.tooltipEl);
     this.position();
+    this.attachWindowListeners();
 
     // Trigger entrance animation
     requestAnimationFrame(() => {
@@ -153,23 +186,52 @@ export class TooltipDirective implements OnDestroy, OnChanges {
 
   private hide() {
     if (!this.tooltipEl) return;
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+    this.detachWindowListeners();
     const el = this.tooltipEl;
     this.renderer.removeClass(el, 'whist-tooltip--visible');
     this.renderer.addClass(el, 'whist-tooltip--hiding');
-    setTimeout(() => {
+    if (this.removeTimeout) {
+      clearTimeout(this.removeTimeout);
+    }
+    this.removeTimeout = setTimeout(() => {
       if (el.parentNode) {
         this.renderer.removeChild(document.body, el);
       }
       if (this.tooltipEl === el) {
         this.tooltipEl = null;
       }
+      this.removeTimeout = null;
     }, 200);
+  }
+
+  private attachWindowListeners() {
+    if (this.windowListeners.length > 0) return;
+    this.ngZone.runOutsideAngular(() => {
+      const handler = () => {
+        if (this.tooltipEl) this.position();
+      };
+      this.windowListeners.push(
+        this.renderer.listen('window', 'scroll', handler),
+        this.renderer.listen('window', 'resize', handler)
+      );
+    });
+  }
+
+  private detachWindowListeners() {
+    this.windowListeners.forEach((unlisten) => unlisten());
+    this.windowListeners = [];
   }
 
   ngOnDestroy() {
     this.listeners.forEach((unlisten) => unlisten());
+    this.detachWindowListeners();
     if (this.showTimeout) clearTimeout(this.showTimeout);
     if (this.hideTimeout) clearTimeout(this.hideTimeout);
+    if (this.removeTimeout) clearTimeout(this.removeTimeout);
     if (this.tooltipEl?.parentNode) {
       this.renderer.removeChild(document.body, this.tooltipEl);
     }

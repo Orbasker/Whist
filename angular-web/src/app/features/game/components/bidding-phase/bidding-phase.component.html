@@ -13,6 +13,7 @@
         class="mb-3 text-base font-semibold text-on-surface sm:text-lg inline-flex items-center gap-1.5 cursor-help"
         [appTooltip]="'tooltips.trumpExplain' | translate"
         tooltipPosition="bottom"
+        tabindex="0"
       >
         {{ 'game.biddingPhase.trump' | translate }}
         <span class="material-symbols-outlined text-sm text-primary/60">info</span>
@@ -27,6 +28,7 @@
         <span
           class="text-sm text-on-surface-variant sm:text-base cursor-help"
           [appTooltip]="'tooltips.totalBidsBar' | translate"
+          tabindex="0"
           >{{ 'game.biddingPhase.totalBids' | translate }}</span
         >
         <span class="text-xl font-bold text-on-surface sm:text-2xl">{{ totalBids }}</span>
@@ -80,12 +82,14 @@
             class="rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-medium text-primary cursor-help"
             aria-label="Current player"
             [appTooltip]="'tooltips.youBadge' | translate"
+            tabindex="0"
             >{{ 'game.biddingPhase.you' | translate }}</span
           >
           <span
             *ngIf="isPlayerOwner(i)"
             class="rounded-full bg-surface-container-highest/50 px-2.5 py-0.5 text-xs font-medium text-on-surface-variant cursor-help"
             [appTooltip]="'tooltips.managerBadge' | translate"
+            tabindex="0"
             >{{ 'game.biddingPhase.manager' | translate }}</span
           >
           <span *ngIf="isBidLocked(i)" class="text-xs text-destructive"

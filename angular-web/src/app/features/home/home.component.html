@@ -62,7 +62,7 @@
 
     <!-- Loading -->
     <div *ngIf="loading" class="py-12 flex flex-col items-center gap-4 text-on-surface-variant">
-      <app-loader variant="suits" size="md"></app-loader>
+      <app-loader variant="suits" size="md" [label]="'home.loadingGames' | translate"></app-loader>
       <span>{{ 'home.loadingGames' | translate }}</span>
     </div>
 

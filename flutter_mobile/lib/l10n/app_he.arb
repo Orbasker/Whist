@@ -34,5 +34,7 @@
   "language": "שפה",
   "hebrew": "עברית",
   "english": "English",
-  "appTitle": "וויסט"
+  "appTitle": "וויסט",
+  "liveUpdatesConnected": "עדכונים חיים מחוברים",
+  "realtimeDisconnected": "עדכונים בזמן אמת מנותקים"
 }

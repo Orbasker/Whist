@@ -114,6 +114,7 @@
   position: relative;
   width: 56px;
   height: 56px;
+  --whist-orbit-radius: 24px;
 }
 
 .whist-orbit-ring {
@@ -274,6 +275,7 @@
         0 0 24px rgba(255, 140, 140, 0.2);
     }
   }
+
   animation-name: whist-suit-bounce-red;
 }
 
@@ -300,6 +302,7 @@
   &.whist-loader-orbit {
     width: 36px;
     height: 36px;
+    --whist-orbit-radius: 16px;
 
     .whist-orbit-dot--1 {
       width: 5px;
@@ -366,6 +369,7 @@
   &.whist-loader-orbit {
     width: 80px;
     height: 80px;
+    --whist-orbit-radius: 34px;
 
     .whist-orbit-dot--1 {
       width: 12px;
@@ -427,12 +431,12 @@
   }
 
   .whist-orbit-dot--1 {
-    transform: translateX(24px);
+    transform: translateX(var(--whist-orbit-radius));
   }
   .whist-orbit-dot--2 {
-    transform: rotate(120deg) translateX(24px);
+    transform: rotate(120deg) translateX(var(--whist-orbit-radius));
   }
   .whist-orbit-dot--3 {
-    transform: rotate(240deg) translateX(24px);
+    transform: rotate(240deg) translateX(var(--whist-orbit-radius));
   }
 }
