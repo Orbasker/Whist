@@ -32,6 +32,7 @@ dev = [
     "black==23.11.0",
     "ruff==0.1.6",
     "ty>=0.0.1",
+    "debugpy>=1.8.20",
 ]
 
 [tool.setuptools.packages.find]
@@ -55,8 +56,3 @@ invalid-method-override = "ignore"
 [tool.ty.src]
 # Exclude tests so `ty check .` does not require resolving pytest in CI
 exclude = ["tests"]
-
-[dependency-groups]
-dev = [
-    "debugpy>=1.8.20",
-]

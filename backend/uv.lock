@@ -1360,6 +1360,7 @@ dependencies = [
 [package.optional-dependencies]
 dev = [
     { name = "black" },
+    { name = "debugpy" },
     { name = "httpx" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
@@ -1368,16 +1369,12 @@ dev = [
     { name = "ty" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "debugpy" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = "==1.12.1" },
     { name = "better-auth", specifier = ">=0.0.1b11" },
     { name = "black", marker = "extra == 'dev'", specifier = "==23.11.0" },
+    { name = "debugpy", marker = "extra == 'dev'", specifier = ">=1.8.20" },
     { name = "email-validator", specifier = ">=2.3.0" },
     { name = "fastapi", specifier = "==0.104.1" },
     { name = "httpx", specifier = ">=0.25.0" },
@@ -1397,6 +1394,3 @@ requires-dist = [
     { name = "uvicorn", extras = ["standard"], specifier = "==0.24.0" },
 ]
 provides-extras = ["dev"]
-
-[package.metadata.requires-dev]
-dev = [{ name = "debugpy", specifier = ">=1.8.20" }]

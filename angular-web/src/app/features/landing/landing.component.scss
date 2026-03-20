@@ -19,9 +19,9 @@ $green-muted: #80bea6;
 $green-light: #95d3ba;
 
 // --- Typography ---
-$font-serif: 'Libre Baskerville', 'Georgia', serif;
-$font-sans: 'Inter', sans-serif;
-$font-mono: 'Nimbus Sans', 'Inter', sans-serif;
+$font-serif: 'Libre Baskerville', Georgia, serif;
+$font-sans: Inter, sans-serif;
+$font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 :host {
   display: block;
@@ -36,7 +36,7 @@ $font-mono: 'Nimbus Sans', 'Inter', sans-serif;
   margin: -1px;
   padding: 0;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   border: 0;
 }
 

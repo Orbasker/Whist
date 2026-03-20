@@ -212,7 +212,7 @@
       "trickTakingDesc": "Each player declares how many tricks they'll take. Hit your number exactly — no more, no less."
     },
     "ledger": {
-      "title": "The Ledger:",
+      "title": "The Ledger",
       "subtitle": "A Record of Eminence",
       "description": "Every round is tracked in the Ledger. Watch the scores shift as contracts are made and broken across rounds.",
       "player1": "Archibald Vane",
