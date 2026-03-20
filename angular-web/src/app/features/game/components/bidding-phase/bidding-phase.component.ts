@@ -8,6 +8,7 @@ import { ScoreboardIconComponent } from '../../../../shared/components/scoreboar
 import { TranslateModule } from '@ngx-translate/core';
 import { GameService } from '../../../../core/services/game.service';
 import { GameState } from '../../../../core/models/game-state.model';
+import { TooltipDirective } from '../../../../shared/directives/tooltip.directive';
 
 @Component({
   selector: 'app-bidding-phase',
@@ -18,6 +19,7 @@ import { GameState } from '../../../../core/models/game-state.model';
     BidInputGridComponent,
     ScoreboardIconComponent,
     TranslateModule,
+    TooltipDirective,
   ],
   templateUrl: './bidding-phase.component.html',
   styleUrl: './bidding-phase.component.scss',

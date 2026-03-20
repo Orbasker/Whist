@@ -48,5 +48,7 @@
   "language": "Language",
   "hebrew": "Hebrew",
   "english": "English",
-  "appTitle": "Whist"
+  "appTitle": "Whist",
+  "liveUpdatesConnected": "Live updates connected",
+  "realtimeDisconnected": "Realtime disconnected"
 }

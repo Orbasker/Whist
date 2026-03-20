@@ -5,6 +5,8 @@
     (click)="selectTrump(option.value)"
     [attr.aria-pressed]="selectedTrump === option.value"
     [attr.aria-label]="('game.biddingPhase.trump' | translate) + ': ' + (option.label | translate)"
+    [appTooltip]="option.label | translate"
+    tooltipPosition="bottom"
     class="min-h-touch h-12 w-12 sm:h-14 sm:w-14 rounded-full font-bold text-lg transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background flex items-center justify-center"
     [ngClass]="
       selectedTrump === option.value

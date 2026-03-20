@@ -92,7 +92,8 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final gameService = context.watch<GameService>();
-    final bids = gameService.currentBids ??
+    final bids =
+        gameService.currentBids ??
         List.filled(widget.gameState.players.length, 0);
     final roundsPlayed = widget.gameState.currentRound - 1;
 
@@ -156,7 +157,8 @@ class _TricksPhaseContentState extends State<TricksPhaseContent> {
                 selectedTrick: _tricks[i],
                 onTrickSelected: (v) => _onTrickChange(i, v),
                 isCurrentPlayer: gameService.currentPlayerIndex == i,
-                isOwner: gameService.isGameOwner &&
+                isOwner:
+                    gameService.isGameOwner &&
                     widget.gameState.playerUserIds != null &&
                     i < widget.gameState.playerUserIds!.length &&
                     widget.gameState.ownerId != null &&

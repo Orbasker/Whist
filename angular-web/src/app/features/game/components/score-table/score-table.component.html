@@ -24,8 +24,14 @@
   <div class="score-table-body">
     <div *ngIf="gameState" class="space-y-4">
       <div class="bg-surface-container-low rounded-2xl p-3 sm:p-4">
-        <h3 class="mb-3 text-base font-semibold text-on-surface sm:text-lg">
+        <h3
+          class="mb-3 text-base font-semibold text-on-surface sm:text-lg inline-flex items-center gap-1.5 cursor-help"
+          [appTooltip]="'tooltips.scoreExplain' | translate"
+          tooltipPosition="bottom"
+          tabindex="0"
+        >
           {{ 'game.scoreTable.currentScore' | translate }}
+          <span class="material-symbols-outlined text-sm text-primary/60">info</span>
         </h3>
         <div class="grid grid-cols-2 gap-3">
           <div *ngFor="let player of gameState.players; let i = index" class="text-center">
@@ -57,10 +63,18 @@
               </ng-container>
             </div>
             <div
-              class="text-xl font-bold sm:text-2xl"
+              class="text-xl font-bold sm:text-2xl cursor-help"
+              tabindex="0"
               [class.text-primary]="gameState.scores[i] > 0"
               [class.text-destructive]="gameState.scores[i] < 0"
               [class.text-on-surface]="gameState.scores[i] === 0"
+              [appTooltip]="
+                gameState.scores[i] > 0
+                  ? ('tooltips.scorePositive' | translate)
+                  : gameState.scores[i] < 0
+                    ? ('tooltips.scoreNegative' | translate)
+                    : ('tooltips.scoreExplain' | translate)
+              "
             >
               {{ gameState.scores[i] }}
             </div>
@@ -73,8 +87,14 @@
       </div>
 
       <div *ngIf="canProposeOrVoteReset" class="bg-surface-container-low rounded-2xl p-4 space-y-2">
-        <h3 class="text-sm font-semibold text-on-surface">
+        <h3
+          class="text-sm font-semibold text-on-surface inline-flex items-center gap-1 cursor-help"
+          [appTooltip]="'tooltips.resetVote' | translate"
+          tooltipPosition="bottom"
+          tabindex="0"
+        >
           {{ 'game.scoreTable.resetGame' | translate }}
+          <span class="material-symbols-outlined text-xs text-primary/60">info</span>
         </h3>
         <p class="text-xs text-on-surface-variant">
           {{ 'game.scoreTable.resetDescription' | translate }}
@@ -127,6 +147,8 @@
         *ngIf="isGameOwner"
         (click)="onDeleteGameClick()"
         class="min-h-touch rounded-full bg-error-container/20 px-4 py-2.5 text-sm font-bold text-destructive transition-colors hover:bg-error-container/30 border border-destructive/10"
+        [appTooltip]="'tooltips.deleteGame' | translate"
+        tooltipPosition="bottom"
       >
         {{ 'game.scoreTable.deleteGame' | translate }}
       </button>

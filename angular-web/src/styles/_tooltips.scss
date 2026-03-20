@@ -1,0 +1,201 @@
+/* ──────────────────────────────────────────────────
+   Whist Tooltip System — Neon Conservatory Edition
+   Emerald glow on deep navy, gold accents
+   ────────────────────────────────────────────────── */
+
+.whist-tooltip {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  max-width: 280px;
+
+  /* Glass card */
+  background: linear-gradient(135deg, rgba(19, 27, 46, 0.95) 0%, rgba(6, 14, 32, 0.98) 100%);
+  border: 1px solid rgba(149, 211, 186, 0.2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  backdrop-filter: blur(16px);
+
+  /* Typography */
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(218, 226, 253, 0.92);
+  text-align: center;
+
+  /* Entrance animation */
+  opacity: 0;
+  transform: scale(0.92) translateY(4px);
+  transition:
+    opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &--visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  &--hiding {
+    opacity: 0;
+    transform: scale(0.92) translateY(4px);
+    transition:
+      opacity 0.15s ease-in,
+      transform 0.15s ease-in;
+  }
+
+  /* ── Glow variant ── */
+  &--glow {
+    box-shadow:
+      0 0 12px rgba(149, 211, 186, 0.15),
+      0 0 30px rgba(149, 211, 186, 0.06),
+      0 4px 24px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(149, 211, 186, 0.08);
+    border-color: rgba(149, 211, 186, 0.25);
+
+    .whist-tooltip-arrow::before {
+      filter: drop-shadow(0 0 4px rgba(149, 211, 186, 0.2));
+    }
+  }
+
+  /* Shimmer line at top */
+  &--glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12px;
+    right: 12px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(149, 211, 186, 0.5) 30%,
+      rgba(255, 185, 95, 0.4) 70%,
+      transparent 100%
+    );
+    border-radius: 1px;
+  }
+}
+
+.whist-tooltip-text {
+  display: block;
+}
+
+/* ── Arrow ── */
+.whist-tooltip-arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: rgba(19, 27, 46, 0.95);
+    border: 1px solid rgba(149, 211, 186, 0.2);
+    transform: rotate(45deg);
+  }
+}
+
+/* Position-specific arrow placement */
+.whist-tooltip--top .whist-tooltip-arrow {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &::before {
+    border-top: none;
+    border-left: none;
+  }
+}
+
+.whist-tooltip--bottom .whist-tooltip-arrow {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &::before {
+    border-bottom: none;
+    border-right: none;
+  }
+}
+
+.whist-tooltip--left .whist-tooltip-arrow {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &::before {
+    border-bottom: none;
+    border-left: none;
+  }
+}
+
+.whist-tooltip--right .whist-tooltip-arrow {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &::before {
+    border-top: none;
+    border-right: none;
+  }
+}
+
+/* ── Direction-specific transforms ── */
+.whist-tooltip--top {
+  transform: scale(0.92) translateY(4px);
+
+  &.whist-tooltip--visible {
+    transform: scale(1) translateY(0);
+  }
+
+  &.whist-tooltip--hiding {
+    transform: scale(0.92) translateY(4px);
+  }
+}
+
+.whist-tooltip--bottom {
+  transform: scale(0.92) translateY(-4px);
+
+  &.whist-tooltip--visible {
+    transform: scale(1) translateY(0);
+  }
+
+  &.whist-tooltip--hiding {
+    transform: scale(0.92) translateY(-4px);
+  }
+}
+
+.whist-tooltip--left {
+  transform: scale(0.92) translateX(4px);
+
+  &.whist-tooltip--visible {
+    transform: scale(1) translateX(0);
+  }
+
+  &.whist-tooltip--hiding {
+    transform: scale(0.92) translateX(4px);
+  }
+}
+
+.whist-tooltip--right {
+  transform: scale(0.92) translateX(-4px);
+
+  &.whist-tooltip--visible {
+    transform: scale(1) translateX(0);
+  }
+
+  &.whist-tooltip--hiding {
+    transform: scale(0.92) translateX(-4px);
+  }
+}
+
+/* ── Mobile: slightly bigger touch targets ── */
+@media (max-width: 640px) {
+  .whist-tooltip {
+    max-width: 240px;
+    font-size: 0.75rem;
+    padding: 8px 12px;
+  }
+}

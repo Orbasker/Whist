@@ -116,5 +116,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get english => 'English';
 
   @override
+  String get liveUpdatesConnected => 'עדכונים חיים מחוברים';
+
+  @override
+  String get realtimeDisconnected => 'עדכונים בזמן אמת מנותקים';
+
+  @override
   String get appTitle => 'וויסט';
 }

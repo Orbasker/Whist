@@ -228,11 +228,11 @@ class _InvitationFormState extends State<InvitationForm> {
                         labelText: AppStrings.invitationFormSlotPlaceholder(n),
                         errorText:
                             _emailControllers[slotIndex].text.isNotEmpty &&
-                                    !_isValidEmail(
-                                      _emailControllers[slotIndex].text,
-                                    )
-                                ? AppStrings.invitationFormInvalidEmail
-                                : null,
+                                !_isValidEmail(
+                                  _emailControllers[slotIndex].text,
+                                )
+                            ? AppStrings.invitationFormInvalidEmail
+                            : null,
                         border: const OutlineInputBorder(),
                       ),
                       onChanged: (_) => setState(() {}),

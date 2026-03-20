@@ -25,6 +25,7 @@ import { UiInputComponent } from '../../shared/components/ui/input/input.compone
 import { UiLabelComponent } from '../../shared/components/ui/label/label.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-home',
@@ -45,6 +46,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     UiCardContentComponent,
     UiInputComponent,
     UiLabelComponent,
+    LoaderComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
