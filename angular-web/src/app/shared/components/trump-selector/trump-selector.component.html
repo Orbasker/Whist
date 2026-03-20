@@ -12,7 +12,7 @@
         : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-bright'
     "
   >
-    <span *ngIf="option.icon" aria-hidden="true">{{ option.icon }}</span>
+    <span *ngIf="option.icon" [class]="option.color" aria-hidden="true">{{ option.icon }}</span>
     <span *ngIf="!option.icon">{{ option.label | translate }}</span>
   </button>
 </div>

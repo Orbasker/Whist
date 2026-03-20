@@ -85,7 +85,7 @@
         *ngFor="let game of games"
         role="button"
         tabindex="0"
-        (click)="continueGame(game.id)"
+        (click)="$event.target === $event.currentTarget && continueGame(game.id)"
         (keydown.enter)="$event.target === $event.currentTarget ? continueGame(game.id) : null"
         (keydown.space)="
           $event.target === $event.currentTarget ? onCardSpace($event, game.id) : null
