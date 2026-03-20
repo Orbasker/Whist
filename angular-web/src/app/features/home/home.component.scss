@@ -2,17 +2,17 @@
 
 // Header entrance
 :host ::ng-deep header {
-  animation: staggerFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: stagger-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 // Trophy icon float
 :host ::ng-deep header .rounded-full.bg-secondary\/15 {
-  animation: authIconFloat 5s ease-in-out infinite;
+  animation: auth-icon-float 5s ease-in-out infinite;
 }
 
 // Game card staggered entrance animation
 :host ::ng-deep section .space-y-4 > div[role='button'] {
-  animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: card-entrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @for $i from 1 through 20 {
     &:nth-child(#{$i}) {
@@ -23,7 +23,7 @@
 
 // Game card left accent bar - animate on entrance
 :host ::ng-deep div[role='button'] .absolute.top-0.left-0.w-1 {
-  animation: staggerFadeIn 0.3s ease 0.3s both;
+  animation: stagger-fade-in 0.3s ease 0.3s both;
 }
 
 // Trophy button hover pulse
@@ -39,12 +39,12 @@
 
 // Status badge pop
 :host ::ng-deep .rounded-full.bg-secondary\/15.text-secondary {
-  animation: gridButtonPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+  animation: grid-button-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
 }
 
 // New game button glow
 :host ::ng-deep .btn-gradient.rounded-full {
-  animation: pulseGlow 3s ease-in-out infinite;
+  animation: pulse-glow 3s ease-in-out infinite;
 
   &:hover {
     animation: none;
@@ -53,12 +53,12 @@
 
 // Empty state icon gentle bounce
 :host ::ng-deep .py-12 .rounded-full.bg-surface-container-high {
-  animation: authIconFloat 4s ease-in-out infinite;
+  animation: auth-icon-float 4s ease-in-out infinite;
 }
 
 // Score cards in quick look modal - staggered entrance
 :host ::ng-deep app-modal .grid-cols-2 > div {
-  animation: staggerFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: stagger-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   &:nth-child(1) {
     animation-delay: 0.1s;
@@ -76,7 +76,7 @@
 
 // Quick look score values pop
 :host ::ng-deep app-modal .text-3xl.font-black {
-  animation: scorePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+  animation: score-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
 }
 
 // Loading spinner enhanced glow

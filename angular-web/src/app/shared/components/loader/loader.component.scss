@@ -27,6 +27,7 @@
   position: relative;
   width: 80px;
   height: 60px;
+
   margin-left: 80px;
 
   &::before {
@@ -96,7 +97,6 @@
   animation-duration: var(--tap-speed);
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  transform: rotate(10deg);
 
   &::before {
     content: '';
@@ -192,7 +192,7 @@
   height: 180px;
 }
 
-@keyframes rotateBall {
+@keyframes rotate-ball {
   0% {
     transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);
   }
@@ -204,7 +204,7 @@
   }
 }
 
-@keyframes bounceBall {
+@keyframes bounce-ball {
   0% {
     transform: translateY(-70px) scale(1, 1);
   }
@@ -231,7 +231,7 @@
   }
 }
 
-@keyframes bounceShadow {
+@keyframes bounce-shadow {
   0% {
     filter: blur(3px);
     opacity: 0.6;
@@ -265,7 +265,7 @@
 }
 
 .ball {
-  animation-name: bounceBall;
+  animation-name: bounce-ball;
   animation-duration: 1.2s;
   animation-iteration-count: infinite;
   animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
@@ -277,7 +277,7 @@
 }
 
 .ball-inner {
-  animation-name: rotateBall;
+  animation-name: rotate-ball;
   animation-duration: 25s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
@@ -337,7 +337,7 @@
 }
 
 .ball-shadow {
-  animation-name: bounceShadow;
+  animation-name: bounce-shadow;
   animation-duration: 1.2s;
   animation-iteration-count: infinite;
   animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
@@ -360,7 +360,7 @@
   overflow: hidden;
 }
 
-@keyframes astroSnow {
+@keyframes astro-snow {
   0% {
     opacity: 0;
     transform: translateY(0px);
@@ -374,7 +374,7 @@
   }
 }
 
-@keyframes astroRotate {
+@keyframes astro-rotate {
   0% {
     transform: rotate(0deg);
   }
@@ -386,7 +386,7 @@
 .astro-stars {
   position: absolute;
   inset: 0;
-  animation: astroSnow 4s linear infinite;
+  animation: astro-snow 4s linear infinite;
 }
 
 .astro-star {
@@ -413,7 +413,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  animation: astroRotate 8s linear infinite;
+  animation: astro-rotate 8s linear infinite;
   width: 60px;
   height: 80px;
 }
@@ -605,6 +605,12 @@
 // Reduced Motion
 // ============================================================
 @media (prefers-reduced-motion: reduce) {
+  .loader-hand,
+  .loader-ball,
+  .loader-astronaut {
+    display: none;
+  }
+
   .finger,
   .ball,
   .ball-inner,
@@ -614,13 +620,13 @@
     animation: none !important;
   }
 
-  // Show a simple pulsing dot instead
+  // Show a static fallback instead
   .loader-wrapper::after {
     content: '';
+    display: block;
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background: #ffb95f;
-    animation: pulseGlow 1.5s ease-in-out infinite !important;
   }
 }

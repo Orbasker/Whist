@@ -3,8 +3,10 @@
     *ngIf="serviceLoading"
     class="fixed inset-0 z-[90] flex items-center justify-center bg-background/55 backdrop-blur-sm"
     aria-live="polite"
+    role="status"
   >
     <app-loader></app-loader>
+    <span class="sr-only">{{ 'common.loading' | translate }}</span>
   </div>
 
   <!-- Header -->
@@ -88,6 +90,12 @@
   ></app-round-history>
 </div>
 
-<div *ngIf="!gameState" class="flex min-h-screen items-center justify-center bg-background">
+<div
+  *ngIf="!gameState"
+  class="flex min-h-screen items-center justify-center bg-background"
+  role="status"
+  aria-live="polite"
+>
   <app-loader></app-loader>
+  <span class="sr-only">{{ 'common.loading' | translate }}</span>
 </div>

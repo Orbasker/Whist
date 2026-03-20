@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, ElementRef, PLATFORM_ID, Inject } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Meta, Title } from '@angular/platform-browser';
@@ -19,13 +19,11 @@ import { ScrollRevealDirective } from '../../shared/directives/scroll-reveal.dir
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })
-export class LandingComponent implements OnInit, AfterViewInit {
+export class LandingComponent implements OnInit {
   constructor(
     private meta: Meta,
     private title: Title,
-    private translate: TranslateService,
-    private el: ElementRef<HTMLElement>,
-    @Inject(PLATFORM_ID) private platformId: object
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -55,33 +53,10 @@ export class LandingComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    this.initProgressBarAnimation();
-  }
-
   scrollTo(sectionId: string): void {
     const el = document.getElementById(sectionId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }
-
-  private initProgressBarAnimation(): void {
-    const progressBar = this.el.nativeElement.querySelector('.stats-progress-bar');
-    if (!progressBar) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).classList.add('animate-fill');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(progressBar);
   }
 }

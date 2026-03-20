@@ -5,22 +5,22 @@
 
 // Brand header entrance
 :host ::ng-deep main > .mb-12 {
-  animation: authBrandEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: auth-brand-entrance 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 // Playing cards icon float
 :host ::ng-deep .rounded-full.bg-surface-container-highest\/50 {
-  animation: authIconFloat 4s ease-in-out infinite;
+  animation: auth-icon-float 4s ease-in-out infinite;
 }
 
 // Login card entrance
 :host ::ng-deep .glass-panel {
-  animation: authCardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  animation: auth-card-entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 
 // OAuth buttons staggered
 :host ::ng-deep .space-y-4 > button {
-  animation: staggerFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: stagger-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   &:nth-child(1) {
     animation-delay: 0.4s;
@@ -32,12 +32,12 @@
 
 // Divider fade in
 :host ::ng-deep .flex.items-center.gap-4 {
-  animation: staggerFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+  animation: stagger-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
 }
 
 // Form fields staggered
 :host ::ng-deep form .relative.group {
-  animation: staggerFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: stagger-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   &:nth-child(1) {
     animation-delay: 0.6s;
@@ -52,12 +52,12 @@
 
 // Error message shake
 :host ::ng-deep [role='alert'] {
-  animation: lockShake 0.5s ease-in-out;
+  animation: lock-shake 0.5s ease-in-out;
 }
 
 // Submit button glow
 :host ::ng-deep form .btn-gradient:not(:disabled) {
-  animation: pulseGlow 2.5s ease-in-out infinite;
+  animation: pulse-glow 2.5s ease-in-out infinite;
 
   &:hover {
     animation: none;

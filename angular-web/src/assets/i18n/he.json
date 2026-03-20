@@ -2,6 +2,7 @@
   "common": {
     "cancel": "ביטול",
     "close": "סגור",
+    "loading": "טוען...",
     "saving": "שומר...",
     "you": "אתה",
     "confirmDelete": "אישור מחיקה",

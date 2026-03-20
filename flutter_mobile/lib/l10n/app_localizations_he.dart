@@ -107,6 +107,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get currentScoresLabel => 'ניקוד נוכחי';
 
   @override
+  String get unnamedGame => 'משחק ללא שם';
+
+  @override
+  String get liveUpdatesConnected => 'עדכונים חיים מחוברים';
+
+  @override
+  String get realtimeDisconnected => 'החיבור לעדכונים נותק';
+
+  @override
   String get language => 'שפה';
 
   @override

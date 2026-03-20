@@ -19,7 +19,7 @@
 // --- Keyframe Animations ---
 
 // Fade in + slide up (hero text stagger)
-@keyframes fadeSlideUp {
+@keyframes fade-slide-up {
   from {
     opacity: 0;
     transform: translateY(40px);
@@ -31,7 +31,7 @@
 }
 
 // Gentle float (hero floating card - with centering transform)
-@keyframes gentleFloat {
+@keyframes gentle-float {
   0%,
   100% {
     transform: translateY(-50%) rotate(12deg) translateX(0);
@@ -42,7 +42,7 @@
 }
 
 // Card shimmer
-@keyframes cardShimmer {
+@keyframes card-shimmer {
   0% {
     background-position: -200% center;
   }
@@ -52,7 +52,7 @@
 }
 
 // Subtle pulse glow
-@keyframes pulseGlow {
+@keyframes pulse-glow {
   0%,
   100% {
     box-shadow: 0 0 20px rgba(255, 185, 95, 0.15);
@@ -63,7 +63,7 @@
 }
 
 // Dot pulse (gameplay dots)
-@keyframes dotPulse {
+@keyframes dot-pulse {
   0%,
   100% {
     box-shadow: 0 0 10px #ffb95f;
@@ -78,7 +78,7 @@
 }
 
 // Progress bar fill
-@keyframes progressFill {
+@keyframes progress-fill {
   from {
     width: 0;
   }
@@ -88,7 +88,7 @@
 }
 
 // Accent bar grow
-@keyframes accentGrow {
+@keyframes accent-grow {
   from {
     width: 0;
   }
@@ -98,7 +98,7 @@
 }
 
 // Card fan out
-@keyframes fanLeft {
+@keyframes fan-left {
   from {
     opacity: 0;
     transform: rotate(0deg) translateX(20px);
@@ -109,7 +109,7 @@
   }
 }
 
-@keyframes fanRight {
+@keyframes fan-right {
   from {
     opacity: 0;
     transform: rotate(0deg) translateX(-20px);
@@ -120,7 +120,7 @@
   }
 }
 
-@keyframes fanCenter {
+@keyframes fan-center {
   from {
     opacity: 0;
     transform: scale(0.8) translateY(20px);
@@ -132,7 +132,7 @@
 }
 
 // Float particles
-@keyframes particleFloat {
+@keyframes particle-float {
   0%,
   100% {
     transform: translate(0, 0) scale(1);
@@ -153,7 +153,7 @@
 }
 
 // Typewriter cursor blink
-@keyframes cursorBlink {
+@keyframes cursor-blink {
   0%,
   100% {
     opacity: 1;
@@ -164,7 +164,7 @@
 }
 
 // Suit spin (decorative)
-@keyframes suitSpin {
+@keyframes suit-spin {
   from {
     transform: rotateY(0deg);
   }
@@ -174,7 +174,7 @@
 }
 
 // Modal entrance
-@keyframes modalSlideUp {
+@keyframes modal-slide-up {
   from {
     opacity: 0;
     transform: translateY(24px) scale(0.96);
@@ -185,7 +185,7 @@
   }
 }
 
-@keyframes backdropFadeIn {
+@keyframes backdrop-fade-in {
   from {
     opacity: 0;
   }
@@ -195,7 +195,7 @@
 }
 
 // Game card entrance
-@keyframes cardEntrance {
+@keyframes card-entrance {
   from {
     opacity: 0;
     transform: translateY(16px) scale(0.98);
@@ -207,7 +207,7 @@
 }
 
 // Number counter (for stats)
-@keyframes countUp {
+@keyframes count-up {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -219,7 +219,7 @@
 }
 
 // Divider draw
-@keyframes drawLine {
+@keyframes draw-line {
   from {
     width: 0;
   }
@@ -229,7 +229,7 @@
 }
 
 // Subtle ambient glow
-@keyframes ambientGlow {
+@keyframes ambient-glow {
   0%,
   100% {
     opacity: 0.3;
@@ -242,7 +242,7 @@
 }
 
 // Dot cycling (landing gameplay dots)
-@keyframes dotCycle {
+@keyframes dot-cycle {
   0%,
   100% {
     opacity: 1;
@@ -258,7 +258,7 @@
 }
 
 // Score table slide in from left
-@keyframes slideInLeft {
+@keyframes slide-in-left {
   from {
     opacity: 0;
     transform: translateX(-24px) scale(0.96);
@@ -270,7 +270,7 @@
 }
 
 // Score pop (score reveal in round summary)
-@keyframes scorePop {
+@keyframes score-pop {
   0% {
     opacity: 0;
     transform: scale(0.5) translateY(10px);
@@ -285,7 +285,7 @@
 }
 
 // Bid grid button ripple
-@keyframes gridButtonPop {
+@keyframes grid-button-pop {
   0% {
     transform: scale(0.85);
   }
@@ -298,7 +298,7 @@
 }
 
 // Trump selector bounce
-@keyframes trumpBounce {
+@keyframes trump-bounce {
   0% {
     transform: scale(1);
   }
@@ -314,7 +314,7 @@
 }
 
 // Phase transition (bidding <-> tricks)
-@keyframes phaseEnter {
+@keyframes phase-enter {
   from {
     opacity: 0;
     transform: translateX(30px);
@@ -326,7 +326,7 @@
 }
 
 // Auth card entrance
-@keyframes authCardEntrance {
+@keyframes auth-card-entrance {
   from {
     opacity: 0;
     transform: translateY(40px) scale(0.95);
@@ -338,7 +338,7 @@
 }
 
 // Auth brand entrance
-@keyframes authBrandEntrance {
+@keyframes auth-brand-entrance {
   from {
     opacity: 0;
     transform: translateY(-20px);
@@ -350,7 +350,7 @@
 }
 
 // Auth icon float
-@keyframes authIconFloat {
+@keyframes auth-icon-float {
   0%,
   100% {
     transform: translateY(0) rotate(0deg);
@@ -361,7 +361,7 @@
 }
 
 // Lock icon shake
-@keyframes lockShake {
+@keyframes lock-shake {
   0%,
   100% {
     transform: translateX(0);
@@ -381,7 +381,7 @@
 }
 
 // Success checkmark
-@keyframes successPop {
+@keyframes success-pop {
   0% {
     transform: scale(0) rotate(-45deg);
     opacity: 0;
@@ -396,7 +396,7 @@
 }
 
 // Stagger children (utility)
-@keyframes staggerFadeIn {
+@keyframes stagger-fade-in {
   from {
     opacity: 0;
     transform: translateY(12px);
@@ -408,7 +408,7 @@
 }
 
 // Progress bar pulse
-@keyframes progressPulse {
+@keyframes progress-pulse {
   0%,
   100% {
     box-shadow: none;
@@ -419,7 +419,7 @@
 }
 
 // Row highlight flash
-@keyframes rowHighlight {
+@keyframes row-highlight {
   0% {
     background: rgba(238, 152, 0, 0.15);
   }
@@ -432,19 +432,19 @@
 
 // Trump selector button - bounce when selected
 app-trump-selector button[aria-pressed='true'] {
-  animation: trumpBounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: trump-bounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 // Bid/Tricks grid button - pop when selected
 app-bid-input-grid button[aria-pressed='true'],
 app-tricks-input-grid button[aria-pressed='true'] {
-  animation: gridButtonPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: grid-button-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 // Bid/Tricks grid buttons staggered entrance
-app-bid-input-grid .grid > ng-container:first-child button,
-app-tricks-input-grid .grid > ng-container:first-child button {
-  animation: staggerFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+app-bid-input-grid .grid > button,
+app-tricks-input-grid .grid > button {
+  animation: stagger-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @for $i from 1 through 7 {
     &:nth-child(#{$i}) {
@@ -454,8 +454,7 @@ app-tricks-input-grid .grid > ng-container:first-child button {
 }
 
 // Lock bid button pulse
-button:has(+ app-bid-input-grid),
-.bg-secondary\/15 {
+button.bg-secondary\/15 {
   transition:
     transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
     background 0.2s ease;

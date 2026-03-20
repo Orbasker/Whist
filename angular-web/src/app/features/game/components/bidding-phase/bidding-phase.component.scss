@@ -10,12 +10,12 @@
 // Phase entrance animation
 :host {
   display: block;
-  animation: phaseEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: phase-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 // Player cards staggered entrance
 :host ::ng-deep .space-y-4 > div {
-  animation: staggerFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: stagger-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @for $i from 1 through 4 {
     &:nth-child(#{$i}) {
@@ -31,13 +31,13 @@
 
 // Status message transition
 :host ::ng-deep .text-destructive {
-  animation: lockShake 0.4s ease-in-out;
+  animation: lock-shake 0.4s ease-in-out;
 }
 
 // Submit button glow when ready
 :host ::ng-deep .btn-gradient {
   &:not(:disabled) {
-    animation: pulseGlow 2s ease-in-out infinite;
+    animation: pulse-glow 2s ease-in-out infinite;
 
     &:hover {
       animation: none;

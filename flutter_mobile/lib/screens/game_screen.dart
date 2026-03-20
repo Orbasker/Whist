@@ -226,6 +226,7 @@ class _GameScreenState extends State<GameScreen> {
   void _openInviteModal(BuildContext context, GameService gameService) {
     final gameState = gameService.gameState!;
     final api = context.read<ApiService>();
+    final l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -238,7 +239,7 @@ class _GameScreenState extends State<GameScreen> {
                 ? gameState.name!
                 : (gameState.players.isNotEmpty
                       ? gameState.players.join(', ')
-                      : 'Unnamed game'),
+                      : l10n.unnamedGame),
             players: gameState.players,
             playerUserIds: gameState.playerUserIds,
             api: api,
@@ -323,8 +324,8 @@ class _RealtimeIndicator extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Tooltip(
           message: isConnected
-              ? 'Live updates connected'
-              : 'Realtime disconnected',
+              ? AppLocalizations.of(context)!.liveUpdatesConnected
+              : AppLocalizations.of(context)!.realtimeDisconnected,
           child: Icon(
             isConnected ? Icons.circle : Icons.circle_outlined,
             size: 10,
