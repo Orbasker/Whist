@@ -34,9 +34,19 @@
   align-items: center;
   gap: 12px;
   text-decoration: none;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 
   .logo-icon {
     color: #fbbf24;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    .landing-logo:hover & {
+      transform: rotate(15deg) scale(1.1);
+    }
   }
 
   .logo-text {
@@ -89,12 +99,20 @@
   text-decoration: none;
   transition:
     background 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
 
   &:hover,
   &:focus-visible {
     background: #065f46;
     border-color: rgba(149, 211, 186, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(6, 78, 59, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
   }
 }
 

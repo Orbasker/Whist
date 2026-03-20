@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InvitationService, InvitationInfo } from '../../core/services/invitation.service';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { AuthService } from '../../core/services/auth.service';
 import { GameService } from '../../core/services/game.service';
-import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-invite',

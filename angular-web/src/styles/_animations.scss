@@ -1,0 +1,482 @@
+// ============================================================
+// Global Animation System
+// ============================================================
+
+// --- Scroll Reveal Base ---
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// --- Keyframe Animations ---
+
+// Fade in + slide up (hero text stagger)
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Gentle float (hero floating card - with centering transform)
+@keyframes gentle-float {
+  0%,
+  100% {
+    transform: translateY(-50%) rotate(12deg) translateX(0);
+  }
+  50% {
+    transform: translateY(calc(-50% - 12px)) rotate(12deg) translateX(4px);
+  }
+}
+
+// Card shimmer
+@keyframes card-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+// Subtle pulse glow
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 185, 95, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 185, 95, 0.3);
+  }
+}
+
+// Dot pulse (gameplay dots)
+@keyframes dot-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px #ffb95f;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 20px #ffb95f,
+      0 0 40px rgba(255, 185, 95, 0.3);
+    transform: scale(1.15);
+  }
+}
+
+// Progress bar fill
+@keyframes progress-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--progress-width, 74.2%);
+  }
+}
+
+// Accent bar grow
+@keyframes accent-grow {
+  from {
+    width: 0;
+  }
+  to {
+    width: 96px;
+  }
+}
+
+// Card fan out
+@keyframes fan-left {
+  from {
+    opacity: 0;
+    transform: rotate(0deg) translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-12deg) translateX(0);
+  }
+}
+
+@keyframes fan-right {
+  from {
+    opacity: 0;
+    transform: rotate(0deg) translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(12deg) translateX(0);
+  }
+}
+
+@keyframes fan-center {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Float particles
+@keyframes particle-float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(10px, -20px) scale(1.2);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-5px, -40px) scale(0.8);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(15px, -20px) scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+// Typewriter cursor blink
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+// Suit spin (decorative)
+@keyframes suit-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+// Modal entrance
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes backdrop-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Game card entrance
+@keyframes card-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Number counter (for stats)
+@keyframes count-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Divider draw
+@keyframes draw-line {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+// Subtle ambient glow
+@keyframes ambient-glow {
+  0%,
+  100% {
+    opacity: 0.3;
+    filter: blur(60px);
+  }
+  50% {
+    opacity: 0.5;
+    filter: blur(80px);
+  }
+}
+
+// Dot cycling (landing gameplay dots)
+@keyframes dot-cycle {
+  0%,
+  100% {
+    opacity: 1;
+    background: #ffb95f;
+    box-shadow: 0 0 10px #ffb95f;
+  }
+  33%,
+  66% {
+    opacity: 0.4;
+    background: #bdc8d3;
+    box-shadow: none;
+  }
+}
+
+// Score table slide in from left
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+// Score pop (score reveal in round summary)
+@keyframes score-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(10px);
+  }
+  60% {
+    transform: scale(1.15) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Bid grid button ripple
+@keyframes grid-button-pop {
+  0% {
+    transform: scale(0.85);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Trump selector bounce
+@keyframes trump-bounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.2) rotate(-5deg);
+  }
+  60% {
+    transform: scale(0.95) rotate(2deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(0);
+  }
+}
+
+// Phase transition (bidding <-> tricks)
+@keyframes phase-enter {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Auth card entrance
+@keyframes auth-card-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Auth brand entrance
+@keyframes auth-brand-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Auth icon float
+@keyframes auth-icon-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(3deg);
+  }
+}
+
+// Lock icon shake
+@keyframes lock-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+// Success checkmark
+@keyframes success-pop {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+// Stagger children (utility)
+@keyframes stagger-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Progress bar pulse
+@keyframes progress-pulse {
+  0%,
+  100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(238, 152, 0, 0.4);
+  }
+}
+
+// Row highlight flash
+@keyframes row-highlight {
+  0% {
+    background: rgba(238, 152, 0, 0.15);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+// --- Shared Component Animations ---
+
+// Trump selector button - bounce when selected
+app-trump-selector button[aria-pressed='true'] {
+  animation: trump-bounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// Bid/Tricks grid button - pop when selected
+app-bid-input-grid button[aria-pressed='true'],
+app-tricks-input-grid button[aria-pressed='true'] {
+  animation: grid-button-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// Bid/Tricks grid buttons staggered entrance
+app-bid-input-grid .grid > button,
+app-tricks-input-grid .grid > button {
+  animation: stagger-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @for $i from 1 through 7 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 20}ms;
+    }
+  }
+}
+
+// Lock bid button pulse
+button.bg-secondary\/15 {
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.2s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// --- Reduced Motion ---
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

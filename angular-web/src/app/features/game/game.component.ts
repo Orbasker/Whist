@@ -25,9 +25,9 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
     ScoreTableComponent,
     ScoreboardIconComponent,
     RoundHistoryComponent,
+    LoaderComponent,
     TranslateModule,
     TooltipDirective,
-    LoaderComponent,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -35,6 +35,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
 export class GameComponent implements OnInit, OnDestroy {
   gameState: GameState | null = null;
   phase: 'bidding' | 'tricks' = 'bidding';
+  serviceLoading = false;
   showScoreTable = false;
   showRoundSummary = false;
   roundResults: RoundSummaryResults | null = null;
@@ -76,6 +77,12 @@ export class GameComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.gameService.getCurrentPhase().subscribe((phase) => {
         this.phase = phase;
+      })
+    );
+
+    this.subscriptions.add(
+      this.gameService.getLoading().subscribe((loading) => {
+        this.serviceLoading = loading;
       })
     );
 

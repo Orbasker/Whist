@@ -45,10 +45,11 @@
   "gameLabel": "Game",
   "playersLabel": "Players",
   "currentScoresLabel": "Current scores",
+  "unnamedGame": "Unnamed game",
+  "liveUpdatesConnected": "Live updates connected",
+  "realtimeDisconnected": "Realtime disconnected",
   "language": "Language",
   "hebrew": "Hebrew",
   "english": "English",
-  "appTitle": "Whist",
-  "liveUpdatesConnected": "Live updates connected",
-  "realtimeDisconnected": "Realtime disconnected"
+  "appTitle": "Whist"
 }

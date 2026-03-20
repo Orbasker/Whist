@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type LoaderVariant = 'cards' | 'orbit' | 'suits';
@@ -11,7 +11,7 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
   template: `
     <!-- Card Fan Loader -->
     <div
-      *ngIf="variant === 'cards'"
+      *ngIf="activeVariant === 'cards'"
       class="whist-loader-cards"
       [class.whist-loader--sm]="size === 'sm'"
       [class.whist-loader--lg]="size === 'lg'"
@@ -34,7 +34,7 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
 
     <!-- Orbit Loader -->
     <div
-      *ngIf="variant === 'orbit'"
+      *ngIf="activeVariant === 'orbit'"
       class="whist-loader-orbit"
       [class.whist-loader--sm]="size === 'sm'"
       [class.whist-loader--lg]="size === 'lg'"
@@ -50,7 +50,7 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
 
     <!-- Suits Shuffle Loader -->
     <div
-      *ngIf="variant === 'suits'"
+      *ngIf="activeVariant === 'suits'"
       class="whist-loader-suits"
       [class.whist-loader--sm]="size === 'sm'"
       [class.whist-loader--lg]="size === 'lg'"
@@ -64,8 +64,27 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
     </div>
   `,
 })
-export class LoaderComponent {
-  @Input() variant: LoaderVariant = 'cards';
+export class LoaderComponent implements OnInit {
+  @Input() variant: LoaderVariant | null = null;
   @Input() size: LoaderSize = 'md';
   @Input() label = '';
+
+  activeVariant: LoaderVariant = 'cards';
+
+  ngOnInit(): void {
+    if (this.variant) {
+      this.activeVariant = this.variant;
+      return;
+    }
+
+    // Keep the branch behavior of rotating between the three loader styles
+    // while remaining compatible with the newer explicit variant API.
+    const variants: LoaderVariant[] = ['cards', 'orbit', 'suits'];
+    const seed =
+      typeof globalThis.crypto?.getRandomValues === 'function'
+        ? globalThis.crypto.getRandomValues(new Uint32Array(1))[0]
+        : Date.now();
+
+    this.activeVariant = variants[seed % variants.length];
+  }
 }

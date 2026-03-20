@@ -6,11 +6,11 @@
 @import './styles/loaders';
 @import './styles/rtl';
 @import './styles/breakpoints';
+@import './styles/animations';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 /* Global styles */
 * {
   margin: 0;

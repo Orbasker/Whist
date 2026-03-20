@@ -284,6 +284,24 @@ abstract class AppLocalizations {
   /// **'Current scores'**
   String get currentScoresLabel;
 
+  /// No description provided for @unnamedGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Unnamed game'**
+  String get unnamedGame;
+
+  /// No description provided for @liveUpdatesConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Live updates connected'**
+  String get liveUpdatesConnected;
+
+  /// No description provided for @realtimeDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Realtime disconnected'**
+  String get realtimeDisconnected;
+
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
@@ -301,18 +319,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English'**
   String get english;
-
-  /// No description provided for @liveUpdatesConnected.
-  ///
-  /// In en, this message translates to:
-  /// **'Live updates connected'**
-  String get liveUpdatesConnected;
-
-  /// No description provided for @realtimeDisconnected.
-  ///
-  /// In en, this message translates to:
-  /// **'Realtime disconnected'**
-  String get realtimeDisconnected;
 
   /// No description provided for @appTitle.
   ///

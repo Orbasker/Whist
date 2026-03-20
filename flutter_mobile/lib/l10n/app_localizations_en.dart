@@ -108,6 +108,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currentScoresLabel => 'Current scores';
 
   @override
+  String get unnamedGame => 'Unnamed game';
+
+  @override
+  String get liveUpdatesConnected => 'Live updates connected';
+
+  @override
+  String get realtimeDisconnected => 'Realtime disconnected';
+
+  @override
   String get language => 'Language';
 
   @override
@@ -115,12 +124,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get english => 'English';
-
-  @override
-  String get liveUpdatesConnected => 'Live updates connected';
-
-  @override
-  String get realtimeDisconnected => 'Realtime disconnected';
 
   @override
   String get appTitle => 'Whist';

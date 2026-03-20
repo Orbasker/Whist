@@ -31,10 +31,11 @@
   "gameLabel": "משחק",
   "playersLabel": "שחקנים",
   "currentScoresLabel": "ניקוד נוכחי",
+  "unnamedGame": "משחק ללא שם",
+  "liveUpdatesConnected": "עדכונים חיים מחוברים",
+  "realtimeDisconnected": "החיבור לעדכונים נותק",
   "language": "שפה",
   "hebrew": "עברית",
   "english": "English",
-  "appTitle": "וויסט",
-  "liveUpdatesConnected": "עדכונים חיים מחוברים",
-  "realtimeDisconnected": "עדכונים בזמן אמת מנותקים"
+  "appTitle": "וויסט"
 }

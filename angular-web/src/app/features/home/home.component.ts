@@ -39,6 +39,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
     TranslateModule,
     ModalComponent,
     ConfirmModalComponent,
+    LoaderComponent,
     UiButtonComponent,
     UiCardComponent,
     UiCardHeaderComponent,
@@ -46,7 +47,6 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
     UiCardContentComponent,
     UiInputComponent,
     UiLabelComponent,
-    LoaderComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -59,6 +59,7 @@ export class HomeComponent implements OnInit {
   userId: string | null = null;
   games: GameState[] = [];
   loading = false;
+  actionLoading = false;
   showNewGameForm = false;
   newGameName = '';
   showInvitationForm = false;
@@ -129,6 +130,7 @@ export class HomeComponent implements OnInit {
   }
 
   async logout() {
+    this.actionLoading = true;
     try {
       await this.authService.signOut();
       this.isAuthenticated = false;
@@ -137,6 +139,8 @@ export class HomeComponent implements OnInit {
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('Logout error:', error);
+    } finally {
+      this.actionLoading = false;
     }
   }
 
@@ -166,6 +170,7 @@ export class HomeComponent implements OnInit {
       ];
 
       try {
+        this.actionLoading = true;
         const gameName = this.newGameName.trim() || undefined;
         const game = await this.gameService.createGame(players, gameName);
         localStorage.setItem('whist_game_id', game.id);
@@ -185,6 +190,8 @@ export class HomeComponent implements OnInit {
         ) {
           this.router.navigate(['/login']);
         }
+      } finally {
+        this.actionLoading = false;
       }
     }
   }
@@ -197,12 +204,15 @@ export class HomeComponent implements OnInit {
   async continueGame(gameId: string | undefined) {
     if (!gameId) return;
     this.closeQuickLook();
+    this.actionLoading = true;
     try {
       await this.gameService.loadGame(gameId);
       localStorage.setItem('whist_game_id', gameId);
       this.router.navigate(['/game']);
     } catch (error) {
       console.error('Failed to load game:', error);
+    } finally {
+      this.actionLoading = false;
     }
   }
 
@@ -313,6 +323,7 @@ export class HomeComponent implements OnInit {
     const gameId = this.deleteGameIdPending;
     this.closeDeleteConfirm();
     if (!gameId) return;
+    this.actionLoading = true;
     try {
       await this.gameService.deleteGameAsync(gameId);
       await this.loadGames();
@@ -325,6 +336,8 @@ export class HomeComponent implements OnInit {
       const message =
         err instanceof Error ? err.message : this.translate.instant('home.deleteGameFailed');
       alert(message);
+    } finally {
+      this.actionLoading = false;
     }
   }
 }
