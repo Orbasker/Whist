@@ -5,11 +5,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GameState } from '../../../../core/models/game-state.model';
 import { GameService } from '../../../../core/services/game.service';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
+import { TooltipDirective } from '../../../../shared/directives/tooltip.directive';
 
 @Component({
   selector: 'app-score-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, ConfirmModalComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, ConfirmModalComponent, TooltipDirective],
   templateUrl: './score-table.component.html',
   styleUrl: './score-table.component.scss',
 })

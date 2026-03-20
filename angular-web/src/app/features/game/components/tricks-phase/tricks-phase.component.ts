@@ -6,11 +6,18 @@ import { GameState } from '../../../../core/models/game-state.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { TricksInputGridComponent } from '../../../../shared/components/tricks-input-grid/tricks-input-grid.component';
 import { ScoreboardIconComponent } from '../../../../shared/components/scoreboard-icon/scoreboard-icon.component';
+import { TooltipDirective } from '../../../../shared/directives/tooltip.directive';
 
 @Component({
   selector: 'app-tricks-phase',
   standalone: true,
-  imports: [CommonModule, TricksInputGridComponent, ScoreboardIconComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    TricksInputGridComponent,
+    ScoreboardIconComponent,
+    TranslateModule,
+    TooltipDirective,
+  ],
   templateUrl: './tricks-phase.component.html',
   styleUrl: './tricks-phase.component.scss',
 })

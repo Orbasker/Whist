@@ -11,6 +11,7 @@ import { ScoreTableComponent } from './components/score-table/score-table.compon
 import { ScoreboardIconComponent } from '../../shared/components/scoreboard-icon/scoreboard-icon.component';
 import { RoundHistoryComponent } from './components/round-history/round-history.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { TooltipDirective } from '../../shared/directives/tooltip.directive';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
@@ -26,6 +27,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
     RoundHistoryComponent,
     LoaderComponent,
     TranslateModule,
+    TooltipDirective,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',

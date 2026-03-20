@@ -2,11 +2,8 @@
   <div
     *ngIf="serviceLoading"
     class="fixed inset-0 z-[90] flex items-center justify-center bg-background/55 backdrop-blur-sm"
-    aria-live="polite"
-    role="status"
   >
-    <app-loader></app-loader>
-    <span class="sr-only">{{ 'common.loading' | translate }}</span>
+    <app-loader variant="cards" size="lg" [label]="'common.loading' | translate"></app-loader>
   </div>
 
   <!-- Header -->
@@ -35,6 +32,8 @@
         (click)="showScoreTable = true"
         class="text-primary hover:bg-surface-container-highest/50 transition-colors p-2 rounded-full active:scale-95 duration-200"
         [attr.aria-label]="'game.scoreTable' | translate"
+        [appTooltip]="'tooltips.scoreExplain' | translate"
+        tooltipPosition="bottom"
       >
         <span class="material-symbols-outlined">table_chart</span>
       </button>
@@ -92,10 +91,7 @@
 
 <div
   *ngIf="!gameState"
-  class="flex min-h-screen items-center justify-center bg-background"
-  role="status"
-  aria-live="polite"
+  class="flex min-h-screen flex-col items-center justify-center gap-4 bg-background"
 >
-  <app-loader></app-loader>
-  <span class="sr-only">{{ 'common.loading' | translate }}</span>
+  <app-loader variant="cards" size="lg" [label]="'common.loading' | translate"></app-loader>
 </div>

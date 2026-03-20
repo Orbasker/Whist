@@ -244,6 +244,25 @@
       "contact": "Contact"
     }
   },
+  "tooltips": {
+    "scoreExplain": "Hit your bid exactly: tricks\u00b2 + 10 points. Miss and lose points per trick off.",
+    "bidZeroRisk": "Bid 0 is high-risk: +50 if you take nothing, -50 if you take any trick.",
+    "totalBidsBar": "Total bids can't equal 13. Last bidder must push Over or Under.",
+    "trumpExplain": "The trump suit beats all other suits. Choose wisely to control the game.",
+    "noTrumpExplain": "No trump means the highest card of the led suit wins each trick.",
+    "tricksCount": "Record exactly how many tricks each player actually took this round.",
+    "lockBid": "Lock your bid so other players can see it. You can't change it after.",
+    "resetVote": "All players must vote yes to reset. Scores will go back to zero.",
+    "roundScore": "This round's score change based on bid vs actual tricks taken.",
+    "managerBadge": "The game manager can edit all players and manage the game.",
+    "youBadge": "This is your seat at the table.",
+    "overMode": "Over: total bids exceed 13. More competition for tricks.",
+    "underMode": "Under: total bids under 13. Someone won't hit their target.",
+    "scorePositive": "Ahead of the pack! Keep hitting those contracts.",
+    "scoreNegative": "Behind on points. A good zero-bid can turn things around.",
+    "roundHistory": "View the complete history of bids, tricks, and scores for every round.",
+    "deleteGame": "Permanently delete this game and all its history. This cannot be undone."
+  },
   "invitationForm": {
     "gameFull": "Game is full. No slots available for invitation.",
     "title": "Send game invitations",
