@@ -1,85 +1,619 @@
-// Home uses Tailwind in template; add component-specific overrides here if needed.
-
-// Header entrance
-:host ::ng-deep header {
-  animation: stagger-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+:host {
+  display: block;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(20, 184, 255, 0.06), transparent 30%),
+    linear-gradient(135deg, #081425 0%, #040e1f 55%, #081425 100%);
+  color: #d8e3fb;
 }
 
-// Trophy icon float
-:host ::ng-deep header .rounded-full.bg-secondary\/15 {
-  animation: auth-icon-float 5s ease-in-out infinite;
+.dashboard-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 17rem minmax(0, 1fr);
 }
 
-// Game card staggered entrance animation
-:host ::ng-deep section .space-y-4 > div[role='button'] {
-  animation: card-entrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-
-  @for $i from 1 through 20 {
-    &:nth-child(#{$i}) {
-      animation-delay: #{$i * 60}ms;
-    }
-  }
+.dashboard-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(180deg, #040e1f, #081425);
 }
 
-// Game card left accent bar - animate on entrance
-:host ::ng-deep div[role='button'] .absolute.top-0.left-0.w-1 {
-  animation: stagger-fade-in 0.3s ease 0.3s both;
+.sidebar-brand {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
 }
 
-// Trophy button hover pulse
-:host ::ng-deep div[role='button'] .rounded-full.bg-secondary\/10 {
+.sidebar-brand-title {
+  color: #f1c400;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-brand-subtitle {
+  color: rgba(216, 227, 251, 0.45);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sidebar-user {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 1rem;
+  background: rgba(42, 53, 72, 0.3);
+}
+
+.sidebar-user-badge {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #f1c400, #d0a900);
+  color: #3c2f00;
+  font-weight: 800;
+}
+
+.sidebar-user strong {
+  display: block;
+  color: #d8e3fb;
+  font-size: 0.95rem;
+}
+
+.sidebar-user p {
+  margin: 0.15rem 0 0;
+  color: rgba(216, 227, 251, 0.45);
+  font-size: 0.8rem;
+}
+
+.sidebar-nav {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 3rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.9rem;
+  color: rgba(216, 227, 251, 0.6);
+  text-decoration: none;
   transition:
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.2s ease;
+    background 0.2s ease,
+    color 0.2s ease;
+}
 
-  &:hover {
-    transform: scale(1.1);
+.sidebar-link:hover,
+.sidebar-link:focus-visible {
+  background: rgba(42, 53, 72, 0.4);
+  color: #f1c400;
+}
+
+.sidebar-link-active {
+  background: rgba(20, 184, 255, 0.08);
+  color: #f1c400;
+  box-shadow: inset 2px 0 0 #f1c400;
+}
+
+.sidebar-footer {
+  display: grid;
+  gap: 1rem;
+}
+
+.sidebar-cta {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 1.5rem;
+  background: rgba(20, 184, 255, 0.1);
+  color: #f1c400;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sidebar-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sidebar-meta button,
+.sidebar-meta a {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: rgba(216, 227, 251, 0.45);
+  font-size: 0.8rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dashboard-main {
+  padding: 1.75rem 2rem 2.5rem;
+}
+
+.dashboard-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-kicker {
+  margin: 0 0 0.4rem;
+  color: #8ad0ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.dashboard-topbar h1,
+.dashboard-hero-copy h2,
+.dashboard-auth-card h2,
+.dashboard-state-card h2 {
+  margin: 0;
+  color: #d8e3fb;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(2rem, 4vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-topnav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.dashboard-topnav a {
+  color: rgba(216, 227, 251, 0.55);
+  text-decoration: none;
+}
+
+.dashboard-topnav-active,
+.dashboard-topnav a:hover,
+.dashboard-topnav a:focus-visible {
+  color: #f1c400;
+}
+
+.dashboard-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(18rem, 0.85fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-hero-copy,
+.dashboard-summary-card,
+.dashboard-auth-card,
+.dashboard-state-card,
+.game-card,
+.setup-panel {
+  border-radius: 1.5rem;
+  background: #111c2d;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-hero-copy {
+  padding: 1.75rem;
+}
+
+.dashboard-hero-copy p:last-child,
+.dashboard-auth-card p:last-of-type,
+.dashboard-state-card p:last-of-type {
+  margin: 1rem 0 0;
+  max-width: 42rem;
+  color: rgba(216, 227, 251, 0.6);
+  line-height: 1.7;
+}
+
+.dashboard-summary-card {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  padding: 1.75rem;
+}
+
+.dashboard-summary-card div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+}
+
+.dashboard-summary-card span {
+  color: rgba(216, 227, 251, 0.5);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.dashboard-summary-card strong {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.dashboard-summary-card button,
+.dashboard-state-card button,
+.dashboard-auth-card a,
+.game-card-actions button:first-child,
+.setup-submit {
+  min-height: 3.25rem;
+  border: 0;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, #f1c400 0%, #d0a900 100%);
+  color: #3c2f00;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.dashboard-auth-card,
+.dashboard-state-card {
+  padding: 2rem;
+}
+
+.dashboard-auth-card a,
+.dashboard-state-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 0 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.dashboard-state-card {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  min-height: 18rem;
+}
+
+.dashboard-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid rgba(20, 184, 255, 0.2);
+  border-top-color: #14b8ff;
+  border-radius: 999px;
+  animation: dashboard-spin 0.9s linear infinite;
+}
+
+.dashboard-games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1.25rem;
+}
+
+.game-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.4rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.game-card:hover {
+  background: #152031;
+}
+
+.game-card-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.game-card-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0 0.65rem;
+  margin-bottom: 0.85rem;
+  border-radius: 999px;
+  background: rgba(74, 225, 118, 0.1);
+  color: #4ae176;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.game-card-status-complete {
+  background: rgba(42, 53, 72, 0.5);
+  color: rgba(216, 227, 251, 0.55);
+}
+
+.game-card h3 {
+  margin: 0;
+  color: #d8e3fb;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.game-card-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 0.9rem;
+  background: rgba(42, 53, 72, 0.5);
+  color: #f1c400;
+  cursor: pointer;
+}
+
+.game-card-players {
+  margin: 0;
+  color: rgba(216, 227, 251, 0.6);
+  line-height: 1.6;
+}
+
+.game-card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.game-card-stats div {
+  padding: 0.9rem 0.8rem;
+  border-radius: 0.95rem;
+  background: rgba(42, 53, 72, 0.3);
+}
+
+.game-card-stats span {
+  display: block;
+  color: rgba(216, 227, 251, 0.4);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.game-card-stats strong {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.game-card-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.game-card-actions button {
+  min-height: 2.9rem;
+  padding: 0 1rem;
+}
+
+.game-card-action-secondary {
+  border: 1px solid rgba(62, 72, 80, 0.15);
+  border-radius: 1.5rem;
+  background: rgba(42, 53, 72, 0.3);
+  color: #d8e3fb;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.setup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(4, 14, 31, 0.7);
+  backdrop-filter: blur(16px);
+}
+
+.setup-panel {
+  position: relative;
+  width: min(100%, 33rem);
+  padding: 2rem;
+  overflow: hidden;
+  background: rgba(31, 42, 60, 0.9);
+  backdrop-filter: blur(16px);
+}
+
+.setup-panel-glow {
+  position: absolute;
+  inset: -20% -10% auto auto;
+  width: 8rem;
+  height: 8rem;
+  background: linear-gradient(135deg, rgba(241, 196, 0, 0.1), transparent);
+  transform: rotate(25deg);
+}
+
+.setup-kicker,
+.setup-section-title span,
+.setup-field > span {
+  color: #8ad0ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.setup-panel h2 {
+  margin: 0.5rem 0 1.5rem;
+  color: #d8e3fb;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.setup-form {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.setup-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.setup-field input {
+  min-height: 3.2rem;
+  padding: 0 1rem;
+  border: 1px solid rgba(62, 72, 80, 0.15);
+  border-radius: 0.5rem;
+  background: rgba(4, 14, 31, 0.4);
+  color: #d8e3fb;
+}
+
+.setup-field input::placeholder {
+  color: rgba(216, 227, 251, 0.25);
+}
+
+.setup-field input:focus {
+  outline: 2px solid rgba(138, 208, 255, 0.4);
+  outline-offset: 0;
+}
+
+.setup-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.setup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.setup-note {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(42, 53, 72, 0.3);
+  color: rgba(216, 227, 251, 0.7);
+}
+
+.setup-note .material-symbols-outlined {
+  color: #f1c400;
+}
+
+.setup-note p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.setup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.85rem;
+}
+
+.setup-cancel {
+  min-height: 3.25rem;
+  padding: 0 1rem;
+  border: 0;
+  background: transparent;
+  color: rgba(216, 227, 251, 0.7);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.setup-submit {
+  min-width: 12rem;
+}
+
+.setup-submit:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+@keyframes dashboard-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-// Status badge pop
-:host ::ng-deep .rounded-full.bg-secondary\/15.text-secondary {
-  animation: grid-button-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
-}
+@media (max-width: 1080px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr;
+  }
 
-// New game button glow
-:host ::ng-deep .btn-gradient.rounded-full {
-  animation: pulse-glow 3s ease-in-out infinite;
+  .dashboard-sidebar {
+    gap: 1.5rem;
+  }
 
-  &:hover {
-    animation: none;
+  .dashboard-main {
+    padding-top: 1.5rem;
   }
 }
 
-// Empty state icon gentle bounce
-:host ::ng-deep .py-12 .rounded-full.bg-surface-container-high {
-  animation: auth-icon-float 4s ease-in-out infinite;
-}
-
-// Score cards in quick look modal - staggered entrance
-:host ::ng-deep app-modal .grid-cols-2 > div {
-  animation: stagger-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-
-  &:nth-child(1) {
-    animation-delay: 0.1s;
+@media (max-width: 760px) {
+  .dashboard-main {
+    padding: 1.25rem 1rem 2rem;
   }
-  &:nth-child(2) {
-    animation-delay: 0.15s;
-  }
-  &:nth-child(3) {
-    animation-delay: 0.2s;
-  }
-  &:nth-child(4) {
-    animation-delay: 0.25s;
-  }
-}
 
-// Quick look score values pop
-:host ::ng-deep app-modal .text-3xl.font-black {
-  animation: score-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
-}
+  .dashboard-topbar,
+  .dashboard-hero {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
 
-// Loading spinner enhanced glow
-:host ::ng-deep .animate-spin {
-  filter: drop-shadow(0 0 8px rgba(238, 152, 0, 0.3));
+  .dashboard-topnav {
+    flex-wrap: wrap;
+    gap: 0.85rem 1rem;
+  }
+
+  .dashboard-games,
+  .setup-grid,
+  .game-card-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .setup-overlay {
+    padding: 0.75rem;
+  }
+
+  .setup-panel {
+    padding: 1.5rem 1rem;
+  }
+
+  .setup-actions {
+    flex-direction: column-reverse;
+  }
+
+  .setup-submit,
+  .setup-cancel {
+    width: 100%;
+  }
 }

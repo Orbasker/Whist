@@ -8,15 +8,15 @@
 }
 
 .landing-header {
-  backdrop-filter: blur(6px);
-  background: rgba(2, 6, 23, 0.7);
+  backdrop-filter: blur(12px);
+  background: rgba(4, 14, 31, 0.7);
   transition:
     background 0.3s ease,
     box-shadow 0.3s ease;
 
   &.scrolled {
-    background: rgba(2, 6, 23, 0.9);
-    box-shadow: 0 25px 50px -12px rgba(2, 44, 34, 0.5);
+    background: rgba(4, 14, 31, 0.9);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -41,7 +41,7 @@
   }
 
   .logo-icon {
-    color: #fbbf24;
+    color: #f1c400;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     .landing-logo:hover & {
@@ -50,11 +50,12 @@
   }
 
   .logo-text {
-    font-family: 'Libre Baskerville', Georgia, serif;
-    font-style: italic;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 800;
     font-size: 24px;
     line-height: 32px;
-    color: #fbbf24;
+    color: #f1c400;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -65,19 +66,19 @@
 }
 
 .nav-link {
-  font-family: Inter, sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 10px;
-  font-weight: 400;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
   line-height: 15px;
-  color: #cbd5e1;
+  color: #bdc8d2;
   text-decoration: none;
   transition: color 0.2s ease;
 
   &:hover,
   &:focus-visible {
-    color: #fbbf24;
+    color: #f1c400;
   }
 }
 
@@ -85,17 +86,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #064e3b;
-  border: 1px solid rgba(149, 211, 186, 0.2);
-  border-radius: 6px;
+  background: rgba(20, 184, 255, 0.12);
+  border: 1px solid rgba(138, 208, 255, 0.15);
+  border-radius: 1.5rem;
   padding: 9px 25px;
-  font-family: Inter, sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   line-height: 15px;
-  color: #80bea6;
+  color: #8ad0ff;
   text-decoration: none;
   transition:
     background 0.2s ease,
@@ -105,10 +106,10 @@
 
   &:hover,
   &:focus-visible {
-    background: #065f46;
-    border-color: rgba(149, 211, 186, 0.4);
+    background: rgba(20, 184, 255, 0.2);
+    border-color: rgba(138, 208, 255, 0.3);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(6, 78, 59, 0.4);
+    box-shadow: 0 4px 12px rgba(20, 184, 255, 0.2);
   }
 
   &:active {

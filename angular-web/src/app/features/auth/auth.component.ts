@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule, LoaderComponent],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })

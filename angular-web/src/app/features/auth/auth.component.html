@@ -1,70 +1,115 @@
-<!-- Felt-gradient background -->
-<div class="fixed inset-0 z-0 felt-gradient pointer-events-none"></div>
+<main class="auth-shell">
+  <header class="auth-header">
+    <a routerLink="/" class="auth-brand">{{ 'landing.brandName' | translate }}</a>
+    <span class="auth-era">EST. 1890</span>
+  </header>
 
-<main class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 py-12">
-  <!-- Brand header -->
-  <div class="mb-12 text-center">
-    <div
-      class="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-surface-container-highest/50 ghost-border shadow-2xl"
-    >
-      <span
-        class="material-symbols-outlined text-4xl text-secondary"
-        style="font-variation-settings: 'FILL' 1"
-        >playing_cards</span
-      >
-    </div>
-    <h1 class="text-5xl md:text-6xl font-headline font-bold tracking-tight italic text-primary">
-      WHIST
-    </h1>
-    <p class="mt-4 text-on-surface-variant font-medium tracking-widest uppercase text-xs">
-      {{ 'auth.subtitle' | translate }}
-    </p>
-  </div>
+  <section class="auth-stage" aria-labelledby="auth-title">
+    <div class="auth-panel">
+      <div class="auth-panel-glow" aria-hidden="true"></div>
 
-  <!-- Login container -->
-  <div
-    class="w-full max-w-md glass-panel ghost-border rounded-2xl p-8 md:p-10 shadow-[0px_24px_48px_rgba(0,0,0,0.4)] relative overflow-hidden"
-  >
-    <div
-      *ngIf="isLoading"
-      class="absolute inset-0 z-20 flex items-center justify-center bg-background/70 backdrop-blur-sm"
-      aria-live="polite"
-    >
-      <div class="flex flex-col items-center text-center">
-        <app-loader></app-loader>
-        <p class="-mt-2 text-sm font-semibold text-on-surface-variant">
-          {{ loadingMessageKey | translate }}
+      <div class="auth-copy">
+        <h1 id="auth-title" class="auth-title">
+          {{ isLoginMode ? ('auth.grandSalon' | translate) : ('auth.joinTheClub' | translate) }}
+        </h1>
+        <p class="auth-subtitle">
+          {{ isLoginMode ? ('auth.welcomeBack' | translate) : ('auth.subtitle' | translate) }}
         </p>
       </div>
-    </div>
 
-    <div class="space-y-8">
-      <!-- Error message -->
       <div
-        *ngIf="errorMessage"
-        role="alert"
-        class="rounded-xl bg-error-container/20 px-4 py-3 text-sm text-on-error-container border border-error-container/10"
+        *ngIf="isLoading"
+        class="absolute inset-0 z-20 flex items-center justify-center bg-background/70 backdrop-blur-sm"
+        aria-live="polite"
       >
-        {{ errorMessage }}
+        <div class="flex flex-col items-center text-center">
+          <app-loader></app-loader>
+          <p class="-mt-2 text-sm font-semibold text-on-surface-variant">
+            {{ loadingMessageKey | translate }}
+          </p>
+        </div>
       </div>
 
-      <div class="text-center">
-        <h2 class="text-2xl font-headline font-bold tracking-tight text-secondary">
-          {{ (isLoginMode ? 'auth.signIn' : 'auth.signUp') | translate }}
-        </h2>
-        <p class="text-on-surface-variant text-sm mt-2">{{ 'auth.welcomeBack' | translate }}</p>
+      <div *ngIf="errorMessage" role="alert" class="auth-alert">
+        <span class="material-symbols-outlined auth-alert-icon">error</span>
+        <div>
+          <strong>{{
+            isLoginMode ? ('auth.authError' | translate) : ('auth.regError' | translate)
+          }}</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
       </div>
 
-      <!-- OAuth buttons (login mode) -->
-      <ng-container *ngIf="isLoginMode">
-        <div class="space-y-4">
+      <ng-container *ngIf="isLoginMode; else signupView">
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+          <label class="auth-field">
+            <span>{{ 'auth.email' | translate }}</span>
+            <div class="auth-input-wrap">
+              <span class="material-symbols-outlined">alternate_email</span>
+              <input
+                id="login-email"
+                type="email"
+                formControlName="email"
+                [attr.aria-label]="'auth.email' | translate"
+                [placeholder]="'auth.enterEmail' | translate"
+              />
+            </div>
+          </label>
+          <p
+            *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+            class="auth-error"
+          >
+            <span *ngIf="loginForm.get('email')?.errors?.['required']">{{
+              'auth.emailRequired' | translate
+            }}</span>
+            <span *ngIf="loginForm.get('email')?.errors?.['email']">{{
+              'auth.invalidEmail' | translate
+            }}</span>
+          </p>
+
+          <label class="auth-field">
+            <span>{{ 'auth.password' | translate }}</span>
+            <div class="auth-input-wrap">
+              <span class="material-symbols-outlined">lock</span>
+              <input
+                id="login-password"
+                type="password"
+                formControlName="password"
+                [attr.aria-label]="'auth.password' | translate"
+                [placeholder]="'auth.enterPassword' | translate"
+              />
+            </div>
+          </label>
+          <p
+            *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            class="auth-error"
+          >
+            <span *ngIf="loginForm.get('password')?.errors?.['required']">{{
+              'auth.passwordRequired' | translate
+            }}</span>
+            <span *ngIf="loginForm.get('password')?.errors?.['minlength']">{{
+              'auth.passwordMinLength' | translate
+            }}</span>
+          </p>
+
+          <button type="submit" [disabled]="loginForm.invalid || isLoading" class="auth-submit">
+            <span *ngIf="!isLoading">{{ 'auth.signIn' | translate }}</span>
+            <span *ngIf="isLoading">{{ 'auth.signingIn' | translate }}</span>
+          </button>
+        </form>
+
+        <div class="auth-divider">
+          <span>{{ 'auth.or' | translate }}</span>
+        </div>
+
+        <div class="auth-oauth">
           <button
             type="button"
             (click)="onGoogleSignIn()"
             [disabled]="isLoading"
-            class="w-full h-14 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface rounded-xl font-bold flex items-center justify-center gap-3 active:scale-[0.98] transition-all duration-200 ghost-border disabled:opacity-50"
+            class="auth-oauth-button"
           >
-            <svg class="h-6 w-6 shrink-0" viewBox="0 0 24 24">
+            <svg class="auth-oauth-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -90,9 +135,9 @@
             type="button"
             (click)="onGitHubSignIn()"
             [disabled]="isLoading"
-            class="w-full h-14 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface rounded-xl font-bold flex items-center justify-center gap-3 active:scale-[0.98] transition-all duration-200 ghost-border disabled:opacity-50"
+            class="auth-oauth-button"
           >
-            <svg class="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <svg class="auth-oauth-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
                 d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
               />
@@ -101,200 +146,102 @@
             <span *ngIf="isLoading">{{ 'auth.connecting' | translate }}</span>
           </button>
         </div>
-
-        <!-- Divider -->
-        <div class="flex items-center gap-4">
-          <div class="flex-1 h-[1px] bg-outline-variant/30"></div>
-          <span
-            class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60"
-            >{{ 'auth.or' | translate }}</span
-          >
-          <div class="flex-1 h-[1px] bg-outline-variant/30"></div>
-        </div>
       </ng-container>
 
-      <!-- Login Form -->
-      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-4">
-        <div class="relative group">
-          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <span
-              class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
-              >alternate_email</span
-            >
-          </div>
-          <input
-            id="login-email"
-            type="email"
-            formControlName="email"
-            [attr.aria-label]="'auth.email' | translate"
-            [placeholder]="'auth.enterEmail' | translate"
-            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-            [class.ring-2]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-            [class.ring-red-400]="
-              loginForm.get('email')?.invalid && loginForm.get('email')?.touched
-            "
-          />
-        </div>
-        <p
-          *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-          class="text-sm text-destructive px-4"
-        >
-          <span *ngIf="loginForm.get('email')?.errors?.['required']">{{
-            'auth.emailRequired' | translate
-          }}</span>
-          <span *ngIf="loginForm.get('email')?.errors?.['email']">{{
-            'auth.invalidEmail' | translate
-          }}</span>
-        </p>
-
-        <div class="relative group">
-          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <span
-              class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
-              >lock</span
-            >
-          </div>
-          <input
-            id="login-password"
-            type="password"
-            formControlName="password"
-            [attr.aria-label]="'auth.password' | translate"
-            [placeholder]="'auth.enterPassword' | translate"
-            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-            [class.ring-2]="
-              loginForm.get('password')?.invalid && loginForm.get('password')?.touched
-            "
-            [class.ring-red-400]="
-              loginForm.get('password')?.invalid && loginForm.get('password')?.touched
-            "
-          />
-        </div>
-        <p
-          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-          class="text-sm text-destructive px-4"
-        >
-          <span *ngIf="loginForm.get('password')?.errors?.['required']">{{
-            'auth.passwordRequired' | translate
-          }}</span>
-          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">{{
-            'auth.passwordMinLength' | translate
-          }}</span>
-        </p>
-
-        <button
-          type="submit"
-          [disabled]="loginForm.invalid || isLoading"
-          class="w-full h-14 btn-gradient rounded-xl font-extrabold text-sm uppercase tracking-widest active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
-        >
-          <span *ngIf="!isLoading">{{ 'auth.signIn' | translate }}</span>
-          <span *ngIf="isLoading">{{ 'auth.signingIn' | translate }}</span>
-        </button>
-      </form>
-
-      <!-- Signup Form -->
-      <form *ngIf="!isLoginMode" [formGroup]="signupForm" (ngSubmit)="onSignup()" class="space-y-4">
-        <div class="relative group">
-          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <span
-              class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
-              >person</span
-            >
-          </div>
-          <input
-            id="signup-name"
-            type="text"
-            formControlName="name"
-            [attr.aria-label]="'auth.name' | translate"
-            [placeholder]="'auth.enterName' | translate"
-            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-          />
-        </div>
-        <p
-          *ngIf="signupForm.get('name')?.invalid && signupForm.get('name')?.touched"
-          class="text-sm text-destructive px-4"
-        >
-          {{ 'auth.nameRequired' | translate }}
-        </p>
-
-        <div class="relative group">
-          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <span
-              class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
-              >alternate_email</span
-            >
-          </div>
-          <input
-            id="signup-email"
-            type="email"
-            formControlName="email"
-            [attr.aria-label]="'auth.email' | translate"
-            [placeholder]="'auth.enterEmail' | translate"
-            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-          />
-        </div>
-        <p
-          *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched"
-          class="text-sm text-destructive px-4"
-        >
-          <span *ngIf="signupForm.get('email')?.errors?.['required']">{{
-            'auth.emailRequired' | translate
-          }}</span>
-          <span *ngIf="signupForm.get('email')?.errors?.['email']">{{
-            'auth.invalidEmail' | translate
-          }}</span>
-        </p>
-
-        <div class="relative group">
-          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <span
-              class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors text-xl"
-              >lock</span
-            >
-          </div>
-          <input
-            id="signup-password"
-            type="password"
-            formControlName="password"
-            [attr.aria-label]="'auth.password' | translate"
-            [placeholder]="'auth.enterPasswordMin' | translate"
-            class="w-full h-14 bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-          />
-        </div>
-        <p
-          *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"
-          class="text-sm text-destructive px-4"
-        >
-          <span *ngIf="signupForm.get('password')?.errors?.['required']">{{
-            'auth.passwordRequired' | translate
-          }}</span>
-          <span *ngIf="signupForm.get('password')?.errors?.['minlength']">{{
-            'auth.passwordMinLength' | translate
-          }}</span>
-        </p>
-
-        <button
-          type="submit"
-          [disabled]="signupForm.invalid || isLoading"
-          class="w-full h-14 btn-gradient rounded-xl font-extrabold text-sm uppercase tracking-widest active:scale-[0.98] transition-all duration-200 disabled:opacity-50"
-        >
-          <span *ngIf="!isLoading">{{ 'auth.signUp' | translate }}</span>
-          <span *ngIf="isLoading">{{ 'auth.creatingAccount' | translate }}</span>
-        </button>
-      </form>
-
-      <!-- Toggle mode -->
-      <div class="pt-4 text-center">
-        <p class="text-on-surface-variant text-sm">
-          {{ (isLoginMode ? 'auth.noAccount' : 'auth.haveAccount') | translate }}
-          <button
-            type="button"
-            (click)="toggleMode()"
-            class="text-secondary font-bold hover:underline decoration-2 underline-offset-4 transition-all bg-transparent border-none cursor-pointer"
+      <ng-template #signupView>
+        <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="auth-form">
+          <label class="auth-field">
+            <span>{{ 'auth.name' | translate }}</span>
+            <div class="auth-input-wrap">
+              <span class="material-symbols-outlined">person</span>
+              <input
+                id="signup-name"
+                type="text"
+                formControlName="name"
+                [attr.aria-label]="'auth.name' | translate"
+                [placeholder]="'auth.enterName' | translate"
+              />
+            </div>
+          </label>
+          <p
+            *ngIf="signupForm.get('name')?.invalid && signupForm.get('name')?.touched"
+            class="auth-error"
           >
-            {{ (isLoginMode ? 'auth.signUp' : 'auth.signIn') | translate }}
+            {{ 'auth.nameRequired' | translate }}
+          </p>
+
+          <label class="auth-field">
+            <span>{{ 'auth.email' | translate }}</span>
+            <div class="auth-input-wrap">
+              <span class="material-symbols-outlined">alternate_email</span>
+              <input
+                id="signup-email"
+                type="email"
+                formControlName="email"
+                [attr.aria-label]="'auth.email' | translate"
+                [placeholder]="'auth.enterEmail' | translate"
+              />
+            </div>
+          </label>
+          <p
+            *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched"
+            class="auth-error"
+          >
+            <span *ngIf="signupForm.get('email')?.errors?.['required']">{{
+              'auth.emailRequired' | translate
+            }}</span>
+            <span *ngIf="signupForm.get('email')?.errors?.['email']">{{
+              'auth.invalidEmail' | translate
+            }}</span>
+          </p>
+
+          <label class="auth-field">
+            <span>{{ 'auth.password' | translate }}</span>
+            <div class="auth-input-wrap">
+              <span class="material-symbols-outlined">lock</span>
+              <input
+                id="signup-password"
+                type="password"
+                formControlName="password"
+                [attr.aria-label]="'auth.password' | translate"
+                [placeholder]="'auth.enterPasswordMin' | translate"
+              />
+            </div>
+          </label>
+          <p
+            *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"
+            class="auth-error"
+          >
+            <span *ngIf="signupForm.get('password')?.errors?.['required']">{{
+              'auth.passwordRequired' | translate
+            }}</span>
+            <span *ngIf="signupForm.get('password')?.errors?.['minlength']">{{
+              'auth.passwordMinLength' | translate
+            }}</span>
+          </p>
+
+          <button type="submit" [disabled]="signupForm.invalid || isLoading" class="auth-submit">
+            <span *ngIf="!isLoading">{{ 'auth.signUp' | translate }}</span>
+            <span *ngIf="isLoading">{{ 'auth.creatingAccount' | translate }}</span>
           </button>
-        </p>
+        </form>
+      </ng-template>
+
+      <div class="auth-switch">
+        <span>{{ (isLoginMode ? 'auth.noAccount' : 'auth.haveAccount') | translate }}</span>
+        <button type="button" (click)="toggleMode()">
+          {{ (isLoginMode ? 'auth.signUp' : 'auth.signIn') | translate }}
+        </button>
       </div>
     </div>
-  </div>
+  </section>
+
+  <footer class="auth-footer">
+    <nav>
+      <span>{{ 'auth.termsOfService' | translate }}</span>
+      <span>{{ 'auth.privacyPolicy' | translate }}</span>
+      <span>{{ 'auth.clubEtiquette' | translate }}</span>
+    </nav>
+    <p>&copy; {{ 'auth.footerCopyright' | translate }}</p>
+  </footer>
 </main>

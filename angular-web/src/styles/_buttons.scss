@@ -1,4 +1,4 @@
-/* Stitch "Whist" button system — gold CTA, emerald accents */
+/* Stitch "Whist" button system — Neon Conservatory */
 
 .btn {
   display: inline-flex;
@@ -37,29 +37,29 @@
 }
 
 .btn-primary {
-  background: #ee9800;
-  color: #2a1700;
-  box-shadow: 0 4px 16px rgba(238, 152, 0, 0.2);
+  background: linear-gradient(135deg, #14b8ff 0%, #0090cc 100%);
+  color: #00344c;
+  box-shadow: 0 4px 16px rgba(20, 184, 255, 0.2);
 
   &:hover:not(:disabled) {
-    background: #ffb95f;
-    box-shadow: 0 6px 24px rgba(255, 185, 95, 0.3);
+    background: linear-gradient(135deg, #3cc8ff 0%, #14b8ff 100%);
+    box-shadow: 0 6px 24px rgba(20, 184, 255, 0.3);
   }
 
   &:disabled {
-    background: #2d3449;
+    background: #2a3548;
     box-shadow: none;
-    color: #89938d;
+    color: #87929b;
   }
 }
 
 .btn-secondary {
-  background: rgba(45, 52, 73, 0.5);
-  color: #dae2fd;
-  border: 1px solid rgba(64, 73, 68, 0.2);
+  background: rgba(42, 53, 72, 0.5);
+  color: #d8e3fb;
+  border: 1px solid rgba(62, 72, 80, 0.15);
 
   &:hover:not(:disabled) {
-    background: rgba(45, 52, 73, 0.8);
+    background: rgba(42, 53, 72, 0.8);
   }
 }
 
@@ -74,22 +74,22 @@
 }
 
 .btn-success {
-  background: rgba(6, 78, 59, 0.3);
-  color: #95d3ba;
-  border: 1px solid rgba(149, 211, 186, 0.1);
+  background: rgba(0, 57, 21, 0.3);
+  color: #4ae176;
+  border: 1px solid rgba(74, 225, 118, 0.1);
 
   &:hover:not(:disabled) {
-    background: rgba(6, 78, 59, 0.4);
+    background: rgba(0, 57, 21, 0.4);
   }
 }
 
 .btn-ghost {
   background: transparent;
-  color: #95d3ba;
+  color: #8ad0ff;
 
   &:hover:not(:disabled) {
-    background: rgba(6, 78, 59, 0.15);
-    color: #b0f0d6;
+    background: rgba(20, 184, 255, 0.1);
+    color: #a8ddff;
   }
 }
 

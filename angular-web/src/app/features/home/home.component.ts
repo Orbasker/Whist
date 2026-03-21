@@ -262,6 +262,33 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  private _activeCount = 0;
+  private _completedCount = 0;
+  private _lastGamesRef: GameState[] | null = null;
+
+  private updateGameCounts(): void {
+    if (this.games === this._lastGamesRef) return;
+    let active = 0;
+    let completed = 0;
+    for (const game of this.games) {
+      if (game.status === 'active') active++;
+      else completed++;
+    }
+    this._activeCount = active;
+    this._completedCount = completed;
+    this._lastGamesRef = this.games;
+  }
+
+  getActiveGameCount(): number {
+    this.updateGameCounts();
+    return this._activeCount;
+  }
+
+  getCompletedGameCount(): number {
+    this.updateGameCounts();
+    return this._completedCount;
+  }
+
   openInvitationForm(game: GameState) {
     this.selectedGameId = game.id;
     this.selectedGameName =

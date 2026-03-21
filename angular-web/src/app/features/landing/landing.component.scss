@@ -1,29 +1,28 @@
 @use 'sass:color';
 
 // ============================================================
-// Landing page styles — adapted from Figma node 4:1601
+// Landing page styles — Stitch "Neon Conservatory" design system
 // ============================================================
 
-// --- Color tokens (landing-specific) ---
-$bg-deep: #0b1326;
-$bg-darker: #060e20;
-$bg-card: #131b2e;
-$bg-card-alt: #171f33;
-$bg-card-alt2: #222a3d;
-$bg-green: #022c22;
-$bg-green-dark: #064e3b;
-$text-light: #dae2fd;
-$text-muted: #bfc9c3;
-$text-slate: #64748b;
-$gold: #ffb95f;
-$gold-dark: #5b3800;
-$green-muted: #80bea6;
-$green-light: #95d3ba;
+// --- Color tokens (landing-specific, from Stitch) ---
+$bg-deep: #081425;
+$bg-darker: #040e1f;
+$bg-card: #111c2d;
+$bg-card-alt: #152031;
+$bg-card-alt2: #1f2a3c;
+$bg-teal: #00344c;
+$bg-teal-dark: #004564;
+$text-light: #d8e3fb;
+$text-muted: #bdc8d2;
+$text-slate: #87929b;
+$gold: #f1c400;
+$gold-dark: #503f00;
+$green: #4ae176;
+$teal: #8ad0ff;
+$teal-bright: #14b8ff;
 
 // --- Typography ---
-$font-serif: 'Libre Baskerville', Georgia, serif;
-$font-sans: Inter, sans-serif;
-$font-mono: 'Nimbus Sans', Inter, sans-serif;
+$font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
 
 :host {
   display: block;
@@ -134,7 +133,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
   animation-duration: 6s;
   width: 3px;
   height: 3px;
-  background: rgba($green-light, 0.3);
+  background: rgba($green, 0.3);
 }
 
 // Hero staggered entrance animations
@@ -168,7 +167,8 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 .hero-heading-line {
   display: block;
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-size: clamp(48px, 8vw, 128px);
   line-height: 1;
   color: $text-light;
@@ -177,13 +177,14 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 .hero-heading-accent {
   display: block;
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-style: italic;
   font-size: clamp(48px, 8vw, 128px);
   line-height: 1;
   color: $gold;
   letter-spacing: -0.025em;
-  text-shadow: 0 0 12px rgba($gold, 0.2);
+  text-shadow: 0 0 16px rgba($gold, 0.2);
 
   span {
     display: block;
@@ -209,14 +210,14 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: $gold;
+  background: linear-gradient(135deg, $gold, darken($gold, 8%));
   color: $gold-dark;
   font-family: $font-sans;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 18px;
   line-height: 28px;
   padding: 20px 40px;
-  border-radius: 8px;
+  border-radius: 1.5rem;
   text-decoration: none;
   box-shadow:
     0 20px 25px -5px rgba($gold, 0.1),
@@ -250,15 +251,16 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
     display: block;
     width: 48px;
     height: 1px;
-    background: #404944;
+    background: rgba(62, 72, 80, 0.5);
     transition:
       width 0.3s ease,
       background 0.3s ease;
   }
 
   span:last-child {
-    font-family: $font-mono;
+    font-family: $font-sans;
     font-size: 12px;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1.2px;
     color: $text-muted;
@@ -283,15 +285,15 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(6px);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(42, 53, 72, 0.4);
+  border: 1px solid rgba(62, 72, 80, 0.15);
   color: $text-light;
   font-family: $font-sans;
   font-weight: 700;
   font-size: 18px;
   line-height: 28px;
   padding: 21px 49px;
-  border-radius: 8px;
+  border-radius: 1.5rem;
   text-decoration: none;
   transition:
     background 0.2s ease,
@@ -301,8 +303,8 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
   &:hover,
   &:focus-visible {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(42, 53, 72, 0.7);
+    border-color: rgba(62, 72, 80, 0.3);
     transform: translateY(-1px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
@@ -330,12 +332,9 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 .card-inner {
   width: 100%;
   height: 100%;
-  background: #31394d;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: $bg-card-alt2;
   border-radius: 12px;
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 60px rgba($gold, 0.05);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -363,10 +362,11 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .card-letter {
-  font-family: $font-serif;
+  font-family: $font-sans;
   font-style: italic;
+  font-weight: 800;
   font-size: 48px;
-  color: #022c22;
+  color: $bg-teal;
   opacity: 0.8;
   align-self: flex-start;
 }
@@ -378,7 +378,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 .card-suit {
   font-size: 48px;
-  color: #022c22;
+  color: $bg-teal;
   opacity: 0.6;
   transition: transform 0.6s ease;
 
@@ -401,11 +401,13 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .section-title {
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-size: clamp(32px, 4vw, 48px);
   line-height: 1;
   color: $text-light;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .section-title-italic {
@@ -431,6 +433,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 .section-subtitle {
   font-family: $font-sans;
   font-size: 14px;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 2.8px;
   color: $text-muted;
@@ -445,8 +448,8 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 // Gameplay card
 .gameplay-card {
-  background: radial-gradient(circle at center, #064e3b, #0b513d);
-  border-radius: 24px;
+  background: radial-gradient(circle at center, $bg-teal-dark, $bg-teal);
+  border-radius: 1.5rem;
   overflow: hidden;
   min-height: 500px;
   position: relative;
@@ -478,16 +481,16 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 .dealer-hand-badge {
   backdrop-filter: blur(10px);
-  background: rgba(23, 31, 51, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: rgba(21, 32, 49, 0.7);
+  border-radius: 1rem;
   padding: 25px;
   max-width: 320px;
 }
 
 .dealer-hand-title {
   display: block;
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 700;
   font-style: italic;
   font-size: 20px;
   line-height: 28px;
@@ -512,7 +515,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #bdc8d3;
+  background: $text-muted;
   transition:
     background 0.3s ease,
     box-shadow 0.3s ease;
@@ -630,7 +633,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .pc-rank {
-  font-family: $font-serif;
+  font-family: $font-sans;
   font-weight: 700;
   font-size: 24px;
   line-height: 32px;
@@ -652,7 +655,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .pc-rank-bottom {
-  font-family: $font-serif;
+  font-family: $font-sans;
   font-weight: 700;
   font-size: 24px;
   line-height: 32px;
@@ -674,9 +677,8 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 .info-card {
   background: $bg-card;
-  border-radius: 24px;
+  border-radius: 1.5rem;
   padding: 52px 32px 32px;
-  border-inline-start: 4px solid;
   flex: 1;
   transition:
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -690,24 +692,24 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .info-card-amber {
-  border-color: rgba($gold, 0.3);
+  box-shadow: inset 4px 0 0 rgba($gold, 0.3);
 
   &:hover {
-    border-color: rgba($gold, 0.6);
     box-shadow:
+      inset 4px 0 0 rgba($gold, 0.6),
       0 20px 40px rgba(0, 0, 0, 0.2),
       0 0 30px rgba($gold, 0.05);
   }
 }
 
 .info-card-green {
-  border-color: rgba($green-light, 0.3);
+  box-shadow: inset 4px 0 0 rgba($green, 0.3);
 
   &:hover {
-    border-color: rgba($green-light, 0.6);
     box-shadow:
+      inset 4px 0 0 rgba($green, 0.6),
       0 20px 40px rgba(0, 0, 0, 0.2),
-      0 0 30px rgba($green-light, 0.05);
+      0 0 30px rgba($green, 0.05);
   }
 }
 
@@ -727,11 +729,13 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .info-card-title {
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-size: 24px;
   line-height: 32px;
   color: $text-light;
   margin: 0 0 16px;
+  letter-spacing: -0.02em;
 }
 
 .info-card-text {
@@ -841,30 +845,28 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .rank-score {
-  font-family: $font-mono;
+  font-family: $font-sans;
+  font-weight: 500;
   font-size: 12px;
   letter-spacing: 1.2px;
   color: $text-muted;
 }
 
 .rank-score-top {
-  color: $green-light;
+  color: $green;
 }
 
 // Stats card
 .stats-card {
   background: $bg-card-alt;
-  border-radius: 24px;
+  border-radius: 1.5rem;
   overflow: hidden;
   position: relative;
   min-height: 500px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   transition: box-shadow 0.4s ease;
 
   &:hover {
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.15),
-      0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -881,17 +883,11 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 
 .stats-overlay {
   backdrop-filter: blur(10px);
-  background: rgba(23, 31, 51, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: rgba(21, 32, 49, 0.7);
+  border-radius: 1rem;
   padding: 33px;
   margin: 48px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  transition: border-color 0.3s ease;
-
-  .stats-card:hover & {
-    border-color: rgba(255, 255, 255, 0.1);
-  }
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
 }
 
 .stats-content {
@@ -904,6 +900,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 .stats-label {
   font-family: $font-sans;
   font-size: 10px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: $gold;
@@ -912,7 +909,8 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .stats-value {
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-size: 30px;
   line-height: 36px;
   color: $text-light;
@@ -961,8 +959,9 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .rule-number {
-  font-family: $font-serif;
+  font-family: $font-sans;
   font-style: italic;
+  font-weight: 800;
   font-size: 36px;
   line-height: 40px;
   color: $gold;
@@ -974,15 +973,17 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .rule-title {
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-size: 24px;
   line-height: 32px;
   color: $text-light;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .rule-divider {
-  border-top: 1px solid rgba(64, 73, 68, 0.2);
+  border-top: 1px solid rgba(62, 72, 80, 0.2);
 }
 
 // Animated divider draws on reveal
@@ -1009,7 +1010,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 // CTA Section
 // ============================================================
 .cta-section {
-  background: $bg-green;
+  background: $bg-teal;
   padding: 128px 192px;
   position: relative;
   overflow: hidden;
@@ -1023,7 +1024,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
   transform: translate(-50%, -50%);
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba($green-light, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba($green, 0.08) 0%, transparent 70%);
   border-radius: 50%;
   animation: ambient-glow 5s ease-in-out infinite;
   pointer-events: none;
@@ -1038,11 +1039,13 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .cta-title {
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-size: clamp(36px, 5vw, 60px);
   line-height: 1;
   color: $text-light;
   margin: 0 0 32px;
+  letter-spacing: -0.02em;
 }
 
 .cta-description {
@@ -1050,7 +1053,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
   font-weight: 300;
   font-size: 18px;
   line-height: 28px;
-  color: $green-muted;
+  color: $teal;
   max-width: 672px;
   margin: 0 auto 48px;
 }
@@ -1065,8 +1068,7 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 // Footer
 // ============================================================
 .landing-footer {
-  background: #020617;
-  border-top: 1px solid rgba(6, 78, 59, 0.2);
+  background: $bg-darker;
   padding: 48px 0;
 }
 
@@ -1086,15 +1088,18 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
 }
 
 .footer-logo {
-  font-family: $font-serif;
+  font-family: $font-sans;
+  font-weight: 800;
   font-size: 20px;
   line-height: 28px;
-  color: #065f46;
+  color: $teal-bright;
+  letter-spacing: -0.02em;
 }
 
 .footer-copyright {
-  font-family: $font-mono;
+  font-family: $font-sans;
   font-size: 11px;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1.1px;
   color: $text-slate;
@@ -1105,8 +1110,9 @@ $font-mono: 'Nimbus Sans', Inter, sans-serif;
   gap: 32px;
 
   a {
-    font-family: $font-mono;
+    font-family: $font-sans;
     font-size: 11px;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1.1px;
     color: $text-slate;
