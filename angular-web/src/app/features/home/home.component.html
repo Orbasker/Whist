@@ -439,19 +439,19 @@
 
 <!-- Mobile Bottom Nav -->
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-  <button type="button" class="bnav-item" aria-label="{{ 'home.navHome' | translate }}">
+  <button type="button" class="bnav-item" [attr.aria-label]="'home.navHome' | translate">
     <span class="material-symbols-outlined">style</span>
     <span class="bnav-label">{{ 'home.navHome' | translate }}</span>
   </button>
   <button
     type="button"
     class="bnav-item bnav-item--active"
-    aria-label="{{ 'home.navGames' | translate }}"
+    [attr.aria-label]="'home.navGames' | translate"
   >
     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">casino</span>
     <span class="bnav-label">{{ 'home.navGames' | translate }}</span>
   </button>
-  <button type="button" class="bnav-item" aria-label="{{ 'home.navHistory' | translate }}">
+  <button type="button" class="bnav-item" [attr.aria-label]="'home.navHistory' | translate">
     <span class="material-symbols-outlined">history_edu</span>
     <span class="bnav-label">{{ 'home.navHistory' | translate }}</span>
   </button>
@@ -460,7 +460,7 @@
     class="bnav-item"
     *ngIf="isAuthenticated"
     (click)="logout()"
-    aria-label="{{ 'home.logout' | translate }}"
+    [attr.aria-label]="'home.logout' | translate"
   >
     <span class="material-symbols-outlined">logout</span>
     <span class="bnav-label">{{ 'home.logout' | translate }}</span>
