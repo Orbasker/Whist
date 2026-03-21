@@ -26,4 +26,12 @@ else
   npm ci
 fi
 
+echo "=== Setting up Flutter ==="
+cd "$ROOT_DIR/flutter_mobile"
+if [ -d ".dart_tool" ] && [ -f ".dart_tool/package_config.json" ]; then
+  echo "Flutter deps already installed, skipping flutter pub get"
+else
+  flutter pub get
+fi
+
 echo "=== Setup complete ==="
