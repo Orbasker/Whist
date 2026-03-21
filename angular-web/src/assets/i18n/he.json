@@ -102,7 +102,7 @@
     "nameRequired": "נדרש שם",
     "signingIn": "מתחבר...",
     "creatingAccount": "יוצר חשבון...",
-    "or": "או",
+    "or": "לחלופין",
     "continueWithGoogle": "המשך עם Google",
     "continueWithGitHub": "המשך עם GitHub",
     "connecting": "מתחבר...",
@@ -116,7 +116,7 @@
     "githubNotConfigured": "התחברות GitHub אינה מוגדרת. פנה לתמיכה או הגדר ב-Neon Auth.",
     "authFailed": "האימות נכשל. נסה שוב.",
     "invalidRequest": "בקשה לא תקינה. בדוק את ההגדרות.",
-    "welcomeBack": "ברוכים השבים לשולחן",
+    "welcomeBack": "ברוכים הבאים למעגל הפנימי של משחק מעולה.",
     "subtitle": "משחק הקלפים הישראלי האייקוני",
     "grandSalon": "הסלון הגדול",
     "joinTheClub": "הצטרפו למועדון",
@@ -125,6 +125,8 @@
     "termsOfService": "תנאי שימוש",
     "privacyPolicy": "מדיניות פרטיות",
     "clubEtiquette": "נימוסי המועדון",
+    "showPassword": "הצג סיסמה",
+    "hidePassword": "הסתר סיסמה",
     "footerCopyright": "1890 קולקטיב הוויסט. כל הזכויות שמורות."
   },
   "invite": {

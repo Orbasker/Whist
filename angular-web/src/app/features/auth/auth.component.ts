@@ -19,6 +19,7 @@ export class AuthComponent implements OnInit {
   errorMessage: string | null = null;
   isLoading = false;
   loadingMessageKey = 'auth.signingIn';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +51,7 @@ export class AuthComponent implements OnInit {
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
     this.errorMessage = null;
+    this.showPassword = false;
   }
 
   async onLogin() {
