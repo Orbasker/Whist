@@ -9,6 +9,7 @@ export const environment = {
   useSupabaseRealtime: true,
   supabaseUrl: '',
   supabaseAnonKey: '',
+  publicBaseUrl: 'https://staging.whist.orbasker.com',
   gaMeasurementId: '',
   googleAdsId: '',
 };

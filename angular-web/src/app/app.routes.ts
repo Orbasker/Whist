@@ -1,11 +1,19 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { SeoData } from './core/services/seo.service';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
       import('./features/landing/landing.component').then((m) => m.LandingComponent),
+    data: {
+      seo: {
+        titleKey: 'landing.pageTitle',
+        descriptionKey: 'landing.metaDescription',
+        canonicalPath: '/',
+      } as SeoData,
+    },
   },
   {
     path: 'dashboard',
@@ -15,6 +23,13 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./features/auth/auth.component').then((m) => m.AuthComponent),
+    data: {
+      seo: {
+        titleKey: 'auth.pageTitle',
+        descriptionKey: 'auth.metaDescription',
+        canonicalPath: '/login',
+      } as SeoData,
+    },
   },
   {
     path: 'game',
@@ -25,6 +40,13 @@ export const routes: Routes = [
     path: 'invite/:token',
     loadComponent: () =>
       import('./features/invite/invite.component').then((m) => m.InviteComponent),
+    data: {
+      seo: {
+        titleKey: 'invite.pageTitle',
+        descriptionKey: 'invite.metaDescription',
+        canonicalPath: '/invite',
+      } as SeoData,
+    },
   },
   {
     path: '**',

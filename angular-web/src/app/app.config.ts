@@ -18,6 +18,7 @@ import { WebSocketService } from './core/services/websocket.service';
 import { SupabaseRealtimeService } from './core/services/supabase-realtime.service';
 import { LanguageService } from './core/services/language.service';
 import { AnalyticsService } from './core/services/analytics.service';
+import { SeoService } from './core/services/seo.service';
 import { Injectable } from '@angular/core';
 
 /** Never show raw translation keys; use a safe fallback so UI stays polished. */
@@ -52,6 +53,12 @@ export const appConfig: ApplicationConfig = {
       provide: APP_INITIALIZER,
       useFactory: (analytics: AnalyticsService) => () => analytics.init(),
       deps: [AnalyticsService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (seo: SeoService) => () => seo.init(),
+      deps: [SeoService],
       multi: true,
     },
     {
