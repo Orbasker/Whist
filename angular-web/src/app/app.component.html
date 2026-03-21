@@ -1,3 +1,5 @@
+<app-splash *ngIf="showSplash" (dismissed)="onSplashDismissed()"></app-splash>
+
 <div class="app-layout">
   <main class="app-main" [class.has-footer]="showGlobalFooter">
     <router-outlet></router-outlet>
