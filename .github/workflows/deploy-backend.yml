@@ -5,36 +5,11 @@ on:
     branches: [main]
     paths:
       - "backend/**"
-  pull_request:
-    branches: [main]
-    paths:
-      - "backend/**"
 
 jobs:
-  deploy-staging:
-    name: Deploy to Staging
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    environment: staging
-    concurrency:
-      group: staging-backend
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-
-      - name: Deploy to staging
-        working-directory: backend
-        run: flyctl deploy --remote-only --app whist-api-staging
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
   deploy-production:
     name: Deploy to Production
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: production
     concurrency:
       group: production-backend
       cancel-in-progress: false
