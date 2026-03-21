@@ -198,6 +198,7 @@
     },
     "roundSummary": {
       "title": "סיכום סיבוב",
+      "roundLabel": "סיבוב {{round}}",
       "playerTotals": "סיכום שחקנים",
       "bidTook": "הימר {{bid}}, לקח {{took}}",
       "total": "סה\"כ",

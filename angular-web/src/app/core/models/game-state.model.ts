@@ -51,4 +51,6 @@ export interface RoundSummaryResults {
   tricks: number[];
   roundScores: number[];
   newTotalScores: number[];
+  trumpSuit?: string | null;
+  roundNumber: number;
 }
