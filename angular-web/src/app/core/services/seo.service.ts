@@ -4,6 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { LanguageService } from './language.service';
+import { environment } from '../../../environments/environment';
 
 export interface SeoData {
   titleKey: string;
@@ -12,10 +13,12 @@ export interface SeoData {
   ogType?: string;
 }
 
-const BASE_URL = 'https://whist.orbasker.com';
+const BASE_URL = environment.publicBaseUrl.replace(/\/$/, '');
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
+  private lastSeo: SeoData | null = null;
+
   constructor(
     private meta: Meta,
     private title: Title,
@@ -38,9 +41,16 @@ export class SeoService {
       )
       .subscribe((data) => {
         if (data['seo']) {
-          this.updateMetaTags(data['seo'] as SeoData);
+          this.lastSeo = data['seo'] as SeoData;
+          this.updateMetaTags(this.lastSeo);
         }
       });
+
+    this.translate.onLangChange.subscribe(() => {
+      if (this.lastSeo) {
+        this.updateMetaTags(this.lastSeo);
+      }
+    });
   }
 
   updateMetaTags(seo: SeoData): void {
