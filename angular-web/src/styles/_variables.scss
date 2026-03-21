@@ -1,38 +1,38 @@
-/* Stitch "Whist" palette — Neon Conservatory: Electric Teal + Gold on deep navy */
+/* Stitch "Whist" palette — Emerald + Gold on deep navy */
 
-$background: #081425;
-$surface-container-lowest: #040e1f;
-$surface-container-low: #111c2d;
-$surface-container: #152031;
-$surface-container-high: #1f2a3c;
-$surface-container-highest: #2a3548;
-$surface-bright: #2f3a4c;
-$surface-variant: #2a3548;
+$background: #0b1326;
+$surface-container-lowest: #060e20;
+$surface-container-low: #131b2e;
+$surface-container: #171f33;
+$surface-container-high: #222a3d;
+$surface-container-highest: #2d3449;
+$surface-bright: #31394d;
+$surface-variant: #2d3449;
 
-$primary: #8ad0ff;
-$primary-container: #14b8ff;
-$on-primary: #00344c;
-$on-primary-container: #004564;
+$primary: #95d3ba;
+$primary-container: #064e3b;
+$on-primary: #003829;
+$on-primary-container: #80bea6;
 
-$secondary: #4ae176;
-$secondary-container: #00b954;
-$on-secondary: #003915;
-$on-secondary-container: #004119;
+$secondary: #ffb95f;
+$secondary-container: #ee9800;
+$on-secondary: #472a00;
+$on-secondary-container: #5b3800;
 
-$tertiary: #f1c400;
-$tertiary-container: #d0a900;
-$on-tertiary: #3c2f00;
-$on-tertiary-container: #503f00;
+$tertiary: #bdc8d3;
+$tertiary-container: #3b454f;
+$on-tertiary: #28313b;
+$on-tertiary-container: #a8b2be;
 
 $error: #ffb4ab;
 $error-container: #93000a;
 
-$on-surface: #d8e3fb;
-$on-surface-variant: #bdc8d2;
-$on-background: #d8e3fb;
+$on-surface: #dae2fd;
+$on-surface-variant: #bfc9c3;
+$on-background: #dae2fd;
 
-$outline: #87929b;
-$outline-variant: #3e4850;
+$outline: #89938d;
+$outline-variant: #404944;
 
 $touch-target-min: 44px;
 
@@ -43,14 +43,14 @@ $touch-target-min: 44px;
   --text-primary: #{$on-surface};
   --text-secondary: #{$on-surface-variant};
   --accent-primary: #{$primary};
-  --accent-secondary: #{$tertiary};
+  --accent-secondary: #{$secondary};
   --focus-ring: 0 0 0 2px #{$background}, 0 0 0 4px #{$primary};
   --input-border: #{$outline-variant};
   --input-border-focus: #{$primary};
   --input-bg: #{$surface-container-low};
   --error-border: #{$error};
   --error-bg: rgba(147, 0, 10, 0.25);
-  --success-border: #{$secondary};
+  --success-border: #{$primary};
   --modal-backdrop: rgba(0, 0, 0, 0.6);
 
   /* Button design system */

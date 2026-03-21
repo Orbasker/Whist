@@ -330,6 +330,11 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  isLeadingScore(scores: number[], index: number): boolean {
+    const max = Math.max(...scores);
+    return scores[index] === max;
+  }
+
   isGameOwner(game: { owner_id?: string | null }): boolean {
     if (!game?.owner_id || !this.userId) return false;
     return String(game.owner_id).trim() === this.userId;
