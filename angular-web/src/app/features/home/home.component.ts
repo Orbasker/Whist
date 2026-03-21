@@ -250,6 +250,14 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  getActiveGameCount(): number {
+    return this.games.filter((game) => game.status === 'active').length;
+  }
+
+  getCompletedGameCount(): number {
+    return this.games.filter((game) => game.status !== 'active').length;
+  }
+
   openInvitationForm(game: GameState) {
     this.selectedGameId = game.id;
     this.selectedGameName =

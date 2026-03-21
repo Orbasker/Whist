@@ -52,7 +52,8 @@
     "mustBeLoggedIn": "עליך להתחבר כדי ליצור משחק. התחבר ונסה שוב.",
     "authTokenMissing": "חסר טוקן אימות. התחבר שוב.",
     "createGameFailed": "יצירת המשחק נכשלה. נסה שוב.",
-    "openGame": "פתח משחק"
+    "openGame": "פתח משחק",
+    "liveGames": "שולחנות פעילים"
   },
   "auth": {
     "signIn": "התחברות",

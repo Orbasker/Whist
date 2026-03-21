@@ -52,7 +52,8 @@
     "mustBeLoggedIn": "You must be logged in to create a game. Please log in and try again.",
     "authTokenMissing": "Authentication token is missing. Please log in again.",
     "createGameFailed": "Failed to create game. Please try again.",
-    "openGame": "Open game"
+    "openGame": "Open game",
+    "liveGames": "Live Tables"
   },
   "auth": {
     "signIn": "Sign In",
@@ -114,7 +115,6 @@
     "roundsPlayed": "{{count}} rounds",
     "bidding": "Bidding",
     "tricks": "Tricks",
-    "scoreTable": "Score table",
     "roundsHistory": "Score board ({{count}} rounds)",
     "openRoundsList": "Open rounds list ({{count}} rounds)",
     "roundsEmpty": "No rounds yet",

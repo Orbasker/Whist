@@ -1,88 +1,122 @@
-<div class="min-h-screen felt-gradient relative z-10">
-  <!-- Header -->
-  <header class="px-6 pt-8 pb-6">
-    <div class="flex items-center gap-4 mb-2">
-      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary/15">
-        <span
-          class="material-symbols-outlined text-secondary text-2xl"
-          style="font-variation-settings: 'FILL' 1"
-          >emoji_events</span
-        >
+<div class="dashboard-shell">
+  <aside class="dashboard-sidebar">
+    <div>
+      <div class="sidebar-brand">
+        <span class="sidebar-brand-title">{{ 'landing.brandName' | translate }}</span>
+        <span class="sidebar-brand-subtitle">The Grand Salon</span>
       </div>
-      <div>
-        <h1 class="text-2xl font-headline font-bold tracking-tight text-on-surface">
-          {{ 'home.title' | translate }}
-        </h1>
-        <p class="text-sm text-on-surface-variant">{{ 'home.subtitle' | translate }}</p>
-      </div>
-    </div>
 
-    <!-- User info -->
-    <div class="mt-4" *ngIf="isAuthenticated">
-      <div class="flex items-center justify-between">
-        <div class="text-sm text-on-surface-variant">
-          <span *ngIf="userName" class="text-on-surface font-medium">{{ userName }}</span>
-          <span *ngIf="userName && userEmail" class="mx-1 text-outline">·</span>
-          <span *ngIf="userEmail">{{ userEmail }}</span>
+      <div class="sidebar-user" *ngIf="isAuthenticated">
+        <div class="sidebar-user-badge">
+          {{ (userName || userEmail || 'W').slice(0, 1) | uppercase }}
         </div>
-        <button
-          type="button"
-          (click)="logout()"
-          class="text-sm text-primary font-semibold hover:underline bg-transparent border-none cursor-pointer"
-        >
-          {{ 'home.logout' | translate }}
-        </button>
+        <div>
+          <strong>{{ userName || ('landing.brandName' | translate) }}</strong>
+          <p>{{ userEmail || 'Elite member access' }}</p>
+        </div>
       </div>
+
+      <nav class="sidebar-nav" aria-label="Dashboard sections">
+        <a class="sidebar-link sidebar-link-active" href="#" (click)="$event.preventDefault()">
+          <span class="material-symbols-outlined">style</span>
+          <span>{{ 'home.liveGames' | translate }}</span>
+        </a>
+        <a class="sidebar-link" href="#" (click)="$event.preventDefault(); toggleNewGameForm()">
+          <span class="material-symbols-outlined">add_circle</span>
+          <span>{{ 'home.newGame' | translate }}</span>
+        </a>
+      </nav>
     </div>
 
-    <a
-      *ngIf="!isAuthenticated"
-      routerLink="/login"
-      class="mt-4 inline-flex items-center text-sm text-primary font-semibold hover:underline"
-    >
-      {{ 'home.loginOrSignup' | translate }}
-    </a>
-  </header>
-
-  <!-- Games List -->
-  <section *ngIf="isAuthenticated" class="px-6 pb-6">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-lg font-bold text-secondary tracking-wide uppercase text-xs">
-        {{ 'home.myGames' | translate }}
-      </h2>
+    <div class="sidebar-footer">
+      <a *ngIf="!isAuthenticated" routerLink="/login" class="sidebar-cta">
+        {{ 'home.loginOrSignup' | translate }}
+      </a>
       <button
+        *ngIf="isAuthenticated"
         type="button"
         (click)="toggleNewGameForm()"
-        class="h-12 px-6 btn-gradient rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-primary-container/20 active:scale-95 transition-all"
+        class="sidebar-cta"
       >
-        <span class="material-symbols-outlined text-xl">add</span>
         {{ 'home.newGame' | translate }}
       </button>
-    </div>
-
-    <!-- Loading -->
-    <div *ngIf="loading" class="py-12 text-center text-on-surface-variant">
-      <div
-        class="h-8 w-8 mx-auto mb-4 animate-spin rounded-full border-4 border-primary border-t-transparent"
-      ></div>
-      {{ 'home.loadingGames' | translate }}
-    </div>
-
-    <!-- Empty state -->
-    <div *ngIf="!loading && games.length === 0" class="py-12 text-center">
-      <div
-        class="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-surface-container-high"
-      >
-        <span class="material-symbols-outlined text-3xl text-on-surface-variant">style</span>
+      <div class="sidebar-meta">
+        <button *ngIf="isAuthenticated" type="button" (click)="logout()">Logout</button>
+        <a *ngIf="!isAuthenticated" routerLink="/">Return Home</a>
       </div>
-      <p class="text-on-surface-variant mb-2">{{ 'home.noGames' | translate }}</p>
-      <p class="text-sm text-on-surface-variant/60">{{ 'home.createGameToStart' | translate }}</p>
     </div>
+  </aside>
 
-    <!-- Game cards -->
-    <div *ngIf="!loading && games.length > 0" class="space-y-4">
-      <div
+  <main class="dashboard-main">
+    <header class="dashboard-topbar">
+      <div>
+        <p class="dashboard-kicker">{{ 'home.myGames' | translate }}</p>
+        <h1>
+          {{ isAuthenticated ? ('home.liveGames' | translate) : ('landing.brandName' | translate) }}
+        </h1>
+      </div>
+
+      <nav class="dashboard-topnav" aria-label="Primary">
+        <a href="#" class="dashboard-topnav-active" (click)="$event.preventDefault()">{{
+          'home.liveGames' | translate
+        }}</a>
+        <a href="#" (click)="$event.preventDefault(); toggleNewGameForm()">{{
+          'home.newGame' | translate
+        }}</a>
+      </nav>
+    </header>
+
+    <section *ngIf="isAuthenticated" class="dashboard-hero">
+      <div class="dashboard-hero-copy">
+        <p class="dashboard-kicker">Club Table</p>
+        <h2>Track every round with the newer Whist Club presentation.</h2>
+        <p>
+          Review active sessions, resume a game, or open a new table with the darker tournament
+          layout from the exported designs.
+        </p>
+      </div>
+
+      <div class="dashboard-summary-card">
+        <div>
+          <span>Active tables</span>
+          <strong>{{ getActiveGameCount() }}</strong>
+        </div>
+        <div>
+          <span>Completed</span>
+          <strong>{{ getCompletedGameCount() }}</strong>
+        </div>
+        <button type="button" (click)="toggleNewGameForm()">
+          {{ 'home.newGame' | translate }}
+        </button>
+      </div>
+    </section>
+
+    <section *ngIf="!isAuthenticated" class="dashboard-auth-card">
+      <p class="dashboard-kicker">Membership Required</p>
+      <h2>Sign in to enter the table.</h2>
+      <p>
+        The exported designs assume an authenticated club flow. Sign in first, then create or resume
+        a table.
+      </p>
+      <a routerLink="/login">{{ 'home.loginOrSignup' | translate }}</a>
+    </section>
+
+    <section *ngIf="isAuthenticated && loading" class="dashboard-state-card">
+      <div class="dashboard-spinner" aria-hidden="true"></div>
+      <p>{{ 'home.loadingGames' | translate }}</p>
+    </section>
+
+    <section *ngIf="isAuthenticated && !loading && games.length === 0" class="dashboard-state-card">
+      <p class="dashboard-kicker">No Active Sessions</p>
+      <h2>{{ 'home.noGames' | translate }}</h2>
+      <p>{{ 'home.createGameToStart' | translate }}</p>
+      <button type="button" (click)="toggleNewGameForm()">{{ 'home.newGame' | translate }}</button>
+    </section>
+
+    <section *ngIf="isAuthenticated && !loading && games.length > 0" class="dashboard-games">
+      <article
         *ngFor="let game of games"
+        class="game-card"
         role="button"
         tabindex="0"
         (click)="$event.target === $event.currentTarget && continueGame(game.id)"
@@ -91,262 +125,195 @@
           $event.target === $event.currentTarget ? onCardSpace($event, game.id) : null
         "
         [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
-        class="bg-surface-container-low rounded-2xl p-4 cursor-pointer transition-all hover:bg-surface-container-high active:scale-[0.99] relative overflow-hidden group"
       >
-        <!-- Left accent bar -->
-        <div
-          class="absolute top-0 left-0 w-1 h-full rounded-full"
-          [class.bg-primary-container]="game.status === 'active'"
-          [class.bg-outline-variant]="game.status !== 'active'"
-        ></div>
-
-        <div class="flex items-center gap-4 pr-2">
-          <!-- Trophy button -->
-          <button
-            type="button"
-            (click)="openQuickLook(game, $event)"
-            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-secondary/10 transition-colors hover:bg-secondary/20"
-            [attr.aria-label]="'game.scoreBoard' | translate"
-          >
+        <div class="game-card-top">
+          <div>
             <span
-              class="material-symbols-outlined text-secondary"
-              style="font-variation-settings: 'FILL' 1"
-              >emoji_events</span
+              class="game-card-status"
+              [class.game-card-status-complete]="game.status !== 'active'"
             >
+              {{
+                game.status === 'active'
+                  ? ('home.active' | translate)
+                  : ('home.completed' | translate)
+              }}
+            </span>
+            <h3>{{ getGameDisplayName(game) }}</h3>
+          </div>
+          <button type="button" class="game-card-icon" (click)="openQuickLook(game, $event)">
+            <span class="material-symbols-outlined">table_chart</span>
           </button>
+        </div>
 
-          <!-- Game info -->
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2 mb-1">
-              <h3 class="truncate text-base font-bold text-on-surface">
-                {{ getGameDisplayName(game) }}
-              </h3>
-              <span
-                class="shrink-0 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
-                [ngClass]="
-                  game.status === 'active'
-                    ? 'bg-secondary/15 text-secondary'
-                    : 'bg-surface-container-highest text-on-surface-variant'
-                "
-              >
-                {{
-                  game.status === 'active'
-                    ? ('home.active' | translate)
-                    : ('home.completed' | translate)
-                }}
-              </span>
-            </div>
-            <p class="text-sm text-on-surface-variant mb-1">
-              {{ game.players.join(', ') }}
-            </p>
-            <div class="flex items-center gap-2 text-xs text-on-surface-variant/60">
-              <span>{{ 'home.round' | translate }} {{ game.current_round }}</span>
-              <span>·</span>
-              <span>{{ 'home.score' | translate }}: {{ game.scores.join(' - ') }}</span>
-            </div>
+        <p class="game-card-players">{{ game.players.join(' · ') }}</p>
+
+        <div class="game-card-stats">
+          <div>
+            <span>Round</span>
+            <strong>{{ game.current_round }}</strong>
           </div>
-
-          <!-- Actions -->
-          <div class="flex shrink-0 items-center gap-1">
-            <button
-              *ngIf="isGameOwner(game)"
-              type="button"
-              (click)="openInvitationForm(game); $event.stopPropagation()"
-              class="flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-highest hover:text-primary transition-colors"
-              [attr.aria-label]="'home.sendInvites' | translate"
-            >
-              <span class="material-symbols-outlined text-xl">person_add</span>
-            </button>
-            <button
-              *ngIf="isGameOwner(game)"
-              type="button"
-              (click)="openDeleteConfirm(game.id, $event)"
-              class="flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant hover:bg-error-container/20 hover:text-destructive transition-colors"
-              [attr.aria-label]="'home.deleteGame' | translate"
-            >
-              <span class="material-symbols-outlined text-xl">delete</span>
-            </button>
+          <div>
+            <span>Score</span>
+            <strong>{{ game.scores.join(' / ') }}</strong>
+          </div>
+          <div>
+            <span>Updated</span>
+            <strong>{{ formatDate(game.updated_at) }}</strong>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Quick look modal -->
-  <app-modal
-    *ngIf="quickLookGame"
-    [title]="getGameDisplayName(quickLookGame)"
-    size="md"
-    (close)="closeQuickLook()"
-  >
-    <div class="space-y-6">
-      <div class="grid grid-cols-2 gap-4">
-        <div
-          *ngFor="let player of quickLookGame.players; let i = index"
-          class="bg-surface-container-low rounded-2xl p-4 relative overflow-hidden"
-        >
-          <div
-            class="absolute top-0 left-0 w-1 h-full"
-            [class.bg-primary]="quickLookGame.scores[i] > 0"
-            [class.bg-destructive]="quickLookGame.scores[i] < 0"
-            [class.bg-outline-variant]="quickLookGame.scores[i] === 0"
-          ></div>
-          <p class="text-sm text-on-surface-variant font-medium mb-2">{{ player }}</p>
-          <p
-            class="text-3xl font-black font-headline tracking-tighter"
-            [class.text-primary]="quickLookGame.scores[i] > 0"
-            [class.text-destructive]="quickLookGame.scores[i] < 0"
-            [class.text-on-surface-variant]="quickLookGame.scores[i] === 0"
+        <div class="game-card-actions">
+          <button type="button" (click)="continueGame(game.id)">Continue</button>
+          <button
+            *ngIf="isGameOwner(game)"
+            type="button"
+            class="game-card-action-secondary"
+            (click)="openInvitationForm(game); $event.stopPropagation()"
           >
-            {{ quickLookGame.scores[i] > 0 ? '+' : '' }}{{ quickLookGame.scores[i] }}
-          </p>
+            {{ 'home.sendInvites' | translate }}
+          </button>
+          <button
+            *ngIf="isGameOwner(game)"
+            type="button"
+            class="game-card-action-secondary"
+            (click)="openDeleteConfirm(game.id, $event)"
+          >
+            {{ 'home.deleteGame' | translate }}
+          </button>
         </div>
-      </div>
-      <p class="text-sm text-on-surface-variant">
-        {{ 'home.round' | translate }} {{ quickLookGame.current_round }}
-        ·
-        {{
-          quickLookGame.status === 'active'
-            ? ('home.active' | translate)
-            : ('home.completed' | translate)
-        }}
-      </p>
-      <button
-        type="button"
-        (click)="quickLookGame && continueGame(quickLookGame.id)"
-        class="w-full h-14 btn-gradient rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-lg shadow-primary-container/20 active:scale-[0.98] transition-all"
-      >
-        <span class="material-symbols-outlined">play_arrow</span>
-        {{ 'home.openGame' | translate }}
-      </button>
-    </div>
-  </app-modal>
+      </article>
+    </section>
+  </main>
+</div>
 
-  <!-- Invitation Modal -->
-  <app-modal
-    *ngIf="showInvitationForm"
-    [title]="'home.sendInvitations' | translate"
-    size="md"
-    (close)="closeInvitationForm()"
-  >
-    <app-invitation-form
-      [gameId]="selectedGameId || ''"
-      [gameName]="selectedGameName"
-      [players]="selectedGame?.players || []"
-      [playerUserIds]="selectedGame?.player_user_ids || []"
-      [currentUserId]="userId"
-      [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
-      (invitationsSent)="onInvitationsSent($event)"
-      (cancelled)="closeInvitationForm()"
-      (playerNameUpdated)="onPlayerNameUpdated($event)"
-    ></app-invitation-form>
-  </app-modal>
+<div *ngIf="showNewGameForm" class="setup-overlay" role="presentation" (click)="closeNewGameForm()">
+  <section class="setup-panel" (click)="$event.stopPropagation()" aria-labelledby="setup-title">
+    <div class="setup-panel-glow" aria-hidden="true"></div>
+    <p class="setup-kicker">Initiate Session</p>
+    <h2 id="setup-title">New Game Setup</h2>
 
-  <!-- Delete confirmation -->
-  <app-confirm-modal
-    *ngIf="showDeleteConfirm"
-    [title]="'common.confirmDelete' | translate"
-    [message]="'home.confirmDeleteGame' | translate"
-    [confirmLabel]="'common.delete' | translate"
-    [cancelLabel]="'common.cancel' | translate"
-    (confirmed)="doDeleteGame()"
-    (cancelled)="closeDeleteConfirm()"
-  ></app-confirm-modal>
-
-  <!-- New Game Form Modal -->
-  <app-modal
-    *ngIf="showNewGameForm"
-    [title]="'home.newGameFormTitle' | translate"
-    size="md"
-    (close)="closeNewGameForm()"
-  >
-    <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-5">
-      <div>
-        <label
-          for="new-game-name"
-          class="block text-sm font-semibold text-on-surface-variant mb-2"
-          >{{ 'home.gameNameOptional' | translate }}</label
-        >
+    <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="setup-form">
+      <label class="setup-field">
+        <span>{{ 'home.gameNameOptional' | translate }}</span>
         <input
           id="new-game-name"
           type="text"
           [(ngModel)]="newGameName"
           [ngModelOptions]="{ standalone: true }"
           [placeholder]="'home.gameNamePlaceholder' | translate"
-          class="w-full h-12 bg-surface-container-low border border-outline-variant rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
         />
+      </label>
+
+      <div class="setup-section-title">
+        <span>Table Assignment</span>
       </div>
-      <div class="space-y-3">
-        <label class="block text-sm font-semibold text-on-surface-variant">{{
-          'home.playerNames' | translate
-        }}</label>
-        <div *ngFor="let i of [1, 2, 3, 4]">
-          <label
-            [attr.for]="'new-game-player-' + i"
-            class="block text-xs font-medium text-on-surface-variant/60 mb-1"
-            >{{ 'home.player' | translate }} {{ i }}</label
-          >
+
+      <div class="setup-grid">
+        <label *ngFor="let i of [1, 2, 3, 4]" class="setup-field">
+          <span>{{ 'home.player' | translate }} {{ i }}</span>
           <input
             [id]="'new-game-player-' + i"
             type="text"
             [formControlName]="'player' + i"
             [placeholder]="('home.player' | translate) + ' ' + i"
-            class="w-full h-12 bg-surface-container-low border border-outline-variant rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
           />
-        </div>
+        </label>
       </div>
-      <div class="flex gap-3 pt-2">
-        <button
-          type="button"
-          (click)="closeNewGameForm()"
-          class="flex-1 h-12 rounded-xl bg-surface-container-highest/50 text-on-surface font-semibold hover:bg-surface-container-highest transition-colors"
-        >
+
+      <div class="setup-note">
+        <span class="material-symbols-outlined">info</span>
+        <p>
+          Standard American whist rules will apply. 52-card deck, partners sit opposite each other.
+          The first team to reach 7 points wins the rubber.
+        </p>
+      </div>
+
+      <div class="setup-actions">
+        <button type="button" class="setup-cancel" (click)="closeNewGameForm()">
           {{ 'common.cancel' | translate }}
         </button>
-        <button
-          type="submit"
-          [disabled]="!playerForm.valid"
-          class="flex-1 h-12 btn-gradient rounded-xl font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-all disabled:opacity-50"
-        >
-          <span class="material-symbols-outlined text-xl">play_arrow</span>
+        <button type="submit" class="setup-submit" [disabled]="!playerForm.valid">
           {{ 'home.startGame' | translate }}
         </button>
       </div>
     </form>
-  </app-modal>
-
-  <!-- Player Input Form (unauthenticated fallback) -->
-  <section
-    *ngIf="!isAuthenticated || (!showNewGameForm && games.length === 0 && !loading)"
-    class="px-6 pb-6"
-  >
-    <div class="glass-panel ghost-border rounded-2xl p-6 relative overflow-hidden">
-      <div
-        class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"
-      ></div>
-      <h2 class="text-lg font-bold text-on-surface mb-4">{{ 'home.playerNames' | translate }}</h2>
-      <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="space-y-3">
-        <div *ngFor="let i of [1, 2, 3, 4]">
-          <label [attr.for]="'landing-player-' + i" class="sr-only"
-            >{{ 'home.player' | translate }} {{ i }}</label
-          >
-          <input
-            [id]="'landing-player-' + i"
-            type="text"
-            [formControlName]="'player' + i"
-            [placeholder]="('home.player' | translate) + ' ' + i"
-            class="w-full h-12 bg-surface-container-low border border-outline-variant rounded-xl px-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/50 transition-all"
-          />
-        </div>
-        <button
-          type="submit"
-          [disabled]="!playerForm.valid"
-          class="w-full h-14 btn-gradient rounded-xl font-bold flex items-center justify-center gap-2 mt-4 active:scale-[0.98] transition-all disabled:opacity-50"
-        >
-          <span class="material-symbols-outlined text-xl">play_arrow</span>
-          {{ 'home.startGame' | translate }}
-        </button>
-      </form>
-    </div>
   </section>
 </div>
+
+<app-modal
+  *ngIf="quickLookGame"
+  [title]="getGameDisplayName(quickLookGame)"
+  size="md"
+  (close)="closeQuickLook()"
+>
+  <div class="space-y-6">
+    <div class="grid grid-cols-2 gap-4">
+      <div
+        *ngFor="let player of quickLookGame.players; let i = index"
+        class="bg-surface-container-low rounded-2xl p-4 relative overflow-hidden"
+      >
+        <div
+          class="absolute top-0 left-0 w-1 h-full"
+          [class.bg-primary]="quickLookGame.scores[i] > 0"
+          [class.bg-destructive]="quickLookGame.scores[i] < 0"
+          [class.bg-outline-variant]="quickLookGame.scores[i] === 0"
+        ></div>
+        <p class="text-sm text-on-surface-variant font-medium mb-2">{{ player }}</p>
+        <p
+          class="text-3xl font-black font-headline tracking-tighter"
+          [class.text-primary]="quickLookGame.scores[i] > 0"
+          [class.text-destructive]="quickLookGame.scores[i] < 0"
+          [class.text-on-surface-variant]="quickLookGame.scores[i] === 0"
+        >
+          {{ quickLookGame.scores[i] > 0 ? '+' : '' }}{{ quickLookGame.scores[i] }}
+        </p>
+      </div>
+    </div>
+    <p class="text-sm text-on-surface-variant">
+      {{ 'home.round' | translate }} {{ quickLookGame.current_round }}
+      ·
+      {{
+        quickLookGame.status === 'active'
+          ? ('home.active' | translate)
+          : ('home.completed' | translate)
+      }}
+    </p>
+    <button
+      type="button"
+      (click)="quickLookGame && continueGame(quickLookGame.id)"
+      class="w-full h-14 btn-gradient rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-lg shadow-primary-container/20 active:scale-[0.98] transition-all"
+    >
+      <span class="material-symbols-outlined">play_arrow</span>
+      {{ 'home.openGame' | translate }}
+    </button>
+  </div>
+</app-modal>
+
+<app-modal
+  *ngIf="showInvitationForm"
+  [title]="'home.sendInvitations' | translate"
+  size="md"
+  (close)="closeInvitationForm()"
+>
+  <app-invitation-form
+    [gameId]="selectedGameId || ''"
+    [gameName]="selectedGameName"
+    [players]="selectedGame?.players || []"
+    [playerUserIds]="selectedGame?.player_user_ids || []"
+    [currentUserId]="userId"
+    [isGameOwner]="!!(selectedGame && isGameOwner(selectedGame))"
+    (invitationsSent)="onInvitationsSent($event)"
+    (cancelled)="closeInvitationForm()"
+    (playerNameUpdated)="onPlayerNameUpdated($event)"
+  ></app-invitation-form>
+</app-modal>
+
+<app-confirm-modal
+  *ngIf="showDeleteConfirm"
+  [title]="'common.confirmDelete' | translate"
+  [message]="'home.confirmDeleteGame' | translate"
+  [confirmLabel]="'common.delete' | translate"
+  [cancelLabel]="'common.cancel' | translate"
+  (confirmed)="doDeleteGame()"
+  (cancelled)="closeDeleteConfirm()"
+></app-confirm-modal>

@@ -1,42 +1,67 @@
-/* Stitch "Whist" — felt-table atmospheric background */
+/* Stitch "Whist" — Neon Conservatory atmospheric background */
 body {
-  background: #0b1326;
+  background: #081425;
   min-height: 100vh;
   position: relative;
 }
 
-/* Felt-table gradient: subtle emerald center glow */
+/* Felt-table gradient: subtle teal center glow */
 .felt-gradient {
-  background: radial-gradient(circle at center, #064e3b 0%, #0b1326 100%);
+  background: radial-gradient(circle at center, #004564 0%, #081425 100%);
 }
 
 /* Glass panel — the main card surface treatment */
 .glass-panel {
-  background: rgba(23, 31, 51, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(21, 32, 49, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
-/* Ghost border for subtle card edges */
+/* Ghost border for subtle card edges (15% opacity of outline-variant) */
 .ghost-border {
-  border: 1px solid rgba(64, 73, 68, 0.15);
+  border: 1px solid rgba(62, 72, 80, 0.15);
 }
 
 /* Inner glow for elevated cards */
 .inner-glow {
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Gold CTA button */
+/* Gold CTA button — tertiary prestige color */
 .btn-gradient {
-  background: #ee9800;
-  color: #2a1700;
+  background: linear-gradient(135deg, #f1c400 0%, #d0a900 100%);
+  color: #3c2f00;
   font-weight: 700;
   border: none;
+  border-radius: 1.5rem;
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background: #ffb95f;
+    background: linear-gradient(135deg, #f5d030 0%, #f1c400 100%);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Primary teal CTA button */
+.btn-teal {
+  background: linear-gradient(135deg, #14b8ff 0%, #0090cc 100%);
+  color: #00344c;
+  font-weight: 700;
+  border: none;
+  border-radius: 1.5rem;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #3cc8ff 0%, #14b8ff 100%);
     transform: translateY(-1px);
   }
 
