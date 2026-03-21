@@ -17,4 +17,7 @@ COPY . .
 
 EXPOSE 8000
 
+RUN addgroup --system app && adduser --system --ingroup app app && chown -R app:app /app
+USER app
+
 CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
