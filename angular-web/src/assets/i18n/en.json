@@ -180,7 +180,19 @@
       "took": "Took",
       "change": "Change",
       "before": "Before",
-      "after": "After"
+      "after": "After",
+      "suit": "Suit",
+      "sessionLedger": "Session Ledger",
+      "detailedChronicle": "A detailed chronicle of every round played.",
+      "totalRounds": "Total Rounds",
+      "leader": "Leader",
+      "finalStandings": "Final Standings",
+      "rank": "Rank",
+      "activeRecord": "Active Record",
+      "currentRank": "Current Rank",
+      "totalScore": "Total Score",
+      "winRate": "Win Rate",
+      "rounds": "Rounds"
     }
   },
   "trump": {
