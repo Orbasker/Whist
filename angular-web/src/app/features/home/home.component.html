@@ -1,138 +1,158 @@
-<div class="dashboard-shell">
-  <div
-    *ngIf="actionLoading"
-    class="fixed inset-0 z-[80] flex items-center justify-center bg-background/60 backdrop-blur-sm"
-    aria-live="polite"
-  >
-    <app-loader></app-loader>
-  </div>
+<!-- Loading overlay -->
+<div
+  *ngIf="actionLoading"
+  class="fixed inset-0 z-[80] flex items-center justify-center bg-background/60 backdrop-blur-sm"
+  aria-live="polite"
+>
+  <app-loader></app-loader>
+</div>
 
-  <aside class="dashboard-sidebar">
-    <div>
-      <div class="sidebar-brand">
-        <span class="sidebar-brand-title">{{ 'landing.brandName' | translate }}</span>
-        <span class="sidebar-brand-subtitle">{{ 'home.grandSalon' | translate }}</span>
-      </div>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     DESKTOP LAYOUT (≥1024px): Full-width top header, sidebar, main
+     ═══════════════════════════════════════════════════════════════════════ -->
 
-      <div class="sidebar-user" *ngIf="isAuthenticated">
-        <div class="sidebar-user-badge">
-          {{ (userName || userEmail || 'W').slice(0, 1) | uppercase }}
-        </div>
-        <div>
-          <strong>{{ userName || ('landing.brandName' | translate) }}</strong>
-          <p>{{ userEmail || ('home.eliteMemberAccess' | translate) }}</p>
-        </div>
-      </div>
-
-      <nav class="sidebar-nav" aria-label="Dashboard sections">
-        <button type="button" class="sidebar-link sidebar-link-active" aria-current="page">
-          <span class="material-symbols-outlined">style</span>
-          <span>{{ 'home.liveGames' | translate }}</span>
-        </button>
-        <button type="button" class="sidebar-link" (click)="toggleNewGameForm()">
-          <span class="material-symbols-outlined">add_circle</span>
-          <span>{{ 'home.newGame' | translate }}</span>
-        </button>
-      </nav>
-    </div>
-
-    <div class="sidebar-footer">
-      <a *ngIf="!isAuthenticated" routerLink="/login" class="sidebar-cta">
-        {{ 'home.loginOrSignup' | translate }}
-      </a>
-      <button
-        *ngIf="isAuthenticated"
-        type="button"
-        (click)="toggleNewGameForm()"
-        class="sidebar-cta"
-      >
-        {{ 'home.newGame' | translate }}
-      </button>
-      <div class="sidebar-meta">
-        <button *ngIf="isAuthenticated" type="button" (click)="logout()">
-          {{ 'home.logout' | translate }}
-        </button>
-        <a *ngIf="!isAuthenticated" routerLink="/">{{ 'home.returnHome' | translate }}</a>
-      </div>
-    </div>
-  </aside>
-
-  <main class="dashboard-main">
-    <header class="dashboard-topbar">
-      <div>
-        <p class="dashboard-kicker">{{ 'home.myGames' | translate }}</p>
-        <h1>
-          {{ isAuthenticated ? ('home.liveGames' | translate) : ('landing.brandName' | translate) }}
-        </h1>
-      </div>
-
-      <nav class="dashboard-topnav" aria-label="Primary">
-        <button type="button" class="dashboard-topnav-active">
+<!-- Top App Bar — full-width, fixed above everything -->
+<header class="desktop-header">
+  <div class="desktop-header-inner">
+    <div class="desktop-header-left">
+      <span class="desktop-brand">{{ 'landing.brandName' | translate }}</span>
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <button type="button" class="desktop-nav-link desktop-nav-active" aria-current="page">
           {{ 'home.liveGames' | translate }}
         </button>
-        <button type="button" (click)="toggleNewGameForm()">
-          {{ 'home.newGame' | translate }}
+        <button type="button" class="desktop-nav-link">
+          {{ 'home.gameHistory' | translate }}
+        </button>
+        <button type="button" class="desktop-nav-link">
+          {{ 'home.leaderboard' | translate }}
         </button>
       </nav>
-    </header>
-
-    <section *ngIf="isAuthenticated" class="dashboard-hero">
-      <div class="dashboard-hero-copy">
-        <p class="dashboard-kicker">{{ 'home.clubTable' | translate }}</p>
-        <h2>{{ 'home.heroHeading' | translate }}</h2>
-        <p>{{ 'home.heroDescription' | translate }}</p>
-      </div>
-
-      <div class="dashboard-summary-card">
-        <div>
-          <span>{{ 'home.activeTables' | translate }}</span>
-          <strong>{{ getActiveGameCount() }}</strong>
+    </div>
+    <div class="desktop-header-right" *ngIf="isAuthenticated">
+      <button class="header-icon-btn" type="button">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+      <div class="header-user-section">
+        <div class="header-user-text">
+          <p class="header-user-name">{{ userName || ('landing.brandName' | translate) }}</p>
+          <p class="header-user-email">{{ userEmail || '' }}</p>
         </div>
-        <div>
-          <span>{{ 'home.completedTables' | translate }}</span>
-          <strong>{{ getCompletedGameCount() }}</strong>
-        </div>
-        <button type="button" (click)="toggleNewGameForm()">
-          {{ 'home.newGame' | translate }}
+        <button class="header-icon-btn header-account-btn" type="button">
+          <span class="material-symbols-outlined">account_circle</span>
+        </button>
+        <button class="header-icon-btn header-logout-btn" type="button" (click)="logout()">
+          <span class="material-symbols-outlined">logout</span>
         </button>
       </div>
-    </section>
+    </div>
+    <div class="desktop-header-right" *ngIf="!isAuthenticated">
+      <a routerLink="/login" class="header-login-link">{{ 'home.loginOrSignup' | translate }}</a>
+    </div>
+  </div>
+</header>
 
-    <section *ngIf="!isAuthenticated" class="dashboard-auth-card">
-      <p class="dashboard-kicker">{{ 'home.membershipRequired' | translate }}</p>
-      <h2>{{ 'home.signInToEnter' | translate }}</h2>
-      <p>{{ 'home.authRequiredDescription' | translate }}</p>
-      <a routerLink="/login">{{ 'home.loginOrSignup' | translate }}</a>
-    </section>
+<!-- Side NavBar (Grand Salon) — fixed left, below header -->
+<aside class="desktop-sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-brand">
+      <h2 class="sidebar-brand-title">{{ 'home.grandSalon' | translate }}</h2>
+      <p class="sidebar-brand-subtitle">{{ 'home.eliteMemberAccess' | translate }}</p>
+    </div>
 
-    <section *ngIf="isAuthenticated && loading" class="dashboard-state-card">
-      <div class="dashboard-spinner" aria-hidden="true"></div>
-      <p>{{ 'home.loadingGames' | translate }}</p>
-    </section>
+    <nav class="sidebar-nav" aria-label="Dashboard sections">
+      <button type="button" class="sidebar-link sidebar-link-active" aria-current="page">
+        <span class="material-symbols-outlined">playing_cards</span>
+        <span>{{ 'home.liveGames' | translate }}</span>
+      </button>
+      <button type="button" class="sidebar-link">
+        <span class="material-symbols-outlined">history</span>
+        <span>{{ 'home.gameHistory' | translate }}</span>
+      </button>
+      <button type="button" class="sidebar-link">
+        <span class="material-symbols-outlined">military_tech</span>
+        <span>{{ 'home.leaderboard' | translate }}</span>
+      </button>
+      <button type="button" class="sidebar-link">
+        <span class="material-symbols-outlined">menu_book</span>
+        <span>{{ 'home.clubRules' | translate }}</span>
+      </button>
+    </nav>
+  </div>
 
-    <section *ngIf="isAuthenticated && !loading && games.length === 0" class="dashboard-state-card">
-      <p class="dashboard-kicker">{{ 'home.noActiveSessions' | translate }}</p>
-      <h2>{{ 'home.noGames' | translate }}</h2>
-      <p>{{ 'home.createGameToStart' | translate }}</p>
-      <button type="button" (click)="toggleNewGameForm()">{{ 'home.newGame' | translate }}</button>
-    </section>
+  <button *ngIf="isAuthenticated" type="button" class="sidebar-cta" (click)="toggleNewGameForm()">
+    <span class="material-symbols-outlined">add</span>
+    {{ 'home.newGame' | translate }}
+  </button>
+  <a *ngIf="!isAuthenticated" routerLink="/login" class="sidebar-cta">
+    {{ 'home.loginOrSignup' | translate }}
+  </a>
+</aside>
 
-    <section *ngIf="isAuthenticated && !loading && games.length > 0" class="dashboard-games">
-      <article
-        *ngFor="let game of games"
-        class="game-card"
-        role="button"
-        tabindex="0"
-        (click)="continueGame(game.id)"
-        (keydown.enter)="$event.target === $event.currentTarget && continueGame(game.id)"
-        (keydown.space)="$event.target === $event.currentTarget && onCardSpace($event, game.id)"
-        [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
-      >
-        <div class="game-card-top">
+<!-- Desktop Main Content — offset right by sidebar, down by header -->
+<main class="desktop-main">
+  <!-- Hero Header Section -->
+  <section *ngIf="isAuthenticated" class="desktop-hero">
+    <div class="hero-row">
+      <div class="hero-copy">
+        <h1 class="hero-title">{{ 'home.myGames' | translate }}</h1>
+        <p class="hero-desc">{{ 'home.heroDescription' | translate }}</p>
+      </div>
+      <button type="button" class="hero-new-game-btn" (click)="toggleNewGameForm()">
+        <span class="material-symbols-outlined">add_circle</span>
+        {{ 'home.newGame' | translate }}
+      </button>
+    </div>
+    <div class="hero-separator"></div>
+  </section>
+
+  <!-- Auth Required -->
+  <section *ngIf="!isAuthenticated" class="state-card">
+    <p class="kicker">{{ 'home.membershipRequired' | translate }}</p>
+    <h2>{{ 'home.signInToEnter' | translate }}</h2>
+    <p>{{ 'home.authRequiredDescription' | translate }}</p>
+    <a routerLink="/login" class="gold-btn">{{ 'home.loginOrSignup' | translate }}</a>
+  </section>
+
+  <!-- Loading -->
+  <section *ngIf="isAuthenticated && loading" class="state-card">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>{{ 'home.loadingGames' | translate }}</p>
+  </section>
+
+  <!-- Empty State -->
+  <section *ngIf="isAuthenticated && !loading && games.length === 0" class="state-card">
+    <p class="kicker">{{ 'home.noActiveSessions' | translate }}</p>
+    <h2>{{ 'home.noGames' | translate }}</h2>
+    <p>{{ 'home.createGameToStart' | translate }}</p>
+    <button type="button" class="gold-btn" (click)="toggleNewGameForm()">
+      {{ 'home.newGame' | translate }}
+    </button>
+  </section>
+
+  <!-- Bento Grid Game Cards -->
+  <section *ngIf="isAuthenticated && !loading && games.length > 0" class="bento-grid">
+    <article
+      *ngFor="let game of games"
+      class="game-tile"
+      [class.game-tile--completed]="game.status !== 'active'"
+      role="button"
+      tabindex="0"
+      (click)="continueGame(game.id)"
+      (keydown.enter)="$event.target === $event.currentTarget && continueGame(game.id)"
+      (keydown.space)="$event.target === $event.currentTarget && onCardSpace($event, game.id)"
+      [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
+    >
+      <!-- Felt gradient bar for active games -->
+      <div *ngIf="game.status === 'active'" class="tile-felt-bar"></div>
+
+      <div class="tile-body">
+        <!-- Header row -->
+        <div class="tile-header">
           <div>
             <span
-              class="game-card-status"
-              [class.game-card-status-complete]="game.status !== 'active'"
+              class="tile-badge"
+              [class.tile-badge--active]="game.status === 'active'"
+              [class.tile-badge--done]="game.status !== 'active'"
             >
               {{
                 game.status === 'active'
@@ -140,56 +160,322 @@
                   : ('home.completed' | translate)
               }}
             </span>
-            <h3>{{ getGameDisplayName(game) }}</h3>
+            <h3 class="tile-name">{{ getGameDisplayName(game) }}</h3>
           </div>
-          <button type="button" class="game-card-icon" (click)="openQuickLook(game, $event)">
-            <span class="material-symbols-outlined">table_chart</span>
-          </button>
+          <p class="tile-updated">{{ formatDate(game.updated_at) }}</p>
         </div>
 
-        <p class="game-card-players">{{ game.players.join(' · ') }}</p>
-
-        <div class="game-card-stats">
-          <div>
-            <span>{{ 'home.roundLabel' | translate }}</span>
-            <strong>{{ game.current_round }}</strong>
+        <!-- Info rows -->
+        <div class="tile-info">
+          <div class="tile-info-row">
+            <span class="material-symbols-outlined tile-info-icon">groups</span>
+            <p>{{ game.players.join(' · ') }}</p>
           </div>
-          <div>
-            <span>{{ 'home.scoreLabel' | translate }}</span>
-            <strong>{{ game.scores.join(' / ') }}</strong>
-          </div>
-          <div>
-            <span>{{ 'home.updatedLabel' | translate }}</span>
-            <strong>{{ formatDate(game.updated_at) }}</strong>
+          <div class="tile-info-row">
+            <span class="material-symbols-outlined tile-info-icon">history_edu</span>
+            <p>{{ 'home.roundLabel' | translate }} {{ game.current_round }}</p>
           </div>
         </div>
 
-        <div class="game-card-actions">
-          <button type="button" (click)="continueGame(game.id); $event.stopPropagation()">
-            {{ 'home.continue' | translate }}
-          </button>
+        <!-- Score Grid (2×2) — active games -->
+        <div *ngIf="game.status === 'active'" class="tile-scores">
+          <div *ngFor="let player of game.players; let i = index" class="score-cell">
+            <p class="score-cell-label">{{ player }}</p>
+            <p class="score-cell-value" [class.score-cell-lead]="isLeadingScore(game.scores, i)">
+              {{ game.scores[i] }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Winner display — completed games -->
+        <div *ngIf="game.status !== 'active'" class="tile-winner">
+          <div class="winner-left">
+            <p class="winner-tag">{{ 'home.scoreLabel' | translate }}</p>
+            <p class="winner-scores">{{ game.scores.join(' / ') }}</p>
+          </div>
+          <div class="winner-right">
+            <p class="winner-round">{{ 'home.roundLabel' | translate }} {{ game.current_round }}</p>
+          </div>
+          <div class="winner-medal" aria-hidden="true">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1"
+              >military_tech</span
+            >
+          </div>
+        </div>
+
+        <!-- Action bar -->
+        <div class="tile-actions">
+          <div class="tile-actions-left">
+            <button
+              *ngIf="game.status === 'active'"
+              type="button"
+              class="act-icon act-trophy"
+              (click)="openQuickLook(game, $event)"
+              [attr.aria-label]="'home.score' | translate"
+              title="Quick Score"
+            >
+              <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1"
+                >trophy</span
+              >
+            </button>
+            <button
+              *ngIf="isGameOwner(game)"
+              type="button"
+              class="act-icon act-invite"
+              (click)="openInvitationForm(game); $event.stopPropagation()"
+              [attr.aria-label]="'home.invite' | translate"
+              title="Invite"
+            >
+              <span class="material-symbols-outlined">mail</span>
+            </button>
+            <button
+              *ngIf="game.status !== 'active'"
+              type="button"
+              class="act-view-log"
+              (click)="continueGame(game.id); $event.stopPropagation()"
+            >
+              {{ 'home.continue' | translate }}
+            </button>
+          </div>
           <button
             *ngIf="isGameOwner(game)"
             type="button"
-            class="game-card-action-secondary"
-            (click)="openInvitationForm(game); $event.stopPropagation()"
-          >
-            {{ 'home.sendInvites' | translate }}
-          </button>
-          <button
-            *ngIf="isGameOwner(game)"
-            type="button"
-            class="game-card-action-secondary"
+            class="act-icon act-delete"
             (click)="openDeleteConfirm(game.id, $event)"
+            [attr.aria-label]="'home.delete' | translate"
+            title="Delete"
           >
-            {{ 'home.deleteGame' | translate }}
+            <span class="material-symbols-outlined">delete</span>
           </button>
         </div>
-      </article>
-    </section>
-  </main>
-</div>
+      </div>
+    </article>
+  </section>
 
+  <!-- TODO: Club Performance Section — wire to real aggregate data before enabling
+  <section *ngIf="isAuthenticated && !loading && games.length > 0" class="perf-section">
+    ...
+  </section>
+  -->
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     MOBILE LAYOUT (<1024px): Top gradient header, card list, bottom nav
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- Mobile Top Header -->
+<header class="mobile-header">
+  <div class="mobile-header-inner">
+    <div class="mobile-header-left">
+      <div *ngIf="isAuthenticated" class="mobile-avatar">
+        {{ (userName || userEmail || 'W').slice(0, 1) | uppercase }}
+      </div>
+      <span class="mobile-brand">{{ 'landing.brandName' | translate }}</span>
+    </div>
+    <button *ngIf="isAuthenticated" class="header-icon-btn mobile-notif" type="button">
+      <span class="material-symbols-outlined">notifications</span>
+    </button>
+  </div>
+</header>
+
+<main class="mobile-main">
+  <!-- Mobile Hero -->
+  <section *ngIf="isAuthenticated" class="mobile-hero">
+    <div class="mobile-hero-inner">
+      <div class="mobile-hero-trophy-wrap">
+        <span
+          class="material-symbols-outlined mobile-hero-trophy"
+          style="font-variation-settings: 'FILL' 1"
+          >emoji_events</span
+        >
+      </div>
+      <h1 class="mobile-hero-title">{{ 'home.myGames' | translate }}</h1>
+      <p class="mobile-hero-subtitle">{{ 'home.heroHeading' | translate }}</p>
+    </div>
+  </section>
+
+  <!-- Section heading with search/filter -->
+  <div *ngIf="isAuthenticated && !loading && games.length > 0" class="mobile-section-head">
+    <h2 class="mobile-section-title">{{ 'home.activeTables' | translate }}</h2>
+  </div>
+
+  <!-- Auth Required (mobile) -->
+  <section *ngIf="!isAuthenticated" class="state-card">
+    <p class="kicker">{{ 'home.membershipRequired' | translate }}</p>
+    <h2>{{ 'home.signInToEnter' | translate }}</h2>
+    <p>{{ 'home.authRequiredDescription' | translate }}</p>
+    <a routerLink="/login" class="gold-btn">{{ 'home.loginOrSignup' | translate }}</a>
+  </section>
+
+  <!-- Loading (mobile) -->
+  <section *ngIf="isAuthenticated && loading" class="state-card">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>{{ 'home.loadingGames' | translate }}</p>
+  </section>
+
+  <!-- Empty (mobile) -->
+  <section *ngIf="isAuthenticated && !loading && games.length === 0" class="state-card">
+    <p class="kicker">{{ 'home.noActiveSessions' | translate }}</p>
+    <h2>{{ 'home.noGames' | translate }}</h2>
+    <p>{{ 'home.createGameToStart' | translate }}</p>
+    <button type="button" class="gold-btn" (click)="toggleNewGameForm()">
+      {{ 'home.newGame' | translate }}
+    </button>
+  </section>
+
+  <!-- Mobile Game Card List -->
+  <div *ngIf="isAuthenticated && !loading && games.length > 0" class="mobile-game-list">
+    <article
+      *ngFor="let game of games"
+      class="m-card"
+      [class.m-card--active]="game.status === 'active'"
+      [class.m-card--done]="game.status !== 'active'"
+      role="button"
+      tabindex="0"
+      (click)="continueGame(game.id)"
+      (keydown.enter)="$event.target === $event.currentTarget && continueGame(game.id)"
+      (keydown.space)="$event.target === $event.currentTarget && onCardSpace($event, game.id)"
+      [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
+    >
+      <div class="m-card-head">
+        <div>
+          <h3 class="m-card-name">{{ getGameDisplayName(game) }}</h3>
+        </div>
+        <span
+          class="m-card-badge"
+          [class.m-card-badge--active]="game.status === 'active'"
+          [class.m-card-badge--done]="game.status !== 'active'"
+        >
+          {{
+            game.status === 'active' ? ('home.active' | translate) : ('home.completed' | translate)
+          }}
+        </span>
+      </div>
+
+      <!-- Active: round + current lead -->
+      <div *ngIf="game.status === 'active'" class="m-card-stats">
+        <div class="m-card-stat">
+          <span class="m-card-stat-label">{{ 'home.roundLabel' | translate }}</span>
+          <span class="m-card-stat-value">{{ game.current_round }}</span>
+        </div>
+        <div class="m-card-stat-divider"></div>
+        <div class="m-card-stat m-card-stat--wide">
+          <span class="m-card-stat-label">{{ 'home.scoreLabel' | translate }}</span>
+          <span class="m-card-stat-value">{{ game.scores.join(' / ') }}</span>
+        </div>
+      </div>
+
+      <!-- Completed: winner row -->
+      <div *ngIf="game.status !== 'active'" class="m-card-winner">
+        <div class="m-card-winner-left">
+          <p class="m-card-winner-tag">{{ 'home.scoreLabel' | translate }}</p>
+          <p class="m-card-winner-scores">{{ game.scores.join(' / ') }}</p>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="m-card-actions">
+        <button
+          *ngIf="game.status === 'active'"
+          type="button"
+          class="m-card-primary-btn"
+          (click)="continueGame(game.id); $event.stopPropagation()"
+        >
+          {{ 'home.continue' | translate }}
+        </button>
+        <button
+          *ngIf="game.status !== 'active'"
+          type="button"
+          class="m-card-secondary-btn"
+          (click)="continueGame(game.id); $event.stopPropagation()"
+        >
+          {{ 'home.continue' | translate }}
+        </button>
+        <button
+          *ngIf="isGameOwner(game)"
+          type="button"
+          class="m-card-icon-btn"
+          (click)="openInvitationForm(game); $event.stopPropagation()"
+          [attr.aria-label]="'home.invite' | translate"
+        >
+          <span class="material-symbols-outlined">person_add</span>
+        </button>
+        <button
+          *ngIf="isGameOwner(game)"
+          type="button"
+          class="m-card-icon-btn m-card-icon-btn--danger"
+          (click)="openDeleteConfirm(game.id, $event)"
+          [attr.aria-label]="'home.delete' | translate"
+        >
+          <span class="material-symbols-outlined">delete_outline</span>
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <!-- Mobile Season Summary -->
+  <div *ngIf="isAuthenticated && !loading && games.length > 0" class="mobile-season">
+    <div class="mobile-season-watermark">
+      <span class="material-symbols-outlined">history_edu</span>
+    </div>
+    <h4 class="mobile-season-title">{{ 'home.seasonSummary' | translate }}</h4>
+    <div class="mobile-season-grid">
+      <div class="mobile-season-stat">
+        <p class="mobile-season-stat-label">{{ 'home.activeTables' | translate }}</p>
+        <p class="mobile-season-stat-value">{{ getActiveGameCount() }}</p>
+      </div>
+      <div class="mobile-season-stat">
+        <p class="mobile-season-stat-label">{{ 'home.completedTables' | translate }}</p>
+        <p class="mobile-season-stat-value">{{ getCompletedGameCount() }}</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Mobile FAB -->
+<button *ngIf="isAuthenticated" type="button" class="mobile-fab" (click)="toggleNewGameForm()">
+  <span class="material-symbols-outlined">add</span>
+</button>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <button type="button" class="bnav-item" [attr.aria-label]="'home.navHome' | translate">
+    <span class="material-symbols-outlined">style</span>
+    <span class="bnav-label">{{ 'home.navHome' | translate }}</span>
+  </button>
+  <button
+    type="button"
+    class="bnav-item bnav-item--active"
+    [attr.aria-label]="'home.navGames' | translate"
+  >
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">casino</span>
+    <span class="bnav-label">{{ 'home.navGames' | translate }}</span>
+  </button>
+  <button type="button" class="bnav-item" [attr.aria-label]="'home.navHistory' | translate">
+    <span class="material-symbols-outlined">history_edu</span>
+    <span class="bnav-label">{{ 'home.navHistory' | translate }}</span>
+  </button>
+  <button
+    type="button"
+    class="bnav-item"
+    *ngIf="isAuthenticated"
+    (click)="logout()"
+    [attr.aria-label]="'home.logout' | translate"
+  >
+    <span class="material-symbols-outlined">logout</span>
+    <span class="bnav-label">{{ 'home.logout' | translate }}</span>
+  </button>
+  <a *ngIf="!isAuthenticated" routerLink="/login" class="bnav-item">
+    <span class="material-symbols-outlined">login</span>
+    <span class="bnav-label">{{ 'home.loginOrSignup' | translate }}</span>
+  </a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SHARED MODALS (rendered regardless of breakpoint)
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- New Game Form Overlay -->
 <div *ngIf="showNewGameForm" class="setup-overlay" role="presentation" (click)="closeNewGameForm()">
   <section class="setup-panel" (click)="$event.stopPropagation()" aria-labelledby="setup-title">
     <div class="setup-panel-glow" aria-hidden="true"></div>
@@ -226,9 +512,7 @@
 
       <div class="setup-note">
         <span class="material-symbols-outlined">info</span>
-        <p>
-          {{ 'home.setupNote' | translate }}
-        </p>
+        <p>{{ 'home.setupNote' | translate }}</p>
       </div>
 
       <div class="setup-actions">
@@ -243,6 +527,7 @@
   </section>
 </div>
 
+<!-- Quick Look Modal -->
 <app-modal
   *ngIf="quickLookGame"
   [title]="getGameDisplayName(quickLookGame)"
@@ -292,6 +577,7 @@
   </div>
 </app-modal>
 
+<!-- Invitation Modal -->
 <app-modal
   *ngIf="showInvitationForm"
   [title]="'home.sendInvitations' | translate"
@@ -311,6 +597,7 @@
   ></app-invitation-form>
 </app-modal>
 
+<!-- Delete Confirmation Modal -->
 <app-confirm-modal
   *ngIf="showDeleteConfirm"
   [title]="'common.confirmDelete' | translate"

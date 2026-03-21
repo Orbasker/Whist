@@ -55,6 +55,9 @@
     "createGameFailed": "Failed to create game. Please try again.",
     "openGame": "Open game",
     "liveGames": "Live Tables",
+    "gameHistory": "Game History",
+    "leaderboard": "Leaderboard",
+    "clubRules": "Club Rules",
     "grandSalon": "The Grand Salon",
     "eliteMemberAccess": "Elite member access",
     "returnHome": "Return home",
@@ -74,7 +77,11 @@
     "continue": "Continue",
     "roundLabel": "Round",
     "scoreLabel": "Score",
-    "updatedLabel": "Updated"
+    "updatedLabel": "Updated",
+    "seasonSummary": "Season Summary",
+    "navHome": "Home",
+    "navGames": "Games",
+    "navHistory": "History"
   },
   "auth": {
     "pageTitle": "Sign In - Whist Club | Israeli Whist Card Game",
