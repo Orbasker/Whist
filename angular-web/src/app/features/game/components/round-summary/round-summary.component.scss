@@ -2,6 +2,22 @@
   display: block;
 }
 
+.player-card {
+  &--winner {
+    background: rgba(31, 42, 60, 0.6);
+  }
+  &--loser {
+    background: rgba(21, 28, 45, 0.5);
+  }
+  &--default {
+    background: rgba(21, 28, 45, 0.4);
+  }
+}
+
+.shadow-tertiary-glow {
+  box-shadow: 0 0 12px rgba(208, 169, 0, 0.3);
+}
+
 // Player result cards staggered entrance
 :host ::ng-deep .space-y-3 > div {
   animation: stagger-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -14,7 +30,7 @@
 }
 
 // Score pop animation
-:host ::ng-deep .text-2xl.font-bold {
+:host ::ng-deep .text-xl.font-black {
   animation: score-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
 }
 

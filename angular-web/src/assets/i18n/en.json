@@ -196,11 +196,12 @@
       "deleteGame": "Delete game"
     },
     "roundSummary": {
-      "title": "Round summary",
+      "title": "Round Summary",
+      "roundLabel": "Round {{round}}",
       "playerTotals": "Player totals",
       "bidTook": "Bid {{bid}}, took {{took}}",
       "total": "Total",
-      "continueNext": "Continue to next round"
+      "continueNext": "Continue to Next Round"
     },
     "roundHistoryTable": {
       "round": "Round",
