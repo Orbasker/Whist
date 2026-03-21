@@ -11,11 +11,23 @@
     />
     <meta
       name="keywords"
-      content="וויסט ישראלי, משחק קלפים, מעקב ניקוד, לקיחות, israeli whist, card game, score tracker, trick-taking, whist scorekeeper"
+      content="וויסט ישראלי, משחק קלפים, מעקב ניקוד, לקיחות, מכרז שליט, חוזים, israeli whist, card game, score tracker, trick-taking, whist scorekeeper, trump bidding"
     />
     <meta name="author" content="Whist Club" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
     <link rel="canonical" href="https://whist.orbasker.com/" />
+
+    <!-- Mobile App Meta -->
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Whist Club" />
+    <meta name="application-name" content="Whist Club" />
+
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="he" href="https://whist.orbasker.com/" />
+    <link rel="alternate" hreflang="en" href="https://whist.orbasker.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://whist.orbasker.com/" />
 
     <!-- Open Graph -->
     <meta property="og:title" content="וויסט ישראלי - מעקב ניקוד למשחק קלפים" />
@@ -37,22 +49,88 @@
       content="עקבו אחר ניקוד וויסט ישראלי אונליין. מעקב ניקוד דיגיטלי חינמי למשחק הלקיחות ל-4 שחקנים."
     />
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data: WebApplication -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Whist Club",
+        "alternateName": "מועדון וויסט",
         "description": "Free online Israeli Whist card game score tracker. Track scores and manage game history for the popular 4-player trick-taking game with trump bidding and contracts.",
         "url": "https://whist.orbasker.com",
         "applicationCategory": "GameApplication",
         "operatingSystem": "Web",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
         "offers": {
           "@type": "Offer",
           "price": "0",
           "priceCurrency": "USD"
         },
         "inLanguage": ["he", "en"]
+      }
+    </script>
+
+    <!-- Structured Data: FAQ (Israeli Whist Rules) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Israeli Whist?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Israeli Whist is a popular 4-player trick-taking card game where all 52 cards are dealt (13 each). Players bid on a trump suit in an auction, then each declares how many tricks they will take. The total bids cannot equal 13, forcing the last bidder to push the game Over or Under."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is Israeli Whist scored?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Hit your contract exactly and score your tricks squared plus ten (e.g., bid 3, take 3 = 19 points). Miss your contract and lose points for every trick you're off. Bidding zero is high-risk: succeed for a 50-point bonus in Under, but fail and face a steep 50-point penalty."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How many players do you need for Israeli Whist?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Israeli Whist is played with exactly 4 players. Each player plays for themselves — there are no teams. Every player receives 13 cards from a standard 52-card deck."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is Whist Club?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Whist Club is a free online score tracker for Israeli Whist. It provides real-time digital scorekeeping, game history tracking, and multiplayer support so you can focus on playing instead of manual score calculations."
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Structured Data: Breadcrumb -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://whist.orbasker.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Sign In",
+            "item": "https://whist.orbasker.com/login"
+          }
+        ]
       }
     </script>
 
@@ -69,6 +147,7 @@
     />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   </head>
   <body>
     <app-root></app-root>

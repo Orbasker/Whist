@@ -7,6 +7,7 @@ export const environment = {
   useSupabaseRealtime: true,
   supabaseUrl: '',
   supabaseAnonKey: '',
+  publicBaseUrl: 'http://localhost:4200',
   gaMeasurementId: '',
   googleAdsId: '',
 };

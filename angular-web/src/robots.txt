@@ -1,6 +1,15 @@
 User-agent: *
 Allow: /
+Allow: /login
 Disallow: /dashboard
 Disallow: /game
+Disallow: /invite/
+
+User-agent: Googlebot
+Allow: /
+Allow: /login
+Disallow: /dashboard
+Disallow: /game
+Disallow: /invite/
 
 Sitemap: https://whist.orbasker.com/sitemap.xml

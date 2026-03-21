@@ -57,6 +57,8 @@
     "liveGames": "Live Tables"
   },
   "auth": {
+    "pageTitle": "Sign In - Whist Club | Israeli Whist Card Game",
+    "metaDescription": "Sign in or create an account to track your Israeli Whist card game scores online. Free score tracker with real-time updates for 4-player trick-taking games.",
     "signIn": "Sign In",
     "signUp": "Sign Up",
     "email": "Email",
@@ -91,6 +93,8 @@
     "subtitle": "The iconic Israeli card game"
   },
   "invite": {
+    "pageTitle": "Game Invitation - Whist Club | Join an Israeli Whist Game",
+    "metaDescription": "You've been invited to play Israeli Whist! Join the game, track scores in real-time, and compete in the classic 4-player trick-taking card game.",
     "title": "Game invitation",
     "loadingInvitation": "Loading invitation details...",
     "error": "Error",
@@ -176,7 +180,19 @@
       "took": "Took",
       "change": "Change",
       "before": "Before",
-      "after": "After"
+      "after": "After",
+      "suit": "Suit",
+      "sessionLedger": "Session Ledger",
+      "detailedChronicle": "A detailed chronicle of every round played.",
+      "totalRounds": "Total Rounds",
+      "leader": "Leader",
+      "finalStandings": "Final Standings",
+      "rank": "Rank",
+      "activeRecord": "Active Record",
+      "currentRank": "Current Rank",
+      "totalScore": "Total Score",
+      "winRate": "Win Rate",
+      "rounds": "Rounds"
     }
   },
   "trump": {
