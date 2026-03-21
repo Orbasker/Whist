@@ -176,7 +176,19 @@
       "took": "לקח",
       "change": "שינוי",
       "before": "לפני",
-      "after": "אחרי"
+      "after": "אחרי",
+      "suit": "צבע",
+      "sessionLedger": "פנקס המשחק",
+      "detailedChronicle": "תיעוד מפורט של כל הסיבובים.",
+      "totalRounds": "סה\"כ סיבובים",
+      "leader": "מוביל",
+      "finalStandings": "דירוג סופי",
+      "rank": "מקום",
+      "activeRecord": "רשומה פעילה",
+      "currentRank": "דירוג נוכחי",
+      "totalScore": "ניקוד כולל",
+      "winRate": "אחוז הצלחה",
+      "rounds": "סיבובים"
     }
   },
   "trump": {

@@ -1,154 +1,408 @@
 <app-modal [title]="'game.roundHistory' | translate" size="full" (close)="onClose()">
   <div class="round-history-root flex min-h-0 flex-1 flex-col overflow-hidden">
+    <!-- Empty state -->
     <div *ngIf="rounds.length === 0" class="py-12 px-6 text-center text-on-surface-variant">
       {{ 'game.roundsEmpty' | translate }}
     </div>
 
     <div
       *ngIf="rounds.length > 0"
-      class="round-history-scroll flex min-h-0 flex-1 flex-col overflow-hidden p-3 sm:p-4"
+      class="round-history-scroll flex min-h-0 flex-1 flex-col overflow-hidden"
     >
-      <div class="round-history-table-wrap min-h-0 flex-1 overflow-auto">
-        <table
-          class="round-history-table min-w-[640px] w-full border-collapse text-right text-xs sm:text-sm"
-        >
-          <thead class="round-history-thead">
-            <tr class="text-on-surface-variant">
-              <th
-                class="sticky left-0 z-10 w-16 bg-surface-container-lowest py-3 pl-2 pr-4 font-semibold"
+      <!-- ═══ DESKTOP TABLE VIEW ═══ -->
+      <div class="hidden sm:flex min-h-0 flex-1 flex-col overflow-hidden p-3 sm:p-4">
+        <!-- Header stats -->
+        <div class="flex items-end justify-between mb-4 gap-4 flex-wrap">
+          <div>
+            <h2 class="font-headline text-lg text-on-surface mb-0.5">
+              {{ 'game.roundHistoryTable.sessionLedger' | translate }}
+            </h2>
+            <p class="text-xs text-on-surface-variant italic">
+              {{ 'game.roundHistoryTable.detailedChronicle' | translate }}
+            </p>
+          </div>
+          <div class="flex gap-3">
+            <div class="bg-surface-container-low px-4 py-2.5 rounded-lg border-l-2 border-primary">
+              <div
+                class="text-[9px] uppercase tracking-widest text-on-surface-variant font-semibold mb-0.5"
               >
-                {{ 'game.roundHistoryTable.round' | translate }}
-              </th>
-              <th class="w-12 bg-surface-container-lowest py-3 px-2 text-center font-semibold">
-                {{ 'game.roundHistoryTable.card' | translate }}
-              </th>
-              <ng-container *ngFor="let player of players; let pi = index">
-                <th
-                  colspan="5"
-                  class="bg-surface-container-lowest py-2 px-1 text-center font-semibold"
-                  [ngClass]="{
-                    'bg-primary/10 text-primary': isCurrentPlayer(pi),
-                  }"
-                >
-                  <span>{{ player }}</span>
-                  <span
-                    *ngIf="isCurrentPlayer(pi)"
-                    class="mr-1 ml-1 inline-block rounded-full bg-primary/20 px-2 py-0.5 text-xs font-medium"
-                    >{{ 'common.you' | translate }}</span
-                  >
-                </th>
-              </ng-container>
-            </tr>
-            <tr class="text-on-surface-variant/60">
-              <th class="sticky left-0 z-10 bg-surface-container-lowest py-2 pl-2 pr-4"></th>
-              <th class="bg-surface-container-lowest py-2 px-2"></th>
-              <ng-container *ngFor="let player of players; let pi = index">
-                <th
-                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ 'game.roundHistoryTable.bid' | translate }}
-                </th>
-                <th
-                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ 'game.roundHistoryTable.took' | translate }}
-                </th>
-                <th
-                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ 'game.roundHistoryTable.change' | translate }}
-                </th>
-                <th
-                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ 'game.roundHistoryTable.before' | translate }}
-                </th>
-                <th
-                  class="bg-surface-container-lowest py-2 px-1.5 text-center font-normal"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ 'game.roundHistoryTable.after' | translate }}
-                </th>
-              </ng-container>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let round of rounds; let ri = index"
-              class="transition-colors hover:bg-surface-container-low/50"
+                {{ 'game.roundHistoryTable.totalRounds' | translate }}
+              </div>
+              <div class="font-headline text-lg text-primary tabular-nums">
+                {{ rounds.length }}
+              </div>
+            </div>
+            <div
+              *ngIf="standings.length > 0"
+              class="bg-surface-container-low px-4 py-2.5 rounded-lg border-l-2 border-secondary"
             >
-              <td
-                class="sticky left-0 z-10 bg-surface-container-lowest py-2.5 pl-2 pr-4 font-medium text-on-surface"
+              <div
+                class="text-[9px] uppercase tracking-widest text-on-surface-variant font-semibold mb-0.5"
               >
-                {{ round.round_number }}
-              </td>
-              <td class="py-2.5 px-2 text-center text-lg">
+                {{ 'game.roundHistoryTable.leader' | translate }}
+              </div>
+              <div class="font-headline text-lg text-secondary truncate max-w-[120px]">
+                {{ standings[0].name }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div
+          class="round-history-table-wrap min-h-0 flex-1 overflow-auto bg-surface-container-low rounded-xl"
+        >
+          <table class="round-history-table w-full border-collapse text-center text-xs">
+            <!-- Player name headers -->
+            <thead class="round-history-thead">
+              <tr class="bg-surface-container-highest">
+                <th
+                  class="sticky left-0 z-30 bg-surface-container-highest py-4 px-4 text-left text-[10px] uppercase tracking-widest text-on-surface-variant font-semibold border-b border-outline-variant/15"
+                >
+                  {{ 'game.roundHistoryTable.round' | translate }}
+                </th>
+                <th
+                  class="bg-surface-container-highest py-4 px-3 text-center text-[10px] uppercase tracking-widest text-on-surface-variant font-semibold border-b border-outline-variant/15"
+                >
+                  {{ 'game.roundHistoryTable.card' | translate }}
+                </th>
+                <ng-container *ngFor="let player of players; let pi = index; trackBy: trackByIndex">
+                  <th
+                    colspan="5"
+                    class="py-4 px-2 text-center text-[10px] uppercase tracking-widest font-semibold border-b"
+                    [ngClass]="{
+                      'bg-primary-container/20 text-primary border-b-2 border-primary':
+                        isCurrentPlayer(pi),
+                      'bg-surface-container-highest text-on-surface-variant border-b border-outline-variant/15':
+                        !isCurrentPlayer(pi),
+                    }"
+                  >
+                    {{ player }}
+                    <span
+                      *ngIf="isCurrentPlayer(pi)"
+                      class="ml-1 text-[8px] bg-primary/20 px-1.5 py-0.5 rounded-full font-medium normal-case"
+                      >{{ 'common.you' | translate }}</span
+                    >
+                  </th>
+                </ng-container>
+              </tr>
+              <!-- Sub-headers -->
+              <tr
+                class="bg-surface-container-high text-[9px] uppercase tracking-widest text-outline font-medium"
+              >
+                <th
+                  class="sticky left-0 z-30 bg-surface-container-high px-4 py-1.5 border-b border-outline-variant/15"
+                >
+                  #
+                </th>
+                <th class="px-3 py-1.5 border-b border-outline-variant/15 text-center">
+                  {{ 'game.roundHistoryTable.suit' | translate }}
+                </th>
+                <ng-container *ngFor="let player of players; let pi = index; trackBy: trackByIndex">
+                  <th
+                    class="px-1.5 py-1.5 border-b border-outline-variant/15 text-center"
+                    [ngClass]="{ 'bg-primary-container/10': isCurrentPlayer(pi) }"
+                  >
+                    {{ 'game.roundHistoryTable.bid' | translate }}
+                  </th>
+                  <th
+                    class="px-1.5 py-1.5 border-b border-outline-variant/15 text-center"
+                    [ngClass]="{ 'bg-primary-container/10': isCurrentPlayer(pi) }"
+                  >
+                    {{ 'game.roundHistoryTable.took' | translate }}
+                  </th>
+                  <th
+                    class="px-1.5 py-1.5 border-b border-outline-variant/15 text-center"
+                    [ngClass]="{ 'bg-primary-container/10': isCurrentPlayer(pi) }"
+                  >
+                    +/-
+                  </th>
+                  <th
+                    class="px-1.5 py-1.5 border-b border-outline-variant/15 text-center"
+                    [ngClass]="{ 'bg-primary-container/10': isCurrentPlayer(pi) }"
+                  >
+                    {{ 'game.roundHistoryTable.before' | translate }}
+                  </th>
+                  <th
+                    class="px-1.5 py-1.5 border-b border-outline-variant/15 text-center"
+                    [ngClass]="{ 'bg-primary-container/10': isCurrentPlayer(pi) }"
+                  >
+                    {{ 'game.roundHistoryTable.after' | translate }}
+                  </th>
+                </ng-container>
+              </tr>
+            </thead>
+
+            <!-- Data rows (newest first) -->
+            <tbody class="divide-y divide-outline-variant/10">
+              <tr
+                *ngFor="let round of reversedRounds; let ri = index; trackBy: trackByRound"
+                class="transition-colors hover:bg-surface-container-high"
+                [style.opacity]="getRowOpacity(ri)"
+              >
+                <td
+                  class="sticky left-0 z-10 bg-surface-container-low px-4 py-3 text-left font-headline text-base text-on-surface"
+                >
+                  {{ round.round_number }}
+                </td>
+                <td class="px-3 py-3">
+                  <span class="text-lg" [ngClass]="getTrumpColorClass(round.trump_suit)">
+                    {{ getTrumpSymbol(round.trump_suit) }}
+                  </span>
+                </td>
+                <ng-container *ngFor="let player of players; let pi = index; trackBy: trackByIndex">
+                  <td
+                    class="px-1.5 py-3 tabular-nums"
+                    [ngClass]="{
+                      'bg-primary-container/5': isCurrentPlayer(pi),
+                      'font-bold': isCurrentPlayer(pi),
+                    }"
+                  >
+                    {{ round.bids[pi] }}
+                  </td>
+                  <td
+                    class="px-1.5 py-3 tabular-nums"
+                    [ngClass]="{ 'bg-primary-container/5': isCurrentPlayer(pi) }"
+                  >
+                    {{ round.tricks[pi] }}
+                  </td>
+                  <td
+                    class="px-1.5 py-3 tabular-nums font-semibold"
+                    [ngClass]="{
+                      'bg-primary-container/5': isCurrentPlayer(pi),
+                      'text-primary': round.scores[pi] > 0,
+                      'text-destructive': round.scores[pi] < 0,
+                      'text-on-surface-variant': round.scores[pi] === 0,
+                    }"
+                  >
+                    {{ formatGainLoss(round.scores[pi]) }}
+                  </td>
+                  <td
+                    class="px-1.5 py-3 tabular-nums text-outline"
+                    [ngClass]="{ 'bg-primary-container/5': isCurrentPlayer(pi) }"
+                  >
+                    {{ getScoreBefore(reversedOriginalIndices[ri], pi) }}
+                  </td>
+                  <td
+                    class="px-1.5 py-3 tabular-nums font-medium"
+                    [ngClass]="{
+                      'bg-primary-container/10 text-primary font-bold': isCurrentPlayer(pi),
+                      'text-on-surface': !isCurrentPlayer(pi),
+                    }"
+                  >
+                    {{ getScoreAfter(reversedOriginalIndices[ri], pi) }}
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+
+            <!-- Final Standings Footer -->
+            <tfoot class="round-history-tfoot">
+              <tr class="bg-surface-container-highest border-t-2 border-secondary/30">
+                <td
+                  class="sticky left-0 z-10 bg-surface-container-highest px-4 py-5 text-left font-headline text-base text-secondary italic"
+                  colspan="2"
+                >
+                  {{ 'game.roundHistoryTable.finalStandings' | translate }}
+                </td>
+                <ng-container *ngFor="let player of players; let pi = index; trackBy: trackByIndex">
+                  <td
+                    colspan="5"
+                    class="py-5 px-2 text-center"
+                    [ngClass]="{
+                      'bg-primary-container/30': isCurrentPlayer(pi),
+                    }"
+                  >
+                    <div
+                      class="text-[9px] uppercase tracking-widest mb-1"
+                      [ngClass]="{
+                        'text-primary': standings[0].playerIndex === pi,
+                        'text-outline': standings[0].playerIndex !== pi,
+                      }"
+                    >
+                      <ng-container *ngFor="let s of standings; trackBy: trackByIndex">
+                        <ng-container *ngIf="s.playerIndex === pi">
+                          {{ 'game.roundHistoryTable.rank' | translate }} {{ getRankLabel(s.rank) }}
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                    <div
+                      class="font-headline tabular-nums"
+                      [ngClass]="{
+                        'text-3xl text-primary': standings[0].playerIndex === pi,
+                        'text-2xl text-on-surface': standings[0].playerIndex !== pi,
+                      }"
+                    >
+                      {{ getTotalScore(pi) }}
+                    </div>
+                  </td>
+                </ng-container>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ MOBILE CARD VIEW ═══ -->
+      <div class="flex sm:hidden min-h-0 flex-1 flex-col overflow-hidden">
+        <!-- Player tabs -->
+        <div class="flex gap-2 px-4 pt-3 pb-2 overflow-x-auto no-scrollbar flex-shrink-0">
+          <button
+            *ngFor="let player of players; let pi = index; trackBy: trackByIndex"
+            (click)="currentPlayerIndex = pi"
+            class="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap"
+            [ngClass]="{
+              'bg-primary-container text-primary': getMobilePlayerIndex() === pi,
+              'bg-surface-container-high text-on-surface-variant': getMobilePlayerIndex() !== pi,
+            }"
+          >
+            {{ player }}
+          </button>
+        </div>
+
+        <!-- Active player stats card -->
+        <div
+          class="mx-4 mt-2 mb-3 p-4 bg-surface-container-low rounded-xl border border-primary-container/30 flex-shrink-0"
+        >
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <span
+                class="text-[9px] uppercase tracking-widest text-on-surface-variant font-semibold"
+              >
+                {{ 'game.roundHistoryTable.activeRecord' | translate }}
+              </span>
+              <h2 class="font-headline text-xl text-secondary">
+                {{ players[getMobilePlayerIndex()] }}
+              </h2>
+            </div>
+            <div class="text-right">
+              <span
+                class="text-[9px] uppercase tracking-widest text-on-surface-variant font-semibold"
+              >
+                {{ 'game.roundHistoryTable.currentRank' | translate }}
+              </span>
+              <div class="font-headline text-base text-primary">
+                <ng-container *ngFor="let s of standings; trackBy: trackByIndex">
+                  <ng-container *ngIf="s.playerIndex === getMobilePlayerIndex()">
+                    #{{ s.rank }}
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="text-center">
+              <div
+                class="text-[9px] uppercase font-semibold text-on-surface-variant tracking-tight mb-0.5"
+              >
+                {{ 'game.roundHistoryTable.totalScore' | translate }}
+              </div>
+              <div class="font-headline text-lg tabular-nums">
+                {{ getTotalScore(getMobilePlayerIndex()) }}
+              </div>
+            </div>
+            <div class="text-center">
+              <div
+                class="text-[9px] uppercase font-semibold text-on-surface-variant tracking-tight mb-0.5"
+              >
+                {{ 'game.roundHistoryTable.winRate' | translate }}
+              </div>
+              <div class="font-headline text-lg text-primary tabular-nums">
+                {{ getWinRate(getMobilePlayerIndex()) }}%
+              </div>
+            </div>
+            <div class="text-center">
+              <div
+                class="text-[9px] uppercase font-semibold text-on-surface-variant tracking-tight mb-0.5"
+              >
+                {{ 'game.roundHistoryTable.rounds' | translate }}
+              </div>
+              <div class="font-headline text-lg tabular-nums">{{ rounds.length }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ledger header -->
+        <div class="flex items-center justify-between px-4 mb-2 flex-shrink-0">
+          <h3 class="font-headline text-sm italic text-on-surface-variant">
+            {{ 'game.roundHistoryTable.sessionLedger' | translate }}
+          </h3>
+        </div>
+
+        <!-- Column headers -->
+        <div
+          class="grid grid-cols-6 gap-1 px-5 py-1.5 bg-surface-container-highest/50 mx-4 rounded-t-lg border-b border-white/5 flex-shrink-0"
+        >
+          <div class="text-[9px] font-bold uppercase tracking-tight text-on-surface-variant">
+            R#
+          </div>
+          <div class="text-[9px] font-bold uppercase tracking-tight text-on-surface-variant">
+            {{ 'game.roundHistoryTable.suit' | translate }}
+          </div>
+          <div class="text-[9px] font-bold uppercase tracking-tight text-on-surface-variant">
+            {{ 'game.roundHistoryTable.bid' | translate }}
+          </div>
+          <div class="text-[9px] font-bold uppercase tracking-tight text-on-surface-variant">
+            {{ 'game.roundHistoryTable.took' | translate }}
+          </div>
+          <div class="text-[9px] font-bold uppercase tracking-tight text-on-surface-variant">
+            +/-
+          </div>
+          <div
+            class="text-[9px] font-bold uppercase tracking-tight text-on-surface-variant text-right"
+          >
+            {{ 'game.roundHistoryTable.after' | translate }}
+          </div>
+        </div>
+
+        <!-- Scrollable round cards -->
+        <div class="flex-1 min-h-0 overflow-y-auto px-4 pb-4 space-y-2 mt-2">
+          <div
+            *ngFor="let round of reversedRounds; let ri = index; trackBy: trackByRound"
+            class="grid grid-cols-6 gap-1 px-4 py-3.5 bg-surface-container-low rounded-lg items-center border-l-2 transition-colors"
+            [ngClass]="getMobileBorderClass(round, getMobilePlayerIndex())"
+            [style.opacity]="getRowOpacity(ri)"
+          >
+            <div class="font-headline text-sm text-on-surface-variant tabular-nums">
+              {{ round.round_number }}
+            </div>
+            <div>
+              <span class="text-base" [ngClass]="getTrumpColorClass(round.trump_suit)">
                 {{ getTrumpSymbol(round.trump_suit) }}
-              </td>
-              <ng-container *ngFor="let player of players; let pi = index">
-                <td
-                  class="py-2.5 px-1.5 text-center text-on-surface/90"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ round.bids[pi] }}
-                </td>
-                <td
-                  class="py-2.5 px-1.5 text-center text-on-surface/90"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ round.tricks[pi] }}
-                </td>
-                <td
-                  class="py-2.5 px-1.5 text-center font-semibold tabular-nums"
-                  [ngClass]="{
-                    'bg-primary/5': isCurrentPlayer(pi),
-                    'text-primary': round.scores[pi] > 0,
-                    'text-destructive': round.scores[pi] < 0,
-                    'text-on-surface-variant': round.scores[pi] === 0,
-                  }"
-                >
-                  {{ formatGainLoss(round.scores[pi]) }}
-                </td>
-                <td
-                  class="py-2.5 px-1.5 text-center tabular-nums text-on-surface-variant"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ getScoreBefore(ri, pi) }}
-                </td>
-                <td
-                  class="py-2.5 px-1.5 text-center font-medium tabular-nums text-on-surface/90"
-                  [ngClass]="{ 'bg-primary/5': isCurrentPlayer(pi) }"
-                >
-                  {{ getScoreAfter(ri, pi) }}
-                </td>
-              </ng-container>
-            </tr>
-          </tbody>
-          <tfoot class="round-history-tfoot">
-            <tr class="bg-surface-container-low font-semibold text-on-surface">
-              <td class="sticky left-0 z-10 bg-surface-container-low py-3 pl-2 pr-4">
-                {{ 'game.roundSummary.total' | translate }}
-              </td>
-              <td class="bg-surface-container-low py-3 px-2"></td>
-              <ng-container *ngFor="let player of players; let pi = index">
-                <td
-                  colspan="5"
-                  class="py-3 px-2 text-center tabular-nums"
-                  [ngClass]="{
-                    'bg-primary/10 text-primary': isCurrentPlayer(pi),
-                    'bg-surface-container-low': !isCurrentPlayer(pi),
-                  }"
-                >
-                  {{ rounds.length > 0 ? getScoreAfter(rounds.length - 1, pi) : '—' }}
-                </td>
-              </ng-container>
-            </tr>
-          </tfoot>
-        </table>
+              </span>
+            </div>
+            <div class="text-sm tabular-nums">
+              {{ round.bids[getMobilePlayerIndex()] }}
+            </div>
+            <div
+              class="text-sm tabular-nums"
+              [ngClass]="{
+                'font-bold text-primary': madeContract(round, getMobilePlayerIndex()),
+              }"
+            >
+              {{ round.tricks[getMobilePlayerIndex()] }}
+            </div>
+            <div
+              class="text-xs tabular-nums font-semibold"
+              [ngClass]="{
+                'text-primary': round.scores[getMobilePlayerIndex()] > 0,
+                'text-destructive': round.scores[getMobilePlayerIndex()] < 0,
+                'text-on-surface-variant': round.scores[getMobilePlayerIndex()] === 0,
+              }"
+            >
+              {{ formatGainLoss(round.scores[getMobilePlayerIndex()]) }}
+            </div>
+            <div
+              class="font-headline text-sm text-right tabular-nums"
+              [ngClass]="{
+                'text-secondary': ri === 0,
+                'text-on-surface': ri !== 0,
+              }"
+            >
+              {{ getMobileCumulativeScore(reversedOriginalIndices[ri]) }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
