@@ -1,0 +1,36 @@
+<div class="splash-overlay" [class.fade-out]="fadeOut">
+  <!-- Background gradient blobs -->
+  <div class="splash-bg-blobs" aria-hidden="true">
+    <div class="blob blob--top-right"></div>
+    <div class="blob blob--bottom-left"></div>
+  </div>
+
+  <!-- Central brand identity -->
+  <main class="splash-content">
+    <!-- Trophy icon with pulse halo -->
+    <div class="icon-wrapper">
+      <div class="icon-halo" aria-hidden="true"></div>
+      <div class="icon-frame">
+        <span class="material-symbols-outlined icon-trophy">military_tech</span>
+      </div>
+    </div>
+
+    <!-- Brand text -->
+    <div class="brand-text">
+      <h1 class="brand-title">Whist</h1>
+      <p class="brand-subtitle">Score your card game</p>
+    </div>
+
+    <!-- Loading spinner -->
+    <div class="spinner-wrapper">
+      <div class="loading-spinner" role="status" aria-label="Loading">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Version footer -->
+  <footer class="splash-footer">
+    <span class="version-label">v2.0.0</span>
+  </footer>
+</div>

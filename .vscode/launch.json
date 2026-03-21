@@ -53,6 +53,13 @@
       "cwd": "${workspaceFolder}/angular-web"
     },
     {
+      "name": "Frontend: Serve (Prod API → whist.api.orbasker.com)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "API_URL=https://whist.api.orbasker.com/api/v1 npm run start",
+      "cwd": "${workspaceFolder}/angular-web"
+    },
+    {
       "name": "Frontend: Chrome Debug",
       "type": "chrome",
       "request": "launch",
@@ -73,6 +80,13 @@
       "configurations": [
         "Backend: Dev (Local PostgreSQL)",
         "Frontend: Serve (Dev → localhost:8000)"
+      ]
+    },
+    {
+      "name": "Frontend: Debug (Prod API)",
+      "configurations": [
+        "Frontend: Serve (Prod API → whist.api.orbasker.com)",
+        "Frontend: Chrome Debug"
       ]
     }
   ]

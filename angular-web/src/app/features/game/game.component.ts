@@ -92,6 +92,13 @@ export class GameComponent implements OnInit, OnDestroy {
         this.updateCurrentUserId();
       })
     );
+
+    this.subscriptions.add(
+      this.gameService.getRoundSummaryResults().subscribe((results) => {
+        this.roundResults = results;
+        this.showRoundSummary = !!results;
+      })
+    );
   }
 
   private updateCurrentUserId() {
@@ -150,7 +157,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   onRoundSummaryClose() {
-    this.showRoundSummary = false;
+    this.gameService.dismissRoundSummary();
   }
 
   async onDeleteGameRequested() {

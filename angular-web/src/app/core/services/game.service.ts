@@ -2,7 +2,7 @@ import { Injectable, Injector, Inject } from '@angular/core';
 import { BehaviorSubject, Observable, firstValueFrom, Subscription } from 'rxjs';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
-import { GameState, Round } from '../models/game-state.model';
+import { GameState, Round, RoundSummaryResults } from '../models/game-state.model';
 import { REALTIME_SERVICE } from './realtime.types';
 import type { RealtimeService } from './realtime.types';
 
@@ -21,6 +21,7 @@ export class GameService {
   private lockedTricks$ = new BehaviorSubject<Set<number>>(new Set());
   private loading$ = new BehaviorSubject<boolean>(false);
   private error$ = new BehaviorSubject<string | null>(null);
+  private roundSummaryResults$ = new BehaviorSubject<RoundSummaryResults | null>(null);
   private wsSubscription: Subscription | null = null;
   private currentGameId: string | null = null;
   private currentPlayerIndex: number | null = null;
@@ -108,6 +109,15 @@ export class GameService {
 
   getError(): Observable<string | null> {
     return this.error$.asObservable();
+  }
+
+  getRoundSummaryResults(): Observable<RoundSummaryResults | null> {
+    return this.roundSummaryResults$.asObservable();
+  }
+
+  dismissRoundSummary(): void {
+    this.roundSummaryResults$.next(null);
+    this.currentPhase$.next('bidding');
   }
 
   async listGames(): Promise<GameState[]> {
@@ -416,11 +426,50 @@ export class GameService {
         }
         this.clearRoundState();
       } else if (message.type === 'tricks_submitted' && message.game) {
+        // Capture current state before clearing
+        const previousScores = this.gameState$.value?.scores ?? [];
+        const bids = this.currentBids$.value;
+        const trumpSuit = this.currentTrumpSuit$.value;
+        const previousRound = this.gameState$.value?.current_round ?? 1;
+        const players = message.game.players ?? this.gameState$.value?.players ?? [];
+        const newScores = message.game.scores ?? [];
+        const liveTricks = { ...this.liveTrickSelections$.value };
+
         this.gameState$.next(message.game);
         this.currentBids$.next(null);
         this.currentTrumpSuit$.next(null);
-        this.currentPhase$.next('bidding');
         this.clearRoundState();
+
+        // Build round summary from score differences
+        const messageData = message.data as { tricks?: number[] } | undefined;
+        let tricks = messageData?.tricks ?? [];
+        // Fallback: reconstruct tricks from live selections if not in message
+        if (tricks.length === 0 && Object.keys(liveTricks).length > 0) {
+          tricks = Array(players.length).fill(0);
+          Object.keys(liveTricks).forEach((idx) => {
+            const i = parseInt(idx);
+            if (i >= 0 && i < tricks.length) tricks[i] = liveTricks[i];
+          });
+        }
+        const roundScores = newScores.map(
+          (score: number, i: number) => score - (previousScores[i] ?? 0)
+        );
+
+        if (bids && players.length > 0) {
+          this.roundSummaryResults$.next({
+            players,
+            bids,
+            tricks,
+            roundScores,
+            newTotalScores: newScores,
+            trumpSuit,
+            roundNumber: previousRound,
+          });
+          // Phase stays as 'tricks' until summary is dismissed
+        } else {
+          // Fallback: no bids captured, skip summary
+          this.currentPhase$.next('bidding');
+        }
       } else if (message.type === 'error') {
         this.error$.next(message.message || 'An error occurred');
       }
@@ -740,6 +789,7 @@ export class GameService {
     this.currentPhase$.next('bidding');
     this.currentBids$.next(null);
     this.currentTrumpSuit$.next(null);
+    this.roundSummaryResults$.next(null);
     this.clearRoundState();
     this.setPlayerIndex(null);
     this.loading$.next(false);

@@ -50,6 +50,39 @@ export class InvitationFormComponent {
     return this.availableSlotIndices.length === 0;
   }
 
+  get occupiedCount(): number {
+    return (this.playerUserIds ?? []).filter((id) => typeof id === 'string' && id.trim().length > 0)
+      .length;
+  }
+
+  getInitial(name: string, index: number): string {
+    if (name && name.trim().length > 0) {
+      return name.trim().charAt(0).toUpperCase();
+    }
+    return `P${index + 1}`;
+  }
+
+  isEmailValid(slotIndex: number): boolean {
+    const ctrl = this.invitationForm.get(`email${slotIndex + 1}`);
+    return !!ctrl && ctrl.valid && !!ctrl.value && ctrl.value.trim().length > 0;
+  }
+
+  isEmailInvalid(slotIndex: number): boolean {
+    const ctrl = this.invitationForm.get(`email${slotIndex + 1}`);
+    return !!ctrl && ctrl.invalid && ctrl.touched && !!ctrl.value;
+  }
+
+  getInputBorderClass(slotIndex: number): string {
+    if (this.isEmailValid(slotIndex)) return 'border-secondary';
+    if (this.isEmailInvalid(slotIndex)) return 'border-destructive';
+    return 'border-outline-variant';
+  }
+
+  getInputIconClass(slotIndex: number): string {
+    if (this.isEmailValid(slotIndex)) return 'text-secondary';
+    return 'text-outline-variant';
+  }
+
   isRealUser(index: number): boolean {
     const id = this.playerUserIds[index];
     return typeof id === 'string' && id.trim().length > 0;

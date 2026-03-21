@@ -19,4 +19,27 @@ export class RoundSummaryComponent {
   onContinue() {
     this.close.emit();
   }
+
+  get winnerIndex(): number {
+    if (!this.results) return -1;
+    let maxScore = -Infinity;
+    let winnerIdx = -1;
+    this.results.roundScores.forEach((score, i) => {
+      if (score > maxScore) {
+        maxScore = score;
+        winnerIdx = i;
+      }
+    });
+    return winnerIdx;
+  }
+
+  getTrumpIcon(suit?: string | null): string {
+    const icons: Record<string, string> = {
+      hearts: 'favorite',
+      diamonds: 'diamond',
+      clubs: 'eco',
+      spades: 'spa',
+    };
+    return suit ? (icons[suit] ?? '') : '';
+  }
 }
