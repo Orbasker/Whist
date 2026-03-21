@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../../styles/variables';
 
 :host {
@@ -475,7 +476,11 @@
 .tile-felt-bar {
   height: 3px;
   width: 100%;
-  background: radial-gradient(circle at center, $primary-container, darken($primary-container, 5%));
+  background: radial-gradient(
+    circle at center,
+    $primary-container,
+    color.adjust($primary-container, $lightness: -5%)
+  );
 }
 
 .tile-body {
@@ -1452,12 +1457,11 @@
     place-items: center;
     width: 3rem;
     min-height: 2.75rem;
-    border: 0;
+    border: 1px solid rgba($outline-variant, 0.2);
     border-radius: 0.5rem;
     background: $surface-container-high;
     color: $secondary;
     cursor: pointer;
-    border: 1px solid rgba($outline-variant, 0.2);
     transition: background 0.2s;
 
     .material-symbols-outlined {

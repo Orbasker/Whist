@@ -77,7 +77,11 @@
     "continue": "המשך",
     "roundLabel": "סיבוב",
     "scoreLabel": "ניקוד",
-    "updatedLabel": "עודכן"
+    "updatedLabel": "עודכן",
+    "seasonSummary": "סיכום עונה",
+    "navHome": "בית",
+    "navGames": "משחקים",
+    "navHistory": "היסטוריה"
   },
   "auth": {
     "pageTitle": "התחברות - מועדון וויסט | משחק הקלפים הישראלי",

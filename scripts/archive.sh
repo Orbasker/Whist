@@ -9,20 +9,26 @@ cd "$ROOT_DIR"
 
 echo "=== Stopping dev processes ==="
 
-# Kill backend (uvicorn)
-if pgrep -f "uvicorn app.main:app" > /dev/null 2>&1; then
-  echo "Stopping uvicorn..."
-  pkill -f "uvicorn app.main:app" || true
+# Kill backend (uvicorn) scoped to this workspace
+UVICORN_PIDS=$(pgrep -f "uvicorn.*$ROOT_DIR" 2>/dev/null || true)
+if [ -n "$UVICORN_PIDS" ]; then
+  echo "Stopping uvicorn (PIDs: $UVICORN_PIDS)..."
+  echo "$UVICORN_PIDS" | xargs kill 2>/dev/null || true
 else
-  echo "No uvicorn process found"
+  echo "No uvicorn process found for this workspace"
 fi
 
-# Kill frontend (Angular ng serve)
-if pgrep -f "ng serve" > /dev/null 2>&1; then
-  echo "Stopping ng serve..."
-  pkill -f "ng serve" || true
+# Kill frontend (Angular ng serve) scoped to this workspace
+NG_PIDS=$(pgrep -f "ng serve.*$ROOT_DIR" 2>/dev/null || true)
+if [ -z "$NG_PIDS" ]; then
+  # Also check for ng serve started from within the workspace dir
+  NG_PIDS=$(lsof -ti :4200 2>/dev/null || true)
+fi
+if [ -n "$NG_PIDS" ]; then
+  echo "Stopping ng serve (PIDs: $NG_PIDS)..."
+  echo "$NG_PIDS" | xargs kill 2>/dev/null || true
 else
-  echo "No ng serve process found"
+  echo "No ng serve process found for this workspace"
 fi
 
 echo "=== Cleaning build artifacts ==="

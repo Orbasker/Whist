@@ -77,7 +77,11 @@
     "continue": "Continue",
     "roundLabel": "Round",
     "scoreLabel": "Score",
-    "updatedLabel": "Updated"
+    "updatedLabel": "Updated",
+    "seasonSummary": "Season Summary",
+    "navHome": "Home",
+    "navGames": "Games",
+    "navHistory": "History"
   },
   "auth": {
     "pageTitle": "Sign In - Whist Club | Israeli Whist Card Game",

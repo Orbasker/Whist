@@ -211,6 +211,7 @@
               type="button"
               class="act-icon act-trophy"
               (click)="openQuickLook(game, $event)"
+              [attr.aria-label]="'home.score' | translate"
               title="Quick Score"
             >
               <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1"
@@ -222,6 +223,7 @@
               type="button"
               class="act-icon act-invite"
               (click)="openInvitationForm(game); $event.stopPropagation()"
+              [attr.aria-label]="'home.invite' | translate"
               title="Invite"
             >
               <span class="material-symbols-outlined">mail</span>
@@ -240,6 +242,7 @@
             type="button"
             class="act-icon act-delete"
             (click)="openDeleteConfirm(game.id, $event)"
+            [attr.aria-label]="'home.delete' | translate"
             title="Delete"
           >
             <span class="material-symbols-outlined">delete</span>
@@ -249,58 +252,11 @@
     </article>
   </section>
 
-  <!-- Club Performance Section -->
+  <!-- TODO: Club Performance Section — wire to real aggregate data before enabling
   <section *ngIf="isAuthenticated && !loading && games.length > 0" class="perf-section">
-    <h2 class="perf-heading">Club Performance</h2>
-    <div class="perf-grid">
-      <div class="perf-chart-card">
-        <div class="chart-head">
-          <h4 class="chart-label">Win/Loss Distribution</h4>
-          <div class="chart-legend">
-            <span class="legend-dot legend-dot--gold"></span><span class="legend-text">Whist</span>
-            <span class="legend-dot legend-dot--teal"></span><span class="legend-text">Bid</span>
-          </div>
-        </div>
-        <div class="chart-bars">
-          <div class="bar-col" style="height: 66%">
-            <div class="bar-fill bar-fill--gold" style="height: 50%"></div>
-          </div>
-          <div class="bar-col" style="height: 80%">
-            <div class="bar-fill bar-fill--teal" style="height: 75%"></div>
-          </div>
-          <div class="bar-col" style="height: 50%">
-            <div class="bar-fill bar-fill--gold" style="height: 25%"></div>
-          </div>
-          <div class="bar-col" style="height: 100%">
-            <div class="bar-fill bar-fill--teal" style="height: 80%"></div>
-          </div>
-          <div class="bar-col" style="height: 75%">
-            <div class="bar-fill bar-fill--gold" style="height: 66%"></div>
-          </div>
-          <div class="bar-col" style="height: 40%">
-            <div class="bar-fill bar-fill--teal" style="height: 20%"></div>
-          </div>
-        </div>
-      </div>
-      <div class="perf-side">
-        <div class="rank-card">
-          <div class="rank-card-watermark">
-            <span class="material-symbols-outlined">military_tech</span>
-          </div>
-          <h4 class="rank-kicker">Current Rank</h4>
-          <p class="rank-title">Grand Master</p>
-          <p class="rank-sub">Top 2% of the Club</p>
-        </div>
-        <div class="tip-card">
-          <h4 class="tip-kicker">Pro Tip</h4>
-          <p class="tip-text">
-            "Never lead with a singleton unless your partner has shown strength in that suit.
-            Patience is the bridge to victory."
-          </p>
-        </div>
-      </div>
-    </div>
+    ...
   </section>
+  -->
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════════════════
@@ -440,6 +396,7 @@
           type="button"
           class="m-card-icon-btn"
           (click)="openInvitationForm(game); $event.stopPropagation()"
+          [attr.aria-label]="'home.invite' | translate"
         >
           <span class="material-symbols-outlined">person_add</span>
         </button>
@@ -448,6 +405,7 @@
           type="button"
           class="m-card-icon-btn m-card-icon-btn--danger"
           (click)="openDeleteConfirm(game.id, $event)"
+          [attr.aria-label]="'home.delete' | translate"
         >
           <span class="material-symbols-outlined">delete_outline</span>
         </button>
@@ -460,7 +418,7 @@
     <div class="mobile-season-watermark">
       <span class="material-symbols-outlined">history_edu</span>
     </div>
-    <h4 class="mobile-season-title">Season Summary</h4>
+    <h4 class="mobile-season-title">{{ 'home.seasonSummary' | translate }}</h4>
     <div class="mobile-season-grid">
       <div class="mobile-season-stat">
         <p class="mobile-season-stat-label">{{ 'home.activeTables' | translate }}</p>
@@ -481,21 +439,31 @@
 
 <!-- Mobile Bottom Nav -->
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-  <button type="button" class="bnav-item">
+  <button type="button" class="bnav-item" aria-label="{{ 'home.navHome' | translate }}">
     <span class="material-symbols-outlined">style</span>
-    <span class="bnav-label">Home</span>
+    <span class="bnav-label">{{ 'home.navHome' | translate }}</span>
   </button>
-  <button type="button" class="bnav-item bnav-item--active">
+  <button
+    type="button"
+    class="bnav-item bnav-item--active"
+    aria-label="{{ 'home.navGames' | translate }}"
+  >
     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">casino</span>
-    <span class="bnav-label">Games</span>
+    <span class="bnav-label">{{ 'home.navGames' | translate }}</span>
   </button>
-  <button type="button" class="bnav-item">
+  <button type="button" class="bnav-item" aria-label="{{ 'home.navHistory' | translate }}">
     <span class="material-symbols-outlined">history_edu</span>
-    <span class="bnav-label">History</span>
+    <span class="bnav-label">{{ 'home.navHistory' | translate }}</span>
   </button>
-  <button type="button" class="bnav-item" *ngIf="isAuthenticated" (click)="logout()">
-    <span class="material-symbols-outlined">settings</span>
-    <span class="bnav-label">Settings</span>
+  <button
+    type="button"
+    class="bnav-item"
+    *ngIf="isAuthenticated"
+    (click)="logout()"
+    aria-label="{{ 'home.logout' | translate }}"
+  >
+    <span class="material-symbols-outlined">logout</span>
+    <span class="bnav-label">{{ 'home.logout' | translate }}</span>
   </button>
   <a *ngIf="!isAuthenticated" routerLink="/login" class="bnav-item">
     <span class="material-symbols-outlined">login</span>
