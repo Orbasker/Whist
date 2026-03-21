@@ -1,0 +1,13 @@
+__pycache__
+*.pyc
+.env
+.env.prod
+.env.example
+.env.prod.example
+env.example
+.venv
+.git
+tests
+*.egg-info
+.ruff_cache
+.pytest_cache

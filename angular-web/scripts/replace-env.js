@@ -39,7 +39,7 @@ let content = fs.readFileSync(readPath, 'utf8');
 
 // Dev defaults for environment.ts; prod/staging use production defaults
 const isDev = envFile.includes('environment.ts') && !envFile.includes('.prod') && !envFile.includes('.staging');
-const defaultApiUrl = isDev ? 'http://localhost:8000/api/v1' : 'https://whist.api.orbasker.com/api/v1';
+const defaultApiUrl = isDev ? 'http://localhost:8000/api/v1' : 'https://whist-api.orbasker.com/api/v1';
 const defaultAuthUrl = isDev
   ? 'https://ep-shiny-voice-agz9vcbc.neonauth.c-2.eu-central-1.aws.neon.tech/neondb/auth'
   : 'https://ep-xxx-prod.neonauth.region.aws.neon.tech/neondb/auth';
