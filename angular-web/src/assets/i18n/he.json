@@ -125,6 +125,8 @@
     "termsOfService": "תנאי שימוש",
     "privacyPolicy": "מדיניות פרטיות",
     "clubEtiquette": "נימוסי המועדון",
+    "showPassword": "הצג סיסמה",
+    "hidePassword": "הסתר סיסמה",
     "footerCopyright": "1890 קולקטיב הוויסט. כל הזכויות שמורות."
   },
   "invite": {

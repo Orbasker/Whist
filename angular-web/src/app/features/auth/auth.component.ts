@@ -51,6 +51,7 @@ export class AuthComponent implements OnInit {
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
     this.errorMessage = null;
+    this.showPassword = false;
   }
 
   async onLogin() {

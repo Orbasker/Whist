@@ -125,6 +125,8 @@
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
     "clubEtiquette": "Club Etiquette",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "footerCopyright": "1890 The Whist Collective. All rights reserved."
   },
   "invite": {

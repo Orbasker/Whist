@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: radial-gradient(circle at center, #1a2744 0%, #0f172a 100%);
   color: #dae2fd;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
 }
 
 // ── Top bar ──────────────────────────────────────────────
@@ -439,11 +439,12 @@
   flex-wrap: wrap;
   justify-content: center;
 
-  span {
+  a {
     color: #64748b;
     font-size: 0.625rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
+    text-decoration: none;
     cursor: pointer;
     transition: color 0.2s ease;
 

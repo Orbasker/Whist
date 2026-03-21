@@ -95,6 +95,10 @@
                     type="button"
                     class="auth-visibility-toggle"
                     (click)="showPassword = !showPassword"
+                    [attr.aria-label]="
+                      (showPassword ? 'auth.hidePassword' : 'auth.showPassword') | translate
+                    "
+                    [attr.aria-pressed]="showPassword"
                   >
                     <span class="material-symbols-outlined">{{
                       showPassword ? 'visibility_off' : 'visibility'
@@ -247,6 +251,10 @@
                     type="button"
                     class="auth-visibility-toggle"
                     (click)="showPassword = !showPassword"
+                    [attr.aria-label]="
+                      (showPassword ? 'auth.hidePassword' : 'auth.showPassword') | translate
+                    "
+                    [attr.aria-pressed]="showPassword"
                   >
                     <span class="material-symbols-outlined">{{
                       showPassword ? 'visibility_off' : 'visibility'
@@ -279,7 +287,12 @@
       <div class="auth-toggle-bar">
         <p>
           <span>{{ (isLoginMode ? 'auth.noAccount' : 'auth.haveAccount') | translate }}</span>
-          <button type="button" (click)="toggleMode()" class="auth-toggle-link">
+          <button
+            type="button"
+            (click)="toggleMode()"
+            class="auth-toggle-link"
+            [disabled]="isLoading"
+          >
             {{ (isLoginMode ? 'auth.signUp' : 'auth.signIn') | translate }}
           </button>
         </p>
@@ -290,9 +303,9 @@
 
 <footer class="auth-footer">
   <nav class="auth-footer-links">
-    <span>{{ 'auth.termsOfService' | translate }}</span>
-    <span>{{ 'auth.privacyPolicy' | translate }}</span>
-    <span>{{ 'auth.clubEtiquette' | translate }}</span>
+    <a href="/terms">{{ 'auth.termsOfService' | translate }}</a>
+    <a href="/privacy">{{ 'auth.privacyPolicy' | translate }}</a>
+    <a href="/etiquette">{{ 'auth.clubEtiquette' | translate }}</a>
   </nav>
   <p class="auth-footer-copy">&copy; {{ 'auth.footerCopyright' | translate }}</p>
 </footer>
