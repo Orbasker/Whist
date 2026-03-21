@@ -54,7 +54,27 @@
     "authTokenMissing": "חסר טוקן אימות. התחבר שוב.",
     "createGameFailed": "יצירת המשחק נכשלה. נסה שוב.",
     "openGame": "פתח משחק",
-    "liveGames": "שולחנות פעילים"
+    "liveGames": "שולחנות פעילים",
+    "grandSalon": "הסלון הגדול",
+    "eliteMemberAccess": "גישת חבר מועדון",
+    "returnHome": "חזור הביתה",
+    "clubTable": "שולחן המועדון",
+    "heroHeading": "עקבו אחר כל סיבוב עם הצגת מועדון הוויסט החדשה.",
+    "heroDescription": "סקרו שולחנות פעילים, המשיכו משחק, או פתחו שולחן חדש עם עיצוב הטורניר הכהה.",
+    "activeTables": "שולחנות פעילים",
+    "completedTables": "הושלמו",
+    "membershipRequired": "נדרשת חברות",
+    "signInToEnter": "התחברו כדי להיכנס לשולחן.",
+    "authRequiredDescription": "העיצובים מניחים זרימת מועדון מאומת. התחברו קודם, ואז צרו או המשיכו שולחן.",
+    "noActiveSessions": "אין משחקים פעילים",
+    "initiateSession": "התחל משחק",
+    "newGameSetup": "הגדרת משחק חדש",
+    "tableAssignment": "שיבוץ שולחן",
+    "setupNote": "חוקי וויסט אמריקאי סטנדרטיים יחולו. חפיסת 52 קלפים, שותפים יושבים מול. הקבוצה הראשונה שמגיעה ל-7 נקודות מנצחת.",
+    "continue": "המשך",
+    "roundLabel": "סיבוב",
+    "scoreLabel": "ניקוד",
+    "updatedLabel": "עודכן"
   },
   "auth": {
     "pageTitle": "התחברות - מועדון וויסט | משחק הקלפים הישראלי",
@@ -90,7 +110,15 @@
     "authFailed": "האימות נכשל. נסה שוב.",
     "invalidRequest": "בקשה לא תקינה. בדוק את ההגדרות.",
     "welcomeBack": "ברוכים השבים לשולחן",
-    "subtitle": "משחק הקלפים הישראלי האייקוני"
+    "subtitle": "משחק הקלפים הישראלי האייקוני",
+    "grandSalon": "הסלון הגדול",
+    "joinTheClub": "הצטרפו למועדון",
+    "authError": "שגיאת אימות",
+    "regError": "שגיאת הרשמה",
+    "termsOfService": "תנאי שימוש",
+    "privacyPolicy": "מדיניות פרטיות",
+    "clubEtiquette": "נימוסי המועדון",
+    "footerCopyright": "1890 קולקטיב הוויסט. כל הזכויות שמורות."
   },
   "invite": {
     "pageTitle": "הזמנה למשחק - מועדון וויסט | הצטרפו למשחק וויסט ישראלי",
@@ -151,7 +179,8 @@
       "bid": "הימור",
       "lockChoice": "נעל בחירה",
       "lockPlayerChoice": "נעל בחירת שחקן",
-      "finishRound": "סיים סיבוב"
+      "finishRound": "סיים סיבוב",
+      "matched": "מותאם"
     },
     "scoreTable": {
       "title": "לוח ניקוד",

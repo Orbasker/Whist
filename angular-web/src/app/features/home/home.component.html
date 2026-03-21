@@ -11,7 +11,7 @@
     <div>
       <div class="sidebar-brand">
         <span class="sidebar-brand-title">{{ 'landing.brandName' | translate }}</span>
-        <span class="sidebar-brand-subtitle">The Grand Salon</span>
+        <span class="sidebar-brand-subtitle">{{ 'home.grandSalon' | translate }}</span>
       </div>
 
       <div class="sidebar-user" *ngIf="isAuthenticated">
@@ -20,19 +20,19 @@
         </div>
         <div>
           <strong>{{ userName || ('landing.brandName' | translate) }}</strong>
-          <p>{{ userEmail || 'Elite member access' }}</p>
+          <p>{{ userEmail || ('home.eliteMemberAccess' | translate) }}</p>
         </div>
       </div>
 
       <nav class="sidebar-nav" aria-label="Dashboard sections">
-        <a class="sidebar-link sidebar-link-active" href="#" (click)="$event.preventDefault()">
+        <button type="button" class="sidebar-link sidebar-link-active" aria-current="page">
           <span class="material-symbols-outlined">style</span>
           <span>{{ 'home.liveGames' | translate }}</span>
-        </a>
-        <a class="sidebar-link" href="#" (click)="$event.preventDefault(); toggleNewGameForm()">
+        </button>
+        <button type="button" class="sidebar-link" (click)="toggleNewGameForm()">
           <span class="material-symbols-outlined">add_circle</span>
           <span>{{ 'home.newGame' | translate }}</span>
-        </a>
+        </button>
       </nav>
     </div>
 
@@ -49,8 +49,10 @@
         {{ 'home.newGame' | translate }}
       </button>
       <div class="sidebar-meta">
-        <button *ngIf="isAuthenticated" type="button" (click)="logout()">Logout</button>
-        <a *ngIf="!isAuthenticated" routerLink="/">Return Home</a>
+        <button *ngIf="isAuthenticated" type="button" (click)="logout()">
+          {{ 'home.logout' | translate }}
+        </button>
+        <a *ngIf="!isAuthenticated" routerLink="/">{{ 'home.returnHome' | translate }}</a>
       </div>
     </div>
   </aside>
@@ -65,32 +67,29 @@
       </div>
 
       <nav class="dashboard-topnav" aria-label="Primary">
-        <a href="#" class="dashboard-topnav-active" (click)="$event.preventDefault()">{{
-          'home.liveGames' | translate
-        }}</a>
-        <a href="#" (click)="$event.preventDefault(); toggleNewGameForm()">{{
-          'home.newGame' | translate
-        }}</a>
+        <button type="button" class="dashboard-topnav-active">
+          {{ 'home.liveGames' | translate }}
+        </button>
+        <button type="button" (click)="toggleNewGameForm()">
+          {{ 'home.newGame' | translate }}
+        </button>
       </nav>
     </header>
 
     <section *ngIf="isAuthenticated" class="dashboard-hero">
       <div class="dashboard-hero-copy">
-        <p class="dashboard-kicker">Club Table</p>
-        <h2>Track every round with the newer Whist Club presentation.</h2>
-        <p>
-          Review active sessions, resume a game, or open a new table with the darker tournament
-          layout from the exported designs.
-        </p>
+        <p class="dashboard-kicker">{{ 'home.clubTable' | translate }}</p>
+        <h2>{{ 'home.heroHeading' | translate }}</h2>
+        <p>{{ 'home.heroDescription' | translate }}</p>
       </div>
 
       <div class="dashboard-summary-card">
         <div>
-          <span>Active tables</span>
+          <span>{{ 'home.activeTables' | translate }}</span>
           <strong>{{ getActiveGameCount() }}</strong>
         </div>
         <div>
-          <span>Completed</span>
+          <span>{{ 'home.completedTables' | translate }}</span>
           <strong>{{ getCompletedGameCount() }}</strong>
         </div>
         <button type="button" (click)="toggleNewGameForm()">
@@ -100,12 +99,9 @@
     </section>
 
     <section *ngIf="!isAuthenticated" class="dashboard-auth-card">
-      <p class="dashboard-kicker">Membership Required</p>
-      <h2>Sign in to enter the table.</h2>
-      <p>
-        The exported designs assume an authenticated club flow. Sign in first, then create or resume
-        a table.
-      </p>
+      <p class="dashboard-kicker">{{ 'home.membershipRequired' | translate }}</p>
+      <h2>{{ 'home.signInToEnter' | translate }}</h2>
+      <p>{{ 'home.authRequiredDescription' | translate }}</p>
       <a routerLink="/login">{{ 'home.loginOrSignup' | translate }}</a>
     </section>
 
@@ -115,7 +111,7 @@
     </section>
 
     <section *ngIf="isAuthenticated && !loading && games.length === 0" class="dashboard-state-card">
-      <p class="dashboard-kicker">No Active Sessions</p>
+      <p class="dashboard-kicker">{{ 'home.noActiveSessions' | translate }}</p>
       <h2>{{ 'home.noGames' | translate }}</h2>
       <p>{{ 'home.createGameToStart' | translate }}</p>
       <button type="button" (click)="toggleNewGameForm()">{{ 'home.newGame' | translate }}</button>
@@ -155,21 +151,23 @@
 
         <div class="game-card-stats">
           <div>
-            <span>Round</span>
+            <span>{{ 'home.roundLabel' | translate }}</span>
             <strong>{{ game.current_round }}</strong>
           </div>
           <div>
-            <span>Score</span>
+            <span>{{ 'home.scoreLabel' | translate }}</span>
             <strong>{{ game.scores.join(' / ') }}</strong>
           </div>
           <div>
-            <span>Updated</span>
+            <span>{{ 'home.updatedLabel' | translate }}</span>
             <strong>{{ formatDate(game.updated_at) }}</strong>
           </div>
         </div>
 
         <div class="game-card-actions">
-          <button type="button" (click)="continueGame(game.id)">Continue</button>
+          <button type="button" (click)="continueGame(game.id); $event.stopPropagation()">
+            {{ 'home.continue' | translate }}
+          </button>
           <button
             *ngIf="isGameOwner(game)"
             type="button"
@@ -195,8 +193,8 @@
 <div *ngIf="showNewGameForm" class="setup-overlay" role="presentation" (click)="closeNewGameForm()">
   <section class="setup-panel" (click)="$event.stopPropagation()" aria-labelledby="setup-title">
     <div class="setup-panel-glow" aria-hidden="true"></div>
-    <p class="setup-kicker">Initiate Session</p>
-    <h2 id="setup-title">New Game Setup</h2>
+    <p class="setup-kicker">{{ 'home.initiateSession' | translate }}</p>
+    <h2 id="setup-title">{{ 'home.newGameSetup' | translate }}</h2>
 
     <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="setup-form">
       <label class="setup-field">
@@ -211,7 +209,7 @@
       </label>
 
       <div class="setup-section-title">
-        <span>Table Assignment</span>
+        <span>{{ 'home.tableAssignment' | translate }}</span>
       </div>
 
       <div class="setup-grid">
@@ -229,8 +227,7 @@
       <div class="setup-note">
         <span class="material-symbols-outlined">info</span>
         <p>
-          Standard American whist rules will apply. 52-card deck, partners sit opposite each other.
-          The first team to reach 7 points wins the rubber.
+          {{ 'home.setupNote' | translate }}
         </p>
       </div>
 

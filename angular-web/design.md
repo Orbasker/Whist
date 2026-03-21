@@ -150,21 +150,21 @@ Main CTAs: subtle gradient from primary to primary-container at 135deg for backl
 
 | Screen | Stitch ID | Route | Status |
 |--------|-----------|-------|--------|
-| Landing Page | `3b50887270ed4536a822c99633132501` | `/` | Needs update |
+| Landing Page | `3b50887270ed4536a822c99633132501` | `/` | Updated |
 | Landing Animated v2 | `a4198f4bd541483ebeaa6c5b8b89e408` | `/` | Reference |
-| Auth Screen v2 | `5f9ff5f6210849c9b435420b4a60dc63` | `/login` | Needs update |
+| Auth Screen v2 | `5f9ff5f6210849c9b435420b4a60dc63` | `/login` | Updated |
 | Splash Screen v2 | `5d0215dfc3f441c5b6de2e72a59482ce` | — | Future |
-| Home Dashboard | `97ccd7c9514d48a8b618317209eccdea` | `/dashboard` | Needs update |
+| Home Dashboard | `97ccd7c9514d48a8b618317209eccdea` | `/dashboard` | Updated |
 | My Games Dashboard | `51fbecb6e9704538871cffa511e56c6e` | `/dashboard` | Reference |
-| New Game Setup | `a487f0860a7c4b169fe5326912a1042b` | `/dashboard` (modal) | Needs update |
-| Bidding Phase | `582be71627ae4004b7304100a3bd5232` | `/game` (bidding) | Needs update |
+| New Game Setup | `a487f0860a7c4b169fe5326912a1042b` | `/dashboard` (modal) | Updated |
+| Bidding Phase | `582be71627ae4004b7304100a3bd5232` | `/game` (bidding) | Updated |
 | Bidding Phase v2 | `1ddfbb5c98474e61b979dd9fa5d25081` | `/game` (bidding) | Reference |
-| Tricks Phase | `c5a426be74f34d24a9d0937c97c5c1f0` | `/game` (tricks) | Needs update |
+| Tricks Phase | `c5a426be74f34d24a9d0937c97c5c1f0` | `/game` (tricks) | Updated |
 | Tricks Phase v2 | `7365f12f8aa64e8fb511e2a6fdc9831a` | `/game` (tricks) | Reference |
-| Score Table | `fdbdad6e954b4263b4488aead78b22de` | `/game` (modal) | Needs update |
-| Round History | `9375dd9a914e47758e4eeeb4d01d7bcc` | `/game` (modal) | Needs update |
+| Score Table | `fdbdad6e954b4263b4488aead78b22de` | `/game` (modal) | Updated |
+| Round History | `9375dd9a914e47758e4eeeb4d01d7bcc` | `/game` (modal) | Updated |
 | Round History v2 | `64c456be37b146ebb27079edbdffa6ba` | `/game` (modal) | Reference |
-| Round Summary | `acc882a4018545afae6840d97d022962` | `/game` (modal) | Needs update |
+| Round Summary | `acc882a4018545afae6840d97d022962` | `/game` (modal) | Updated |
 | Invitation Modal | `8b86de605f6242879315cce069d17664` | `/dashboard` (modal) | Needs update |
 
 ### Mobile Screens (390px)
@@ -210,15 +210,13 @@ Main CTAs: subtle gradient from primary to primary-container at 135deg for backl
 
 **Impact:** Replace all font references. The design is monofont (Plus Jakarta Sans at different weights), not serif+sans.
 
-### Border Violations
+### Border Violations (Post-Migration)
 
-Current code uses `1px solid` borders extensively:
-- `auth-input-wrap`: `border-bottom: 1px solid`
-- `dashboard-sidebar`: `border-inline-end: 1px solid`
-- `dashboard-summary-card div`: `border-bottom: 1px solid`
-- `game-card`, `setup-panel`, etc.: `border: 1px solid rgba(255,255,255,0.05)`
+Most structural borders have been removed. Remaining ghost borders use `outline-variant` at ~15% opacity:
+- `auth-input-wrap`: `border-bottom: 1px solid rgba(62, 72, 80, 0.15)` (ghost, accessibility)
+- `setup-field input`: `border: 1px solid rgba(62, 72, 80, 0.15)` (ghost, accessibility)
 
-**Fix:** Remove all structural borders. Use surface tonal shifts. Only keep ghost borders at `outline-variant` 15% opacity where accessibility requires it.
+**Rule:** No new structural borders. Use surface tonal shifts for section separation. Ghost borders at ~15% opacity only where form accessibility requires them.
 
 ### Layout Differences
 
@@ -266,7 +264,7 @@ Stitch setting: `ROUND_EIGHT` (8px base)
 | Element | Radius |
 |---------|--------|
 | Cards / Panels | `1.5rem` (xl) |
-| Buttons (primary/CTA) | `1.5rem` (xl) |
+| Buttons (primary/CTA) | `9999px` (full) |
 | Chips / Pills | `9999px` (full) |
 | Inputs | `0.5rem` (sm) |
 | Modals | `1.5rem` (xl) |
@@ -278,7 +276,7 @@ Stitch setting: `ROUND_EIGHT` (8px base)
 ### Do
 - Use spacing scale strictly for breathing room (especially `spacing-6`, `spacing-8`)
 - Use vibrant accents (`secondary` green, `tertiary` gold) **sparingly** for wins/prestige only
-- Use `full` roundedness for action buttons — friendly and touchable
+- Use `full` (`9999px`) roundedness for primary/CTA buttons; reserve `1.5rem` for cards/panels
 - Use `surface-container` nesting for depth instead of lines
 
 ### Don't

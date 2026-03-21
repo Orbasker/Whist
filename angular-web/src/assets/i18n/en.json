@@ -54,7 +54,27 @@
     "authTokenMissing": "Authentication token is missing. Please log in again.",
     "createGameFailed": "Failed to create game. Please try again.",
     "openGame": "Open game",
-    "liveGames": "Live Tables"
+    "liveGames": "Live Tables",
+    "grandSalon": "The Grand Salon",
+    "eliteMemberAccess": "Elite member access",
+    "returnHome": "Return home",
+    "clubTable": "Club Table",
+    "heroHeading": "Track every round with the newer Whist Club presentation.",
+    "heroDescription": "Review active sessions, resume a game, or open a new table with the darker tournament layout from the exported designs.",
+    "activeTables": "Active tables",
+    "completedTables": "Completed",
+    "membershipRequired": "Membership Required",
+    "signInToEnter": "Sign in to enter the table.",
+    "authRequiredDescription": "The exported designs assume an authenticated club flow. Sign in first, then create or resume a table.",
+    "noActiveSessions": "No Active Sessions",
+    "initiateSession": "Initiate Session",
+    "newGameSetup": "New Game Setup",
+    "tableAssignment": "Table Assignment",
+    "setupNote": "Standard American whist rules will apply. 52-card deck, partners sit opposite each other. The first team to reach 7 points wins the rubber.",
+    "continue": "Continue",
+    "roundLabel": "Round",
+    "scoreLabel": "Score",
+    "updatedLabel": "Updated"
   },
   "auth": {
     "pageTitle": "Sign In - Whist Club | Israeli Whist Card Game",
@@ -90,7 +110,15 @@
     "authFailed": "Authentication failed. Please try again.",
     "invalidRequest": "Invalid request. Please check your configuration.",
     "welcomeBack": "Welcome back to the table",
-    "subtitle": "The iconic Israeli card game"
+    "subtitle": "The iconic Israeli card game",
+    "grandSalon": "The Grand Salon",
+    "joinTheClub": "Join The Club",
+    "authError": "Authentication error",
+    "regError": "Registration error",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "clubEtiquette": "Club Etiquette",
+    "footerCopyright": "1890 The Whist Collective. All rights reserved."
   },
   "invite": {
     "pageTitle": "Game Invitation - Whist Club | Join an Israeli Whist Game",
@@ -150,7 +178,8 @@
       "bid": "Bid",
       "lockChoice": "Lock choice",
       "lockPlayerChoice": "Lock player choice",
-      "finishRound": "Finish round"
+      "finishRound": "Finish round",
+      "matched": "Matched"
     },
     "scoreTable": {
       "title": "Score board",

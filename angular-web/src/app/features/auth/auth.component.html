@@ -10,7 +10,7 @@
 
       <div class="auth-copy">
         <h1 id="auth-title" class="auth-title">
-          {{ isLoginMode ? 'The Grand Salon' : 'Join The Club' }}
+          {{ isLoginMode ? ('auth.grandSalon' | translate) : ('auth.joinTheClub' | translate) }}
         </h1>
         <p class="auth-subtitle">
           {{ isLoginMode ? ('auth.welcomeBack' | translate) : ('auth.subtitle' | translate) }}
@@ -33,7 +33,9 @@
       <div *ngIf="errorMessage" role="alert" class="auth-alert">
         <span class="material-symbols-outlined auth-alert-icon">error</span>
         <div>
-          <strong>{{ isLoginMode ? 'Authentication error' : 'Registration error' }}</strong>
+          <strong>{{
+            isLoginMode ? ('auth.authError' | translate) : ('auth.regError' | translate)
+          }}</strong>
           <p>{{ errorMessage }}</p>
         </div>
       </div>
@@ -236,10 +238,10 @@
 
   <footer class="auth-footer">
     <nav>
-      <a href="#">Terms of Service</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Club Etiquette</a>
+      <span>{{ 'auth.termsOfService' | translate }}</span>
+      <span>{{ 'auth.privacyPolicy' | translate }}</span>
+      <span>{{ 'auth.clubEtiquette' | translate }}</span>
     </nav>
-    <p>&copy; 1890 The Whist Collective. All rights reserved.</p>
+    <p>&copy; {{ 'auth.footerCopyright' | translate }}</p>
   </footer>
 </main>
