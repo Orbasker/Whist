@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "setup": "bash -lc 'cp -n backend/.env.example backend/.env && cp -n backend/.env.prod.example backend/.env.prod'",
-    "run": "bash -lc './scripts/dev.sh'"
+    "setup": "bash -lc './scripts/setup.sh'",
+    "run": "bash -lc './scripts/dev.sh'",
+    "archive": "bash -lc './scripts/archive.sh'"
   },
   "runScriptMode": "nonconcurrent",
   "filesToCopy": [
