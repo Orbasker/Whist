@@ -12,10 +12,18 @@ fi
 
 echo "=== Setting up backend ==="
 cd backend
-uv sync --all-extras
+if [ -d ".venv" ] && uv pip check --quiet 2>/dev/null; then
+  echo "Backend deps already satisfied, skipping uv sync"
+else
+  uv sync --all-extras
+fi
 
 echo "=== Setting up frontend ==="
 cd "$ROOT_DIR/angular-web"
-npm ci
+if [ -d "node_modules" ] && [ -f "node_modules/.package-lock.json" ]; then
+  echo "Frontend deps already installed, skipping npm ci"
+else
+  npm ci
+fi
 
 echo "=== Setup complete ==="
