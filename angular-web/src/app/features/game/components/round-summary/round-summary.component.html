@@ -23,10 +23,12 @@
           </div>
           <div class="text-right">
             <div
-              class="text-3xl font-black font-headline tracking-tighter"
+              class="text-3xl font-black font-headline tracking-tighter cursor-help"
+              tabindex="0"
               [class.text-secondary]="results.roundScores[i] > 0"
               [class.text-destructive]="results.roundScores[i] < 0"
               [class.text-on-surface-variant]="results.roundScores[i] === 0"
+              [appTooltip]="'tooltips.roundScore' | translate"
             >
               {{ results.roundScores[i] > 0 ? '+' : '' }}{{ results.roundScores[i] }}
             </div>

@@ -72,8 +72,8 @@ class _PlayerRow extends StatelessWidget {
     final scoreColor = roundScore > 0
         ? AppColors.success
         : roundScore < 0
-            ? AppColors.destructive
-            : theme.colorScheme.onSurface;
+        ? AppColors.destructive
+        : theme.colorScheme.onSurface;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(

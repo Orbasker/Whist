@@ -1,4 +1,12 @@
 <div class="dashboard-shell">
+  <div
+    *ngIf="actionLoading"
+    class="fixed inset-0 z-[80] flex items-center justify-center bg-background/60 backdrop-blur-sm"
+    aria-live="polite"
+  >
+    <app-loader></app-loader>
+  </div>
+
   <aside class="dashboard-sidebar">
     <div>
       <div class="sidebar-brand">
@@ -119,11 +127,9 @@
         class="game-card"
         role="button"
         tabindex="0"
-        (click)="$event.target === $event.currentTarget && continueGame(game.id)"
-        (keydown.enter)="$event.target === $event.currentTarget ? continueGame(game.id) : null"
-        (keydown.space)="
-          $event.target === $event.currentTarget ? onCardSpace($event, game.id) : null
-        "
+        (click)="continueGame(game.id)"
+        (keydown.enter)="$event.target === $event.currentTarget && continueGame(game.id)"
+        (keydown.space)="$event.target === $event.currentTarget && onCardSpace($event, game.id)"
         [attr.aria-label]="('home.openGame' | translate) + ': ' + getGameDisplayName(game)"
       >
         <div class="game-card-top">

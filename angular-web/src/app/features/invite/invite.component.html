@@ -2,6 +2,19 @@
 <div class="fixed inset-0 z-0 felt-gradient pointer-events-none"></div>
 
 <div class="relative z-10 min-h-screen flex items-center justify-center p-6">
+  <div
+    *ngIf="accepting"
+    class="fixed inset-0 z-[80] flex items-center justify-center bg-background/60 backdrop-blur-sm"
+    aria-live="polite"
+  >
+    <div class="flex flex-col items-center text-center">
+      <app-loader></app-loader>
+      <p class="-mt-2 text-sm font-semibold text-on-surface-variant">
+        {{ 'invite.joining' | translate }}
+      </p>
+    </div>
+  </div>
+
   <div class="w-full max-w-md">
     <!-- Header -->
     <div class="text-center mb-8">
@@ -19,11 +32,15 @@
       </h1>
     </div>
 
-    <!-- Loading -->
-    <div *ngIf="loading" class="glass-panel ghost-border rounded-2xl p-8 text-center">
-      <div
-        class="h-12 w-12 mx-auto mb-4 animate-spin rounded-full border-4 border-primary border-t-transparent"
-      ></div>
+    <div
+      *ngIf="loading"
+      class="glass-panel ghost-border rounded-2xl p-8 flex flex-col items-center gap-4"
+    >
+      <app-loader
+        variant="orbit"
+        size="lg"
+        [label]="'invite.loadingInvitation' | translate"
+      ></app-loader>
       <p class="text-on-surface-variant">{{ 'invite.loadingInvitation' | translate }}</p>
     </div>
 

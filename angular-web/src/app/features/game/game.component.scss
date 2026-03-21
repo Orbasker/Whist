@@ -1,0 +1,14 @@
+// Game header entrance
+:host ::ng-deep header {
+  animation: stagger-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+// Loading spinner enhanced glow
+:host ::ng-deep .animate-spin {
+  filter: drop-shadow(0 0 8px rgba(238, 152, 0, 0.3));
+}
+
+// Phase content area entrance
+:host ::ng-deep .mx-auto.max-w-2xl {
+  animation: stagger-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}

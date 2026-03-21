@@ -11,6 +11,8 @@ import { ScoreTableComponent } from './components/score-table/score-table.compon
 import { ScoreboardIconComponent } from '../../shared/components/scoreboard-icon/scoreboard-icon.component';
 import { RoundHistoryComponent } from './components/round-history/round-history.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { TooltipDirective } from '../../shared/directives/tooltip.directive';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-game',
@@ -23,7 +25,9 @@ import { TranslateModule } from '@ngx-translate/core';
     ScoreTableComponent,
     ScoreboardIconComponent,
     RoundHistoryComponent,
+    LoaderComponent,
     TranslateModule,
+    TooltipDirective,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -31,6 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class GameComponent implements OnInit, OnDestroy {
   gameState: GameState | null = null;
   phase: 'bidding' | 'tricks' = 'bidding';
+  serviceLoading = false;
   showScoreTable = false;
   showRoundSummary = false;
   roundResults: RoundSummaryResults | null = null;
@@ -72,6 +77,12 @@ export class GameComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.gameService.getCurrentPhase().subscribe((phase) => {
         this.phase = phase;
+      })
+    );
+
+    this.subscriptions.add(
+      this.gameService.getLoading().subscribe((loading) => {
+        this.serviceLoading = loading;
       })
     );
 

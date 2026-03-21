@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // ============================================================
 // Landing page styles — Stitch "Neon Conservatory" design system
 // ============================================================
@@ -64,6 +66,93 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
     inset: 0;
     background: linear-gradient(to right, $bg-deep, rgba($bg-deep, 0.8) 50%, transparent);
   }
+}
+
+// Ambient glow effect
+.hero-ambient-glow {
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba($gold, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: ambient-glow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+// Floating particles
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba($gold, 0.4);
+  border-radius: 50%;
+  animation: particle-float 8s ease-in-out infinite;
+}
+
+.particle-1 {
+  top: 20%;
+  left: 15%;
+  animation-delay: 0s;
+  animation-duration: 7s;
+}
+.particle-2 {
+  top: 60%;
+  left: 25%;
+  animation-delay: 1.5s;
+  animation-duration: 9s;
+}
+.particle-3 {
+  top: 30%;
+  right: 30%;
+  animation-delay: 3s;
+  animation-duration: 8s;
+  width: 3px;
+  height: 3px;
+}
+.particle-4 {
+  top: 70%;
+  right: 15%;
+  animation-delay: 4.5s;
+  animation-duration: 10s;
+  width: 5px;
+  height: 5px;
+}
+.particle-5 {
+  top: 45%;
+  left: 50%;
+  animation-delay: 2s;
+  animation-duration: 6s;
+  width: 3px;
+  height: 3px;
+  background: rgba($green-light, 0.3);
+}
+
+// Hero staggered entrance animations
+.hero-anim {
+  opacity: 0;
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-anim-1 {
+  animation-delay: 0.1s;
+}
+.hero-anim-2 {
+  animation-delay: 0.3s;
+}
+.hero-anim-3 {
+  animation-delay: 0.5s;
+}
+.hero-anim-4 {
+  animation-delay: 0.7s;
 }
 
 .hero-content {
@@ -135,12 +224,20 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
     0 8px 10px -6px rgba($gold, 0.1);
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.3s ease;
+  animation: pulse-glow 3s ease-in-out infinite;
 
   &:hover,
   &:focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 25px 50px -12px rgba($gold, 0.2);
+    transform: translateY(-2px);
+    box-shadow:
+      0 25px 50px -12px rgba($gold, 0.25),
+      0 0 30px rgba($gold, 0.15);
+    animation: none;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
   }
 }
 
@@ -155,6 +252,9 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
     width: 48px;
     height: 1px;
     background: rgba(62, 72, 80, 0.5);
+    transition:
+      width 0.3s ease,
+      background 0.3s ease;
   }
 
   span:last-child {
@@ -167,9 +267,16 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
     transition: color 0.2s ease;
   }
 
-  &:hover span:last-child,
-  &:focus-visible span:last-child {
-    color: $gold;
+  &:hover,
+  &:focus-visible {
+    .text-link-divider {
+      width: 64px;
+      background: $gold;
+    }
+
+    span:last-child {
+      color: $gold;
+    }
   }
 }
 
@@ -190,28 +297,36 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   text-decoration: none;
   transition:
     background 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
 
   &:hover,
   &:focus-visible {
     background: rgba(42, 53, 72, 0.7);
     border-color: rgba(62, 72, 80, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
   }
 }
 
-// Floating card visual
+// Floating card visual with animation
 .hero-card-visual {
   position: absolute;
   inset-inline-end: -4%;
   top: 50%;
-  transform: translateY(-50%);
   z-index: 1;
+  animation: gentle-float 6s ease-in-out infinite;
 }
 
 .floating-card {
   width: 320px;
   height: 480px;
-  transform: rotate(12deg);
+  position: relative;
 }
 
 .card-inner {
@@ -225,6 +340,25 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   justify-content: space-between;
   align-items: center;
   padding: 33px;
+  transition: box-shadow 0.4s ease;
+}
+
+// Card shimmer overlay
+.card-shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.03) 45%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: card-shimmer 4s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .card-letter {
@@ -246,6 +380,11 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 48px;
   color: $bg-teal;
   opacity: 0.6;
+  transition: transform 0.6s ease;
+
+  .floating-card:hover & {
+    animation: suit-spin 1s ease-in-out;
+  }
 }
 
 // ============================================================
@@ -277,10 +416,18 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .section-accent-bar {
-  width: 96px;
   height: 4px;
   background: $gold;
   margin-top: 16px;
+}
+
+// Animated accent bar grows on reveal
+.animated-accent-bar {
+  width: 0;
+
+  .revealed & {
+    animation: accent-grow 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  }
 }
 
 .section-subtitle {
@@ -307,6 +454,13 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   min-height: 500px;
   position: relative;
   box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.4s ease;
+
+  &:hover {
+    box-shadow:
+      inset 0 2px 4px 0 rgba(0, 0, 0, 0.05),
+      0 20px 60px rgba(6, 78, 59, 0.3);
+  }
 }
 
 .gameplay-card-inner {
@@ -362,6 +516,9 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   height: 12px;
   border-radius: 50%;
   background: $text-muted;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .dot-active {
@@ -369,7 +526,22 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   box-shadow: 0 0 10px $gold;
 }
 
-// Playing cards overlap
+// Cycling dots - each dot takes turns being active
+.cycling-dot {
+  animation: dot-cycle 3s ease-in-out infinite;
+}
+
+.cycling-dot-1 {
+  animation-delay: 0s;
+}
+.cycling-dot-2 {
+  animation-delay: 1s;
+}
+.cycling-dot-3 {
+  animation-delay: 2s;
+}
+
+// Playing cards overlap with fan animation
 .cards-overlap {
   position: relative;
   height: 290px;
@@ -394,23 +566,70 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   box-shadow:
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
+}
+
+// Animated card fan
+.animated-cards {
+  .card-left {
+    opacity: 0;
+    transform: rotate(0deg);
+
+    .revealed & {
+      animation: fan-left 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+    }
+  }
+
+  .card-center {
+    opacity: 0;
+
+    .revealed & {
+      animation: fan-center 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+    }
+  }
+
+  .card-right {
+    opacity: 0;
+    transform: rotate(0deg);
+
+    .revealed & {
+      animation: fan-right 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+    }
+  }
 }
 
 .card-left {
   transform: rotate(-12deg);
   z-index: 1;
   left: calc(50% - 145px);
+
+  &:hover {
+    transform: rotate(-15deg) translateY(-8px);
+    box-shadow: 0 30px 40px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .card-center {
   z-index: 3;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .card-right {
   transform: rotate(12deg);
   z-index: 2;
   left: calc(50% + -30px);
+
+  &:hover {
+    transform: rotate(15deg) translateY(-8px);
+    box-shadow: 0 30px 40px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .pc-rank {
@@ -449,7 +668,7 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 }
 
-// Info cards
+// Info cards with hover effects
 .info-cards {
   display: flex;
   flex-direction: column;
@@ -461,14 +680,37 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   border-radius: 1.5rem;
   padding: 52px 32px 32px;
   flex: 1;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .info-card-amber {
   box-shadow: inset 4px 0 0 rgba($gold, 0.3);
+
+  &:hover {
+    box-shadow:
+      inset 4px 0 0 rgba($gold, 0.6),
+      0 20px 40px rgba(0, 0, 0, 0.2),
+      0 0 30px rgba($gold, 0.05);
+  }
 }
 
 .info-card-green {
   box-shadow: inset 4px 0 0 rgba($green, 0.3);
+
+  &:hover {
+    box-shadow:
+      inset 4px 0 0 rgba($green, 0.6),
+      0 20px 40px rgba(0, 0, 0, 0.2),
+      0 0 30px rgba($green, 0.05);
+  }
 }
 
 .info-card-icon {
@@ -476,6 +718,14 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 18px;
   margin-bottom: 16px;
   opacity: 0.7;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+
+  .info-card:hover & {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
 
 .info-card-title {
@@ -523,7 +773,7 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   margin: 32px 0;
 }
 
-// Leaderboard
+// Leaderboard with hover effects
 .leaderboard-preview {
   display: flex;
   flex-direction: column;
@@ -536,20 +786,39 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    transform: translateX(4px);
+  }
 }
 
 .leaderboard-row-1 {
   background: $bg-card;
   border-radius: 12px 12px 0 0;
+
+  &:hover {
+    background: color.adjust($bg-card, $lightness: 3%);
+  }
 }
 
 .leaderboard-row-2 {
   background: $bg-card-alt;
+
+  &:hover {
+    background: color.adjust($bg-card-alt, $lightness: 3%);
+  }
 }
 
 .leaderboard-row-3 {
   background: $bg-card-alt2;
   border-radius: 0 0 12px 12px;
+
+  &:hover {
+    background: color.adjust($bg-card-alt2, $lightness: 3%);
+  }
 }
 
 .leaderboard-rank {
@@ -560,6 +829,11 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
 
 .rank-icon {
   font-size: 14px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  .leaderboard-row:hover & {
+    transform: scale(1.3);
+  }
 }
 
 .rank-name {
@@ -589,6 +863,11 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   overflow: hidden;
   position: relative;
   min-height: 500px;
+  transition: box-shadow 0.4s ease;
+
+  &:hover {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .stats-card-inner {
@@ -650,6 +929,12 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   background: $gold;
   border-radius: 9999px;
   box-shadow: 0 0 8px $gold;
+  width: 0;
+  transition: box-shadow 0.3s ease;
+}
+
+.stats-card.revealed .stats-progress-bar {
+  animation: progress-fill 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 // ============================================================
@@ -680,6 +965,11 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 36px;
   line-height: 40px;
   color: $gold;
+  transition: text-shadow 0.3s ease;
+
+  .rule-item:hover & {
+    text-shadow: 0 0 20px rgba($gold, 0.3);
+  }
 }
 
 .rule-title {
@@ -694,6 +984,18 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
 
 .rule-divider {
   border-top: 1px solid rgba(62, 72, 80, 0.2);
+}
+
+// Animated divider draws on reveal
+.animated-divider {
+  border-top: none;
+  height: 1px;
+  background: rgba(64, 73, 68, 0.2);
+  width: 0;
+
+  .revealed & {
+    animation: draw-line 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
 }
 
 .rule-text {
@@ -712,6 +1014,20 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   padding: 128px 192px;
   position: relative;
   overflow: hidden;
+}
+
+// CTA ambient glow
+.cta-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba($green-light, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: ambient-glow 5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .cta-content {
@@ -804,12 +1120,14 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
     opacity: 0.8;
     transition:
       color 0.2s ease,
-      opacity 0.2s ease;
+      opacity 0.2s ease,
+      transform 0.2s ease;
 
     &:hover,
     &:focus-visible {
       color: $text-muted;
       opacity: 1;
+      transform: translateY(-1px);
     }
   }
 }
@@ -823,6 +1141,10 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 
   .hero-card-visual {
+    display: none;
+  }
+
+  .hero-ambient-glow {
     display: none;
   }
 
@@ -855,6 +1177,10 @@ $font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   .hero-section {
     padding: 64px 24px;
     min-height: 80vh;
+  }
+
+  .hero-particles {
+    display: none;
   }
 
   .rules-grid {

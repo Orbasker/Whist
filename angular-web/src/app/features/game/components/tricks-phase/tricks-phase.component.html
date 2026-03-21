@@ -6,7 +6,11 @@
         <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">
           {{ 'game.tricks' | translate }}
         </p>
-        <p class="text-sm text-on-surface-variant">
+        <p
+          class="text-sm text-on-surface-variant cursor-help"
+          [appTooltip]="'tooltips.tricksCount' | translate"
+          tabindex="0"
+        >
           {{ 'game.tricksPhase.question' | translate }}
         </p>
       </div>
@@ -24,6 +28,7 @@
           (click)="openRoundHistory.emit()"
           class="inline-flex items-center gap-1.5 rounded-lg bg-surface-container-highest/50 px-3 py-1.5 text-xs font-bold text-on-surface-variant uppercase tracking-wider transition-colors hover:bg-surface-container-highest"
           [attr.aria-label]="'game.openRoundsList' | translate: { count: roundsPlayed }"
+          [appTooltip]="'tooltips.roundHistory' | translate"
         >
           <span class="material-symbols-outlined text-sm">list</span>
           {{ 'game.roundsHistory' | translate: { count: roundsPlayed } }}
@@ -89,17 +94,24 @@
               <span class="font-bold text-on-surface text-sm">{{ player }}</span>
               <span
                 *ngIf="currentPlayerIndex === i"
-                class="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] font-bold text-primary uppercase"
+                class="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] font-bold text-primary uppercase cursor-help"
+                [appTooltip]="'tooltips.youBadge' | translate"
+                tabindex="0"
                 >{{ 'game.biddingPhase.you' | translate }}</span
               >
               <span
                 *ngIf="isPlayerOwner(i)"
-                class="rounded-full bg-tertiary/15 px-2 py-0.5 text-[10px] font-bold text-tertiary uppercase"
+                class="rounded-full bg-tertiary/15 px-2 py-0.5 text-[10px] font-bold text-tertiary uppercase cursor-help"
+                [appTooltip]="'tooltips.managerBadge' | translate"
+                tabindex="0"
                 >{{ 'game.biddingPhase.manager' | translate }}</span
               >
             </div>
             <div class="flex items-center gap-2 mt-0.5">
-              <span class="text-[10px] text-on-surface-variant uppercase tracking-wider"
+              <span
+                class="text-[10px] text-on-surface-variant uppercase tracking-wider cursor-help"
+                [appTooltip]="'tooltips.scoreExplain' | translate"
+                tabindex="0"
                 >{{ 'game.tricksPhase.bid' | translate }}: {{ bids[i] }}</span
               >
               <span *ngIf="isTrickLocked(i)" class="text-[10px] font-bold text-tertiary"

@@ -10,10 +10,10 @@ import '../models/round.dart';
 /// Uses same API base URL and auth; use [getToken] to supply Bearer token when set.
 class ApiService {
   ApiService({required this.baseUrl, this.authToken, this.getToken})
-      : assert(
-          authToken == null || getToken == null,
-          'Use either authToken or getToken',
-        );
+    : assert(
+        authToken == null || getToken == null,
+        'Use either authToken or getToken',
+      );
 
   final String baseUrl;
   final String? authToken;

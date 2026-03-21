@@ -128,8 +128,9 @@ class GameService extends ChangeNotifier {
       _realtimeSubscription?.cancel();
       _realtime!.disconnect();
       final token = await _api.getToken?.call() ?? _authToken;
-      _realtimeSubscription =
-          _realtime!.connect(gameId, token: token).listen(_onRealtimeMessage);
+      _realtimeSubscription = _realtime!
+          .connect(gameId, token: token)
+          .listen(_onRealtimeMessage);
     }
 
     notifyListeners();

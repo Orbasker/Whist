@@ -5,3 +5,36 @@
   background: hsl(var(--background));
   padding-bottom: 0.5rem;
 }
+
+// Phase entrance animation
+:host {
+  display: block;
+  animation: phase-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+// Player cards staggered entrance
+:host ::ng-deep .space-y-4 > div {
+  animation: stagger-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 80}ms;
+    }
+  }
+}
+
+// Total tricks counter pop on change
+:host ::ng-deep .text-base.font-semibold {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// Submit button glow when total = 13
+:host ::ng-deep .btn-gradient {
+  &:not(:disabled) {
+    animation: pulse-glow 2s ease-in-out infinite;
+
+    &:hover {
+      animation: none;
+    }
+  }
+}
