@@ -44,6 +44,17 @@ export interface TricksSubmit {
   trump_suit?: string;
 }
 
+export interface SubmitBidsResponse {
+  game: GameState;
+  round_mode: 'over' | 'under';
+  total_bids: number;
+}
+
+export interface SubmitTricksResponse {
+  game: GameState;
+  round: Round;
+}
+
 /** Round summary display data (players, bids, tricks, round scores, new totals) */
 export interface RoundSummaryResults {
   players: string[];

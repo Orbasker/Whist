@@ -109,6 +109,16 @@ export class SupabaseRealtimeService implements RealtimeService {
       const bids = msg.data?.bids ?? [];
       const trumpSuit = msg.data?.trump_suit ?? undefined;
       this.apiService.submitBids(gameId, bids, trumpSuit).subscribe({
+        next: (response) => {
+          this.messageSubject.next({
+            type: 'bids_submitted',
+            game: response.game,
+            data: {
+              bids,
+              trump_suit: trumpSuit,
+            },
+          });
+        },
         error: (e) =>
           this.messageSubject.next({
             type: 'error',
@@ -123,6 +133,13 @@ export class SupabaseRealtimeService implements RealtimeService {
       const bids = msg.data?.bids ?? [];
       const trumpSuit = msg.data?.trump_suit ?? undefined;
       this.apiService.submitTricks(gameId, tricks, bids, trumpSuit).subscribe({
+        next: (response) => {
+          this.messageSubject.next({
+            type: 'tricks_submitted',
+            game: response.game,
+            round: response.round,
+          });
+        },
         error: (e) =>
           this.messageSubject.next({
             type: 'error',
