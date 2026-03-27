@@ -1,7 +1,3 @@
-"""Vercel serverless entry point — wraps the FastAPI app with Mangum."""
+"""Vercel serverless entry point — exports the FastAPI ASGI app."""
 
-from mangum import Mangum
-
-from app.main import app
-
-handler = Mangum(app, lifespan="off")
+from app.main import app  # noqa: F401 — Vercel discovers this export at deploy time
