@@ -16,7 +16,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 3rem;
+  padding: calc(1.5rem + var(--safe-area-top)) var(--viewport-padding-right-wide) 1.5rem
+    var(--viewport-padding-left-wide);
   background: rgba(15, 23, 42, 0.2);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -43,7 +44,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 1.5rem 3rem;
+  padding: calc(6rem + var(--safe-area-top)) var(--viewport-padding-right-roomy) 3rem
+    var(--viewport-padding-left-roomy);
   position: relative;
   overflow: hidden;
 }
@@ -465,11 +467,13 @@
 // ── Mobile responsive ────────────────────────────────────
 @media (max-width: 640px) {
   .auth-topbar {
-    padding: 1rem 1.5rem;
+    padding: calc(1rem + var(--safe-area-top)) var(--viewport-padding-right-roomy) 1rem
+      var(--viewport-padding-left-roomy);
   }
 
   .auth-main {
-    padding: 5rem 1rem 2rem;
+    padding: calc(5rem + var(--safe-area-top)) var(--viewport-padding-right) 2rem
+      var(--viewport-padding-left);
   }
 
   .auth-card-body {

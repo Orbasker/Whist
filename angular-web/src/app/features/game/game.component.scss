@@ -1,3 +1,22 @@
+:host {
+  display: block;
+}
+
+.game-header {
+  padding-top: var(--safe-area-top);
+}
+
+.game-header-inner {
+  padding-left: var(--viewport-padding-left-roomy);
+  padding-right: var(--viewport-padding-right-roomy);
+}
+
+.game-content {
+  padding-left: var(--viewport-padding-left);
+  padding-right: var(--viewport-padding-right);
+  padding-bottom: calc(7rem + var(--safe-area-bottom));
+}
+
 // Game header entrance
 :host ::ng-deep header {
   animation: stagger-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
