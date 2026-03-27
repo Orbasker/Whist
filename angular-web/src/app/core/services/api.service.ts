@@ -3,7 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { GameState, Round } from '../models/game-state.model';
+import {
+  GameState,
+  Round,
+  SubmitBidsResponse,
+  SubmitTricksResponse,
+} from '../models/game-state.model';
 
 @Injectable({
   providedIn: 'root',
@@ -73,9 +78,9 @@ export class ApiService {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  submitBids(gameId: string, bids: number[], trumpSuit?: string): Observable<GameState> {
+  submitBids(gameId: string, bids: number[], trumpSuit?: string): Observable<SubmitBidsResponse> {
     return this.http
-      .post<GameState>(`${this.baseUrl}/games/${gameId}/rounds/bids`, {
+      .post<SubmitBidsResponse>(`${this.baseUrl}/games/${gameId}/rounds/bids`, {
         bids,
         trump_suit: trumpSuit,
       })
@@ -87,9 +92,9 @@ export class ApiService {
     tricks: number[],
     bids: number[],
     trumpSuit?: string
-  ): Observable<GameState> {
+  ): Observable<SubmitTricksResponse> {
     return this.http
-      .post<GameState>(`${this.baseUrl}/games/${gameId}/rounds/tricks`, {
+      .post<SubmitTricksResponse>(`${this.baseUrl}/games/${gameId}/rounds/tricks`, {
         tricks,
         bids,
         trump_suit: trumpSuit,
