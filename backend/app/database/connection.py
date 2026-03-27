@@ -1,6 +1,8 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import QueuePool
+from sqlalchemy.pool import NullPool, QueuePool
 
 from app.config import settings
 
@@ -10,14 +12,20 @@ is_sqlite = "sqlite" in url
 connect_args: dict = {}
 engine_kwargs: dict = {}
 
+# Vercel serverless: each invocation is short-lived, so disable persistent pooling
+_is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+
 if is_sqlite:
     connect_args["check_same_thread"] = False
     engine_kwargs["connect_args"] = connect_args
 else:
-    # PostgreSQL (Neon or local): connection pooling and optional SSL
-    engine_kwargs["poolclass"] = QueuePool
-    engine_kwargs["pool_size"] = 5
-    engine_kwargs["max_overflow"] = 10
+    # PostgreSQL (Neon or local)
+    if _is_serverless:
+        engine_kwargs["poolclass"] = NullPool
+    else:
+        engine_kwargs["poolclass"] = QueuePool
+        engine_kwargs["pool_size"] = 5
+        engine_kwargs["max_overflow"] = 10
     engine_kwargs["pool_pre_ping"] = True  # Detect stale connections (e.g. Neon serverless)
     # Neon requires SSL; enforce when connecting to Neon if not already in URL
     if "neon.tech" in url and "sslmode" not in url:
