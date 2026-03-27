@@ -490,14 +490,96 @@ export class GameService {
     this.currentGameId = null;
   }
 
+  private shouldFallbackToRest(error: unknown): boolean {
+    if (!(error instanceof Error)) {
+      return false;
+    }
+
+    return (
+      error.message === 'WebSocket is not connected' ||
+      error.message === 'Realtime is not connected'
+    );
+  }
+
+  private applyBidsSubmitted(game: GameState, bids?: number[], trumpSuit?: string | null): void {
+    this.gameState$.next(game);
+    this.currentPhase$.next('tricks');
+
+    const submittedBids = this.liveBidSelections$.value;
+    if (Object.keys(submittedBids).length === 4) {
+      const bidsArray = Array(4).fill(0);
+      Object.keys(submittedBids).forEach((playerIdx) => {
+        const idx = parseInt(playerIdx, 10);
+        if (idx >= 0 && idx < 4) bidsArray[idx] = submittedBids[idx];
+      });
+      this.currentBids$.next(bidsArray);
+    }
+
+    if (bids && Array.isArray(bids)) {
+      this.currentBids$.next(bids);
+    }
+
+    if (trumpSuit !== undefined) {
+      this.currentTrumpSuit$.next(trumpSuit);
+    }
+
+    this.clearRoundState();
+  }
+
+  private applyTricksSubmitted(
+    game: GameState,
+    round?: Round | null,
+    tricksFromResponse?: number[]
+  ): void {
+    const previousScores = this.gameState$.value?.scores ?? [];
+    const bids = this.currentBids$.value;
+    const trumpSuit = this.currentTrumpSuit$.value;
+    const previousRound = this.gameState$.value?.current_round ?? 1;
+    const players = game.players ?? this.gameState$.value?.players ?? [];
+    const newScores = game.scores ?? [];
+    const liveTricks = { ...this.liveTrickSelections$.value };
+
+    this.gameState$.next(game);
+    this.currentBids$.next(null);
+    this.currentTrumpSuit$.next(null);
+    this.clearRoundState();
+
+    let tricks = round?.tricks ?? tricksFromResponse ?? [];
+    if (tricks.length === 0 && Object.keys(liveTricks).length > 0) {
+      tricks = Array(players.length).fill(0);
+      Object.keys(liveTricks).forEach((idx) => {
+        const i = parseInt(idx, 10);
+        if (i >= 0 && i < tricks.length) tricks[i] = liveTricks[i];
+      });
+    }
+
+    const roundScores =
+      round?.scores ??
+      newScores.map((score: number, i: number) => score - (previousScores[i] ?? 0));
+    const roundBids = round?.bids ?? bids;
+    const roundNumber = round?.round_number ?? previousRound;
+    const roundTrumpSuit = round?.trump_suit ?? trumpSuit;
+
+    if (roundBids && players.length > 0) {
+      this.roundSummaryResults$.next({
+        players,
+        bids: roundBids,
+        tricks,
+        roundScores,
+        newTotalScores: newScores,
+        trumpSuit: roundTrumpSuit,
+        roundNumber,
+      });
+      return;
+    }
+
+    this.currentPhase$.next('bidding');
+  }
+
   async submitBids(bids: number[], trumpSuit?: string): Promise<void> {
     const game = this.gameState$.value;
     if (!game) {
       throw new Error('No game loaded');
-    }
-
-    if (!this.realtimeService.isConnected()) {
-      throw new Error('WebSocket is not connected');
     }
 
     this.loading$.next(true);
@@ -514,6 +596,23 @@ export class GameService {
         },
       });
     } catch (error: unknown) {
+      if (this.shouldFallbackToRest(error)) {
+        try {
+          const response = await firstValueFrom(
+            this.apiService.submitBids(game.id, bids, trumpSuit)
+          );
+          this.applyBidsSubmitted(response.game, bids, trumpSuit ?? null);
+          return;
+        } catch (restError: unknown) {
+          this.error$.next(
+            restError instanceof Error ? restError.message : 'Failed to submit bids'
+          );
+          this.currentBids$.next(null);
+          this.currentTrumpSuit$.next(null);
+          throw restError;
+        }
+      }
+
       this.error$.next(error instanceof Error ? error.message : 'Failed to submit bids');
       this.currentBids$.next(null);
       this.currentTrumpSuit$.next(null);
@@ -571,10 +670,6 @@ export class GameService {
       throw new Error('No bids loaded. Please ensure bids were submitted for this round.');
     }
 
-    if (!this.realtimeService.isConnected()) {
-      throw new Error('WebSocket is not connected');
-    }
-
     this.loading$.next(true);
     this.error$.next(null);
 
@@ -593,6 +688,24 @@ export class GameService {
         round: null,
       };
     } catch (error: unknown) {
+      if (this.shouldFallbackToRest(error)) {
+        try {
+          const response = await firstValueFrom(
+            this.apiService.submitTricks(game.id, tricks, bids, trumpSuit ?? undefined)
+          );
+          this.applyTricksSubmitted(response.game, response.round, tricks);
+          return {
+            game: response.game,
+            round: response.round,
+          };
+        } catch (restError: unknown) {
+          this.error$.next(
+            restError instanceof Error ? restError.message : 'Failed to submit tricks'
+          );
+          throw restError;
+        }
+      }
+
       this.error$.next(error instanceof Error ? error.message : 'Failed to submit tricks');
       throw error;
     } finally {
