@@ -440,10 +440,11 @@ export class GameService {
         this.currentTrumpSuit$.next(null);
         this.clearRoundState();
 
-        // Build round summary from score differences
+        // Build round summary from round payload when available (authoritative),
+        // otherwise fall back to score diffs and live selections.
+        const roundFromMessage = message.round;
         const messageData = message.data as { tricks?: number[] } | undefined;
-        let tricks = messageData?.tricks ?? [];
-        // Fallback: reconstruct tricks from live selections if not in message
+        let tricks = roundFromMessage?.tricks ?? messageData?.tricks ?? [];
         if (tricks.length === 0 && Object.keys(liveTricks).length > 0) {
           tricks = Array(players.length).fill(0);
           Object.keys(liveTricks).forEach((idx) => {
@@ -451,19 +452,23 @@ export class GameService {
             if (i >= 0 && i < tricks.length) tricks[i] = liveTricks[i];
           });
         }
-        const roundScores = newScores.map(
-          (score: number, i: number) => score - (previousScores[i] ?? 0)
-        );
 
-        if (bids && players.length > 0) {
+        const roundScores =
+          roundFromMessage?.scores ??
+          newScores.map((score: number, i: number) => score - (previousScores[i] ?? 0));
+        const roundBids = roundFromMessage?.bids ?? bids;
+        const roundNumber = roundFromMessage?.round_number ?? previousRound;
+        const roundTrumpSuit = roundFromMessage?.trump_suit ?? trumpSuit;
+
+        if (roundBids && players.length > 0) {
           this.roundSummaryResults$.next({
             players,
-            bids,
+            bids: roundBids,
             tricks,
             roundScores,
             newTotalScores: newScores,
-            trumpSuit,
-            roundNumber: previousRound,
+            trumpSuit: roundTrumpSuit,
+            roundNumber,
           });
           // Phase stays as 'tricks' until summary is dismissed
         } else {
