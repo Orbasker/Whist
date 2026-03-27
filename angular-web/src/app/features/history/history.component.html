@@ -1,0 +1,66 @@
+<div class="history-page">
+  <header class="history-header">
+    <a routerLink="/dashboard" class="back-link">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <div>
+      <h1 class="history-title">{{ 'history.title' | translate }}</h1>
+      <p class="history-subtitle">{{ 'history.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <section *ngIf="loading" class="state-card">
+    <app-loader variant="speeder" size="lg" [label]="'history.loading' | translate"></app-loader>
+    <p>{{ 'history.loading' | translate }}</p>
+  </section>
+
+  <!-- Empty -->
+  <section *ngIf="!loading && games.length === 0" class="state-card">
+    <span class="material-symbols-outlined state-icon">history</span>
+    <h2>{{ 'history.empty' | translate }}</h2>
+    <p>{{ 'history.emptyDescription' | translate }}</p>
+    <a routerLink="/dashboard" class="gold-btn">{{ 'history.backToTables' | translate }}</a>
+  </section>
+
+  <!-- Game List -->
+  <div *ngIf="!loading && games.length > 0" class="history-list">
+    <article
+      *ngFor="let game of games"
+      class="history-card"
+      role="button"
+      tabindex="0"
+      (click)="openGame(game.id)"
+      (keydown.enter)="openGame(game.id)"
+    >
+      <div class="history-card-head">
+        <h3 class="history-card-name">{{ getGameDisplayName(game) }}</h3>
+        <span class="history-card-date">{{ formatDate(game.updated_at) }}</span>
+      </div>
+
+      <div class="history-card-players">
+        <span class="material-symbols-outlined history-card-icon">groups</span>
+        <p>{{ game.players.join(' · ') }}</p>
+      </div>
+
+      <div class="history-card-result">
+        <div class="history-card-winner">
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: 'FILL' 1; color: var(--accent-secondary)"
+            >military_tech</span
+          >
+          <span>{{ getWinner(game) }}</span>
+        </div>
+        <div class="history-card-scores">
+          <span class="history-card-scores-label">{{ 'history.finalScore' | translate }}</span>
+          <span>{{ game.scores.join(' / ') }}</span>
+        </div>
+      </div>
+
+      <div class="history-card-meta">
+        <span>{{ 'history.rounds' | translate }}: {{ game.current_round }}</span>
+      </div>
+    </article>
+  </div>
+</div>

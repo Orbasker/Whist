@@ -1,0 +1,103 @@
+<div class="rules-page">
+  <!-- Desktop TOC Sidebar -->
+  <aside class="rules-toc">
+    <p class="toc-label">{{ 'rules.tocLabel' | translate }}</p>
+    <nav>
+      <a
+        *ngFor="let section of sections"
+        [href]="'#' + section.id"
+        class="toc-link"
+        [class.toc-link--active]="activeSection === section.id"
+        (click)="scrollTo(section.id, $event)"
+      >
+        {{ section.key | translate }}
+      </a>
+    </nav>
+    <a routerLink="/dashboard" class="toc-back">
+      <span class="material-symbols-outlined">arrow_back</span>
+      {{ 'rules.backToTables' | translate }}
+    </a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="rules-content">
+    <header class="rules-header">
+      <a routerLink="/dashboard" class="back-link mobile-only">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </a>
+      <div>
+        <h1 class="rules-title">{{ 'rules.title' | translate }}</h1>
+        <p class="rules-subtitle">{{ 'rules.subtitle' | translate }}</p>
+      </div>
+    </header>
+
+    <!-- Section 1: Overview -->
+    <section id="overview" class="rule-section">
+      <span class="rule-number">01.</span>
+      <h2 class="rule-heading">{{ 'rules.sections.overview' | translate }}</h2>
+      <div class="rule-divider"></div>
+      <p class="rule-text">{{ 'rules.overviewText' | translate }}</p>
+    </section>
+
+    <!-- Section 2: Deal & Trump Auction -->
+    <section id="deal" class="rule-section">
+      <span class="rule-number">02.</span>
+      <h2 class="rule-heading">{{ 'rules.sections.deal' | translate }}</h2>
+      <div class="rule-divider"></div>
+      <p class="rule-text">{{ 'rules.dealText' | translate }}</p>
+    </section>
+
+    <!-- Section 3: Contracts -->
+    <section id="contracts" class="rule-section">
+      <span class="rule-number">03.</span>
+      <h2 class="rule-heading">{{ 'rules.sections.contracts' | translate }}</h2>
+      <div class="rule-divider"></div>
+      <p class="rule-text">{{ 'rules.contractsText' | translate }}</p>
+    </section>
+
+    <!-- Section 4: Play -->
+    <section id="play" class="rule-section">
+      <span class="rule-number">04.</span>
+      <h2 class="rule-heading">{{ 'rules.sections.play' | translate }}</h2>
+      <div class="rule-divider"></div>
+      <p class="rule-text">{{ 'rules.playText' | translate }}</p>
+    </section>
+
+    <!-- Section 5: Scoring -->
+    <section id="scoring" class="rule-section">
+      <span class="rule-number">05.</span>
+      <h2 class="rule-heading">{{ 'rules.sections.scoring' | translate }}</h2>
+      <div class="rule-divider"></div>
+      <p class="rule-text">{{ 'rules.scoringText' | translate }}</p>
+    </section>
+
+    <!-- Section 6: Glossary -->
+    <section id="glossary" class="rule-section">
+      <span class="rule-number">06.</span>
+      <h2 class="rule-heading">{{ 'rules.sections.glossary' | translate }}</h2>
+      <div class="rule-divider"></div>
+      <dl class="glossary-list">
+        <div class="glossary-item">
+          <dt>{{ 'rules.glossary.trumpTerm' | translate }}</dt>
+          <dd>{{ 'rules.glossary.trumpDef' | translate }}</dd>
+        </div>
+        <div class="glossary-item">
+          <dt>{{ 'rules.glossary.contractTerm' | translate }}</dt>
+          <dd>{{ 'rules.glossary.contractDef' | translate }}</dd>
+        </div>
+        <div class="glossary-item">
+          <dt>{{ 'rules.glossary.overTerm' | translate }}</dt>
+          <dd>{{ 'rules.glossary.overDef' | translate }}</dd>
+        </div>
+        <div class="glossary-item">
+          <dt>{{ 'rules.glossary.underTerm' | translate }}</dt>
+          <dd>{{ 'rules.glossary.underDef' | translate }}</dd>
+        </div>
+        <div class="glossary-item">
+          <dt>{{ 'rules.glossary.frischTerm' | translate }}</dt>
+          <dd>{{ 'rules.glossary.frischDef' | translate }}</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+</div>

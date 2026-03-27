@@ -37,6 +37,30 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'history',
+    loadComponent: () =>
+      import('./features/history/history.component').then((m) => m.HistoryComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'leaderboard',
+    loadComponent: () =>
+      import('./features/leaderboard/leaderboard.component').then((m) => m.LeaderboardComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'rules',
+    loadComponent: () => import('./features/rules/rules.component').then((m) => m.RulesComponent),
+  },
+  {
+    path: 'notifications',
+    loadComponent: () =>
+      import('./features/notifications/notifications.component').then(
+        (m) => m.NotificationsComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'invite/:token',
     loadComponent: () =>
       import('./features/invite/invite.component').then((m) => m.InviteComponent),
