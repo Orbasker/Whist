@@ -1,0 +1,60 @@
+<div class="leaderboard-page">
+  <header class="lb-header">
+    <a routerLink="/dashboard" class="back-link">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <div>
+      <h1 class="lb-title">{{ 'leaderboard.title' | translate }}</h1>
+      <p class="lb-subtitle">{{ 'leaderboard.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <section *ngIf="loading" class="state-card">
+    <app-loader
+      variant="speeder"
+      size="lg"
+      [label]="'leaderboard.loading' | translate"
+    ></app-loader>
+  </section>
+
+  <!-- Empty -->
+  <section *ngIf="!loading && players.length === 0" class="state-card">
+    <span class="material-symbols-outlined state-icon">military_tech</span>
+    <h2>{{ 'leaderboard.empty' | translate }}</h2>
+    <p>{{ 'leaderboard.emptyDescription' | translate }}</p>
+  </section>
+
+  <!-- Leaderboard Table -->
+  <div *ngIf="!loading && players.length > 0" class="lb-list">
+    <div
+      *ngFor="let player of players"
+      class="lb-row"
+      [class.lb-row--top3]="player.rank <= 3"
+      [class.lb-row--me]="isCurrentUser(player.name)"
+      [ngClass]="getRankClass(player.rank)"
+    >
+      <div class="lb-rank">
+        <span class="lb-rank-badge">{{ getRankEmoji(player.rank) }}</span>
+      </div>
+      <div class="lb-info">
+        <p class="lb-name">
+          {{ player.name }}
+          <span *ngIf="isCurrentUser(player.name)" class="lb-you-badge">{{
+            'leaderboard.you' | translate
+          }}</span>
+        </p>
+        <p class="lb-meta">
+          {{ player.gamesPlayed }} {{ 'leaderboard.games' | translate }} · {{ player.winRate }}%
+          {{ 'leaderboard.winRate' | translate }}
+        </p>
+      </div>
+      <div class="lb-score">
+        <span class="lb-score-value" [class.lb-score-positive]="player.totalScore > 0">
+          {{ player.totalScore > 0 ? '+' : '' }}{{ player.totalScore }}
+        </span>
+        <span class="lb-score-label">{{ 'leaderboard.points' | translate }}</span>
+      </div>
+    </div>
+  </div>
+</div>

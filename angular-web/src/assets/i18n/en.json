@@ -318,6 +318,72 @@
     "roundHistory": "View the complete history of bids, tricks, and scores for every round.",
     "deleteGame": "Permanently delete this game and all its history. This cannot be undone."
   },
+  "history": {
+    "title": "Game History",
+    "subtitle": "Your completed games",
+    "loading": "Loading history...",
+    "empty": "No Completed Games",
+    "emptyDescription": "Once you finish a game, it will appear here.",
+    "backToTables": "Back to Tables",
+    "unnamedGame": "Unnamed Game",
+    "finalScore": "Final Score",
+    "rounds": "Rounds"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "subtitle": "Player rankings across all games",
+    "loading": "Loading rankings...",
+    "empty": "No Rankings Yet",
+    "emptyDescription": "Play some games to see the leaderboard.",
+    "you": "you",
+    "games": "games",
+    "winRate": "win rate",
+    "points": "PTS"
+  },
+  "rules": {
+    "title": "Club Rules",
+    "subtitle": "The complete guide to Israeli Whist",
+    "tocLabel": "Contents",
+    "backToTables": "Back to Tables",
+    "sections": {
+      "overview": "Overview",
+      "deal": "Deal & Trump Auction",
+      "contracts": "Contracts",
+      "play": "Play",
+      "scoring": "Scoring",
+      "glossary": "Glossary"
+    },
+    "overviewText": "Israeli Whist is a trick-taking card game for exactly 4 players. Each player plays for themselves — there are no partnerships. A standard 52-card deck is used, dealing 13 cards to each player. The game revolves around bidding contracts, choosing trump, and taking exactly the number of tricks you declared.",
+    "dealText": "All 52 cards are dealt evenly to four players (13 each). The player to the left of the dealer opens the trump auction by bidding a number of tricks (minimum 5) with a suit, or passing. Bidding continues clockwise; each new bid must be higher than the previous one. The highest bid sets the trump suit. If all four players pass, a Frisch round begins: players exchange 3 cards with their partner (the player across) and bid again with a higher minimum.",
+    "contractsText": "After trump is set, each player declares their contract — the exact number of tricks they intend to take. The total of all four contracts cannot equal 13. The last player to declare must adjust their bid to push the total over or under 13. This ensures someone will fail their contract every round.",
+    "playText": "The player who won the trump auction leads the first trick. Players must follow the led suit if they can. If void in the led suit, they may play trump (cut) or discard. The highest card in the led suit wins the trick, unless trumped — then the highest trump wins. The trick winner leads the next trick.",
+    "scoringText": "Make your contract exactly: score = tricks² + 10. For example, bid 3 and take exactly 3 = 19 points. Miss your contract: lose 10 points for each trick you are off (over or under). A zero bid is high-risk: if you take zero tricks, you earn +50 in Under mode or +25 in Over mode. If you take any trick after bidding zero, you lose -50 (Under) or -25 (Over).",
+    "glossary": {
+      "trumpTerm": "Trump",
+      "trumpDef": "The suit that beats all other suits. Determined by the highest bid in the auction.",
+      "contractTerm": "Contract",
+      "contractDef": "The number of tricks a player commits to taking in a round. Must be hit exactly for a positive score.",
+      "overTerm": "Over",
+      "overDef": "When the total bids exceed 13. More competition for tricks — someone will take more than they wanted.",
+      "underTerm": "Under",
+      "underDef": "When the total bids are below 13. Not enough tricks to go around — someone will fall short.",
+      "frischTerm": "Frisch",
+      "frischDef": "A re-deal triggered when all four players pass the auction. Players exchange 3 cards and bid again with a higher minimum."
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Stay in the game",
+    "loading": "Loading notifications...",
+    "empty": "All Caught Up",
+    "emptyDescription": "No new notifications. Check back after your next game."
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "This card isn't in the deck. The page may have been removed, doesn't exist yet, or the address is incorrect.",
+    "backToTables": "Back to Tables",
+    "backToHome": "Back to Home"
+  },
   "invitationForm": {
     "gameFull": "Game is full. No slots available for invitation.",
     "title": "Send game invitations",

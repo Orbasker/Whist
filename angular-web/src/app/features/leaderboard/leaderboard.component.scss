@@ -1,0 +1,188 @@
+@import '../../../styles/variables';
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $background;
+  color: $on-surface;
+}
+
+.leaderboard-page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.lb-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-link {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: $surface-container;
+  color: $on-surface-variant;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $surface-container-high;
+  }
+}
+
+.lb-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.lb-subtitle {
+  font-size: 0.8rem;
+  color: $on-surface-variant;
+  margin-top: 0.15rem;
+}
+
+.state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 20rem;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  background: $surface-container-low;
+  border: 1px solid $outline-variant;
+  text-align: center;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  p {
+    color: $on-surface-variant;
+    font-size: 0.9rem;
+  }
+}
+
+.state-icon {
+  font-size: 3rem;
+  color: $on-surface-variant;
+  opacity: 0.4;
+}
+
+.lb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  background: $surface-container-low;
+  border: 1px solid transparent;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+
+  &:hover {
+    background: $surface-container;
+  }
+}
+
+.lb-row--me {
+  border-color: rgba($primary, 0.3);
+  background: rgba($primary-container, 0.15);
+}
+
+.rank-gold {
+  border-color: rgba($secondary, 0.3);
+}
+
+.rank-silver {
+  border-color: rgba($tertiary, 0.25);
+}
+
+.rank-bronze {
+  border-color: rgba($secondary, 0.15);
+}
+
+.lb-rank {
+  flex-shrink: 0;
+  width: 2.5rem;
+  text-align: center;
+}
+
+.lb-rank-badge {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: $on-surface-variant;
+
+  .rank-gold & {
+    color: $secondary;
+  }
+}
+
+.lb-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lb-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lb-you-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $primary;
+  background: rgba($primary, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+.lb-meta {
+  font-size: 0.75rem;
+  color: $on-surface-variant;
+  margin-top: 0.15rem;
+}
+
+.lb-score {
+  flex-shrink: 0;
+  text-align: end;
+}
+
+.lb-score-value {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-score-positive {
+  color: $primary;
+}
+
+.lb-score-label {
+  font-size: 0.6rem;
+  color: $on-surface-variant;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}

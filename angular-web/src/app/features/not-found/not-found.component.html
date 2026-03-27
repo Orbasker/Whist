@@ -1,0 +1,24 @@
+<div class="not-found">
+  <div class="not-found-glow" aria-hidden="true"></div>
+
+  <div class="not-found-card">
+    <div class="card-visual" aria-hidden="true">
+      <span class="card-suit">&#9824;</span>
+      <span class="card-rank">?</span>
+    </div>
+
+    <h1 class="not-found-title">{{ 'notFound.title' | translate }}</h1>
+    <p class="not-found-description">{{ 'notFound.description' | translate }}</p>
+
+    <div class="not-found-actions">
+      <a routerLink="/dashboard" class="not-found-btn not-found-btn--primary">
+        <span class="material-symbols-outlined">playing_cards</span>
+        {{ 'notFound.backToTables' | translate }}
+      </a>
+      <a routerLink="/" class="not-found-btn not-found-btn--secondary">
+        <span class="material-symbols-outlined">home</span>
+        {{ 'notFound.backToHome' | translate }}
+      </a>
+    </div>
+  </div>
+</div>

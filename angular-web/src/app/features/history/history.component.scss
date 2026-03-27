@@ -1,0 +1,183 @@
+@import '../../../styles/variables';
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $background;
+  color: $on-surface;
+}
+
+.history-page {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-link {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: $surface-container;
+  color: $on-surface-variant;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $surface-container-high;
+  }
+}
+
+.history-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.history-subtitle {
+  font-size: 0.8rem;
+  color: $on-surface-variant;
+  margin-top: 0.15rem;
+}
+
+.state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 20rem;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  background: $surface-container-low;
+  border: 1px solid $outline-variant;
+  text-align: center;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  p {
+    color: $on-surface-variant;
+    font-size: 0.9rem;
+  }
+}
+
+.state-icon {
+  font-size: 3rem;
+  color: $on-surface-variant;
+  opacity: 0.4;
+}
+
+.gold-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--btn-min-height);
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  border-radius: var(--btn-radius);
+  background: $secondary-container;
+  color: $on-secondary-container;
+  font-weight: var(--btn-font-weight);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.history-card {
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: $surface-container-low;
+  border: 1px solid $outline-variant;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba($primary, 0.4);
+    background: $surface-container;
+  }
+}
+
+.history-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+}
+
+.history-card-name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.history-card-date {
+  font-size: 0.75rem;
+  color: $on-surface-variant;
+}
+
+.history-card-players {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  color: $on-surface-variant;
+}
+
+.history-card-icon {
+  font-size: 1.1rem;
+  opacity: 0.6;
+}
+
+.history-card-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba($outline-variant, 0.3);
+}
+
+.history-card-winner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.history-card-scores {
+  text-align: end;
+  font-size: 0.85rem;
+}
+
+.history-card-scores-label {
+  display: block;
+  font-size: 0.65rem;
+  color: $on-surface-variant;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.history-card-meta {
+  padding-top: 0.5rem;
+  font-size: 0.75rem;
+  color: $on-surface-variant;
+}

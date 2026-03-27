@@ -1,0 +1,157 @@
+@import '../../../styles/variables';
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $background;
+  color: $on-surface;
+}
+
+.notif-page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.notif-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-link {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: $surface-container;
+  color: $on-surface-variant;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $surface-container-high;
+  }
+}
+
+.notif-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.notif-subtitle {
+  font-size: 0.8rem;
+  color: $on-surface-variant;
+  margin-top: 0.15rem;
+}
+
+.state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 20rem;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  background: $surface-container-low;
+  border: 1px solid $outline-variant;
+  text-align: center;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  p {
+    color: $on-surface-variant;
+    font-size: 0.9rem;
+  }
+}
+
+.state-icon {
+  font-size: 3rem;
+  color: $on-surface-variant;
+  opacity: 0.4;
+}
+
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notif-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  background: $surface-container-low;
+  border: 1px solid transparent;
+  border-inline-start: 3px solid transparent;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    background: $surface-container;
+  }
+}
+
+.notif-card--unread {
+  border-inline-start-color: $primary;
+}
+
+.notif-icon-wrap {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: rgba($primary-container, 0.4);
+}
+
+.notif-icon {
+  font-size: 1.25rem;
+  color: $primary;
+}
+
+.notif-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-message {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.notif-meta {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: $on-surface-variant;
+}
+
+.notif-game {
+  font-weight: 600;
+}
+
+.notif-time {
+  opacity: 0.7;
+}
+
+.notif-chevron {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  color: $on-surface-variant;
+  opacity: 0.4;
+}
