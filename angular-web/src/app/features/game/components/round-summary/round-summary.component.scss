@@ -1,5 +1,38 @@
 :host {
   display: block;
+  height: 100%;
+}
+
+.round-summary-shell {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.summary-content {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.summary-actions {
+  position: sticky;
+  bottom: calc(-1.5rem - var(--safe-area-bottom));
+  margin-top: 1rem;
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  margin-bottom: calc(-1.5rem - var(--safe-area-bottom));
+  padding: 1rem 1.5rem calc(1.5rem + var(--safe-area-bottom));
+  background: linear-gradient(to top, rgba(21, 32, 49, 0.98) 72%, rgba(21, 32, 49, 0));
+}
+
+@media (max-width: 639px) {
+  .summary-actions {
+    bottom: calc(-1rem - var(--safe-area-bottom));
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-bottom: calc(-1rem - var(--safe-area-bottom));
+    padding: 0.875rem 1rem calc(1rem + var(--safe-area-bottom));
+  }
 }
 
 .player-card {

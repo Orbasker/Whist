@@ -7,8 +7,8 @@
   </div>
 
   <!-- Header -->
-  <header class="bg-surface-container-lowest/60 backdrop-blur-xl sticky top-0 z-40">
-    <div class="flex items-center justify-between px-6 py-4 max-w-screen-xl mx-auto">
+  <header class="game-header bg-surface-container-lowest/60 backdrop-blur-xl sticky top-0 z-40">
+    <div class="game-header-inner flex items-center justify-between py-4 max-w-screen-xl mx-auto">
       <div class="flex items-center gap-4">
         <button
           (click)="goBack()"
@@ -41,7 +41,7 @@
   </header>
 
   <!-- Main Content -->
-  <div class="mx-auto max-w-4xl p-4 pb-28 sm:p-6 sm:pb-24">
+  <div class="game-content mx-auto max-w-4xl p-4 pb-28 sm:p-6 sm:pb-24">
     <app-bidding-phase
       *ngIf="phase === 'bidding'"
       [players]="gameState.players"
