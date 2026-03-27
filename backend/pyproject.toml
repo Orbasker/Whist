@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "whist-game-backend"
 version = "1.0.0"
 description = "FastAPI backend for Whist card game scoring application"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "fastapi==0.104.1",
     "uvicorn[standard]==0.24.0",
@@ -21,6 +21,7 @@ dependencies = [
     "httpx>=0.25.0",
     "pyjwt>=2.11.0",
     "email-validator>=2.3.0",
+    "mangum>=0.19.0",
 ]
 
 [project.optional-dependencies]
@@ -40,11 +41,11 @@ include = ["app*"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py312"
 
 [tool.black]
 line-length = 100
-target-version = ["py311"]
+target-version = ["py312"]
 
 [tool.ty.rules]
 # Suppress false positives caused by missing/incomplete stubs for SQLAlchemy
