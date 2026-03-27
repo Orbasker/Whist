@@ -1,0 +1,128 @@
+@import '../../../styles/variables';
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $background;
+  color: $on-surface;
+}
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.not-found-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40rem;
+  height: 40rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba($primary-container, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.not-found-card {
+  position: relative;
+  text-align: center;
+  max-width: 28rem;
+}
+
+.card-visual {
+  position: relative;
+  width: 7rem;
+  height: 10rem;
+  margin: 0 auto 2.5rem;
+  background: $surface-container;
+  border: 1px solid $outline-variant;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-suit {
+  font-size: 1.5rem;
+  color: $on-surface-variant;
+  opacity: 0.6;
+}
+
+.card-rank {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: $secondary;
+  font-style: italic;
+}
+
+.not-found-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: $on-surface;
+}
+
+.not-found-description {
+  font-size: 1rem;
+  color: $on-surface-variant;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.not-found-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--btn-min-height);
+  padding: var(--btn-padding-y) 1.75rem;
+  font-weight: var(--btn-font-weight);
+  border-radius: var(--btn-radius);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 16rem;
+
+  .material-symbols-outlined {
+    font-size: 1.25rem;
+  }
+}
+
+.not-found-btn--primary {
+  background: linear-gradient(135deg, $primary-container, darken($primary-container, 4%));
+  color: $primary;
+  border: 1px solid rgba($primary, 0.2);
+
+  &:hover {
+    background: linear-gradient(135deg, lighten($primary-container, 3%), $primary-container);
+    border-color: rgba($primary, 0.4);
+  }
+}
+
+.not-found-btn--secondary {
+  background: transparent;
+  color: $on-surface-variant;
+  border: 1px solid $outline-variant;
+
+  &:hover {
+    background: $surface-container;
+    color: $on-surface;
+  }
+}

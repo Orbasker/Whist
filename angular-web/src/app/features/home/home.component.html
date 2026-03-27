@@ -20,18 +20,18 @@
         <button type="button" class="desktop-nav-link desktop-nav-active" aria-current="page">
           {{ 'home.liveGames' | translate }}
         </button>
-        <button type="button" class="desktop-nav-link">
+        <a routerLink="/history" class="desktop-nav-link">
           {{ 'home.gameHistory' | translate }}
-        </button>
-        <button type="button" class="desktop-nav-link">
+        </a>
+        <a routerLink="/leaderboard" class="desktop-nav-link">
           {{ 'home.leaderboard' | translate }}
-        </button>
+        </a>
       </nav>
     </div>
     <div class="desktop-header-right" *ngIf="isAuthenticated">
-      <button class="header-icon-btn" type="button">
+      <a routerLink="/notifications" class="header-icon-btn" aria-label="Notifications">
         <span class="material-symbols-outlined">notifications</span>
-      </button>
+      </a>
       <div class="header-user-section">
         <div class="header-user-text">
           <p class="header-user-name">{{ userName || ('landing.brandName' | translate) }}</p>
@@ -64,18 +64,18 @@
         <span class="material-symbols-outlined">playing_cards</span>
         <span>{{ 'home.liveGames' | translate }}</span>
       </button>
-      <button type="button" class="sidebar-link">
+      <a routerLink="/history" class="sidebar-link">
         <span class="material-symbols-outlined">history</span>
         <span>{{ 'home.gameHistory' | translate }}</span>
-      </button>
-      <button type="button" class="sidebar-link">
+      </a>
+      <a routerLink="/leaderboard" class="sidebar-link">
         <span class="material-symbols-outlined">military_tech</span>
         <span>{{ 'home.leaderboard' | translate }}</span>
-      </button>
-      <button type="button" class="sidebar-link">
+      </a>
+      <a routerLink="/rules" class="sidebar-link">
         <span class="material-symbols-outlined">menu_book</span>
         <span>{{ 'home.clubRules' | translate }}</span>
-      </button>
+      </a>
     </nav>
   </div>
 
@@ -272,9 +272,14 @@
       </div>
       <span class="mobile-brand">{{ 'landing.brandName' | translate }}</span>
     </div>
-    <button *ngIf="isAuthenticated" class="header-icon-btn mobile-notif" type="button">
+    <a
+      *ngIf="isAuthenticated"
+      routerLink="/notifications"
+      class="header-icon-btn mobile-notif"
+      aria-label="Notifications"
+    >
       <span class="material-symbols-outlined">notifications</span>
-    </button>
+    </a>
   </div>
 </header>
 
@@ -439,10 +444,10 @@
 
 <!-- Mobile Bottom Nav -->
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-  <button type="button" class="bnav-item" [attr.aria-label]="'home.navHome' | translate">
+  <a routerLink="/" class="bnav-item" [attr.aria-label]="'home.navHome' | translate">
     <span class="material-symbols-outlined">style</span>
     <span class="bnav-label">{{ 'home.navHome' | translate }}</span>
-  </button>
+  </a>
   <button
     type="button"
     class="bnav-item bnav-item--active"
@@ -451,10 +456,10 @@
     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">casino</span>
     <span class="bnav-label">{{ 'home.navGames' | translate }}</span>
   </button>
-  <button type="button" class="bnav-item" [attr.aria-label]="'home.navHistory' | translate">
+  <a routerLink="/history" class="bnav-item" [attr.aria-label]="'home.navHistory' | translate">
     <span class="material-symbols-outlined">history_edu</span>
     <span class="bnav-label">{{ 'home.navHistory' | translate }}</span>
-  </button>
+  </a>
   <button
     type="button"
     class="bnav-item"

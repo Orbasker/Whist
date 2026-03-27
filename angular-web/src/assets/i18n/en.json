@@ -318,6 +318,12 @@
     "roundHistory": "View the complete history of bids, tricks, and scores for every round.",
     "deleteGame": "Permanently delete this game and all its history. This cannot be undone."
   },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "This card isn't in the deck. The page may have been removed, doesn't exist yet, or the address is incorrect.",
+    "backToTables": "Back to Tables",
+    "backToHome": "Back to Home"
+  },
   "invitationForm": {
     "gameFull": "Game is full. No slots available for invitation.",
     "title": "Send game invitations",
