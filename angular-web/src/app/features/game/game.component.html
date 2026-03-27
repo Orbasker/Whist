@@ -3,7 +3,7 @@
     *ngIf="serviceLoading"
     class="fixed inset-0 z-[90] flex items-center justify-center bg-background/55 backdrop-blur-sm"
   >
-    <app-loader variant="cards" size="lg" [label]="'common.loading' | translate"></app-loader>
+    <app-loader size="lg" [label]="'common.loading' | translate"></app-loader>
   </div>
 
   <!-- Header -->
@@ -93,5 +93,5 @@
   *ngIf="!gameState"
   class="flex min-h-screen flex-col items-center justify-center gap-4 bg-background"
 >
-  <app-loader variant="cards" size="lg" [label]="'common.loading' | translate"></app-loader>
+  <app-loader size="lg" [label]="'common.loading' | translate"></app-loader>
 </div>

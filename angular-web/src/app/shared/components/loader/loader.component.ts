@@ -1,8 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type LoaderVariant = 'cards' | 'orbit' | 'suits';
+export type LoaderVariant = 'cards' | 'orbit' | 'suits' | 'bird' | 'astronaut' | 'speeder' | 'hand';
 export type LoaderSize = 'sm' | 'md' | 'lg';
+
+const LOADER_VARIANTS: LoaderVariant[] = [
+  'cards',
+  'orbit',
+  'suits',
+  'bird',
+  'astronaut',
+  'speeder',
+  'hand',
+];
 
 @Component({
   selector: 'app-loader',
@@ -62,6 +72,110 @@ export type LoaderSize = 'sm' | 'md' | 'lg';
       <span class="whist-suit whist-suit--3">♣</span>
       <span class="whist-suit whist-suit--4 whist-suit--red">♦</span>
     </div>
+
+    <!-- Bird Loader -->
+    <div
+      *ngIf="activeVariant === 'bird'"
+      class="whist-loader-bird"
+      [class.whist-loader--sm]="size === 'sm'"
+      [class.whist-loader--lg]="size === 'lg'"
+      role="status"
+      [attr.aria-label]="label || null"
+    >
+      <div class="whist-bird-scene">
+        <div class="whist-bird-text" aria-hidden="true">Loading...</div>
+        <div class="whist-bird-hands"></div>
+        <div class="whist-bird-body"></div>
+        <div class="whist-bird-head">
+          <div class="whist-bird-eye"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Astronaut Loader -->
+    <div
+      *ngIf="activeVariant === 'astronaut'"
+      class="whist-loader-astronaut"
+      [class.whist-loader--sm]="size === 'sm'"
+      [class.whist-loader--lg]="size === 'lg'"
+      role="status"
+      [attr.aria-label]="label || null"
+    >
+      <div class="whist-astro-scene">
+        <div
+          *ngFor="let layer of starLayers"
+          class="whist-star-layer"
+          [ngClass]="'whist-star-layer--' + layer"
+        >
+          <div
+            *ngFor="let position of starPositions"
+            class="whist-star"
+            [ngClass]="'whist-star--' + position"
+          ></div>
+        </div>
+        <div class="whist-astronaut">
+          <div class="whist-astro-head"></div>
+          <div class="whist-astro-arm whist-astro-arm--left"></div>
+          <div class="whist-astro-arm whist-astro-arm--right"></div>
+          <div class="whist-astro-body">
+            <div class="whist-astro-panel"></div>
+          </div>
+          <div class="whist-astro-leg whist-astro-leg--left"></div>
+          <div class="whist-astro-leg whist-astro-leg--right"></div>
+          <div class="whist-astro-pack"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Speeder Loader -->
+    <div
+      *ngIf="activeVariant === 'speeder'"
+      class="whist-loader-speeder"
+      [class.whist-loader--sm]="size === 'sm'"
+      [class.whist-loader--lg]="size === 'lg'"
+      role="status"
+      [attr.aria-label]="label || null"
+    >
+      <div class="whist-speeder-scene">
+        <div class="whist-speeder">
+          <span class="whist-speeder-top">
+            <span class="whist-speeder-line whist-speeder-line--1"></span>
+            <span class="whist-speeder-line whist-speeder-line--2"></span>
+            <span class="whist-speeder-line whist-speeder-line--3"></span>
+            <span class="whist-speeder-line whist-speeder-line--4"></span>
+          </span>
+          <div class="whist-speeder-base">
+            <span></span>
+            <div class="whist-speeder-face"></div>
+          </div>
+        </div>
+        <div class="whist-speeder-trails">
+          <span class="whist-speeder-trail whist-speeder-trail--1"></span>
+          <span class="whist-speeder-trail whist-speeder-trail--2"></span>
+          <span class="whist-speeder-trail whist-speeder-trail--3"></span>
+          <span class="whist-speeder-trail whist-speeder-trail--4"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hand Loader -->
+    <div
+      *ngIf="activeVariant === 'hand'"
+      class="whist-loader-hand"
+      [class.whist-loader--sm]="size === 'sm'"
+      [class.whist-loader--lg]="size === 'lg'"
+      role="status"
+      [attr.aria-label]="label || null"
+    >
+      <div class="whist-hand-scene">
+        <div class="whist-hand-finger whist-hand-finger--1"></div>
+        <div class="whist-hand-finger whist-hand-finger--2"></div>
+        <div class="whist-hand-finger whist-hand-finger--3"></div>
+        <div class="whist-hand-finger whist-hand-finger--4"></div>
+        <div class="whist-hand-palm"></div>
+        <div class="whist-hand-thumb"></div>
+      </div>
+    </div>
   `,
 })
 export class LoaderComponent implements OnInit {
@@ -70,6 +184,8 @@ export class LoaderComponent implements OnInit {
   @Input() label = '';
 
   activeVariant: LoaderVariant = 'cards';
+  readonly starLayers = [1, 2, 3, 4];
+  readonly starPositions = [1, 2, 3, 4, 5, 6, 7];
 
   ngOnInit(): void {
     if (this.variant) {
@@ -77,14 +193,13 @@ export class LoaderComponent implements OnInit {
       return;
     }
 
-    // Keep the branch behavior of rotating between the three loader styles
+    // Keep the branch behavior of rotating between the available loader styles
     // while remaining compatible with the newer explicit variant API.
-    const variants: LoaderVariant[] = ['cards', 'orbit', 'suits'];
     const seed =
       typeof globalThis.crypto?.getRandomValues === 'function'
         ? globalThis.crypto.getRandomValues(new Uint32Array(1))[0]
         : Date.now();
 
-    this.activeVariant = variants[seed % variants.length];
+    this.activeVariant = LOADER_VARIANTS[seed % LOADER_VARIANTS.length];
   }
 }
