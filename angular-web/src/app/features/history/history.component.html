@@ -9,11 +9,8 @@
     </div>
   </header>
 
-  <!-- Loading -->
-  <section *ngIf="loading" class="state-card">
-    <app-loader variant="speeder" size="lg" [label]="'history.loading' | translate"></app-loader>
-    <p>{{ 'history.loading' | translate }}</p>
-  </section>
+  <!-- Loading skeleton -->
+  <app-history-skeleton *ngIf="loading"></app-history-skeleton>
 
   <!-- Empty -->
   <section *ngIf="!loading && games.length === 0" class="state-card">

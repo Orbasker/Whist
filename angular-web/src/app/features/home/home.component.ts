@@ -26,6 +26,7 @@ import { UiLabelComponent } from '../../shared/components/ui/label/label.compone
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { DashboardSkeletonComponent } from '../../shared/components/skeletons/dashboard-skeleton.component';
 
 @Component({
   selector: 'app-home',
@@ -40,6 +41,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
     ModalComponent,
     ConfirmModalComponent,
     LoaderComponent,
+    DashboardSkeletonComponent,
     UiButtonComponent,
     UiCardComponent,
     UiCardHeaderComponent,

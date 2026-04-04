@@ -6,11 +6,12 @@ import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { GameState } from '../../core/models/game-state.model';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { HistorySkeletonComponent } from '../../shared/components/skeletons/history-skeleton.component';
 
 @Component({
   selector: 'app-history',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, LoaderComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, LoaderComponent, HistorySkeletonComponent],
   templateUrl: './history.component.html',
   styleUrl: './history.component.scss',
 })

@@ -113,11 +113,8 @@
     <a routerLink="/login" class="gold-btn">{{ 'home.loginOrSignup' | translate }}</a>
   </section>
 
-  <!-- Loading -->
-  <section *ngIf="isAuthenticated && loading" class="state-card">
-    <app-loader variant="speeder" size="lg" [label]="'home.loadingGames' | translate"></app-loader>
-    <p>{{ 'home.loadingGames' | translate }}</p>
-  </section>
+  <!-- Loading skeleton -->
+  <app-dashboard-skeleton *ngIf="isAuthenticated && loading"></app-dashboard-skeleton>
 
   <!-- Empty State -->
   <section *ngIf="isAuthenticated && !loading && games.length === 0" class="state-card">
@@ -312,11 +309,8 @@
     <a routerLink="/login" class="gold-btn">{{ 'home.loginOrSignup' | translate }}</a>
   </section>
 
-  <!-- Loading (mobile) -->
-  <section *ngIf="isAuthenticated && loading" class="state-card">
-    <app-loader variant="speeder" size="lg" [label]="'home.loadingGames' | translate"></app-loader>
-    <p>{{ 'home.loadingGames' | translate }}</p>
-  </section>
+  <!-- Loading skeleton (mobile) -->
+  <app-dashboard-skeleton *ngIf="isAuthenticated && loading"></app-dashboard-skeleton>
 
   <!-- Empty (mobile) -->
   <section *ngIf="isAuthenticated && !loading && games.length === 0" class="state-card">
