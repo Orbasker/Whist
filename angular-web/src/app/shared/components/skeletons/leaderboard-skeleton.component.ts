@@ -7,7 +7,7 @@ import { UiSkeletonComponent } from '../ui/skeleton/skeleton.component';
   standalone: true,
   imports: [CommonModule, UiSkeletonComponent],
   template: `
-    <div class="space-y-3">
+    <div class="space-y-3" role="status" aria-label="Loading leaderboard">
       <div
         *ngFor="let i of rows; let idx = index"
         class="lb-row-skeleton"

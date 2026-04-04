@@ -62,6 +62,7 @@ const { values: args } = parseArgs({
     viewport: { type: 'string' },
     out: { type: 'string', default: 'src/app/shared/components/skeletons/generated' },
     selector: { type: 'string', default: 'main, .mobile-main, .desktop-main' },
+    'storage-state': { type: 'string' },
     'dry-run': { type: 'boolean', default: false },
   },
   strict: false,
@@ -69,6 +70,9 @@ const { values: args } = parseArgs({
 
 const BASE_URL = args.url;
 const OUT_DIR = resolve(process.cwd(), args.out);
+const STORAGE_STATE = args['storage-state']
+  ? resolve(process.cwd(), args['storage-state'])
+  : undefined;
 const DRY_RUN = args['dry-run'];
 
 // Filter routes/viewports by CLI args
@@ -86,7 +90,8 @@ const targetViewports = args.viewport
  * Injected into the page via page.evaluate().
  * Walks the DOM tree within a scope selector and captures element rects.
  */
-function scanElements(scopeSelector, skipTags, skipSelectors) {
+function scanElements({ scopeSelector, skipTags, skipSelectors }) {
+  const skipTagSet = new Set(skipTags);
   const scopes = document.querySelectorAll(scopeSelector);
   if (!scopes.length) return { elements: [], viewport: { width: window.innerWidth, height: window.innerHeight } };
 
@@ -99,7 +104,7 @@ function scanElements(scopeSelector, skipTags, skipSelectors) {
     const walker = document.createTreeWalker(scope, NodeFilter.SHOW_ELEMENT, {
       acceptNode(node) {
         const tag = node.tagName.toLowerCase();
-        if (skipTags.has(tag)) return NodeFilter.FILTER_REJECT;
+        if (skipTagSet.has(tag)) return NodeFilter.FILTER_REJECT;
         for (const sel of skipSelectors) {
           if (node.matches(sel)) return NodeFilter.FILTER_REJECT;
         }
@@ -304,10 +309,16 @@ async function main() {
 
   try {
     for (const route of targetRoutes) {
+      if (route.requiresAuth && !STORAGE_STATE) {
+        console.log(`  Skipping ${route.path} (pass --storage-state to capture protected routes)`);
+        continue;
+      }
+
       const captures = [];
 
       for (const vp of targetViewports) {
         const context = await browser.newContext({
+          ...(STORAGE_STATE ? { storageState: STORAGE_STATE } : {}),
           viewport: { width: vp.width, height: vp.height },
           deviceScaleFactor: vp.label === 'mobile' ? 3 : 2,
         });
@@ -326,7 +337,11 @@ async function main() {
           continue;
         }
 
-        const result = await page.evaluate(scanElements, args.selector, [...SKIP_TAGS], SKIP_SELECTORS);
+        const result = await page.evaluate(scanElements, {
+          scopeSelector: args.selector,
+          skipTags: [...SKIP_TAGS],
+          skipSelectors: SKIP_SELECTORS,
+        });
 
         console.log(`    Found ${result.elements.length} elements`);
 
@@ -381,14 +396,12 @@ async function main() {
   }
 
   // Also write a barrel export
-  const barrel = results
-    .entries()
+  const barrel = Array.from(results.entries())
     .filter(([, caps]) => caps.some((c) => c.elements.length > 0))
     .map(([name]) => {
       const className = name.charAt(0).toUpperCase() + name.slice(1) + 'GeneratedSkeletonComponent';
       return `export { ${className} } from './${name}-skeleton.generated';`;
     })
-    .toArray()
     .join('\n');
 
   if (barrel) {

@@ -7,7 +7,7 @@ import { UiSkeletonComponent } from '../ui/skeleton/skeleton.component';
   standalone: true,
   imports: [CommonModule, UiSkeletonComponent],
   template: `
-    <div class="space-y-3">
+    <div class="space-y-3" role="status" aria-label="Loading history">
       <div *ngFor="let i of cards" class="history-card-skeleton">
         <div class="p-4 space-y-3">
           <!-- Head row: name + date -->

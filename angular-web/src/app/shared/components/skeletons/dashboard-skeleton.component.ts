@@ -8,7 +8,7 @@ import { UiSkeletonComponent } from '../ui/skeleton/skeleton.component';
   imports: [CommonModule, UiSkeletonComponent],
   template: `
     <!-- Desktop skeleton (hidden on mobile) -->
-    <div class="hidden lg:block space-y-6">
+    <div class="hidden lg:block space-y-6" role="status" aria-label="Loading games">
       <!-- Hero header skeleton -->
       <div class="flex items-center justify-between">
         <div class="space-y-2">
@@ -90,7 +90,7 @@ import { UiSkeletonComponent } from '../ui/skeleton/skeleton.component';
     </div>
 
     <!-- Mobile skeleton (hidden on desktop) -->
-    <div class="lg:hidden space-y-4">
+    <div class="lg:hidden space-y-4" role="status" aria-label="Loading games">
       <!-- Mobile hero skeleton -->
       <div class="flex flex-col items-center gap-3 py-6">
         <app-ui-skeleton variant="circle" width="48px" height="48px"></app-ui-skeleton>
