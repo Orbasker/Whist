@@ -9,14 +9,8 @@
     </div>
   </header>
 
-  <!-- Loading -->
-  <section *ngIf="loading" class="state-card">
-    <app-loader
-      variant="speeder"
-      size="lg"
-      [label]="'leaderboard.loading' | translate"
-    ></app-loader>
-  </section>
+  <!-- Loading skeleton -->
+  <app-leaderboard-skeleton *ngIf="loading"></app-leaderboard-skeleton>
 
   <!-- Empty -->
   <section *ngIf="!loading && players.length === 0" class="state-card">

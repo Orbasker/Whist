@@ -48,3 +48,6 @@ Thumbs.db
 
 # Generated dev environment (contains values from .env; template is environment.ts.example)
 src/environments/environment.ts
+
+# Auto-generated skeleton components (regenerate with: npm run generate:skeletons)
+src/app/shared/components/skeletons/generated/

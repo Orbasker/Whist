@@ -6,6 +6,7 @@ import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { GameState } from '../../core/models/game-state.model';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { LeaderboardSkeletonComponent } from '../../shared/components/skeletons/leaderboard-skeleton.component';
 
 export interface PlayerStats {
   name: string;
@@ -19,7 +20,13 @@ export interface PlayerStats {
 @Component({
   selector: 'app-leaderboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, LoaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule,
+    LoaderComponent,
+    LeaderboardSkeletonComponent,
+  ],
   templateUrl: './leaderboard.component.html',
   styleUrl: './leaderboard.component.scss',
 })
