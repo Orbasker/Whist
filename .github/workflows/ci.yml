@@ -7,116 +7,12 @@ on:
     branches: [main]
 
 jobs:
-  # ── PR: path-based filter; push to main: run all (no change detection) ────────
-  changes:
-    name: Detect changes
-    runs-on: ubuntu-latest
-    outputs:
-      backend: ${{ steps.filter.outputs.backend || steps.push_all.outputs.backend }}
-      frontend: ${{ steps.filter.outputs.frontend || steps.push_all.outputs.frontend }}
-      flutter: ${{ steps.filter.outputs.flutter || steps.push_all.outputs.flutter }}
-    steps:
-      # On push to main: skip path detection and mark all pipelines to run
-      - name: Set all pipelines (push to main)
-        id: push_all
-        if: github.event_name == 'push'
-        run: |
-          echo "backend=true" >> "$GITHUB_OUTPUT"
-          echo "frontend=true" >> "$GITHUB_OUTPUT"
-          echo "flutter=true" >> "$GITHUB_OUTPUT"
-
-      # On PR: detect which paths changed and set filter outputs
-      - uses: dorny/paths-filter@v3
-        id: filter
-        if: github.event_name == 'pull_request'
-        with:
-          filters: |
-            backend:
-              - 'backend/**'
-            frontend:
-              - 'angular-web/**'
-            flutter:
-              - 'flutter_mobile/**'
-
-  # ── Backend ──────────────────────────────────────────────────────────────────
-  backend:
-    needs: changes
-    if: github.event_name == 'push' || needs.changes.outputs.backend == 'true'
-    name: Backend (Python)
+  web:
+    name: Web (Next.js)
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: whist_ci
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-
-      - name: Install dependencies
-        run: uv pip install --system ".[dev]"
-
-      - name: Run Alembic migrations
-        env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/whist_ci"
-        run: uv run alembic upgrade head
-
-      # Only runs when NEON_MIGRATION_ENABLED repo variable is 'true' (and NEON_DATABASE_URL secret is set)
-      - name: Run Alembic migrations (Neon)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.NEON_MIGRATION_ENABLED == 'true'
-        env:
-          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
-        run: uv run alembic upgrade head
-
-      - name: Ruff lint
-        run: ruff check .
-
-      - name: Ruff format check
-        run: ruff format --check .
-
-      - name: ty type check
-        run: ty check app/
-
-      - name: Pytest with coverage
-        run: pytest tests/ --cov=. --cov-report=term-missing --cov-report=xml
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: backend-coverage
-          path: backend/coverage.xml
-
-  # ── Frontend ─────────────────────────────────────────────────────────────────
-  frontend:
-    needs: changes
-    if: github.event_name == 'push' || needs.changes.outputs.frontend == 'true'
-    name: Frontend (Angular)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: angular-web
+        working-directory: scoreboard
 
     steps:
       - uses: actions/checkout@v4
@@ -124,50 +20,18 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
-          cache-dependency-path: angular-web/package-lock.json
+          cache-dependency-path: scoreboard/package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Type check
+        run: npm run typecheck
+
       - name: ESLint
         run: npm run lint
 
-      - name: Prettier format check
-        run: npm run format:check
-
-      - name: Angular build
+      - name: Build
         run: npm run build
-
-      - name: Angular tests
-        run: npm test -- --watch=false --browsers=ChromeHeadless
-
-  # ── Flutter ──────────────────────────────────────────────────────────────────
-  flutter:
-    needs: changes
-    if: github.event_name == 'push' || needs.changes.outputs.flutter == 'true'
-    name: Flutter (Mobile)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: flutter_mobile
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.38.4"
-          channel: "stable"
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Flutter analyze
-        run: flutter analyze
-
-      - name: Flutter test
-        run: flutter test

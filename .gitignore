@@ -1,24 +1,12 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# Dependencies
+node_modules/
 
 # IDEs and editors
 .idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
 *.sublime-workspace
+.history/
 
 # Visual Studio Code
 .vscode/*
@@ -27,53 +15,14 @@ yarn-error.log
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/mcp.json
-.history/*
-
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-__screenshots__/
 
 # System files
 .DS_Store
 Thumbs.db
 
-# Environment files (keep .env.example files)
+# Environment files (keep .example files)
 .env
 .env.local
-.env.prod
 .env.*.local
-*.env
-!.env.example
-
-# Python (backend)
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
-.venv
-.uv/
-*.db
-*.sqlite
-*.sqlite3
-.pytest_cache/
-.coverage
-htmlcov/
-*.egg-info/
-dist/
-build/
-
-# Node (root level - angular-web has its own)
-node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
+!*.example
+.vercel
