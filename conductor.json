@@ -1,21 +1,8 @@
 {
   "scripts": {
     "setup": "bash -lc './scripts/setup.sh'",
-    "run": "bash -lc './scripts/dev.sh'",
-    "archive": "bash -lc './scripts/archive.sh'"
+    "run": "bash -lc './scripts/dev.sh'"
   },
   "runScriptMode": "nonconcurrent",
-  "filesToCopy": [
-    "backend/.env",
-    "backend/.env.prod",
-    "backend/.venv",
-    "angular-web/package.json",
-    "angular-web/package-lock.json",
-    "angular-web/node_modules",
-    "angular-web/src/environments/environment.ts",
-    "angular-web/src/environments/environment.prod.ts",
-    "angular-web/src/environments/environment.staging.ts",
-    "angular-web/src/environments/environment.dev.ts",
-    "angular-web/src/environments/environment.test.ts"
-  ]
+  "filesToCopy": ["scoreboard/.env.local", "scoreboard/node_modules"]
 }
