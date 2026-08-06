@@ -70,17 +70,18 @@ export default function Home() {
   }, []);
 
   const hasGames = games.length > 0;
-  const formOpen = !hasGames || showForm;
+  const formOpen = loaded && (!hasGames || showForm);
+  const playerNames = playersText
+    .split(/[,\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const canSubmit = !creating && rulesText.trim().length > 0 && playerNames.length > 0;
 
   async function createGame(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setCreating(true);
     try {
-      const playerNames = playersText
-        .split(/[,\n]/)
-        .map((s) => s.trim())
-        .filter(Boolean);
       const res = await fetch('/api/games', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -161,8 +162,11 @@ export default function Home() {
         >
           <h2 className="text-lg font-semibold">New game</h2>
           <div>
-            <label className="mb-1 block text-sm text-neutral-400">Rules (plain language)</label>
+            <label htmlFor="rules-text" className="mb-1 block text-sm text-neutral-400">
+              Rules (plain language)
+            </label>
             <textarea
+              id="rules-text"
               value={rulesText}
               onChange={(e) => setRulesText(e.target.value)}
               rows={5}
@@ -171,10 +175,11 @@ export default function Home() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm text-neutral-400">
+            <label htmlFor="players-text" className="mb-1 block text-sm text-neutral-400">
               Players (comma or newline separated)
             </label>
             <input
+              id="players-text"
               value={playersText}
               onChange={(e) => setPlayersText(e.target.value)}
               placeholder="Dana, Yossi, Noa, Amir"
@@ -188,7 +193,7 @@ export default function Home() {
           )}
           <button
             type="submit"
-            disabled={creating || !rulesText.trim() || !playersText.trim()}
+            disabled={!canSubmit}
             className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {creating ? 'Reading the rules…' : 'Create game'}
