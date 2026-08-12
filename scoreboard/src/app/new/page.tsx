@@ -127,7 +127,7 @@ export default function NewGame() {
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-6 py-10">
+    <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-10">
       <Link href="/" className="text-sm text-neutral-500 hover:text-orange-400">
         ← All games
       </Link>
@@ -136,10 +136,10 @@ export default function NewGame() {
         Describe your game in chat. Adjust the rules until they look right, then start.
       </p>
 
-      <div className="mt-6 grid gap-6 md:grid-cols-[1.4fr_1fr]">
+      <div className="mt-6 grid gap-4 sm:gap-6 md:grid-cols-[1.4fr_1fr]">
         {/* Setup chat */}
         <section className="flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/50">
-          <div ref={logRef} className="max-h-[55vh] flex-1 space-y-3 overflow-y-auto p-4">
+          <div ref={logRef} className="max-h-[50vh] flex-1 space-y-3 overflow-y-auto p-4 sm:max-h-[55vh]">
             {messages.map((m, i) => (
               <div
                 key={i}
@@ -168,7 +168,7 @@ export default function NewGame() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="e.g. Rummy to 500, first to reach it wins…"
-              className="flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-orange-500"
+              className="min-w-0 flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-base outline-none focus:border-orange-500 sm:text-sm"
             />
             <button
               type="submit"
@@ -225,7 +225,7 @@ export default function NewGame() {
                 setPlayersTouched(true);
               }}
               placeholder="Dana, Yossi, Noa, Amir"
-              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-orange-500"
+              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-base outline-none focus:border-orange-500 sm:text-sm"
             />
             <button
               type="button"
