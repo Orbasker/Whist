@@ -98,7 +98,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
       <header>
         <h1 className="text-3xl font-bold tracking-tight">Scoreboard</h1>
         <p className="mt-2 text-neutral-400">
@@ -171,7 +171,7 @@ export default function Home() {
               onChange={(e) => setRulesText(e.target.value)}
               rows={5}
               placeholder="e.g. Whist for 4 players. Each round players bid tricks. Making your exact bid scores bid squared + 10; missing scores minus 10 per trick off..."
-              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-orange-500"
+              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-base outline-none focus:border-orange-500 sm:text-sm"
             />
           </div>
           <div>
@@ -183,7 +183,7 @@ export default function Home() {
               value={playersText}
               onChange={(e) => setPlayersText(e.target.value)}
               placeholder="Dana, Yossi, Noa, Amir"
-              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-orange-500"
+              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-base outline-none focus:border-orange-500 sm:text-sm"
             />
           </div>
           {error && (

@@ -76,18 +76,20 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   }
 
   if (!game) {
-    return <main className="mx-auto max-w-4xl px-6 py-12 text-neutral-400">Loading…</main>;
+    return (
+      <main className="mx-auto max-w-4xl px-4 py-8 text-neutral-400 sm:px-6 sm:py-12">Loading…</main>
+    );
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-6 py-10">
+    <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-10">
       <Link href="/" className="text-sm text-neutral-500 hover:text-orange-400">
         ← All games
       </Link>
       <h1 className="mt-2 text-2xl font-bold">{game.rules.name}</h1>
       <p className="mt-1 text-sm text-neutral-400">{game.rules.summary}</p>
 
-      <div className="mt-6 grid gap-6 md:grid-cols-[1fr_1.4fr]">
+      <div className="mt-6 grid gap-4 sm:gap-6 md:grid-cols-[1fr_1.4fr]">
         {/* Scoreboard */}
         <section className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-4">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-neutral-500">
@@ -111,7 +113,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
         {/* Chat log + input */}
         <section className="flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/50">
-          <div ref={logRef} className="max-h-[55vh] flex-1 space-y-3 overflow-y-auto p-4">
+          <div ref={logRef} className="max-h-[50vh] flex-1 space-y-3 overflow-y-auto p-4 sm:max-h-[55vh]">
             {game.turns.length === 0 && (
               <p className="text-sm text-neutral-500">
                 Type what happened, e.g. “Dana bid 3 and took 3, Yossi bid 2 took 4”.
@@ -154,7 +156,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Describe the turn…"
-              className="flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-orange-500"
+              className="min-w-0 flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-base outline-none focus:border-orange-500 sm:text-sm"
             />
             <button
               type="submit"
